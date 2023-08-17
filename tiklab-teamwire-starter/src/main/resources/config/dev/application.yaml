@@ -25,7 +25,7 @@ postgresql:
 
 # 访问地址，用于显示日志，消息，待办的图标
 base:
-  url: http://192.168.10.8:8080
+  url: http://192.168.10.5:8080
 
 
 DATA_HOME: ${user.home}/tiklab/teamwire
