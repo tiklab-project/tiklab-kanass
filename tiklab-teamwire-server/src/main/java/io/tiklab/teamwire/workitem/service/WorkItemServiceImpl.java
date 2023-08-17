@@ -404,9 +404,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         StateNodeFlow startState = findStartState(workItem, workTypeId, id);
 
         //设置创建时间
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = formater.format(new Date());
+        logger.info("curentTime:{}", new Date());
+        logger.info("curentTime2:{}", format);
         workItem.setBuildTime(format);
+
 
         //设置事项类型code,关联的系统事项类型
 
@@ -557,7 +560,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             String nodeStatus = stateNodeFlow.getNodeStatus();
             // 设置事项结束时间
             if(nodeStatus.equals("DONE")){
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String format = formater.format(new Date());
                 workItem.setActualEndTime(format);
             }

@@ -146,7 +146,7 @@ public class SprintBurnDowmChartDao{
         Integer remainTaskTotalCount = totalTaskCount - endTaskTotalCount;
         sprintBurnDowmChartEntity.setRemainTaskCount(remainTaskTotalCount);
 
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = formater.format(new Date());
         sprintBurnDowmChartEntity.setRecordTime(format);
 

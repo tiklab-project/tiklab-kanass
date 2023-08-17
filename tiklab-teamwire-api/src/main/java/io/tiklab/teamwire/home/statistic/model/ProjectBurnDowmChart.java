@@ -24,8 +24,8 @@ public class ProjectBurnDowmChart extends BaseModel{
     private java.lang.String projectId;
 
     @ApiProperty(name="recordTime",desc="记录时间")
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    @JSONField(format = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String recordTime;
 
     @ApiProperty(name="remainWorkitemCount",desc="未完成事项数量")

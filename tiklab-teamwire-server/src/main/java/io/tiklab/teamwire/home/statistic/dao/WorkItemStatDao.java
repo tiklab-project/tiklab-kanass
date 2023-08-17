@@ -132,7 +132,7 @@ public class WorkItemStatDao {
 
         // 统计已逾期的事项
         Date dNow = new Date( );
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
         String newDate = ft.format(dNow);
         sql = "select count(1) as endTotalCount from pmc_work_item t, pcs_flc_state_node f";
         sql = sql.concat(" where t.work_status_code='DONE' and ? > t.plan_end_time ");
@@ -239,7 +239,7 @@ public class WorkItemStatDao {
 
         // 统计已逾期的事项
         Date dNow = new Date( );
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
         String newDate = ft.format(dNow);
         sql = "select count(1) as endTotalCount from pmc_work_item t";
         sql = sql.concat(" where t.project_id= ? and t.work_status_code !='DONE' and ? > t.plan_end_time ");
@@ -373,7 +373,7 @@ public class WorkItemStatDao {
 
         // 统计已逾期的事项
         Date dNow = new Date( );
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
         String newDate = ft.format(dNow);
         sql = "select count(1) as endTotalCount from pmc_work_item t, flc_state f";
         sql = sql.concat(" where t.sprint_id= ? and f.state_type = 2 and f.id = t.work_status_id and ? > t.plan_end_time ");
@@ -443,7 +443,7 @@ public class WorkItemStatDao {
         sql = sql.concat(" where f.node_status!='DONE' and f.id = t.work_status_id and t.plan_end_time < ? ");
 
         Date dNow = new Date( );
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
         String newDate = ft.format(dNow);
 
         List<Object> objects = new ArrayList<>();

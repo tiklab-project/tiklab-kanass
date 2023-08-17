@@ -147,7 +147,7 @@ public class ProjectBurnDowmChartDao{
         Integer remainTaskTotalCount = totalTaskCount - endTaskTotalCount;
         projectBurnDowmChartEntity.setRemainTaskCount(remainTaskTotalCount);
 
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = formater.format(new Date());
         projectBurnDowmChartEntity.setRecordTime(format);
 
