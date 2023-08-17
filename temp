@@ -1,0 +1,13 @@
+--server.port=8081
+--jdbc.url=jdbc:mysql://172.10.1.10:3306/tiklab_eas?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+--jdbc.username=root
+--jdbc.password=darth2020
+--jdbc.driverClassName=com.mysql.cj.jdbc.Driver
+--eas.mysql.name=tiklab_teamwire
+--eas.server.port=8081
+--eas.jdbc.url=jdbc:mysql://172.10.1.10:3306/tiklab_eas?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+--eas.jdbc.driverClassName=com.mysql.cj.jdbc.Driver
+--eas.jdbc.username=root
+--eas.jdbc.password=darth2020
+--eas.web.address=http://192.168.10.16:8081
+--eas.address=http://192.168.10.16:8081

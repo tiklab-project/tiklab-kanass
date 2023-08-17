@@ -1,0 +1,78 @@
+#系统名称
+
+app:
+  name: tiklab-teamwire
+spring:
+  profiles:
+    active: release
+  config:
+    import: optional:classpath:/config/${env:dev}/application.yaml
+
+
+
+#web config
+server:
+  port: 8080
+
+# 访问地址，用于显示日志，消息，待办的图标
+base:
+  url: http://teamwire-ce.test.tiklab.net
+
+
+jdbc:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/tiklab_teamwire?stringtype=unspecified
+  username: postgres
+  password: darth2020
+
+DATA_HOME: /opt/tiklab/teamwire
+
+eas:
+  embbed:
+    enable: true
+
+postgresql:
+  embbed:
+    enable: true
+  database: tiklab_teamwire
+#dfs config
+#dfs.server.enabled=false
+dfs:
+  server:
+    enabled: server
+    port: 4001
+    datapath: ${DATA_HOME}/files
+  client:
+    url: 127.0.0.1:4001
+    group: g1
+    bucket: teamwire
+
+#dcs config
+#dcs.server.enabled=false
+dcs:
+  server:
+    enabled: true
+    port: 5000
+    datapath: ${DATA_HOME}/caches
+  client:
+    url: 127.0.0.1:5000
+    group: g1
+    database: dcs1
+    expire: 7200
+
+
+
+#plugin config
+plugin:
+  path: ${DATA_HOME}/plugin
+
+#zip config
+unzip:
+  path: ${DATA_HOME}/unzip/Jire
+
+#license
+licences:
+  path: ${APP_HOME}/licences
+
+client: web
+version: ce
