@@ -1099,8 +1099,20 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
 
-//        joinTemplate.joinQuery(workItemList);
         joinTemplate.joinQuery(workItemList,  new String[]{"project","assigner", "workPriority", "workStatusNode", "workTypeSys"});
         return PaginationBuilder.build(pagination,workItemList);
     }
+
+    @Override
+    public HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery) {
+        HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkType(workItemQuery);
+        return workItemNumByWorkType;
+    }
+
+    @Override
+    public HashMap<String, Integer> findWorkItemNumByWorkList(WorkItemQuery workItemQuery) {
+        HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkList(workItemQuery);
+        return workItemNumByWorkType;
+    }
+
 }

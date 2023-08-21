@@ -246,4 +246,12 @@ public class ProjectController {
         return Result.ok(projectListByKeyWords);
     }
 
+    @RequestMapping(path = "/creatProjectKey",method = RequestMethod.POST)
+    @ApiMethod(name = "creatProjectKey",desc = "根据标题关键字查找事项列表")
+    public Result<String> creatProjectKey(){
+        String key = projectService.creatProjectKey();
+
+        return Result.ok(key);
+    }
+
 }

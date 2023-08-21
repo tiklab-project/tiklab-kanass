@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -214,6 +215,24 @@ public class WorkItemController {
         Pagination<WorkItem> pagination = workItemService.findWorkItemByKeyWorks(workItemQuery);
 
         return Result.ok(pagination);
+    }
+
+    @RequestMapping(path = "/findWorkItemNumByWorkType",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemNumByWorkType",desc = "根据查询对象按分页查找事项列表")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<Pagination<WorkItem>> findWorkItemNumByWorkType(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByWorkType(workItemQuery);
+
+        return Result.ok(workItemNumByWorkType);
+    }
+
+    @RequestMapping(path = "/findWorkItemNumByWorkList",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemNumByWorkList",desc = "根据查询对象按分页查找事项列表")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<Pagination<WorkItem>> findWorkItemNumByWorkList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByWorkList(workItemQuery);
+
+        return Result.ok(workItemNumByWorkType);
     }
 
 }

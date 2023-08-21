@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -529,7 +530,7 @@ public class WorkItemDao{
             s= s.concat(")");
 
             if(paramMap.isEmpty()){
-                sql = sql.concat(" p.root_id     in " + s);
+                sql = sql.concat(" p.root_id in " + s);
             }else {
                 sql = sql.concat(" and p.root_id in " + s);
             }
@@ -565,22 +566,47 @@ public class WorkItemDao{
         if(!StringUtils.isEmpty(workItemQuery.getBuildTimeStart())){
             String buildTimeStart = workItemQuery.getBuildTimeStart();
             String buildTimeEnd = workItemQuery.getBuildTimeEnd();
-            sql = sql.concat(" and p.build_time >= '"+ buildTimeStart + "' and p.build_time <= '" + buildTimeEnd + "'");
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.build_time >= '"+ buildTimeStart + "' and p.build_time <= '" + buildTimeEnd + "'");
+            }else {
+                sql = sql.concat(" and p.build_time >= '"+ buildTimeStart + "' and p.build_time <= '" + buildTimeEnd + "'");
+            }
             paramMap.put("buildTime", buildTimeStart);
         }
 
         if(!StringUtils.isEmpty(workItemQuery.getPlanStartDateStart())){
             String planStartDateStart = workItemQuery.getPlanStartDateStart();
             String planStartDateEnd = workItemQuery.getPlanStartDateEnd();
-            sql = sql.concat(" and p.plan_begin_time >= '"+ planStartDateStart + "' and p.plan_begin_time <= '" + planStartDateEnd + "'");
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.plan_begin_time >= '"+ planStartDateStart + "' and p.plan_begin_time <= '" + planStartDateEnd + "'");
+            }else {
+                sql = sql.concat(" and p.plan_begin_time >= '"+ planStartDateStart + "' and p.plan_begin_time <= '" + planStartDateEnd + "'");
+            }
             paramMap.put("planBeginTime", planStartDateStart);
         }
 
         if(!StringUtils.isEmpty(workItemQuery.getPlanEndDateStart())){
             String planEndDateStart = workItemQuery.getPlanEndDateStart();
             String planEndDateEnd = workItemQuery.getPlanEndDateEnd();
-            sql = sql.concat(" and p.plan_end_time >= '"+ planEndDateStart + "' and p.plan_end_time <= '" + planEndDateEnd + "'");
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.plan_end_time >= '"+ planEndDateStart + "' and p.plan_end_time <= '" + planEndDateEnd + "'");
+            }else {
+                sql = sql.concat(" and p.plan_end_time >= '"+ planEndDateStart + "' and p.plan_end_time <= '" + planEndDateEnd + "'");
+            }
             paramMap.put("planEndTime", planEndDateStart);
+        }
+
+        if(workItemQuery.getOverdue() != null && workItemQuery.getOverdue()){
+            Boolean overdue = workItemQuery.getOverdue();
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = simpleDateFormat.format(date);
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.plan_end_time <= '"+ currentTime + "' and p.work_status_code != 'DONE'");
+            }else {
+                sql = sql.concat(" and p.plan_end_time <= '"+ currentTime + "' and p.work_status_code != 'DONE'");
+            }
+            paramMap.put("overdue", overdue);
         }
 
         sqlMap.put("sql", sql);
@@ -621,10 +647,76 @@ public class WorkItemDao{
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         Pagination page = jdbcTemplate.findPage(sql, new Object[]{}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
 
-
         return page;
     }
 
+    public HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery){
+        HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        workItemQuery.setWorkTypeId(null);
+        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+        String sql = new String();
+        sql = "Select count(1) as total from pmc_work_item p";
+        Object o1 = stringObjectMap.get("sql");
+        if(!ObjectUtils.isEmpty(o1)){
+            sql = sql.concat(" where " + String.valueOf(o1));
+            sql = sql.concat(" and parent_id is null");
+        }else {
+            sql = sql.concat(" where parent_id is null");
+        }
+
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        WorkItemCount.put("all", allNum);
+
+        String sql1 =  sql.concat(" and work_type_code = 'demand'");
+        Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        WorkItemCount.put("demand", demandNum);
+
+        String sql2 =  sql.concat(" and work_type_code = 'task'");
+        Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        WorkItemCount.put("task", taskNum);
+
+        String sql3 =  sql.concat(" and work_type_code = 'defect'");
+        Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        WorkItemCount.put("defect", defectNum);
+
+        return WorkItemCount;
+    }
+
+    public HashMap<String, Integer> findWorkItemNumByWorkList(WorkItemQuery workItemQuery){
+        HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        workItemQuery.setWorkTypeId(null);
+        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+        String sql = new String();
+        sql = "Select count(1) as total from pmc_work_item p";
+        Object o1 = stringObjectMap.get("sql");
+
+        String sql0 = "";
+        if(!ObjectUtils.isEmpty(o1)) {
+            sql0 = sql0.concat(sql + " where " + String.valueOf(o1));
+        }
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql0, new Object[]{}, Integer.class);
+        WorkItemCount.put("all", allNum);
+
+        if(!ObjectUtils.isEmpty(o1)){
+            sql = sql.concat(" where " + String.valueOf(o1) + "and");
+        }else {
+            sql = sql.concat(" where ");
+        }
+
+        String sql1 =  sql.concat(" work_type_code = 'demand'");
+        Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        WorkItemCount.put("demand", demandNum);
+
+        String sql2 =  sql.concat(" work_type_code = 'task'");
+        Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        WorkItemCount.put("task", taskNum);
+
+        String sql3 =  sql.concat(" work_type_code = 'defect'");
+        Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        WorkItemCount.put("defect", defectNum);
+
+        return WorkItemCount;
+    }
     /**
      * 查找非根节点事项的符合条件的事项
      * @param workItemQuery
@@ -764,4 +856,6 @@ public class WorkItemDao{
         Pagination WorkItemPageList = this.jpaTemplate.getJdbcTemplate().findPage(workSql, new String[]{word}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
         return WorkItemPageList;
     }
+
+
 }

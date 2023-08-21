@@ -21,6 +21,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 项目数据访问
@@ -86,10 +87,6 @@ public class ProjectDao{
      */
     public List<ProjectEntity> findProjectList(ProjectQuery projectQuery) {
         QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectEntity.class);
-//        OrQueryCondition orQueryBuildCondition = OrQueryBuilders.instance()
-//                .eq("projectLimits",0)
-//                .in("id",projectQuery.getProjectIds())
-//                .get();
         QueryCondition queryCondition = queryBuilders
                 .like("projectName", projectQuery.getProjectName())
                 .eq("projectSetId", projectQuery.getProjectSetId())
@@ -107,15 +104,50 @@ public class ProjectDao{
     }
 
     /**
+     * 自动生成key
+     */
+    public String creatProjectKey(){
+        int length = new Random().nextInt(7) + 2; // 生成长度在 2 到 8 之间的随机数
+        StringBuilder result = new StringBuilder();
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // 大写字母集合
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = new Random().nextInt(characters.length());
+            result.append(characters.charAt(randomIndex));
+        }
+
+        return result.toString();
+    }
+
+
+    /**
      * 验证项目key是否存在
      * @param key
      * @return
      */
-    public Boolean projectKeyIsOnly(String key){
-        List<ProjectEntity> ProjectEntityList = null;
+    public String projectKeyIsOnly(String key){
         String sql = "select * from pmc_project p";
         sql = sql.concat(" where p.project_key = ? ");
-        ProjectEntityList = this.jpaTemplate.getJdbcTemplate().query(sql,new String[]{key}, new BeanPropertyRowMapper(ProjectEntity.class));
+        List<ProjectEntity> ProjectEntityList = this.jpaTemplate.getJdbcTemplate().query(sql,new String[]{key}, new BeanPropertyRowMapper(ProjectEntity.class));
+
+        if(!ProjectEntityList.isEmpty()){
+            String projectName = ProjectEntityList.get(0).getProjectName();
+            return projectName;
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 验证项目key是否存在
+     * @param name
+     * @return
+     */
+    public Boolean projectNameIsOnly(String name){
+        List<ProjectEntity> ProjectEntityList = null;
+        String sql = "select * from pmc_project p";
+        sql = sql.concat(" where p.project_name = ? ");
+        ProjectEntityList = this.jpaTemplate.getJdbcTemplate().query(sql,new String[]{name}, new BeanPropertyRowMapper(ProjectEntity.class));
         if(ObjectUtils.isEmpty(ProjectEntityList)){
             return true;
         }else {

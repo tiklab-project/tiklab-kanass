@@ -438,7 +438,6 @@ public class WorkItemStatDao {
 
 
     public Pagination<WorkItemEntity> statWorkItemOverdue(WorkItemQuery workItemQuery) {
-        List<WorkItemEntity> workItemEntityList = new ArrayList<>();
         String sql = "select t.* from pmc_work_item t, pcs_flc_state_node f";
         sql = sql.concat(" where f.node_status!='DONE' and f.id = t.work_status_id and t.plan_end_time < ? ");
 

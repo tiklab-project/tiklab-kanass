@@ -221,9 +221,15 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 
         String projectKey = project.getProjectKey();
-        Boolean aBoolean = projectDao.projectKeyIsOnly(projectKey);
-        if(!aBoolean){
-            throw new ApplicationException("项目key 已存在");
+        String usedProjectName = projectDao.projectKeyIsOnly(projectKey);
+        if(usedProjectName != null && !usedProjectName.isEmpty()){
+            throw new ApplicationException("项目key已被" + usedProjectName + "项目使用");
+        }
+
+        String projectName = project.getProjectName();
+        Boolean nameIsOnly = projectDao.projectNameIsOnly(projectName);
+        if(!nameIsOnly){
+            throw new ApplicationException("已存在同名项目");
         }
         String id = projectDao.createProject(projectEntity);
 
@@ -258,7 +264,6 @@ public class ProjectServiceImpl implements ProjectService {
         //初始事项类型
         initWorkType(id);
 
-
         return id;
     }
 
@@ -277,9 +282,15 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 
         String projectKey = project.getProjectKey();
-        Boolean aBoolean = projectDao.projectKeyIsOnly(projectKey);
-        if(!aBoolean){
-            throw new ApplicationException("项目key 已存在");
+        String usedProjectName = projectDao.projectKeyIsOnly(projectKey);
+        if(!usedProjectName.isEmpty()){
+            throw new ApplicationException("项目key已被" + usedProjectName + "项目使用");
+        }
+
+        String projectName = project.getProjectName();
+        Boolean nameIsOnly = projectDao.projectNameIsOnly(projectName);
+        if(!nameIsOnly){
+            throw new ApplicationException("已存在同名项目");
         }
         String id = projectDao.createProject(projectEntity);
 
@@ -745,6 +756,12 @@ public class ProjectServiceImpl implements ProjectService {
         joinTemplate.joinQuery(projectList);
 
         return null;
+    }
+
+    @Override
+    public String creatProjectKey() {
+        return projectDao.creatProjectKey();
+
     }
 
 }

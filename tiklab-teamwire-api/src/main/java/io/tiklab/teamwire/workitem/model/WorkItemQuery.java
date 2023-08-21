@@ -20,6 +20,9 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="id",desc = "事项ID，精确匹配")
     private String id;
 
+    @ApiProperty(name ="overdue",desc = "是否逾期")
+    private Boolean overdue;
+
     @ApiProperty(name ="leftJoinPlanWorkItemEntity",desc = "文档id，精确匹配")
     private String leftJoinPlanWorkItemEntity;
 
@@ -557,5 +560,13 @@ public class WorkItemQuery implements Serializable {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Boolean getOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(Boolean overdue) {
+        this.overdue = overdue;
     }
 }

@@ -13,6 +13,7 @@ import io.tiklab.join.annotation.FindOne;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -173,5 +174,9 @@ public interface WorkItemService {
     List<WorkItem> setChildren(List<WorkItem> matchWorkItemList, WorkItem parentWorkItem);
 
     Pagination<WorkItem> findWorkItemByKeyWorks(WorkItemQuery workItemQuery);
+
+    HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery);
+
+    HashMap<String, Integer> findWorkItemNumByWorkList(WorkItemQuery workItemQuery);
 
 }
