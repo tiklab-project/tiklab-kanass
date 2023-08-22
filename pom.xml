@@ -28,7 +28,7 @@
         <tiklab-rpc.version>1.0.0.3</tiklab-rpc.version>
         <tiklab-plugin.version>1.0.0.3</tiklab-plugin.version>
         <tiklab-form.version>1.0.0.3</tiklab-form.version>
-        <tiklab-flow.version>1.0.0.3</tiklab-flow.version>
+        <tiklab-flow.version>1.0.0.3-SNAPSHOT</tiklab-flow.version>
         <tiklab-user.version>1.0.0.3</tiklab-user.version>
         <tiklab-eam.version>1.0.0.3</tiklab-eam.version>
         <tiklab-privilege.version>1.0.0.3</tiklab-privilege.version>
