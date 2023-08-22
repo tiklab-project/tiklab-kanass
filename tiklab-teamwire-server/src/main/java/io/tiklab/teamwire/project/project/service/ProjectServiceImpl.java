@@ -3,6 +3,7 @@ package io.tiklab.teamwire.project.project.service;
 import com.alibaba.fastjson.JSONObject;
 import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.teamwire.project.milestone.model.Milestone;
 import io.tiklab.teamwire.project.milestone.model.MilestoneQuery;
 import io.tiklab.teamwire.project.milestone.service.MilestoneService;
@@ -232,17 +233,9 @@ public class ProjectServiceImpl implements ProjectService {
             throw new ApplicationException("已存在同名项目");
         }
         String id = projectDao.createProject(projectEntity);
-
-        //初始化项目成员，项目权限
+        // 初始化项目成员角色
         String masterId = project.getMaster().getId();
-        DmUser dmUser = new DmUser();
-        dmUser.setDomainId(id);
-        User user = new User();
-        user.setId(masterId);
-        dmUser.setUser(user);
-        dmUserService.createDmUser(dmUser);
-        dmRoleService.initDmRoles(id, masterId,"teamwire");
-
+        initProjectDmRole(masterId, id);
         //创建动态
         Map<String, String> content = new HashMap<>();
         content.put("projectId", id);
@@ -267,6 +260,45 @@ public class ProjectServiceImpl implements ProjectService {
         return id;
     }
 
+    public void initProjectDmRole(String masterId, String projectId){
+        List<PatchUser> patchUsers = new ArrayList<PatchUser>();
+        if(!masterId.equals("111111")){
+            // 初始化创建者
+            PatchUser patchUser = new PatchUser();
+            DmUser dmUser = new DmUser();
+            dmUser.setDomainId(projectId);
+            User user = new User();
+            user.setId(masterId);
+            dmUser.setUser(user);
+            patchUser.setId(masterId);
+            patchUser.setAdminRole(true);
+            patchUsers.add(patchUser);
+
+            // 初始化"111111"
+            PatchUser patchUser1 = new PatchUser();
+            DmUser dmUser1 = new DmUser();
+            dmUser1.setDomainId(projectId);
+            User user1 = new User();
+            user1.setId("111111");
+            dmUser1.setUser(user1);
+
+            patchUser1.setId("111111");
+            patchUser1.setAdminRole(true);
+            patchUsers.add(patchUser1);
+
+        }else {
+            PatchUser patchUser = new PatchUser();
+            DmUser dmUser = new DmUser();
+            dmUser.setDomainId(projectId);
+            User user = new User();
+            user.setId(masterId);
+            dmUser.setUser(user);
+            patchUser.setId(masterId);
+            patchUser.setAdminRole(true);
+            patchUsers.add(patchUser);
+        }
+        dmRoleService.initPatchDmRole(projectId,patchUsers, "teamwire");
+    }
     @Override
     public String createJiraProject(@NotNull @Valid Project project) {
         if (project.getId() == null) {
