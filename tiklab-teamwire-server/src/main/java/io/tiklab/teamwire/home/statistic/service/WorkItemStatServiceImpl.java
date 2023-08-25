@@ -1,5 +1,6 @@
 package io.tiklab.teamwire.home.statistic.service;
 
+import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.teamwire.home.statistic.model.ProjectWorkItemStat;
 import io.tiklab.teamwire.home.statistic.model.WorkItemBusStatusStat;
 import io.tiklab.teamwire.home.statistic.model.WorkItemStatistic;
@@ -20,18 +21,23 @@ import io.tiklab.teamwire.home.statistic.dao.WorkItemStatDao;
 import io.tiklab.teamwire.workitem.entity.WorkItemEntity;
 import io.tiklab.teamwire.workitem.service.WorkItemService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
 * 统计服务
 */
 @Service
 public class WorkItemStatServiceImpl implements WorkItemStatService {
-
+    private static Logger logger = LoggerFactory.getLogger(WorkItemStatServiceImpl.class);
     @Autowired
     WorkItemStatDao workItemStatDao;
 
@@ -104,32 +110,60 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
 //    }
 
     @Override
-    public List<ProjectWorkItemStat> statProjectWorkItemCount(String recentMasterId) {
+    public List<ProjectWorkItemStat> statProjectWorkItemCount(Integer num) {
         List<ProjectWorkItemStat> list = new ArrayList<>();
         ProjectQuery projectQuery = new ProjectQuery();
-        projectQuery.setRecentMasterId(recentMasterId);
+        long aTime = System.currentTimeMillis();
         List<Project> projectList = projectService.findRecentProjectList(projectQuery);
 
+        // 拼接projects
+        if(projectList.size() > num){
+            projectList = projectList.subList(0, num);
+        }
+        String projectIds = new String();
         if(projectList != null && projectList.size() > 0){
+            projectIds = "(";
+
             for(Project item:projectList){
-                ProjectWorkItemStat projectWorkItemStat = new ProjectWorkItemStat();
-                projectWorkItemStat.setProject(item);
                 String projectId = item.getId();
-
-                WorkItemQuery workItemQuery = new WorkItemQuery();
-                workItemQuery.setProjectId(projectId);
-                workItemQuery.setWorkStatusCode("DONE");
-                List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-                projectWorkItemStat.setEndWorkItemCount((workItemList.size()));
-
-
-                WorkItemQuery workItemQuery2 = new WorkItemQuery();
-                workItemQuery2.setProjectId(projectId);
-                workItemQuery2.setWorkStatusCode("PROGRESS");
-                List<WorkItem> workItemList2 = workItemService.findWorkItemList(workItemQuery2);
-                projectWorkItemStat.setProcessWorkItemCount((workItemList2.size()));
-                list.add(projectWorkItemStat);
+                projectIds = projectIds.concat("'" + projectId + "',");
             }
+            projectIds = projectIds.substring(0, projectIds.length() - 1);
+            projectIds = projectIds.concat(")");
+        }
+
+
+        List<Map<String, Object>> doneWorkCount = projectService.findRecentProjectWorkItemCount(projectIds, "DONE");
+        List<Map<String, Object>> progress = projectService.findRecentProjectWorkItemCount(projectIds, "PROGRESS");
+
+
+
+        for (Project project : projectList) {
+            ProjectWorkItemStat projectWorkItemStat = new ProjectWorkItemStat();
+            projectWorkItemStat.setProject(project);
+            String id = project.getId();
+            List<Map<String, Object>> doneWork = doneWorkCount.stream().filter(e -> e.get("project_id") == id).collect(Collectors.toList());
+            if(doneWork.size() > 0){
+                Object count = doneWork.get(0).get("count");
+                if (count instanceof Integer) {
+                    int doneNum = ((Integer) count).intValue(); // 将Object类型转换为int类型
+                    projectWorkItemStat.setEndWorkItemCount(doneNum);
+                }
+            }else {
+                projectWorkItemStat.setEndWorkItemCount(0);
+            }
+
+            List<Map<String, Object>> processWork = progress.stream().filter(e -> e.get("project_id") == id).collect(Collectors.toList());
+            if(processWork.size() > 0){
+                Object count = processWork.get(0).get("count");
+                if (count instanceof Integer) {
+                    int doneNum = ((Integer) count).intValue(); // 将Object类型转换为int类型
+                    projectWorkItemStat.setProcessWorkItemCount(doneNum);
+                }
+            }else {
+                projectWorkItemStat.setProcessWorkItemCount(0);
+            }
+            list.add(projectWorkItemStat);
         }
         return list;
     }

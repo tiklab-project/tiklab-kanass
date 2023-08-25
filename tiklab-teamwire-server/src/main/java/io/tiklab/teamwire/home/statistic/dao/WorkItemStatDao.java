@@ -265,7 +265,7 @@ public class WorkItemStatDao {
         List<ProjectWorkItemStat> list = new ArrayList<>();
 
         String sql = "select * from pmc_recent r, pmc_project p";
-        sql = sql.concat(" where p.id = r.model_id && r.master_id = ? ");
+        sql = sql.concat(" where p.id = r.model_id and r.master_id = ? ");
 
         List<ProjectEntity> projectEntitylist = getJdbcTemplate().query(sql, new String[]{masterId}, new BeanPropertyRowMapper(ProjectEntity.class));
 

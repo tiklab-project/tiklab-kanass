@@ -75,8 +75,8 @@ public class WorkItemStatController {
     @RequestMapping(path="/statProjectWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "statProjectWorkItem",desc = "按统计事项各个状态的数量")
     @ApiParam(name = "recentMasterId",desc = "用户Id",required = true)
-    public Result<List<ProjectWorkItemStat>> statProjectWorkItemCount(@NotNull String recentMasterId){
-        List<ProjectWorkItemStat> list = reporterService.statProjectWorkItemCount(recentMasterId);
+    public Result<List<ProjectWorkItemStat>> statProjectWorkItemCount(@NotNull Integer num){
+        List<ProjectWorkItemStat> list = reporterService.statProjectWorkItemCount(num);
 
         return Result.ok(list);
     }

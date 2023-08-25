@@ -65,25 +65,25 @@ public class ProjectBurnDowmChartDao{
 
         //所有缺陷
         sql = "select count(1) as totalBugCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id = ? && t.work_type_code = 'defect'");
+        sql = sql.concat(" where t.project_id = ? and t.work_type_code = 'defect'");
         Integer totalBugCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setTotalBugCount(totalBugCount);
 
         // 统计已完成的缺陷
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'DONE' && t.work_type_code = 'defect'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'DONE' and t.work_type_code = 'defect'");
         Integer endBugTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setEndBugCount(endBugTotalCount);
 
         // 统计进行中的缺陷
         sql = "select count(1) as progressTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'START' && t.work_type_code = 'defect'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'START' and t.work_type_code = 'defect'");
         Integer progressBugTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setProgressBugCount(progressBugTotalCount);
 
         // 统计未开始的缺陷
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'TODO' && t.work_type_code = 'defect'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'TODO' and t.work_type_code = 'defect'");
         Integer noBugStartTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setNostartBugCount(noBugStartTotalCount);
 
@@ -93,25 +93,25 @@ public class ProjectBurnDowmChartDao{
 
         //所有需求
         sql = "select count(1) as totalDemandCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id = ? && t.work_type_code = 'demand'");
+        sql = sql.concat(" where t.project_id = ? and t.work_type_code = 'demand'");
         Integer totalDemandCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setTotalDemandCount(totalDemandCount);
 
         // 统计已完成的需求
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'DONE' && t.work_type_code = 'demand'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'DONE' and t.work_type_code = 'demand'");
         Integer endDemandTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setEndDemandCount(endDemandTotalCount);
 
         // 统计进行中的需求
         sql = "select count(1) as progressTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'START' && t.work_type_code = 'demand'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'START' and t.work_type_code = 'demand'");
         Integer progressDemandTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setProgressDemandCount(progressDemandTotalCount);
 
         // 统计未开始的需求
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'TODO' && t.work_type_code = 'demand'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'TODO' and t.work_type_code = 'demand'");
         Integer noDemandStartTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setNostartDemandCount(noDemandStartTotalCount);
 
@@ -121,25 +121,25 @@ public class ProjectBurnDowmChartDao{
 
         //所有任务
         sql = "select count(1) as totalTaskCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id = ? && t.work_type_code = 'task'");
+        sql = sql.concat(" where t.project_id = ? and t.work_type_code = 'task'");
         Integer totalTaskCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setTotalTaskCount(totalTaskCount);
 
         // 统计已完成的任务
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'DONE' && t.work_type_code = 'task'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'DONE' and t.work_type_code = 'task'");
         Integer endTaskTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setEndTaskCount(endTaskTotalCount);
 
         // 统计进行中的任务
         sql = "select count(1) as progressTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'START' && t.work_type_code = 'task'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'START' and t.work_type_code = 'task'");
         Integer progressTaskTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setProgressTaskCount(progressTaskTotalCount);
 
         // 统计未开始的任务
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'TODO' && t.work_type_code = 'task'");
+        sql = sql.concat(" where t.project_id= ? and t.work_status_code = 'TODO' and t.work_type_code = 'task'");
         Integer noTaskStartTotalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         projectBurnDowmChartEntity.setNostartTaskCount(noTaskStartTotalCount);
 

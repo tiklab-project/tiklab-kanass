@@ -12,6 +12,7 @@ import io.tiklab.teamwire.workitem.model.WorkTypeDm;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
 * 项目服务接口
@@ -107,7 +108,7 @@ public interface ProjectService {
      * @return
      */
     List<Project> findRecentProjectList(ProjectQuery projectQuery);
-
+    List<Map<String, Object>> findRecentProjectWorkItemCount(String projectIds, String statusCode);
     /**
      * 查找收藏的项目
      * @param projectQuery

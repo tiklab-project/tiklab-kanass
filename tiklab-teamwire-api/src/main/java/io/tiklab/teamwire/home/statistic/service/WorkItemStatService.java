@@ -43,7 +43,7 @@ public interface WorkItemStatService {
      * 按用户统计事项各个状态的数量
      * @return
      */
-    List<ProjectWorkItemStat> statProjectWorkItemCount(String recentMasterId);
+    List<ProjectWorkItemStat> statProjectWorkItemCount(Integer num);
 
     /**
      * 按用户统计事项分布

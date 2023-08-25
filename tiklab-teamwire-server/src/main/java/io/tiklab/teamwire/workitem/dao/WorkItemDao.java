@@ -174,13 +174,13 @@ public class WorkItemDao{
         return jpaTemplate.findList(queryCondition, WorkItemEntity.class);
     }
 
-    public List<WorkItemEntity> findWorkItemListCount(WorkItemQuery workItemQuery) {
-        QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class,"wi")
-                .eq("wi.projectId",workItemQuery.getProjectId())
-                .orders(workItemQuery.getOrderParams());
-
-        QueryCondition queryCondition = queryBuilders.get();
-        return jpaTemplate.findList(queryCondition, WorkItemEntity.class);
+    public Integer findWorkItemListCount(WorkItemQuery workItemQuery) {
+//        QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class,"wi")
+//                .eq("wi.projectId",workItemQuery.getProjectId())
+//                .orders(workItemQuery.getOrderParams());
+        String sql = "select count(1) as count from pmc_work_item t where t.project_id = '" + workItemQuery.getProjectId() + "'";
+        Integer integer = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, new String[]{}, Integer.class);
+        return integer;
     }
 
     /**
@@ -473,6 +473,7 @@ public class WorkItemDao{
             paramMap.put("builderId", workItemQuery.getUserId());
         }
 
+
         if(workItemQuery.getBuilderIds() != null && workItemQuery.getBuilderIds().size()>0){
             List<String> builderIds = workItemQuery.getBuilderIds();
             String s = new String("(");
@@ -563,9 +564,25 @@ public class WorkItemDao{
             paramMap.put("moduleIds", moduleIds);
         }
 
+        if(!StringUtils.isEmpty(workItemQuery.getUpdateTimeStart())){
+            String updateTimeStart = workItemQuery.getUpdateTimeStart();
+            updateTimeStart = updateTimeStart.concat(" 00:00:00");
+
+            String updateTimeEnd = workItemQuery.getUpdateTimeEnd();
+            updateTimeEnd = updateTimeEnd.concat(" 23:59:59");
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.update_time >= '"+ updateTimeStart + "' and p.update_time <= '" + updateTimeEnd + "'");
+            }else {
+                sql = sql.concat(" and p.update_time >= '"+ updateTimeStart + "' and p.update_time <= '" + updateTimeEnd + "'");
+            }
+            paramMap.put("updateTime", updateTimeStart);
+        }
+
         if(!StringUtils.isEmpty(workItemQuery.getBuildTimeStart())){
             String buildTimeStart = workItemQuery.getBuildTimeStart();
+            buildTimeStart = buildTimeStart.concat(" 00:00:00");
             String buildTimeEnd = workItemQuery.getBuildTimeEnd();
+            buildTimeStart = buildTimeStart.concat(" 23:59:59");
             if(paramMap.isEmpty()){
                 sql = sql.concat(" p.build_time >= '"+ buildTimeStart + "' and p.build_time <= '" + buildTimeEnd + "'");
             }else {

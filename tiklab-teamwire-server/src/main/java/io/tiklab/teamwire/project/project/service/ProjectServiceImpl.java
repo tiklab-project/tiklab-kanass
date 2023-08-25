@@ -2,6 +2,7 @@ package io.tiklab.teamwire.project.project.service;
 
 import com.alibaba.fastjson.JSONObject;
 import io.tiklab.core.utils.UuidGenerator;
+import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.teamwire.project.milestone.model.Milestone;
@@ -62,6 +63,7 @@ import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -78,6 +80,9 @@ import java.util.stream.Collectors;
 @Exporter
 @Service
 public class ProjectServiceImpl implements ProjectService {
+
+    @Autowired
+    JpaTemplate jpaTemplate;
 
     @Autowired
     ProjectDao projectDao;
@@ -757,7 +762,15 @@ public class ProjectServiceImpl implements ProjectService {
 
         joinTemplate.joinQuery(projectList);
 
+
         return projectList;
+    }
+
+    public List<Map<String, Object>> findRecentProjectWorkItemCount(String projectIds, String statusCode) {
+        String sql = "select project_id, count(1) as count from pmc_work_item t where t.project_id in "+ projectIds + " and t.work_status_code = '" + statusCode + "' GROUP BY project_id";
+        List<Map<String, Object>> maps = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        System.out.println(maps);
+        return maps;
     }
 
     /**

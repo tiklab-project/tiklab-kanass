@@ -111,6 +111,9 @@ public class WorkItemEntity implements Serializable {
     @Column(name = "plan_end_time")
     private Date planEndTime;
 
+    @Column(name = "update_time")
+    private String updateTime;
+
     //事项创建时间
     @Column(name = "build_time")
     private String buildTime;
@@ -396,5 +399,13 @@ public class WorkItemEntity implements Serializable {
 
     public void setEachType(String eachType) {
         this.eachType = eachType;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

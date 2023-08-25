@@ -189,6 +189,11 @@ public class WorkItem extends BaseModel {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String buildTime;
 
+    @ApiProperty(name="updateTime",desc="事项更新时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String updateTime;
+
     @ApiProperty(name="percent",desc="完成率")
     private Integer percent;
 
@@ -526,5 +531,13 @@ public class WorkItem extends BaseModel {
 
     public void setTransitionId(String transitionId) {
         this.transitionId = transitionId;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

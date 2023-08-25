@@ -36,9 +36,11 @@ public class SprintBurnDowmChartServiceImpl implements SprintBurnDowmChartServic
     SprintService sprintService;
 
 //    @Scheduled(cron="0/10 * * * * ?")
-    @Scheduled(cron="0 0 23 * * ?")
-    @Transactional
+//    @Scheduled(cron="0 0 23 * * ?")
+
+
     public void everyProjectBurnDownCharts() {
+        System.out.println("20");
         List<Sprint> allSprint = sprintService.findAllSprint();
         for(int i=0;i<allSprint.size();i++) {
             String id = allSprint.get(i).getId();

@@ -514,6 +514,9 @@ public class WorkItemServiceImpl implements WorkItemService {
         logContent.put("oldValue", oldValue);
 
         //更新数据
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = formater.format(new Date());
+        workItem.setUpdateTime(format);
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
 
@@ -712,9 +715,8 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Override
     public Integer findWorkItemListCount(WorkItemQuery workItemQuery) {
-        List<WorkItemEntity> workItemEntityList = workItemDao.findWorkItemListCount(workItemQuery);
+        Integer size = workItemDao.findWorkItemListCount(workItemQuery);
 
-        int size = workItemEntityList.size();
         return size;
     }
 

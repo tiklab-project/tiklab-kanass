@@ -103,6 +103,12 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="moduleIds",desc = "模块ids,范围匹配")
     private List<String> moduleIds;
 
+    @ApiProperty(name ="updateTimeStart",desc = "搜索创建开始时间")
+    private String updateTimeStart;
+
+    @ApiProperty(name ="updateTimeEnd",desc = "搜索创建开始时间")
+    private String updateTimeEnd;
+
     @ApiProperty(name ="buildTimeStart",desc = "搜索创建开始时间")
     private String buildTimeStart;
 
@@ -568,5 +574,21 @@ public class WorkItemQuery implements Serializable {
 
     public void setOverdue(Boolean overdue) {
         this.overdue = overdue;
+    }
+
+    public String getUpdateTimeStart() {
+        return updateTimeStart;
+    }
+
+    public void setUpdateTimeStart(String updateTimeStart) {
+        this.updateTimeStart = updateTimeStart;
+    }
+
+    public String getUpdateTimeEnd() {
+        return updateTimeEnd;
+    }
+
+    public void setUpdateTimeEnd(String updateTimeEnd) {
+        this.updateTimeEnd = updateTimeEnd;
     }
 }
