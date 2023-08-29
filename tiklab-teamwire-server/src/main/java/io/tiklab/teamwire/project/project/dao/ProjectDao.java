@@ -21,6 +21,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -230,6 +231,22 @@ public class ProjectDao{
                 .get();
         return jpaTemplate.findList(queryBuilders, ProjectEntity.class);
     }
+
+    /**
+     * 查找我最近查看的项目
+     * @param projectQuery
+     * @return
+     */
+    public List<ProjectEntity> findRecentProjectListOrderByDate(ProjectQuery projectQuery){
+        String master = projectQuery.getRecentMasterId();
+        String sql = "select rs.id as id, rs.project_name as project_name, rs.project_type_id as project_type_id, rs.icon_url as icon_url from pmc_project rs left join pmc_recent rc on rs.id = rc.model_id where rc.model='project'\n" +
+                "and rc.master_id='" + master + "' order by rc.recent_time desc";
+
+        List<ProjectEntity> projectEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(ProjectEntity.class));
+
+        return projectEntityList;
+    }
+
 
     /**
      * 查找我收藏的项目

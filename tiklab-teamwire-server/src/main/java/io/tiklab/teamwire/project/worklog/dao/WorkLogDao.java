@@ -1,5 +1,7 @@
 package io.tiklab.teamwire.project.worklog.dao;
 
+import io.tiklab.core.order.Order;
+import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
 import io.tiklab.teamwire.project.project.service.ProjectService;
@@ -28,6 +30,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import io.tiklab.dal.jdbc.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -189,7 +192,14 @@ public class WorkLogDao{
         if(String.valueOf(o1).length()>0){
             sql = sql.concat("where " + String.valueOf(o1));
         }
-
+        if(!ObjectUtils.isEmpty(workLogQuery.getOrderParams())){
+            sql= sql.concat(" order by ");
+        }
+        for (Order orderParam : workLogQuery.getOrderParams()) {
+            OrderTypeEnum orderType = orderParam.getOrderType();
+            String name = orderParam.getName();
+            sql = sql.concat(name + " " + orderType );
+        }
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         Pagination page = jdbcTemplate.findPage(sql, new Object[]{}, workLogQuery.getPageParam(), new BeanPropertyRowMapper(WorkLogEntity.class));
         return page;

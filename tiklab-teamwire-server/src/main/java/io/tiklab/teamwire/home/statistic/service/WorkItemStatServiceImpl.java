@@ -136,30 +136,26 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
         List<Map<String, Object>> doneWorkCount = projectService.findRecentProjectWorkItemCount(projectIds, "DONE");
         List<Map<String, Object>> progress = projectService.findRecentProjectWorkItemCount(projectIds, "PROGRESS");
 
-
-
         for (Project project : projectList) {
             ProjectWorkItemStat projectWorkItemStat = new ProjectWorkItemStat();
             projectWorkItemStat.setProject(project);
             String id = project.getId();
-            List<Map<String, Object>> doneWork = doneWorkCount.stream().filter(e -> e.get("project_id") == id).collect(Collectors.toList());
+            List<Map<String, Object>> doneWork = doneWorkCount.stream().filter(e -> e.get("project_id").equals(id)).collect(Collectors.toList());
             if(doneWork.size() > 0){
                 Object count = doneWork.get(0).get("count");
-                if (count instanceof Integer) {
-                    int doneNum = ((Integer) count).intValue(); // 将Object类型转换为int类型
-                    projectWorkItemStat.setEndWorkItemCount(doneNum);
-                }
+                Number countNum = (Number) count;
+                int doneNum = countNum.intValue();
+                projectWorkItemStat.setEndWorkItemCount(doneNum);
             }else {
                 projectWorkItemStat.setEndWorkItemCount(0);
             }
 
-            List<Map<String, Object>> processWork = progress.stream().filter(e -> e.get("project_id") == id).collect(Collectors.toList());
+            List<Map<String, Object>> processWork = progress.stream().filter(e -> e.get("project_id").equals(id)).collect(Collectors.toList());
             if(processWork.size() > 0){
                 Object count = processWork.get(0).get("count");
-                if (count instanceof Integer) {
-                    int doneNum = ((Integer) count).intValue(); // 将Object类型转换为int类型
-                    projectWorkItemStat.setProcessWorkItemCount(doneNum);
-                }
+                Number countNum = (Number) count;
+                int processNum = countNum.intValue();
+                projectWorkItemStat.setProcessWorkItemCount(processNum);
             }else {
                 projectWorkItemStat.setProcessWorkItemCount(0);
             }

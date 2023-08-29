@@ -191,7 +191,6 @@ public class WorkItemDao{
     public Pagination<WorkItemEntity> findWorkItemPage(WorkItemQuery workItemQuery){
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class,"wi")
                 .eq("wi.id", workItemQuery.getId())
-                .like("wi.title", workItemQuery.getTitle())
                 .eq("wi.parentId", workItemQuery.getParentId())
                 .eq("wi.versionId", workItemQuery.getVersionId())
                 .eq("wi.workTypeId", workItemQuery.getWorkTypeId())
@@ -205,7 +204,21 @@ public class WorkItemDao{
         if(workItemQuery.getWorkTypeIds() != null){
             List<String> workTypeIdsIds = workItemQuery.getWorkTypeIds();
             String[] arr = workTypeIdsIds.toArray(new String[workTypeIdsIds.size()]);
-            queryBuilders.in("wi.workTypeId", arr);
+            queryBuilders.in("wi.workTypeSysId", arr);
+        }
+
+        if(workItemQuery.getWorkStatusIds() != null){
+            List<String> workStatusIds = workItemQuery.getWorkStatusIds();
+            String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
+            queryBuilders.in("wi.workStatusNodeId", arr);
+        }
+
+        if(workItemQuery.getLikeId() != null && workItemQuery.getTitle() != null){
+            OrQueryCondition orQueryCondition = OrQueryBuilders.instance()
+                    .like("id", workItemQuery.getLikeId())
+                    .like("title", workItemQuery.getTitle())
+                    .get();
+            queryBuilders = queryBuilders.or(orQueryCondition);
         }
         QueryCondition queryCondition = queryBuilders.get();
         return jpaTemplate.findPage(queryCondition, WorkItemEntity.class);
@@ -278,26 +291,38 @@ public class WorkItemDao{
         String[] strings = new String[size];
         String[] array = objects.toArray(strings);
 
-        //
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class)
-                .like("title", workItemQuery.getTitle())
                 .notIn("id",array)
                 .eq("workTypeId", workItemQuery.getWorkTypeId())
                 .eq("projectId", workItemQuery.getProjectId())
                 .orders(workItemQuery.getOrderParams())
                 .pagination(workItemQuery.getPageParam());
 
-        OrQueryCondition orQueryBuildCondition = OrQueryBuilders.instance()
-                .notIn("parentId",arrayId)
+
+        OrQueryCondition orQueryCondition = OrQueryBuilders.instance()
+                .notIn("parentId", arrayId)
                 .isNull("parentId")
                 .get();
+        queryBuilders = queryBuilders.or(orQueryCondition);
+        if(workItemQuery.getLikeId() != null &&  workItemQuery.getTitle() != null){
+            OrQueryCondition orQueryBuildCondition1 = OrQueryBuilders.instance()
+                    .like("id", workItemQuery.getLikeId())
+                    .like("title", workItemQuery.getTitle())
+                    .get();
+            queryBuilders = queryBuilders.or(orQueryBuildCondition1);
+        }
 
-        queryBuilders = queryBuilders.or(orQueryBuildCondition);
 
         if(workItemQuery.getWorkPriorityIds() != null){
             List<String> workPriorityIdsIds = workItemQuery.getWorkPriorityIds();
             String[] arr = workPriorityIdsIds.toArray(new String[workPriorityIdsIds.size()]);
             queryBuilders.in("workPriorityId", arr);
+        }
+
+        if(workItemQuery.getWorkStatusIds() != null){
+            List<String> workStatusIds = workItemQuery.getWorkStatusIds();
+            String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
+            queryBuilders.in("workStatusNodeId", arr);
         }
 
         QueryCondition queryCondition = queryBuilders.get();

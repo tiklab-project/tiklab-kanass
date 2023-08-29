@@ -1,6 +1,8 @@
 package io.tiklab.teamwire.project.project.service;
 
 import com.alibaba.fastjson.JSONObject;
+import io.tiklab.core.order.Order;
+import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.eam.common.context.LoginContext;
@@ -756,10 +758,8 @@ public class ProjectServiceImpl implements ProjectService {
         String userId = LoginContext.getLoginId();
         projectQuery.setRecentMasterId(userId);
 
-        List<ProjectEntity> projectEntityList =  projectDao.findRecentProjectList(projectQuery);
-
+        List<ProjectEntity> projectEntityList =  projectDao.findRecentProjectListOrderByDate(projectQuery);
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
-
         joinTemplate.joinQuery(projectList);
 
 

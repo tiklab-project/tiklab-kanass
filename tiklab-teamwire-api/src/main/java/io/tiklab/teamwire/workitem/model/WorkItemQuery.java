@@ -20,6 +20,9 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="id",desc = "事项ID，精确匹配")
     private String id;
 
+    @ApiProperty(name ="likeId",desc = "事项ID，精确匹配")
+    private String likeId;
+
     @ApiProperty(name ="overdue",desc = "是否逾期")
     private Boolean overdue;
 
@@ -590,5 +593,13 @@ public class WorkItemQuery implements Serializable {
 
     public void setUpdateTimeEnd(String updateTimeEnd) {
         this.updateTimeEnd = updateTimeEnd;
+    }
+
+    public String getLikeId() {
+        return likeId;
+    }
+
+    public void setLikeId(String likeId) {
+        this.likeId = likeId;
     }
 }
