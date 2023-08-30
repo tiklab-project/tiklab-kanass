@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.tiklab</groupId>
         <artifactId>tiklab-teamwire</artifactId>
-        <version>1.0.0.3</version>
+        <version>1.0.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>tiklab-teamwire-starter</artifactId>
     <name>${project.artifactId}</name>
@@ -55,14 +55,14 @@
                                         <artifactItem>
                                             <groupId>io.tiklab</groupId>
                                             <artifactId>tiklab-jdk-linux</artifactId>
-                                            <version>${project.version}</version>
+                                            <version>${tiklab-jdk.version}</version>
                                             <type>zip</type>
                                             <outputDirectory>embbed</outputDirectory>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>io.tiklab</groupId>
                                             <artifactId>tiklab-postgresql-linux</artifactId>
-                                            <version>${project.version}</version>
+                                            <version>${tiklab-jdk.version}</version>
                                             <type>zip</type>
                                             <outputDirectory>embbed</outputDirectory>
                                         </artifactItem>
@@ -179,14 +179,14 @@
                                         <artifactItem>
                                             <groupId>io.tiklab</groupId>
                                             <artifactId>tiklab-jdk-mac</artifactId>
-                                            <version>${project.version}</version>
+                                            <version>${tiklab-jdk.version}</version>
                                             <type>zip</type>
                                             <outputDirectory>embbed</outputDirectory>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>io.tiklab</groupId>
                                             <artifactId>tiklab-mysql-mac</artifactId>
-                                            <version>${project.version}</version>
+                                            <version>${tiklab-mysql.version}</version>
                                             <type>zip</type>
                                             <outputDirectory>embbed</outputDirectory>
                                         </artifactItem>

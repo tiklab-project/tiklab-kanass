@@ -69,6 +69,12 @@ public interface ProjectWikiRepositoryService {
     List<KanassRepository> findProjectWikiRepositoryList(ProjectWikiRepositoryQuery projectWikiRepositoryQuery);
 
     /**
+     * 根据条件查找人员
+     * @return
+     */
+
+
+    /**
      * 根据条件按照分页查找计划列表
      * @param projectWikiRepositoryQuery
      * @return

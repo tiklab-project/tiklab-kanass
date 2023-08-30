@@ -10,6 +10,8 @@ import io.tiklab.teamwire.project.wiki.model.KanassRepository;
 import io.tiklab.teamwire.project.wiki.model.ProjectWikiRepository;
 import io.tiklab.teamwire.project.wiki.model.ProjectWikiRepositoryQuery;
 import io.tiklab.teamwire.project.wiki.service.ProjectWikiRepositoryService;
+import io.tiklab.teamwire.project.wiki.service.WikiRepositoryService;
+import io.tiklab.user.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,4 +123,6 @@ public class ProjectWikiRepositoryController {
 
         return Result.ok(pagination);
     }
+
+
 }

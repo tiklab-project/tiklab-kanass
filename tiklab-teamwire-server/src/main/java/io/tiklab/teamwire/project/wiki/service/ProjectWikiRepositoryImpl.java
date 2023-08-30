@@ -10,6 +10,7 @@ import io.tiklab.core.page.PaginationBuilder;
 
 import io.tiklab.beans.BeanMapper;
 import io.tiklab.join.JoinTemplate;
+import io.tiklab.user.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -132,9 +133,9 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
 
         }
 
-
         return wikiRepositoryList;
     }
+
 
     @Override
     public Pagination<ProjectWikiRepository> findProjectWikiRepositoryPage(ProjectWikiRepositoryQuery projectWikiRepositoryQuery) {

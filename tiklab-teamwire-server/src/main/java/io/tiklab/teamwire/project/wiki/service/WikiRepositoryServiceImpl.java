@@ -9,6 +9,8 @@ import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
 import io.tiklab.teamwire.support.support.SystemId;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
+import io.tiklab.user.user.model.User;
+import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,14 @@ public class WikiRepositoryServiceImpl implements io.tiklab.teamwire.project.wik
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return new RpcClientTeamWireUtil().rpcClient().getBean(WikiRepositoryService.class, new FixedLookup(url));
+    }
+
+    UserService userServiceRpc(){
+        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
+        systemUrlQuery.setName("kanass");
+        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
+        String url = systemUrlList.get(0).getSystemUrl();
+        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
     }
 
     @Override
@@ -62,4 +72,7 @@ public class WikiRepositoryServiceImpl implements io.tiklab.teamwire.project.wik
 
         return kanassRepositoryList;
     }
+
+
+
 }

@@ -1,6 +1,7 @@
 package io.tiklab.teamwire.project.wiki.service;
 
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
+import io.tiklab.user.user.model.User;
 
 import java.util.List;
 

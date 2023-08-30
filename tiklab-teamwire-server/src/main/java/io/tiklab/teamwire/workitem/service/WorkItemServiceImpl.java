@@ -406,8 +406,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         //设置创建时间
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = formater.format(new Date());
-        logger.info("curentTime:{}", new Date());
-        logger.info("curentTime2:{}", format);
         workItem.setBuildTime(format);
 
 

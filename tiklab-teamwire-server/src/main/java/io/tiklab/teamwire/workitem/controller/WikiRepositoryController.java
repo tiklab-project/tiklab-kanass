@@ -7,6 +7,7 @@ import io.tiklab.postin.annotation.Api;
 import io.tiklab.postin.annotation.ApiMethod;
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
 import io.tiklab.teamwire.project.wiki.service.WikiRepositoryService;
+import io.tiklab.user.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

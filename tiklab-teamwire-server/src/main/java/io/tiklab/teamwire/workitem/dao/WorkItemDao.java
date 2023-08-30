@@ -735,6 +735,8 @@ public class WorkItemDao{
         String sql0 = "";
         if(!ObjectUtils.isEmpty(o1)) {
             sql0 = sql0.concat(sql + " where " + String.valueOf(o1));
+        }else {
+            sql0 = sql;
         }
         Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql0, new Object[]{}, Integer.class);
         WorkItemCount.put("all", allNum);
