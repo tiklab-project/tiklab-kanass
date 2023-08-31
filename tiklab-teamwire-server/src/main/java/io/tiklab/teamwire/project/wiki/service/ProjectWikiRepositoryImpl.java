@@ -10,7 +10,7 @@ import io.tiklab.core.page.PaginationBuilder;
 
 import io.tiklab.beans.BeanMapper;
 import io.tiklab.join.JoinTemplate;
-import io.tiklab.user.user.model.User;
+import io.tiklab.teamwire.workitem.service.WorkRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
 
 
     @Autowired
-    WikiRepositoryService wikiRepositoryService;
+    WorkRepositoryService workRepositoryService;
 
     @Override
     public String createProjectWikiRepository(@NotNull @Valid ProjectWikiRepository projectWikiRepository) {
@@ -90,7 +90,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
         List<KanassRepository> projectWikiWikiRepositoryList = findProjectWikiRepositoryList(projectWikiRepositoryQuery);
         List<String> repositoryIds = projectWikiWikiRepositoryList.stream().map(projectWikiRepository -> projectWikiRepository.getId()).collect(Collectors.toList());
 
-        List<KanassRepository> allWikiRepository = wikiRepositoryService.findAllRepository();
+        List<KanassRepository> allWikiRepository = workRepositoryService.findAllRepository();
 
         List<KanassRepository> wikiRepositoryList = allWikiRepository.stream().filter(repository -> !repositoryIds.contains(repository.getId())).collect(Collectors.toList());
 
@@ -129,7 +129,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
         List<KanassRepository> wikiRepositoryList = new ArrayList<KanassRepository>();
 
         if(repositoryIds.size() > 0){
-            wikiRepositoryList = wikiRepositoryService.findList(repositoryIds);
+            wikiRepositoryList = workRepositoryService.findList(repositoryIds);
 
         }
 

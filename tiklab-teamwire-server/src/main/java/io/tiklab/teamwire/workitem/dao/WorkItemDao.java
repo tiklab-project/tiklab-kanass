@@ -1,12 +1,11 @@
 package io.tiklab.teamwire.workitem.dao;
 
-import io.tiklab.beans.BeanMapper;
 import io.tiklab.core.order.Order;
 import io.tiklab.core.order.OrderTypeEnum;
-import io.tiklab.core.page.Page;
 import io.tiklab.teamwire.project.epic.entity.EpicWorkItemEntity;
 import io.tiklab.teamwire.project.plan.entity.PlanWorkItemEntity;
 import io.tiklab.teamwire.workitem.entity.WorkItemEntity;
+import io.tiklab.teamwire.workitem.model.WorkItem;
 import io.tiklab.teamwire.workitem.model.WorkItemQuery;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jdbc.JdbcTemplate;
@@ -100,6 +99,7 @@ public class WorkItemDao{
                 .like("wi.title",workItemQuery.getTitle())
                 .eq("wi.projectId",workItemQuery.getProjectId())
                 .in("wi.parentId", workItemQuery.getParentIdIn())
+                .eq("wi.parentId", workItemQuery.getParentId())
                 .eq("wi.versionId", workItemQuery.getVersionId())
                 .eq("wi.workTypeSysId", workItemQuery.getWorkTypeId())
                 .eq("wi.workStatusId", workItemQuery.getWorkStatusId())
@@ -724,7 +724,7 @@ public class WorkItemDao{
         return WorkItemCount;
     }
 
-    public HashMap<String, Integer> findWorkItemNumByWorkList(WorkItemQuery workItemQuery){
+    public HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery){
         HashMap<String, Integer> WorkItemCount = new HashMap<>();
         workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
@@ -900,6 +900,109 @@ public class WorkItemDao{
         Pagination WorkItemPageList = this.jpaTemplate.getJdbcTemplate().findPage(workSql, new String[]{word}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
         return WorkItemPageList;
     }
+    public Pagination<WorkItemEntity> findCanBeRelationParentWorkItemList(WorkItemQuery workItemQuery){
+        String id = workItemQuery.getId();
+        String projectId = workItemQuery.getProjectId();
+        String workTypeId = workItemQuery.getWorkTypeId();
+        String sql = "select * from pmc_work_item where id != '" + id
+                + "' and (tree_path not like '%" + id + ";%' or tree_path is null) and project_id = ? and work_type_id = ?";
+        if(workItemQuery.getLikeId() != null){
+            String likeId = workItemQuery.getLikeId();
+            String title = workItemQuery.getTitle();
+            sql = sql.concat(" and (id like '%" + likeId + "%' or title like '%" + title + "%')");
+        }
+
+        // 前置的前置不能作为父级
+        List<String> preWorkItemIds = new ArrayList<>();
+        findPreIds(id, preWorkItemIds);
+        if(preWorkItemIds.size() > 0){
+            sql = sql.concat(" and id not in " + preWorkItemIds);
+        }
+
+        Pagination WorkItemPageList = this.jpaTemplate.getJdbcTemplate().findPage(sql, new String[]{ projectId, workTypeId}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
+        return WorkItemPageList;
+    }
+
+    public Pagination<WorkItemEntity> findCanBeRelationPreWorkItemList(WorkItemQuery workItemQuery){
+        String projectId = workItemQuery.getProjectId();
+        String workTypeId = workItemQuery.getWorkTypeId();
+        String id = workItemQuery.getId();
+        String sql = "select * from pmc_work_item where id != '" + id
+                + "' and (tree_path not like '%" + id + ";%' or tree_path is null) and project_id = ? and work_type_id = ?";
+
+        //查找当前事项的上级，不能设置为前置事项, 暂时去掉
+        String sql1 = "select tree_path from pmc_work_item where id = '" + id + "'";
+        String treePathString = this.jpaTemplate.getJdbcTemplate().queryForObject(sql1, String.class);
+
+        if(treePathString != null &&  treePathString.length() > 0){
+            String[] treePathIds = treePathString.split(";");
+            String tree = new String("(");
+            for (String treePathId : treePathIds) {
+                tree = tree.concat("'" + treePathId + "',");
+            }
+            tree = tree.substring(0, tree.length() - 1);
+            tree = tree.concat(")");
+            sql = sql.concat(" and id not in " + tree);
+        }
 
 
+        // 查找当前事项的后置事项，以及后置的后置， 不能包括包括后置的事项, 暂时去掉
+        List<String> postWorkItemIds = new ArrayList<>();
+        findPostIds(id, postWorkItemIds);
+        String postSql = new String("(");
+        if(postWorkItemIds.size() > 0){
+            for (String postWorkItemId : postWorkItemIds) {
+                postSql = postSql.concat("'" + postWorkItemId + "',");
+            }
+            postSql = postSql.substring(0, postSql.length() - 1);
+            postSql = postSql.concat(")");
+            sql = sql.concat(" and id not in " + postSql);
+        }
+
+        // 查找已经被用作前置事项的事项
+        String sql2 = "select pre_depend_id from pmc_work_item where project_id = '" + projectId +  "' and id != '" + id + "'";
+        List<String> preWorkItemIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql2, String.class);
+        String preSql = new String("(");
+        if(preWorkItemIds.size() > 0){
+            for (String preWorkItemId : preWorkItemIds) {
+                if(preWorkItemId != null){
+                    preSql = preSql.concat("'" + preWorkItemId + "',");
+                }
+
+            }
+            preSql = preSql.substring(0, preSql.length() - 1);
+            preSql = preSql.concat(")");
+            sql = sql.concat(" and id not in " + preSql);
+        }
+
+        if(workItemQuery.getLikeId() != null){
+            String likeId = workItemQuery.getLikeId();
+            String title = workItemQuery.getTitle();
+            sql = sql .concat(" and (id like '%" + likeId + "%' or title like '%" + title + "%')");
+        }
+
+        Pagination WorkItemPageList = this.jpaTemplate.getJdbcTemplate().findPage(sql, new String[]{projectId, workTypeId}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
+        return WorkItemPageList;
+    }
+
+
+    public void findPostIds(String id, List<String> postWorkItemIds){
+        String sql = "select id from pmc_work_item where pre_depend_id = '" + id +  "'";
+        List<String> postIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(postIds.size() > 0){
+            postWorkItemIds.addAll(postIds);
+            for (String postId : postIds) {
+                findPostIds(postId, postWorkItemIds);
+            }
+        }
+    }
+
+    public void findPreIds(String id, List<String> preWorkItemIds){
+        String sql = "select pre_depend_id from pmc_work_item where id = '" + id +  "'";
+        String preId = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, String.class);
+        if(preId != null && preId.length() > 0){
+            preWorkItemIds.add(preId);
+            findPostIds(preId, preWorkItemIds);
+        }
+    }
 }

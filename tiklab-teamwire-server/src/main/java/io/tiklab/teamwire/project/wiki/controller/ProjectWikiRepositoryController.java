@@ -1,7 +1,6 @@
 package io.tiklab.teamwire.project.wiki.controller;
 
 import io.tiklab.core.page.Pagination;
-import io.tiklab.kanass.repository.model.WikiRepository;
 import io.tiklab.postin.annotation.Api;
 import io.tiklab.core.Result;
 import io.tiklab.postin.annotation.ApiMethod;
@@ -10,8 +9,6 @@ import io.tiklab.teamwire.project.wiki.model.KanassRepository;
 import io.tiklab.teamwire.project.wiki.model.ProjectWikiRepository;
 import io.tiklab.teamwire.project.wiki.model.ProjectWikiRepositoryQuery;
 import io.tiklab.teamwire.project.wiki.service.ProjectWikiRepositoryService;
-import io.tiklab.teamwire.project.wiki.service.WikiRepositoryService;
-import io.tiklab.user.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

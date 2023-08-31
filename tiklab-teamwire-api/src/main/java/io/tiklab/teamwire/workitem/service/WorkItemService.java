@@ -177,6 +177,9 @@ public interface WorkItemService {
 
     HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery);
 
-    HashMap<String, Integer> findWorkItemNumByWorkList(WorkItemQuery workItemQuery);
+    HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery);
 
+    Pagination<WorkItem>findCanBeRelationParentWorkItemList(WorkItemQuery workItemQuery);
+
+    Pagination<WorkItem>findCanBeRelationPerWorkItemList(WorkItemQuery workItemQuery);
 }

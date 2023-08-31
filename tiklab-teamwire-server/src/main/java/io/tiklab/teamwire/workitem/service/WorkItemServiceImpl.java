@@ -7,9 +7,6 @@ import io.tiklab.flow.flow.model.*;
 import io.tiklab.flow.flow.service.FlowWorkRelationService;
 import io.tiklab.flow.statenode.model.*;
 import io.tiklab.flow.statenode.service.StateNodeWorkRelationService;
-import io.tiklab.flow.transition.dao.TransitionRuleDao;
-import io.tiklab.flow.transition.entity.TransitionRuleEntity;
-import io.tiklab.flow.transition.model.Transition;
 import io.tiklab.flow.transition.model.TransitionRule;
 import io.tiklab.flow.transition.model.TransitionRuleQuery;
 import io.tiklab.flow.transition.service.TransitionRuleService;
@@ -494,10 +491,14 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
             workItem.setRootId(parentWorkItem.getRootId());
             workItem.setTreePath(treePath);
+        }else if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
+                workItem.getParentWorkItem().getId().equals("nullstring")){
+
+            workItem.setRootId(id);
+            workItem.setTreePath("nullstring");
         }
         //更新事项状态
-        if(updateField != null  &&
-                updateField.equals("workStatusNode")){
+        if(updateField != null  && updateField.equals("workStatusNode")){
             updateWorkItemStatus(workItem);
             updateByTransitionRule(workItem, oldWorkItem);
         }
@@ -547,24 +548,50 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     void updateWorkItemStatus(WorkItem workItem) {
-            // 查找状态对应的项目状态
-            StateNode workStatusNode = workItem.getWorkStatusNode();
-            StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
-            stateNodeFlowQuery.setNodeId(workStatusNode.getId());
-            stateNodeFlowQuery.setFlowId(workItem.getFlowId());
-            List<StateNodeFlow> stateNodeFlowList = stateNodeflowService.findStateNodeFlowList(stateNodeFlowQuery);
+        // 1. 判断子事项是否全部解决完成
+        String statusId = workItem.getWorkStatusNode().getId();
+        String id = workItem.getId();
+        if(statusId.equals("done")){
 
-            StateNodeFlow stateNodeFlow = stateNodeFlowList.get(0);
-            // 设置状态对应的系统状态
-            workItem.setWorkStatus(stateNodeFlow);
-            workItem.setWorkStatusCode(stateNodeFlow.getNodeStatus());
-            String nodeStatus = stateNodeFlow.getNodeStatus();
-            // 设置事项结束时间
-            if(nodeStatus.equals("DONE")){
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String format = formater.format(new Date());
-                workItem.setActualEndTime(format);
+            WorkItemQuery childWorkItemQuery = new WorkItemQuery();
+            childWorkItemQuery.setParentId(id);
+            List<WorkItemEntity> workItemList = workItemDao.findWorkItemList(childWorkItemQuery);
+            List<WorkItemEntity> collect = workItemList.stream().filter(work -> !work.getWorkStatusNodeId().equals("done")).collect(Collectors.toList());
+            if(collect.size() > 0){
+                throw new ApplicationException("还有下级事项没有关闭");
             }
+        }
+        if(!statusId.equals("todo")){
+            WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
+            String preDependId = workItem1.getPreDependId();
+            if(preDependId == null || preDependId.length() < 1){
+                return;
+            }
+            WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
+            if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
+                throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
+            }
+
+        }
+
+        // 查找状态对应的项目状态
+        StateNode workStatusNode = workItem.getWorkStatusNode();
+        StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
+        stateNodeFlowQuery.setNodeId(workStatusNode.getId());
+        stateNodeFlowQuery.setFlowId(workItem.getFlowId());
+        List<StateNodeFlow> stateNodeFlowList = stateNodeflowService.findStateNodeFlowList(stateNodeFlowQuery);
+
+        StateNodeFlow stateNodeFlow = stateNodeFlowList.get(0);
+        // 设置状态对应的系统状态
+        workItem.setWorkStatus(stateNodeFlow);
+        workItem.setWorkStatusCode(stateNodeFlow.getNodeStatus());
+        String nodeStatus = stateNodeFlow.getNodeStatus();
+        // 设置事项结束时间
+        if(nodeStatus.equals("DONE")){
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formater.format(new Date());
+            workItem.setActualEndTime(format);
+        }
 
 
     }
@@ -976,8 +1003,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         return childList;
     }
 
-
-
     @Override
     public List<WorkUserGroupBoard> findWorkUserGroupBoardList(WorkItemQuery workItemQuery) {
         ArrayList<WorkUserGroupBoard> workUserGroupBoardArrayList = new ArrayList<>();
@@ -1110,9 +1135,27 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     @Override
-    public HashMap<String, Integer> findWorkItemNumByWorkList(WorkItemQuery workItemQuery) {
-        HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkList(workItemQuery);
+    public HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery) {
+        HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkStatus(workItemQuery);
         return workItemNumByWorkType;
+    }
+
+    @Override
+    public Pagination<WorkItem> findCanBeRelationParentWorkItemList(WorkItemQuery workItemQuery) {
+        Pagination<WorkItemEntity> pagination = workItemDao.findCanBeRelationParentWorkItemList(workItemQuery);
+        List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
+
+        joinTemplate.joinQuery(workItemList,  new String[]{"assigner", "workPriority", "workStatusNode", "workTypeSys"});
+        return PaginationBuilder.build(pagination,workItemList);
+    }
+
+    @Override
+    public Pagination<WorkItem> findCanBeRelationPerWorkItemList(WorkItemQuery workItemQuery) {
+        Pagination<WorkItemEntity> pagination = workItemDao.findCanBeRelationPreWorkItemList(workItemQuery);
+        List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
+
+        joinTemplate.joinQuery(workItemList,  new String[]{"assigner", "workPriority", "workStatusNode", "workTypeSys"});
+        return PaginationBuilder.build(pagination,workItemList);
     }
 
 }

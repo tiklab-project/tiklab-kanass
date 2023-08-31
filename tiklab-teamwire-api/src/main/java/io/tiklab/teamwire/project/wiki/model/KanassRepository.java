@@ -10,13 +10,13 @@ public class KanassRepository {
     @ApiProperty(name="id",desc="id")
     private String id;
 
-    @ApiProperty(name="KanassRepositoryName",desc="测试仓库名称")
+    @ApiProperty(name="KanassRepositoryName",desc="知识库名称")
     private String KanassRepositoryName;
 
-    @ApiProperty(name="UserName",desc="父级阶段")
+    @ApiProperty(name="UserName",desc="用户")
     private String UserName;
 
-    @ApiProperty(name="iconUrl",desc="父级阶段")
+    @ApiProperty(name="iconUrl",desc="icon")
     private String iconUrl;
 
     @ApiProperty(name="createTime",desc="createTime")

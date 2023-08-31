@@ -3,7 +3,6 @@ package io.tiklab.teamwire.home.insight.dao;
 import io.tiklab.teamwire.home.insight.model.WorkItemCountQuery;
 import io.tiklab.teamwire.home.statistic.entity.ProjectBurnDowmChartEntity;
 import io.tiklab.teamwire.home.statistic.entity.SprintBurnDowmChartEntity;
-import io.tiklab.teamwire.home.statistic.service.SprintBurnDowmChartServiceImpl;
 import io.tiklab.teamwire.project.project.service.ProjectService;
 import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.dal.jpa.JpaTemplate;

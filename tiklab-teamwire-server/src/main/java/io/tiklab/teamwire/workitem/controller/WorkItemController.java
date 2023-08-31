@@ -226,13 +226,31 @@ public class WorkItemController {
         return Result.ok(workItemNumByWorkType);
     }
 
-    @RequestMapping(path = "/findWorkItemNumByWorkList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemNumByWorkList",desc = "根据查询对象按分页查找事项列表")
+    @RequestMapping(path = "/findWorkItemNumByWorkStatus",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemNumByWorkStatus",desc = "根据查询事项状态查找事项数量")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
-    public Result<Pagination<WorkItem>> findWorkItemNumByWorkList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
-        HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByWorkList(workItemQuery);
+    public Result<HashMap<String, Integer>> findWorkItemNumByWorkStatus(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByWorkStatus(workItemQuery);
 
         return Result.ok(workItemNumByWorkType);
+    }
+
+    @RequestMapping(path = "/findCanBeRelationParentWorkItemList",method = RequestMethod.POST)
+    @ApiMethod(name = "findCanBeRelationParentWorkItemList",desc = "根据查询事项状态查找可被关联的上级事项")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<Pagination<WorkItem>> findCanBeRelationParentWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        Pagination<WorkItem> canBeRelationParentWorkItemList = workItemService.findCanBeRelationParentWorkItemList(workItemQuery);
+
+        return Result.ok(canBeRelationParentWorkItemList);
+    }
+
+    @RequestMapping(path = "/findCanBeRelationPerWorkItemList",method = RequestMethod.POST)
+    @ApiMethod(name = "findCanBeRelationPerWorkItemList",desc = "根据查询事项状态查找可被关联的前置事项")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<Pagination<WorkItem>> findCanBeRelationPerWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        Pagination<WorkItem> canBeRelationPerWorkItemList = workItemService.findCanBeRelationPerWorkItemList(workItemQuery);
+
+        return Result.ok(canBeRelationPerWorkItemList);
     }
 
 }

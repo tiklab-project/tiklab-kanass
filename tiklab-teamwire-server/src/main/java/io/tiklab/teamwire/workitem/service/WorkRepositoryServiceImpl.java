@@ -1,4 +1,4 @@
-package io.tiklab.teamwire.project.wiki.service;
+package io.tiklab.teamwire.workitem.service;
 
 import io.tiklab.kanass.repository.model.WikiRepository;
 import io.tiklab.kanass.repository.service.WikiRepositoryService;
@@ -7,10 +7,7 @@ import io.tiklab.teamwire.project.wiki.model.KanassRepository;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
-import io.tiklab.teamwire.support.support.SystemId;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
-import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class WikiRepositoryServiceImpl implements io.tiklab.teamwire.project.wiki.service.WikiRepositoryService {
+public class WorkRepositoryServiceImpl implements WorkRepositoryService {
 
     @Autowired
     SystemUrlService systemUrlService;
@@ -31,13 +28,6 @@ public class WikiRepositoryServiceImpl implements io.tiklab.teamwire.project.wik
         return new RpcClientTeamWireUtil().rpcClient().getBean(WikiRepositoryService.class, new FixedLookup(url));
     }
 
-    UserService userServiceRpc(){
-        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("kanass");
-        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
-        String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
-    }
 
     @Override
     public List<KanassRepository> findAllRepository() {
@@ -73,6 +63,11 @@ public class WikiRepositoryServiceImpl implements io.tiklab.teamwire.project.wik
         return kanassRepositoryList;
     }
 
-
+    @Override
+    public List<KanassRepository> findRepository(String id){
+        System.out.println("zoule");
+//        List<User> allUser = userServiceRpc().findAllUser();
+        return null;
+    }
 
 }

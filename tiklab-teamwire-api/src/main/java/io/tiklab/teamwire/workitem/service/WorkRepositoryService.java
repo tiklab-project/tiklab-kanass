@@ -1,14 +1,13 @@
-package io.tiklab.teamwire.project.wiki.service;
+package io.tiklab.teamwire.workitem.service;
 
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
-import io.tiklab.user.user.model.User;
 
 import java.util.List;
 
 /**
 * 事项附件服务接口
 */
-public interface WikiRepositoryService {
+public interface WorkRepositoryService {
 
     /**
     * 根据条件查询事项附件列表
@@ -17,5 +16,7 @@ public interface WikiRepositoryService {
     List<KanassRepository> findAllRepository();
 
     List<KanassRepository> findList(List<String> idList);
+
+    List<KanassRepository> findRepository(String id);
 
 }

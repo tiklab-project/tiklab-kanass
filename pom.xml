@@ -12,9 +12,9 @@
     <artifactId>tiklab-teamwire</artifactId>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
-    <version>1.0.0.4</version>
+    <version>1.0.0.4-SNAPSHOT</version>
     <properties>
-        <tiklab-teamwire.version>1.0.4-SNAPSHOT</tiklab-teamwire.version>
+        <tiklab-teamwire.version>1.0.0.4-SNAPSHOT</tiklab-teamwire.version>
         <tiklab-mysql.version>1.0.0.3</tiklab-mysql.version>
         <tiklab-jdk.version>1.0.0.3</tiklab-jdk.version>
         <tiklab-toolkit.version>1.0.0.3</tiklab-toolkit.version>
@@ -207,11 +207,6 @@
                 <groupId>io.tiklab</groupId>
                 <artifactId>tiklab-postin-client</artifactId>
                 <version>${tiklab-postin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.tiklab</groupId>
-                <artifactId>tiklab-teamwire-api</artifactId>
-                <version>${tiklab-teamwire.version}</version>
             </dependency>
 
         </dependencies>
