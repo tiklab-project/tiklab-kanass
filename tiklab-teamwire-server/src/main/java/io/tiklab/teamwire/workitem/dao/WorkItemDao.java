@@ -960,7 +960,7 @@ public class WorkItemDao{
         }
 
         // 查找已经被用作前置事项的事项
-        String sql2 = "select pre_depend_id from pmc_work_item where project_id = '" + projectId +  "' and id != '" + id + "'";
+        String sql2 = "select pre_depend_id from pmc_work_item where project_id = '" + projectId +  "' and id != '" + id + "' and pre_depend_id is not null";
         List<String> preWorkItemIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql2, String.class);
         String preSql = new String("(");
         if(preWorkItemIds.size() > 0){
