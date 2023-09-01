@@ -255,7 +255,6 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('556157bb8449', '添加版本事项', 'VersionWorkAdd', '7d9b12620349', 25, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('5d5b64c3d172', '待办类型', 'SysTodoList', '48717b977129', 54, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('63fd58715558', '权限中心', 'SysPriviliege', NULL, 1, '1');
-INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('64bdf62686a4', '版本与许可证', 'SysVersion', NULL, 1, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('66bd7120b0de', '关联项目', 'RelationProject', 'dae13d309463', 1, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('72e68d34870e', '项目', 'Project', NULL, 1, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('746c3becb86f', '消息类型', 'SysMessageType', '47fb980c2919', 49, '1');
