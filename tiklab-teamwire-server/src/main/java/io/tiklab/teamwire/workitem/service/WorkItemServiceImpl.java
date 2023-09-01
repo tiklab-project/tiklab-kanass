@@ -414,10 +414,10 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         //设置treePath,
         if(workItem.getParentWorkItem() != null){
-            if(workItem.getParentWorkItem().getId() != null) {
+            if(workItem.getParentWorkItem().getId() != null && !workItem.getParentWorkItem().getId().equals("nullstring") ) {
                 String treePath = workItem.getParentWorkItem().getId() + ";";
                 WorkItem parentWorkItem = findWorkItem(workItem.getParentWorkItem().getId());
-                if(parentWorkItem.getTreePath() != null){
+                if(parentWorkItem != null && parentWorkItem.getTreePath() != null){
                     treePath = treePath.concat(parentWorkItem.getTreePath());
                 }
                 String rootId = parentWorkItem.getRootId();
