@@ -915,9 +915,18 @@ public class WorkItemDao{
         // 前置的前置不能作为父级
         List<String> preWorkItemIds = new ArrayList<>();
         findPreIds(id, preWorkItemIds);
+
+
         if(preWorkItemIds.size() > 0){
-            sql = sql.concat(" and id not in " + preWorkItemIds);
+            String preSql = new String("(");
+            for (String postWorkItemId : preWorkItemIds) {
+                preSql = preSql.concat("'" + postWorkItemId + "',");
+            }
+            preSql = preSql.substring(0, preSql.length() - 1);
+            preSql = preSql.concat(")");
+            sql = sql.concat(" and id not in " + preSql);
         }
+
 
         Pagination WorkItemPageList = this.jpaTemplate.getJdbcTemplate().findPage(sql, new String[]{ projectId, workTypeId}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
         return WorkItemPageList;

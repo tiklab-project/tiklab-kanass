@@ -27,15 +27,18 @@
         <tiklab-upgrade.version>1.0.0.3</tiklab-upgrade.version>
         <tiklab-rpc.version>1.0.0.3</tiklab-rpc.version>
         <tiklab-plugin.version>1.0.0.3</tiklab-plugin.version>
+
+
+        <tiklab-user.version>1.0.0.5</tiklab-user.version>
+        <tiklab-eam.version>1.0.0.5</tiklab-eam.version>
+        <tiklab-privilege.version>1.0.0.5</tiklab-privilege.version>
+        <tiklab-licence.version>1.0.0.5</tiklab-licence.version>
+        <tiklab-message.version>1.0.0.5</tiklab-message.version>
+        <tiklab-todotask.version>1.0.0.5</tiklab-todotask.version>
+        <tiklab-security.version>1.0.0.5</tiklab-security.version>
+
         <tiklab-form.version>1.0.0.3</tiklab-form.version>
         <tiklab-flow.version>1.0.0.3</tiklab-flow.version>
-        <tiklab-user.version>1.0.0.3</tiklab-user.version>
-        <tiklab-eam.version>1.0.0.3</tiklab-eam.version>
-        <tiklab-privilege.version>1.0.0.3</tiklab-privilege.version>
-        <tiklab-licence.version>1.0.0.3</tiklab-licence.version>
-        <tiklab-message.version>1.0.0.3</tiklab-message.version>
-        <tiklab-todotask.version>1.0.0.3</tiklab-todotask.version>
-        <tiklab-security.version>1.0.0.3</tiklab-security.version>
         <tiklab-postin.version>1.0.0.3</tiklab-postin.version>
         <tiklab-teston.version>1.0.0.3</tiklab-teston.version>
         <tiklab-kanass.version>1.0.0.3</tiklab-kanass.version>

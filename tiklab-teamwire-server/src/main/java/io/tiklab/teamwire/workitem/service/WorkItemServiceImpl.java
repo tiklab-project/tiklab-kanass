@@ -492,7 +492,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             workItem.setRootId(parentWorkItem.getRootId());
             workItem.setTreePath(treePath);
         }else if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
-                workItem.getParentWorkItem().getId().equals("nullstring")){
+            workItem.getParentWorkItem().getId().equals("nullstring")){
 
             workItem.setRootId(id);
             workItem.setTreePath("nullstring");
@@ -564,13 +564,13 @@ public class WorkItemServiceImpl implements WorkItemService {
         if(!statusId.equals("todo")){
             WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
             String preDependId = workItem1.getPreDependId();
-            if(preDependId == null || preDependId.length() < 1){
-                return;
+            if(preDependId != null && preDependId.length() > 1){
+                WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
+                if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
+                    throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
+                }
             }
-            WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
-            if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
-                throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
-            }
+
 
         }
 
