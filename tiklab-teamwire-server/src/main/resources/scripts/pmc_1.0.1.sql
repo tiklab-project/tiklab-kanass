@@ -260,7 +260,6 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('746c3becb86f', '消息类型', 'SysMessageType', '47fb980c2919', 49, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('77da6376511e', '项目类型', 'SysProjectType', NULL, 1, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('7c8652d3e2f0', '字段类型', 'SysFieldType', '290accfb27c3', 0, '1');
-INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('7d9b12620349', '版本', 'Version', NULL, 3, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('7ff4702ebe64', '项目功能管理', 'SysFeatrueProject', '63fd58715558', 0, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('86db94ef62a6', '用户管理', 'SysUser', '1465dc3ae3c4', NULL, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('8d33e4945151', '表单', 'SysFormList', '290accfb27c3', 1, '1');
@@ -452,7 +451,6 @@ INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b56a5709b0
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b67a5e4543a2', '32521b1d228f', 'df306d70374c');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b75a5cfcd434', '1', '90b4e472163a');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b8249548ac7f', '1', '585d26bcbdf3');
-INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ba2c6ec37566', '77f512ab7c53', '64bdf62686a4');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('bb08fa8647f0', '32521b1d228f', 'f4f16a0df8e4');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('bd5cc43663f3', '7fd9ce1c7be1', 'aa2bd97ffce7');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('bda657ee5e7b', '7fd9ce1c7be1', 'd3447a36dd98');
@@ -499,7 +497,6 @@ INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e621682033
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e829c3648f58', '4559d54bc8b7', 'f4f16a0df8e4');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e90ef4935ffb', '1', '043e412151db');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e9520e6c5112', '2', '09a64b79b631');
-INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ea14293d401e', '1', '64bdf62686a4');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ea1c42df716e', '2', '5386b5add6a5');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('eb73e860e5ad', '323810f03653', 'fdb16c391ffc');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('eb893c87f5ae', 'f899d7406414', 'dae13d309463');
