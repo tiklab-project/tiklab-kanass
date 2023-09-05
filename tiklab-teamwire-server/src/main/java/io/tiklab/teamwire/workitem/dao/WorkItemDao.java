@@ -197,30 +197,90 @@ public class WorkItemDao{
                 .eq("wi.workTypeSysId", workItemQuery.getWorkTypeSysId())
                 .eq("wi.projectId", workItemQuery.getProjectId())
                 .eq("wi.assignerId", workItemQuery.getAssignerId())
-                .notIn("wi.id", workItemQuery.getIdNotIn())
-                .orders(workItemQuery.getOrderParams())
-                .pagination(workItemQuery.getPageParam());
+                .eq("wi.sprintId", workItemQuery.getSprintId())
+                .notIn("wi.id", workItemQuery.getIdNotIn());
 
-        if(workItemQuery.getWorkTypeIds() != null){
-            List<String> workTypeIdsIds = workItemQuery.getWorkTypeIds();
-            String[] arr = workTypeIdsIds.toArray(new String[workTypeIdsIds.size()]);
-            queryBuilders.in("wi.workTypeSysId", arr);
+//        if(workItemQuery.getWorkTypeIds() != null){
+//            List<String> workTypeIdsIds = workItemQuery.getWorkTypeIds();
+//            String[] arr = workTypeIdsIds.toArray(new String[workTypeIdsIds.size()]);
+//            queryBuilders.in("wi.workTypeSysId", arr);
+//        }
+//
+//        if(workItemQuery.getWorkStatusIds() != null){
+//            List<String> workStatusIds = workItemQuery.getWorkStatusIds();
+//            String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
+//            queryBuilders.in("wi.workStatusNodeId", arr);
+//        }
+//
+//        if(workItemQuery.getLikeId() != null && workItemQuery.getTitle() != null){
+//            OrQueryCondition orQueryCondition = OrQueryBuilders.instance()
+//                    .like("id", workItemQuery.getLikeId())
+//                    .like("title", workItemQuery.getTitle())
+//                    .get();
+//            queryBuilders = queryBuilders.or(orQueryCondition);
+//        }
+        if(workItemQuery.getVersionIdIsNull() != null) {
+            if(workItemQuery.getVersionIdIsNull() == true){
+                queryBuilders = queryBuilders.isNull("wi.versionId");
+            }else {
+                queryBuilders = queryBuilders.isNotNull("wi.versionId");
+            }
+        }
+
+        if(workItemQuery.getSprintIdIsNull() != null) {
+            if(workItemQuery.getSprintIdIsNull() == true){
+                queryBuilders = queryBuilders.isNull("wi.sprintId");
+            }else {
+                queryBuilders = queryBuilders.isNotNull("wi.sprintId");
+            }
         }
 
         if(workItemQuery.getWorkStatusIds() != null){
             List<String> workStatusIds = workItemQuery.getWorkStatusIds();
             String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
-            queryBuilders.in("wi.workStatusNodeId", arr);
+            queryBuilders.in("wi.workStatusId", arr);
         }
 
-        if(workItemQuery.getLikeId() != null && workItemQuery.getTitle() != null){
-            OrQueryCondition orQueryCondition = OrQueryBuilders.instance()
-                    .like("id", workItemQuery.getLikeId())
-                    .like("title", workItemQuery.getTitle())
-                    .get();
-            queryBuilders = queryBuilders.or(orQueryCondition);
+        if(workItemQuery.getProjectIds() != null){
+            List<String> projectIds = workItemQuery.getProjectIds();
+            String[] arr = projectIds.toArray(new String[projectIds.size()]);
+            queryBuilders.in("wi.projectId", arr);
         }
-        QueryCondition queryCondition = queryBuilders.get();
+
+        if(workItemQuery.getWorkTypeIds() != null){
+            List<String> workTypeIdsIds = workItemQuery.getWorkTypeIds();
+            String[] arr = workTypeIdsIds.toArray(new String[workTypeIdsIds.size()]);
+            queryBuilders.in("wi.workTypeId", arr);
+        }
+
+        if(workItemQuery.getAssignerIds() != null){
+            List<String> assignerIds = workItemQuery.getAssignerIds();
+            String[] arr = assignerIds.toArray(new String[assignerIds.size()]);
+            queryBuilders.in("wi.assignerId", arr);
+        }
+
+        if(workItemQuery.getWorkTypeNoInIds() != null){
+            List<String> workStatusNoInIds = workItemQuery.getWorkTypeNoInIds();
+            String[] arr = workStatusNoInIds.toArray(new String[workStatusNoInIds.size()]);
+            queryBuilders.notIn("wi.workTypeId", arr);
+        }
+
+        if(workItemQuery.getParentIdIsNull() != null){
+            if(workItemQuery.getParentIdIsNull() == true){
+                queryBuilders = queryBuilders.isNull("wi.parentId");
+            }else {
+                queryBuilders = queryBuilders.isNotNull("wi.parentId");
+            }
+        }
+
+        if(workItemQuery.getRootIds() != null){
+            List<String> rootIds = workItemQuery.getRootIds();
+            String[] arr = rootIds.toArray(new String[rootIds.size()]);
+            queryBuilders.in("wi.rootId", arr);
+        }
+        QueryCondition queryCondition = queryBuilders
+                .orders(workItemQuery.getOrderParams())
+                .pagination(workItemQuery.getPageParam()).get();
         return jpaTemplate.findPage(queryCondition, WorkItemEntity.class);
     }
 
@@ -491,11 +551,11 @@ public class WorkItemDao{
 
         if(workItemQuery.getBuilderId() != null && workItemQuery.getBuilderId().length()>0){
             if(paramMap.isEmpty()){
-                sql = sql.concat(" p.builder_id = '" + workItemQuery.getUserId() + "'");
+                sql = sql.concat(" p.builder_id = '" + workItemQuery.getBuilderId() + "'");
             }else {
-                sql = sql.concat(" and p.builder_id = '" + workItemQuery.getUserId() + "'");
+                sql = sql.concat(" and p.builder_id = '" + workItemQuery.getBuilderId() + "'");
             }
-            paramMap.put("builderId", workItemQuery.getUserId());
+            paramMap.put("builderId", workItemQuery.getBuilderId());
         }
 
 
@@ -808,7 +868,7 @@ public class WorkItemDao{
      * @param workItemQuery
      * @return
      */
-    public List<WorkItemEntity> findConditionWorkItemList(WorkItemQuery workItemQuery) {
+    public Pagination<WorkItemEntity> findConditionWorkItemList(WorkItemQuery workItemQuery) {
         String sql = new String();
         sql = "Select * from pmc_work_item p ";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
@@ -816,7 +876,9 @@ public class WorkItemDao{
         if(String.valueOf(o1).length()>0){
             sql = sql.concat("where " + String.valueOf(o1));
         }
-       List<WorkItemEntity> WorkItemList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(WorkItemEntity.class));
+//       List<WorkItemEntity> WorkItemList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(WorkItemEntity.class));
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        Pagination WorkItemList = jdbcTemplate.findPage(sql, new Object[]{}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
 
         return WorkItemList;
     }

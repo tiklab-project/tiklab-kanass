@@ -1,5 +1,6 @@
 package io.tiklab.teamwire.workitem.model;
 
+import io.tiklab.core.page.Pagination;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.flow.statenode.model.StateNode;
@@ -16,7 +17,7 @@ public class WorkBoard {
     private StateNode state;
 
     @ApiProperty(name="id",desc="事项列表")
-    private List<WorkItem> workItemList;
+    private Pagination<WorkItem> workItemList;
 
     public StateNode getState() {
         return state;
@@ -26,11 +27,11 @@ public class WorkBoard {
         this.state = state;
     }
 
-    public List<WorkItem> getWorkItemList() {
+    public Pagination<WorkItem> getWorkItemList() {
         return workItemList;
     }
 
-    public void setWorkItemList(List<WorkItem> workItemList) {
+    public void setWorkItemList(Pagination<WorkItem> workItemList) {
         this.workItemList = workItemList;
     }
 }

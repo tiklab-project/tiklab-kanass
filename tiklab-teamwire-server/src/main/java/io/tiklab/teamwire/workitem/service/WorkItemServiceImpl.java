@@ -195,7 +195,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         content.put("createUser", user);
         content.put("createUserIcon",user.getName().substring( 0, 1));
-        content.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
 
         Message message = new Message();
         MessageType messageType = new MessageType();
@@ -768,13 +768,13 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
-    List<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery) {
-        List<WorkItemEntity> workItemEntityList = workItemDao.findConditionWorkItemList(workItemQuery);
+    Pagination<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery) {
+        Pagination<WorkItemEntity> pagination = workItemDao.findConditionWorkItemList(workItemQuery);
 
-        List<WorkItem> workItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
+        List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
 
         joinTemplate.joinQuery(workItemList);
-        return workItemList;
+        return PaginationBuilder.build(pagination,workItemList);
     }
 
     @Override
@@ -1074,8 +1074,8 @@ public class WorkItemServiceImpl implements WorkItemService {
                     workBoard.setState(stateNode);
 
                     workItemQuery.setWorkStatusId(stateFlowNode.getNode().getId());
-                    List<WorkItem> workItemList = this.findConditionWorkItemList(workItemQuery);
-                    workBoard.setWorkItemList(workItemList);
+                    Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemList(workItemQuery);
+                    workBoard.setWorkItemList(conditionWorkItemList);
                     if(workBoard != null){
                         workBoardList.add(workBoard);
                     }
@@ -1083,6 +1083,19 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
         return workBoardList;
+    }
+
+    @Override
+    public WorkBoard findChangePageWorkBoardList(WorkItemQuery workItemQuery) {
+        WorkBoard workBoard = new WorkBoard();
+
+        StateNode stateNode = stateNodeService.findStateNode(workItemQuery.getWorkStatusId());
+        workBoard.setState(stateNode);
+        workItemQuery.setWorkStatusId(workItemQuery.getWorkStatusId());
+        Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemList(workItemQuery);
+        workBoard.setWorkItemList(conditionWorkItemList);
+
+        return workBoard;
     }
 
     @Override

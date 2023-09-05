@@ -130,6 +130,7 @@ public interface WorkItemService {
      */
     List<WorkBoard> findWorkBoardList(WorkItemQuery workItemQuery);
 
+    WorkBoard findChangePageWorkBoardList(WorkItemQuery workItemQuery);
     /**
      * 查找按照处理人查找分配的事项看板
      * @return

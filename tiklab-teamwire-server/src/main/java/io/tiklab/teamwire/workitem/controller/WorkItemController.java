@@ -171,6 +171,16 @@ public class WorkItemController {
         return Result.ok(workBoardList);
     }
 
+
+    @RequestMapping(path = "/findChangePageWorkBoardList",method = RequestMethod.POST)
+    @ApiMethod(name = "findChangePageWorkBoardList",desc = "根据查询对象查找事项看板列表")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<WorkBoard> findChangePageWorkBoardList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        WorkBoard changePageWorkBoardList = workItemService.findChangePageWorkBoardList(workItemQuery);
+
+        return Result.ok(changePageWorkBoardList);
+    }
+
     @RequestMapping(path = "/findWorkUserGroupBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkUserGroupBoardList",desc = "根据查询对象查找事项看板列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)

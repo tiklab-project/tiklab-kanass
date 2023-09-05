@@ -288,6 +288,12 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('fdb16c391ffc', '事项', 'SysWork', NULL, 1, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('fec1a8ee3f6c', '事项优先级', 'SysWorkPriority', 'fdb16c391ffc', 0, '1');
 
+
+INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('f569dfa96880', '版本与许可证', 'SysVersion', 'fdb16c391ffc', 0, '1');
+
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ba2c6ec37566', '77f512ab7c53', 'f569dfa96880');
+
+
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('1', 'admin', '管理员', 'system', '1', 1, 1);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('2', 'admin', '管理员', 'system', '2', 1, 1);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 2, 0);
@@ -685,11 +691,11 @@ INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, 
 INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('8a9808957cf4', 'f5f8a45722db', 'site', '任务待办-站内信', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
         <div style="display: flex;align-items: center;">
             <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 15px;">
+            <div style="display: flex; flex-direction: column; padding: 0 10px; width: 250px">
                 <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div>
                 <div style="line-height: 30px; display: flex; align-items: center; height: 30px;"> <img
                         src="${workTypeIcon}" alt="" width="16px" height="16px">
-                    <div style="color: #5d70ea; margin-left: 10px;">${workItemTitle}</div>
+                    <div style="color: #5d70ea; margin-left: 10px;text-overflow: ellipsis;white-space: nowrap;height: 30px;overflow: hidden;">${workItemTitle}</div>
                 </div>
             </div>
         </div>
@@ -698,11 +704,11 @@ INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, 
 INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('0588213d423b', 'f5f8a45722db', 'email', '任务待办-邮箱', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
         <div style="display: flex;align-items: center;">
             <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 15px;">
+            <div style="display: flex; flex-direction: column; padding: 0 10px; width: 250px">
                 <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div>
                 <div style="line-height: 30px; display: flex; align-items: center; height: 30px;"> <img
                         src="${workTypeIcon}" alt="" width="16px" height="16px">
-                    <div style="color: #5d70ea; margin-left: 10px;">${workItemTitle}</div>
+                    <div style="color: #5d70ea; margin-left: 10px;text-overflow: ellipsis;white-space: nowrap;height: 30px;overflow: hidden;">${workItemTitle}</div>
                 </div>
             </div>
         </div>
