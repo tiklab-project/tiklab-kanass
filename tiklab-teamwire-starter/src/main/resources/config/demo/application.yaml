@@ -85,3 +85,5 @@ unzip:
 client: web
 version: ce
 
+backup:
+    address: ${DATA_HOME}/backup
