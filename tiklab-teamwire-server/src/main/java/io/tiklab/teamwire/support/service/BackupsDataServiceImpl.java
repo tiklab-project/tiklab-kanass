@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BackUpDataServiceImpl implements BackUpDataService {
+public class BackupsDataServiceImpl implements BackupsDataService {
 
 
     @Value("${jdbc.url}")

@@ -23,7 +23,7 @@
         <tiklab-dal.version>1.0.0.3</tiklab-dal.version>
         <tiklab-dfs.version>1.0.0.3</tiklab-dfs.version>
         <tiklab-dcs.version>1.0.0.3</tiklab-dcs.version>
-        <tiklab-postgresql.version>1.0.0.3</tiklab-postgresql.version>
+        <tiklab-postgresql.version>1.0.0-SNAPSHOT</tiklab-postgresql.version>
         <tiklab-upgrade.version>1.0.0.3</tiklab-upgrade.version>
         <tiklab-rpc.version>1.0.0.3</tiklab-rpc.version>
         <tiklab-plugin.version>1.0.0.3</tiklab-plugin.version>

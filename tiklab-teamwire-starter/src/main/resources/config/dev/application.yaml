@@ -6,6 +6,10 @@ app:
 spring:
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB     #单个文件最大限制
+      max-request-size: 50MB  #多个文件最大限制
 
 #端口
 server:
@@ -14,14 +18,15 @@ server:
 
 jdbc:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://172.10.1.10:5432/tiklab_teamwire?stringtype=unspecified
+  url: jdbc:postgresql://172.10.1.10:5432/teamwire_ee?stringtype=unspecified
   username: postgres
   password: darth2020
 
 postgresql:
+  type: local
   embbed:
     enable: false
-  database: tiklab_teamwire
+  database: teamwire_ee
 
 # 访问地址，用于显示日志，消息，待办的图标
 base:
@@ -98,4 +103,4 @@ postin:
     server: http://192.168.10.3:8090
 
 backup:
-  address: ${DATA_HOME}/backup
+  address: ${DATA_HOMEDATA_HOME}/backup

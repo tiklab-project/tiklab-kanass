@@ -1,8 +1,10 @@
 package io.tiklab.teamwire.support.service;
 
+import io.tiklab.teamwire.support.model.Backups;
+
 import java.io.InputStream;
 
-public interface BackUpService {
+public interface BackupsService {
 
     /**
      * 执行备份
@@ -18,12 +20,12 @@ public interface BackUpService {
     /**
      * 修改备份相关数据
      */
-//    void updateBackups(Backups backups);
-//
-//    /**
-//     * 查询备份相关数据
-//     */
-//    Backups findBackups();
+    void updateBackups(Backups backups);
+
+    /**
+     * 查询备份相关数据
+     */
+    Backups findBackups();
 
 
     /**

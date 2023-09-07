@@ -1,6 +1,6 @@
 package io.tiklab.teamwire.support.service;
 
-public interface BackUpDataService {
+public interface BackupsDataService {
 
 
 

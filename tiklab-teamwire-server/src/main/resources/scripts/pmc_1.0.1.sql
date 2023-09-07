@@ -844,7 +844,7 @@ INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, 
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('eecad17a', 'done', '024227ab', 690, 300, 40, 100, 2, 'DONE');
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('eedd26da', 'todo', '024227ab', 250, 300, 40, 100, 2, 'TODO');
 
-INSERT INTO pcs_flc_state_node (id, name) VALUES ('7db3a0d1', '进行中');
+INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('7db3a0d1', '进行中', 'RROCESS');
 
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('19dc5e5e', '开始', '22751ea5', 'todo', '7db3a0d1', 'right1', 'left1');
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('1e76c11d', '创建', '4d040c6d', 'start', 'todo', 'right1', 'left1');

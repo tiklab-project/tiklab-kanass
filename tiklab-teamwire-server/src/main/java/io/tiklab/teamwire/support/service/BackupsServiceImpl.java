@@ -3,8 +3,10 @@ package io.tiklab.teamwire.support.service;
 import com.alibaba.fastjson.JSONObject;
 import io.tiklab.core.context.AppHomeContext;
 import io.tiklab.core.exception.ApplicationException;
+import io.tiklab.core.exception.SystemException;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.teamwire.common.RepositoryFileUtil;
+import io.tiklab.teamwire.support.model.Backups;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.FileUtils;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,13 +29,13 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class BackUpServiceImpl implements BackUpService{
+public class BackupsServiceImpl implements BackupsService {
 
-    private static Logger logger = LoggerFactory.getLogger(BackUpServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(BackupsServiceImpl.class);
 
 
     @Autowired
-    BackUpDataService backUpDataService;
+    BackupsDataService backupsDataService;
 
 
     @Value("${jdbc.username}")
@@ -196,11 +200,14 @@ public class BackUpServiceImpl implements BackUpService{
                     /**
                      *  恢复postgreSQL 数据
                      */
-                    joinRecoveryLog("start Recovery PostgreSQL database tiklab_xcode ...");
+                    joinRecoveryLog("start Recovery PostgreSQL database tiklab_teamwire ...");
                     executeRecoveryScript(afterDecFileUrl);
-                    joinRecoveryLog("Recovery PostgreSQL database tiklab_xcode success [DONE]");
+                    joinRecoveryLog("Recovery PostgreSQL database tiklab_teamwire success [DONE]");
 
-
+                    joinRecoveryLog(" file  start Recovery ...");
+                    String codePath = backupAddress + "/" + name + "/files";
+                    FileUtils.copyDirectory(new File(codePath), new File(fileAddress));
+                    joinRecoveryLog( "file Recovery  success [DONE]");
                     /**
                      *  删除解压后的文件
                      */
@@ -209,6 +216,8 @@ public class BackUpServiceImpl implements BackUpService{
                     joinRecoveryLog("Recovery success end [DONE]");
 
                 }catch (Exception e){
+                    String logs = recoveryLog.get(loginId);
+                    recoveryLog.put(loginId, logs + "\n" + "Recovery fail end，errorMsg:"+e.getMessage());
                     joinRecoveryLog("Recovery fail end，errorMsg:"+e.getMessage());
                     throw  new ApplicationException(e.getMessage());
                 }
@@ -217,53 +226,102 @@ public class BackUpServiceImpl implements BackUpService{
         return "ok";
     }
 
-//    @Override
-//    public void updateBackups(Backups backups)  {
-//
-//        File file = new File(AppHomeContext.getAppHome()+"/file/backups");
-//        String fileData = gainFileData(file);
-//
-//        JSONObject jsonObject = JSONObject.parseObject(fileData);
-//
-//        if (StringUtils.isNotEmpty(backups.getTaskState())){
-//            String taskState = jsonObject.get("task-state").toString();
-//             fileData = fileData.replace(taskState, backups.getTaskState());
-//        }
-//
-//        try {
-//            FileWriter fileWriter = new FileWriter(file);
-//            fileWriter.write(fileData);
-//            fileWriter.close();
-//        }catch (Exception e){
-//            throw new ApplicationException(5000,e.getMessage());
-//        }
-//    }
+    public void readExecResult(Process process) {
 
-//    @Override
-//    public Backups findBackups() {
-//        Backups backups = new Backups();
-//        File file = new File(AppHomeContext.getAppHome()+"/file/backups");
-//        String fileData = gainFileData(file);
-//        if (StringUtils.isEmpty(fileData)){
-//            throw  new ApplicationException(5000,"数据不存在");
-//        }
-//        JSONObject jsonObject = JSONObject.parseObject(fileData);
-//        String taskState = jsonObject.get("task-state").toString();
-//        String backupsTime = jsonObject.get("backups-time").toString();
-//
-//        backups.setBackupsAddress(yamlDataMaService.backupAddress());
-//        backups.setTaskState(taskState);
-//        backups.setNewBackupsTime(backupsTime);
-//        backups.setNewResult("non");
-//        String result = backupsExecLog.get(LoginContext.getLoginId());
-//        if (StringUtils.isNotEmpty(result)){
-//            backups.setNewResult("fail");
-//           if (result.contains("Backups file success end")){
-//               backups.setNewResult("success");
-//           }
-//        }
-//        return backups;
-//    }
+        //转换流
+        InputStream inputStream = process.getInputStream();
+        InputStream errInputStream = process.getErrorStream();
+
+        InputStreamReader inputStreamReader ;
+        BufferedReader bufferedReader ;
+        if (inputStream == null){
+            inputStreamReader = encode(errInputStream);
+        }else {
+            inputStreamReader = encode(inputStream);
+        }
+
+        String s;
+        bufferedReader = new BufferedReader(inputStreamReader);
+
+        try {
+
+            //读取执行信息
+            while ((s = bufferedReader.readLine()) != null) {
+                joinRecoveryLog( s);
+            }
+
+            //读取err执行信息
+            inputStreamReader = encode(errInputStream);
+            bufferedReader = new BufferedReader(inputStreamReader);
+
+            while ((s = bufferedReader.readLine()) != null) {
+                joinRecoveryLog( s);
+            }
+            // 关闭
+            inputStreamReader.close();
+            bufferedReader.close();
+
+        } catch (Exception e){
+            logger.error("读取执行信息失败！{}",e.getMessage());
+            joinRecoveryLog( "读取执行信息失败");
+
+            process.destroy();
+            throw new SystemException(e);
+        }
+        process.destroy();
+    }
+
+    public InputStreamReader encode(InputStream inputStream){
+        return new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public void updateBackups(Backups backups)  {
+
+        File file = new File(AppHomeContext.getAppHome()+"/bin/backups");
+        String fileData = gainFileData(file);
+
+        JSONObject jsonObject = JSONObject.parseObject(fileData);
+
+        if (StringUtils.isNotEmpty(backups.getTaskState())){
+            String taskState = jsonObject.get("task-state").toString();
+             fileData = fileData.replace(taskState, backups.getTaskState());
+        }
+
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(fileData);
+            fileWriter.close();
+        }catch (Exception e){
+            throw new ApplicationException(5000,e.getMessage());
+        }
+    }
+
+    @Override
+    public Backups findBackups() {
+        Backups backups = new Backups();
+        File file = new File(AppHomeContext.getAppHome()+"/bin/backups");
+        String fileData = gainFileData(file);
+        if (StringUtils.isEmpty(fileData)){
+            throw  new ApplicationException(5000,"数据不存在");
+        }
+        JSONObject jsonObject = JSONObject.parseObject(fileData);
+        String taskState = jsonObject.get("task-state").toString();
+        String backupsTime = jsonObject.get("backups-time").toString();
+
+        backups.setBackupsAddress(backupAddress);
+        backups.setTaskState(taskState);
+        backups.setNewBackupsTime(backupsTime);
+        backups.setNewResult("non");
+        String result = backupsExecLog.get(LoginContext.getLoginId());
+        if (StringUtils.isNotEmpty(result)){
+            backups.setNewResult("fail");
+           if (result.contains("Backups file success end")){
+               backups.setNewResult("success");
+           }
+        }
+        return backups;
+    }
 
 
 
@@ -289,21 +347,21 @@ public class BackUpServiceImpl implements BackUpService{
     public void uploadBackups(InputStream inputStream, String fileName,String userId) {
         try {
             //获取text文件信息
-            File file = new File(AppHomeContext.getAppHome() + "/file/backups");
+            File file = new File(AppHomeContext.getAppHome() + "/bin/backups");
             String fileData = gainFileData(file);
 
             JSONObject jsonObject = JSONObject.parseObject(fileData);
-            String backUpsUrl = jsonObject.get("backups-url").toString();
+            String backUpsUrl = backupAddress;
             String substring = backUpsUrl.substring(0, backUpsUrl.lastIndexOf("/"));
 
             //如果文件夹不存在就创建文件夹
-            File reduceDir = new File(substring);
+            File reduceDir = new File(backUpsUrl);
             if (!reduceDir.exists() && !reduceDir.isDirectory()) {
                 reduceDir.mkdirs();
             }
 
             //上传备份压缩文件的绝对路径
-            String reduceUrl = substring + "/" + fileName;
+            String reduceUrl = backUpsUrl + "/" + fileName;
             File reduceFile = new File(reduceUrl);
             //文件已经存在
             if (!reduceFile.exists()) {
@@ -332,16 +390,17 @@ public class BackUpServiceImpl implements BackUpService{
     public void executeScript(String backUpsUrl) throws IOException, InterruptedException {
 
         String[] args = new String[7];
-        args[0] = "host="+backUpDataService.host();
+        args[0] = "host="+ backupsDataService.host();
         args[1] = "port=5432";
         args[2] = "userName="+jdbcUserName;
         args[3] = "password="+jdbcPassword;
-        args[4] = "dbName="+ backUpDataService.dbName();
-        args[5] = "schemaName="+ backUpDataService.schemaName();
+        args[4] = "dbName="+ backupsDataService.dbName();
+        args[5] = "schemaName="+ backupsDataService.schemaName();
         args[6] = "backupsUrl="+backUpsUrl;
 
         String scriptFile = AppHomeContext.getAppHome() + "/bin/backups.sh";
         Process ps = Runtime.getRuntime().exec(scriptFile,args);
+        readExecResult(ps);
         ps.waitFor();
     }
 
@@ -352,15 +411,16 @@ public class BackUpServiceImpl implements BackUpService{
      */
     public void executeRecoveryScript(String backUpsSqlUrl) throws IOException, InterruptedException {
         String[] args = new String[7];
-        args[0] = "host="+ backUpDataService.host();
+        args[0] = "host="+ backupsDataService.host();
         args[1] = "port=5432";
         args[2] = "userName="+jdbcUserName;
         args[3] = "password="+jdbcPassword;
-        args[4] = "dbName="+ backUpDataService.dbName();
-        args[5] = "schemaName="+ backUpDataService.schemaName();
+        args[4] = "dbName="+ backupsDataService.dbName();
+        args[5] = "schemaName="+ backupsDataService.schemaName();
         args[6] = "backupsSqlUrl="+backUpsSqlUrl;
 
-        Process ps = Runtime.getRuntime().exec(AppHomeContext.getAppHome()+"/file/recovery.sh",args);
+        Process ps = Runtime.getRuntime().exec(AppHomeContext.getAppHome()+"/bin/recovery.sh",args);
+        readExecResult(ps);
         ps.waitFor();
     }
 
