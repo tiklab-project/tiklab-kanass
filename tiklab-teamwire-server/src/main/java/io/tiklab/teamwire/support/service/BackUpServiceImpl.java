@@ -346,10 +346,10 @@ public class BackUpServiceImpl implements BackUpService{
     }
 
 
-        /**
-         *  执行恢复PostgreSQL 数据脚本
-         * @param backUpsSqlUrl 备份sql地址
-         */
+    /**
+     *  执行恢复PostgreSQL 数据脚本
+     * @param backUpsSqlUrl 备份sql地址
+     */
     public void executeRecoveryScript(String backUpsSqlUrl) throws IOException, InterruptedException {
         String[] args = new String[7];
         args[0] = "host="+ backUpDataService.host();

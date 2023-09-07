@@ -18,8 +18,8 @@ PGPASSWORD=${password} ${psql} -U ${userName} -h ${host} -p ${port} -c  "DROP DA
 PGPASSWORD=${password} ${psql} -U ${userName} -h ${host} -p ${port} -c "CREATE DATABASE ${dbName};"
 
 
-PGPASSWORD=${password} ${psql} -U ${userName} -h ${host} -p ${port} -d ${dbName}  -n ${schemaName}<${backupsSqlUrl}${dbName}.sql;
-
+PGPASSWORD=${password} ${psql} -U ${userName} -h ${host} -p ${port} -d ${dbName}  -n ${schemaName}<${backupsSqlUrl}tiklab_teamwire.sql;
+echo "执行dump完成"
 
 #tar -zxvf ${reduceUrl} -C ${prePath}
 #cp -r ${backupsCodeUrl}/* ${sourceFilePath}
