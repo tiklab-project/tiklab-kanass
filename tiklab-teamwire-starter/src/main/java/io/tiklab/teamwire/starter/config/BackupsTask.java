@@ -19,20 +19,18 @@ public class BackupsTask {
     @Autowired
     BackupsService backupsService;
 
-    @Value("${backup.time}")
-    String timeCore;
 
 
     //凌晨2点 执行
-    @Scheduled(cron = "${backup.time}")
-    public void exeBackups(){
-        logger.info("准备执行定时备份");
-        Backups backups = backupsService.findBackups();
-        //设置了定时备份数据
-        if (backups.getTaskState().equals("true")){
-            logger.info("开始执行定时备份");
-            backupsService.backupsExec();
-        }
-    }
+//    @Scheduled(cron = "${backup.time}")
+//    public void exeBackups(){
+//        logger.info("准备执行定时备份");
+//        Backups backups = backupsService.findBackups();
+//        //设置了定时备份数据
+//        if (backups.getTaskState().equals("true")){
+//            logger.info("开始执行定时备份");
+//            backupsService.backupsExec();
+//        }
+//    }
 
 }

@@ -35,10 +35,26 @@ public class BackupsController {
         return Result.ok(result);
     }
 
+    @RequestMapping(path="/backupsCloudExec",method = RequestMethod.POST)
+    @ApiMethod(name = "backupsCloudExec",desc = "备份")
+    public Result<String> backupsCloudExec(String tenantId){
+        String result = backupsService.backupsCloudExec(tenantId);
+
+        return Result.ok(result);
+    }
+
     @RequestMapping(path="/recoveryData",method = RequestMethod.POST)
     @ApiMethod(name = "recoveryData",desc = "备份")
     public Result<String> recoveryData(String fileName){
         String result = backupsService.recoveryData(fileName);
+
+        return Result.ok(result);
+    }
+
+    @RequestMapping(path="/recoveryCloudData",method = RequestMethod.POST)
+    @ApiMethod(name = "recoveryCloudData",desc = "备份")
+    public Result<String> recoveryData(String fileName, String tenantId){
+        String result = backupsService.recoveryCloudData(fileName, tenantId);
 
         return Result.ok(result);
     }

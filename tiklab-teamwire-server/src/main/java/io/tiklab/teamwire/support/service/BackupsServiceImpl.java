@@ -7,6 +7,8 @@ import io.tiklab.core.exception.SystemException;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.teamwire.common.RepositoryFileUtil;
 import io.tiklab.teamwire.support.model.Backups;
+import io.tiklab.teamwire.support.model.BackupsInfo;
+import io.tiklab.teamwire.support.model.BackupsInfoQuery;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.FileUtils;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -37,6 +40,8 @@ public class BackupsServiceImpl implements BackupsService {
     @Autowired
     BackupsDataService backupsDataService;
 
+    @Autowired
+    BackupsInfoServiceImpl backupsInfoService;
 
     @Value("${jdbc.username}")
     String jdbcUserName;
@@ -45,10 +50,10 @@ public class BackupsServiceImpl implements BackupsService {
     String jdbcPassword;
 
     @Value("${dfs.server.datapath}")
-    private String fileAddress;
+    public String fileAddress;
 
     @Value("${backup.address}")
-    private String backupAddress;
+    public String backupAddress;
 
 
     //数据备份日志
@@ -59,6 +64,7 @@ public class BackupsServiceImpl implements BackupsService {
 
     //执行的文件绝对路径名称
     public static Map<String , String> fileAbUrlMap = new HashMap<>();
+
 
     @Override
     public String backupsExec() {
@@ -114,7 +120,7 @@ public class BackupsServiceImpl implements BackupsService {
                     File codeFileUrl = new File(fileUrl);
 
                     /*
-                     * 复制代码源文件到备份文件夹
+                     * 复制文件源文件到备份文件夹
                      * */
                     String backupsCodePath = backupPath + "/files/";
                     File backupsCodeFilePath = new File(backupsCodePath);
@@ -133,7 +139,7 @@ public class BackupsServiceImpl implements BackupsService {
                     LocalDateTime now = LocalDateTime.now();
                     //备份压缩文件名称
                     String backupsName="teamwire_backups_"+ now.getYear()+"_"+now.getMonthValue()+"_" +now.getDayOfMonth()+"_"
-                            +now.getHour()+"_"+now.getMinute()+"_"+String.valueOf(System.currentTimeMillis()).substring(0,9)+".tar.gz";
+                            +now.getHour()+"_"+now.getMinute() +".tar.gz";
 
                     String backupsAbsoluteUrl = substring + "/"+backupsName;
                     // 创建tar输出流
@@ -174,6 +180,10 @@ public class BackupsServiceImpl implements BackupsService {
     }
 
     @Override
+    public String backupsCloudExec(String tenantId){
+        return  null;
+    }
+    @Override
     public String recoveryData(String fileName) {
         String loginId = LoginContext.getLoginId();
         backupsExecLog.remove(loginId);
@@ -208,11 +218,11 @@ public class BackupsServiceImpl implements BackupsService {
                     String codePath = backupAddress + "/" + name + "/files";
                     FileUtils.copyDirectory(new File(codePath), new File(fileAddress));
                     joinRecoveryLog( "file Recovery  success [DONE]");
+
                     /**
                      *  删除解压后的文件
                      */
                     FileUtils.deleteDirectory(new File(backupAddress + "/" + name ));
-
                     joinRecoveryLog("Recovery success end [DONE]");
 
                 }catch (Exception e){
@@ -224,6 +234,11 @@ public class BackupsServiceImpl implements BackupsService {
             }
         });
         return "ok";
+    }
+
+    @Override
+    public String recoveryCloudData(String fileName, String tenantId){
+        return  null;
     }
 
     public void readExecResult(Process process) {
@@ -300,25 +315,32 @@ public class BackupsServiceImpl implements BackupsService {
     @Override
     public Backups findBackups() {
         Backups backups = new Backups();
-        File file = new File(AppHomeContext.getAppHome()+"/bin/backups");
-        String fileData = gainFileData(file);
-        if (StringUtils.isEmpty(fileData)){
-            throw  new ApplicationException(5000,"数据不存在");
+        BackupsInfoQuery backupsInfoQuery = new BackupsInfoQuery();
+        List<BackupsInfo> backupsInfoList = backupsInfoService.findBackupsInfoList(backupsInfoQuery);
+        BackupsInfo backupsInfo = new BackupsInfo();
+        if(!backupsInfoList.isEmpty()){
+            backupsInfo = backupsInfoList.get(0);
         }
-        JSONObject jsonObject = JSONObject.parseObject(fileData);
-        String taskState = jsonObject.get("task-state").toString();
-        String backupsTime = jsonObject.get("backups-time").toString();
+        String taskState = backupsInfo.getTaskState();
+        String backupsTime = backupsInfo.getExecTime();
+        String lastResult = backupsInfo.getLastResult();
 
         backups.setBackupsAddress(backupAddress);
         backups.setTaskState(taskState);
         backups.setNewBackupsTime(backupsTime);
-        backups.setNewResult("non");
+        backups.setNewResult(lastResult);
         String result = backupsExecLog.get(LoginContext.getLoginId());
         if (StringUtils.isNotEmpty(result)){
             backups.setNewResult("fail");
-           if (result.contains("Backups file success end")){
+            if (result.contains("Backups file success end")){
                backups.setNewResult("success");
-           }
+               backupsInfo.setLastResult("success");
+            }
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTime = simpleDateFormat.format(date);
+            backupsInfo.setExecTime(currentTime);
+            backupsInfoService.updateBackupsInfo(backupsInfo);
         }
         return backups;
     }
@@ -346,13 +368,8 @@ public class BackupsServiceImpl implements BackupsService {
     @Override
     public void uploadBackups(InputStream inputStream, String fileName,String userId) {
         try {
-            //获取text文件信息
-            File file = new File(AppHomeContext.getAppHome() + "/bin/backups");
-            String fileData = gainFileData(file);
 
-            JSONObject jsonObject = JSONObject.parseObject(fileData);
             String backUpsUrl = backupAddress;
-            String substring = backUpsUrl.substring(0, backUpsUrl.lastIndexOf("/"));
 
             //如果文件夹不存在就创建文件夹
             File reduceDir = new File(backUpsUrl);

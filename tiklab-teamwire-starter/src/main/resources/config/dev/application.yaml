@@ -103,4 +103,4 @@ postin:
     server: http://192.168.10.3:8090
 
 backup:
-  address: ${DATA_HOMEDATA_HOME}/backup
+  address: ${DATA_HOME}/backup

@@ -12,6 +12,11 @@ public interface BackupsService {
     String backupsExec();
 
     /**
+     * 执行备份
+     */
+    String backupsCloudExec(String tenantId);
+
+    /**
      * 获取备份结果
      * @param type :backups、recovery
      */
@@ -33,6 +38,8 @@ public interface BackupsService {
      * @param fileName 文件名称
      */
     String recoveryData(String fileName);
+
+    String recoveryCloudData(String fileName, String tenantId);
 
     /**
      * 备份数据上传
