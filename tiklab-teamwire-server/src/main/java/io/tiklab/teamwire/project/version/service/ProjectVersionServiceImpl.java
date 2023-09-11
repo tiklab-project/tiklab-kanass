@@ -19,7 +19,7 @@ import java.util.List;
 * 项目版本服务
 */
 @Service
-public class ProjectProjectVersionServiceImpl implements ProjectVersionService {
+public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Autowired
     ProjectVersionDao projectVersionDao;
@@ -93,14 +93,26 @@ public class ProjectProjectVersionServiceImpl implements ProjectVersionService {
     }
 
     @Override
-    public Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery ProjectVersionQuery) {
+    public Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery projectVersionQuery) {
 
-        Pagination<ProjectVersionEntity>  pagination = projectVersionDao.findVersionPage(ProjectVersionQuery);
+        Pagination<ProjectVersionEntity>  pagination = projectVersionDao.findVersionPage(projectVersionQuery);
 
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(pagination.getDataList(), ProjectVersion.class);
 
         joinTemplate.joinQuery(projectVersionList);
 
         return PaginationBuilder.build(pagination, projectVersionList);
+    }
+
+    @Override
+    public List<ProjectVersion> findVersionFocusList(ProjectVersionQuery projectVersionQuery) {
+
+        List<ProjectVersionEntity>  projectVersionListEntity = projectVersionDao.findVersionFocusList(projectVersionQuery);
+
+        List<ProjectVersion> projectVersionList = BeanMapper.mapList(projectVersionListEntity, ProjectVersion.class);
+
+        joinTemplate.joinQuery(projectVersionList);
+
+        return projectVersionList;
     }
 }

@@ -736,15 +736,24 @@ public class WorkItemDao{
             sql = sql.concat(" where parent_id is null");
         }
         if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
-            sql= sql.concat(" order by ");
+            sql= sql.concat(" order by");
         }
         for (Order orderParam : workItemQuery.getOrderParams()) {
             OrderTypeEnum orderType = orderParam.getOrderType();
             String name = orderParam.getName();
             System.out.println(orderType);
             System.out.println(name);
-            sql = sql.concat(name + " " + orderType );
+            if(name.equals("id")){
+                sql = sql.concat(" split_part(id, '-', 1) " + orderType + ", cast(split_part (id, '-', 2) as integer) " + orderType + ",");
+            }else {
+                sql = sql.concat(" " + name + " " + orderType + "," );
+            }
+
         }
+        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+            sql= sql.substring(0, sql.length() - 1);
+        }
+
 
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         Pagination page = jdbcTemplate.findPage(sql, new Object[]{}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));

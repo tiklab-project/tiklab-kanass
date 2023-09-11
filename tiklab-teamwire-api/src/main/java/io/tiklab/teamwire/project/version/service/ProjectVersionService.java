@@ -72,4 +72,6 @@ public interface ProjectVersionService {
     */
     Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery ProjectVersionQuery);
 
+    List<ProjectVersion> findVersionFocusList(ProjectVersionQuery ProjectVersionQuery);
+
 }

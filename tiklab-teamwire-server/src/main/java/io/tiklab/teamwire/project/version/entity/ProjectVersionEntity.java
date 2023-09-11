@@ -42,7 +42,7 @@ public class ProjectVersionEntity implements Serializable {
 
     // 项目版本状态
     @Column(name="version_state",length = 32,notNull = true)
-    private java.lang.String versionState;
+    private String versionState;
 
     public String getId() {
         return id;

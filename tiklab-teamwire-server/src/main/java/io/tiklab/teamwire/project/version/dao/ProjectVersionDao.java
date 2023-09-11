@@ -1,11 +1,15 @@
 package io.tiklab.teamwire.project.version.dao;
 
 import io.tiklab.teamwire.project.version.entity.ProjectVersionEntity;
+import io.tiklab.teamwire.project.version.entity.VersionFocusEntity;
 import io.tiklab.teamwire.project.version.model.ProjectVersionQuery;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.dal.jpa.JpaTemplate;
+import io.tiklab.teamwire.project.version.model.VersionFocus;
+import io.tiklab.teamwire.project.version.model.VersionFocusQuery;
+import io.tiklab.teamwire.sprint.entity.SprintFocusEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,9 +102,20 @@ public class ProjectVersionDao {
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectVersionEntity.class)
                 .eq("projectId", ProjectVersionQuery.getProjectId())
                 .like("name", ProjectVersionQuery.getName())
+                .eq("versionState", ProjectVersionQuery.getVersionState())
                 .orders(ProjectVersionQuery.getOrderParams())
                 .pagination(ProjectVersionQuery.getPageParam())
                 .get();
         return jpaTemplate.findPage(queryCondition, ProjectVersionEntity.class);
+    }
+
+    public List<ProjectVersionEntity> findVersionFocusList(ProjectVersionQuery projectVersionQuery) {
+        QueryCondition queryCondition = QueryBuilders.createQuery(ProjectVersionEntity.class,"pv")
+                .leftJoin(VersionFocusEntity.class, "vefo","vefo.versionId=pv.id")
+                .eq("vefo.masterId", projectVersionQuery.getMasterId ())
+                .eq("vefo.projectId", projectVersionQuery.getProjectId())
+                .orders(projectVersionQuery.getOrderParams())
+                .get();
+        return jpaTemplate.findList(queryCondition, ProjectVersionEntity.class);
     }
 }

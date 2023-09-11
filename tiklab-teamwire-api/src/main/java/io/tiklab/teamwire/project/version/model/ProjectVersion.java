@@ -40,7 +40,7 @@ public class ProjectVersion extends BaseModel {
     private Date relaPublishDate;
 
     @ApiProperty(name="versionState",desc="项目状态")
-    private java.lang.String  versionState;
+    private String  versionState;
 
     @ApiProperty(name="project",desc="所属项目")
     @Mappings({

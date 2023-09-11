@@ -100,4 +100,13 @@ public class ProjectVersionController {
         return Result.ok(pagination);
     }
 
+    @RequestMapping(path = "/findVersionFocusList",method = RequestMethod.POST)
+    @ApiMethod(name = "findVersionFocusList",desc = "根据条件按分页查询项目类型列表")
+    @ApiParam(name = "ProjectVersionQuery",desc = "项目版本搜索模型",required = true)
+    public Result<List<ProjectVersion>> findVersionFocusList(@RequestBody @Valid @NotNull ProjectVersionQuery ProjectVersionQuery){
+        List<ProjectVersion> versionFocusList = projectVersionService.findVersionFocusList(ProjectVersionQuery);
+
+        return Result.ok(versionFocusList);
+    }
+
 }

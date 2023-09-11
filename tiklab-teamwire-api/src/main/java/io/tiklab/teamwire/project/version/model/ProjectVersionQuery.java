@@ -20,6 +20,12 @@ public class ProjectVersionQuery {
     @ApiProperty(name ="name",desc = "版本名称，模糊匹配")
     private String name;
 
+    @ApiProperty(name ="versionState",desc = "版本名称，模糊匹配")
+    private String versionState;
+
+    @ApiProperty(name ="masterId",desc = "版本名称，模糊匹配")
+    private String masterId;
+
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
 
@@ -56,5 +62,21 @@ public class ProjectVersionQuery {
 
     public void setPageParam(Page pageParam) {
         this.pageParam = pageParam;
+    }
+
+    public String getVersionState() {
+        return versionState;
+    }
+
+    public void setVersionState(String versionState) {
+        this.versionState = versionState;
+    }
+
+    public String getMasterId() {
+        return masterId;
+    }
+
+    public void setMasterId(String masterId) {
+        this.masterId = masterId;
     }
 }
