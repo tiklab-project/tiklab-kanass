@@ -37,11 +37,13 @@ public class TeamWireDsmAutoConfiguration {
                 "form_1.0.0",
                 //TeamWireDsm
                 "pmc_1.0.0",
+                "backups_1.0.0"
 
         });
         dsmConfig.newVersion("1.0.1", new String[]{
                 "pmc_1.0.1",
-                "flow_1.0.1"
+                "flow_1.0.1",
+
         });
         dsmConfig.newVersion("1.0.2", new String[]{
         });
