@@ -102,5 +102,6 @@ postin:
     workspaceId: b4a2fc3a3d73
     server: http://192.168.10.3:8090
 
-backup:
-  address: ${DATA_HOME}/backup
+backups:
+  time: 0 0 2 * * ?
+  dir: /data/eas
