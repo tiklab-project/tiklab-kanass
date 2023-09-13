@@ -92,7 +92,7 @@ public class WorkTypeDao{
      * @param code
      * @return
      */
-    public List<WorkTypeEntity> findWorkTypeIds(String code) {
+    public List<WorkTypeEntity> findWorkTypeByCode(String code) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkTypeEntity.class)
                 .eq("code",code)
                 .get();

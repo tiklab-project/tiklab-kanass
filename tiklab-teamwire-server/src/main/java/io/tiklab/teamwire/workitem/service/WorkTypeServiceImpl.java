@@ -123,20 +123,7 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         return workTypeList;
     }
 
-    @Override
-    public String[] findWorkTypeIds(String code) {
-        List<WorkTypeEntity> workTypeEntityList = workTypeDao.findWorkTypeIds(code);
 
-        List<WorkType> workTypeList = BeanMapper.mapList(workTypeEntityList,WorkType.class);
-
-        List<String> idList = new ArrayList<>();
-        for(WorkType workType:workTypeList){
-            idList.add(workType.getId());
-        }
-        String[] ids = new String[idList.size()];
-        ids = idList.toArray(ids);
-        return ids;
-    }
 
     @Override
     public Pagination<WorkType> findWorkTypePage(WorkTypeQuery workTypeQuery) {
@@ -161,14 +148,11 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     }
 
     @Override
-    public List<WorkType> findWorkTypeByCode(@NotNull String code) {
+    public String findWorkTypeByCode(@NotNull String code) {
 
-        List<WorkTypeEntity> workTypeEntityList = workTypeDao.findWorkTypeIds(code);
+        List<WorkTypeEntity> workTypeEntityList = workTypeDao.findWorkTypeByCode(code);
+        String id = workTypeEntityList.get(0).getId();
 
-        List<WorkType> workTypeList = BeanMapper.mapList(workTypeEntityList,WorkType.class);
-
-        joinTemplate.joinQuery(workTypeList);
-
-        return workTypeList;
+        return id;
     }
 }

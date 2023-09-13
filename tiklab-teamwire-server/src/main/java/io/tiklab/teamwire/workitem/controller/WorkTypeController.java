@@ -110,21 +110,14 @@ public class WorkTypeController {
         return Result.ok(form);
     }
 
-    @RequestMapping(path="/findWorkTypeIds",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTypeIds",desc = "根据事项类型ID查找关联表单配置")
-    @ApiParam(name = "code",desc = "事项类型ID",required = true)
-    public Result<String[]> findWorkTypeIds(@NotNull String code){
-        String[] ids = workTypeService.findWorkTypeIds(code);
 
-        return Result.ok(ids);
-    }
 
     @RequestMapping(path = "/findWorkTypeListByCode",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkTypeListByCode",desc = "根据查询对象查找事项类型列表")
     @ApiParam(name = "code",desc = "查询对象",required = true)
-    public Result<List<WorkType>> findWorkTypeListByCode(@NotNull String code){
-        List<WorkType> workTypeList = workTypeService.findWorkTypeByCode(code);
+    public Result<String> findWorkTypeListByCode(@NotNull String code){
+        String workTypeId= workTypeService.findWorkTypeByCode(code);
 
-        return Result.ok(workTypeList);
+        return Result.ok(workTypeId);
     }
 }

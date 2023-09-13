@@ -441,7 +441,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         if(workItem.getParentWorkItem() != null){
-            if(workItem.getParentWorkItem().getId() == null){
+            if(workItem.getParentWorkItem().getId() == null || workItem.getParentWorkItem().getId().equals("nullstring")){
                 WorkItem workItem1 = new WorkItem();
                 workItem1.setRootId(id);
                 workItem1.setId(id);

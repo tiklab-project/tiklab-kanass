@@ -104,4 +104,4 @@ postin:
 
 backups:
   time: 0 0 2 * * ?
-  dir: /data/eas
+  dir: /data/teamwire

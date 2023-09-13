@@ -67,7 +67,6 @@ public interface WorkTypeService {
     List<WorkType> findWorkTypeList(WorkTypeQuery workTypeQuery);
 
 
-    String[] findWorkTypeIds(String code);
     /**
     * 根据条件按分页查询事项类型列表
     * @param workTypeQuery
@@ -87,6 +86,6 @@ public interface WorkTypeService {
      * @param code
      * @return
      */
-    List<WorkType> findWorkTypeByCode(@NotNull String code);
+    String findWorkTypeByCode(@NotNull String code);
 
 }

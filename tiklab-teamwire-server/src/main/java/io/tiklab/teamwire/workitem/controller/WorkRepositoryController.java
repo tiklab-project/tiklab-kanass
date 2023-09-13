@@ -6,6 +6,7 @@ import io.tiklab.postin.annotation.Api;
 import io.tiklab.postin.annotation.ApiMethod;
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
 import io.tiklab.teamwire.workitem.service.WorkRepositoryService;
+import io.tiklab.user.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,12 @@ public class WorkRepositoryController {
         return Result.ok(wikiRepositoryList);
     }
 
-    @RequestMapping(path="/findRepository",method = RequestMethod.POST)
+    @RequestMapping(path="/findRepositoryUserList",method = RequestMethod.POST)
     @ApiMethod(name = "findRepository",desc = "findRepository")
-    public Result<List<KanassRepository>> findRepository(String id){
-        List<KanassRepository> userList = workRepositoryService.findRepository(id);
+    public Result<List<User>> findRepositoryUserList(List<String> repositoryIds){
+        List<User> repositoryUserList = workRepositoryService.findRepositoryUserList(repositoryIds);
 
-        return Result.ok(userList);
+        return Result.ok(repositoryUserList);
     }
 
 

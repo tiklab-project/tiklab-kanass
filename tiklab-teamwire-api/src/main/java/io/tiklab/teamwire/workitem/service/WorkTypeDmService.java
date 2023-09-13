@@ -86,4 +86,6 @@ public interface WorkTypeDmService {
      * @return
      */
     WorkTypeDm findTaskWorkType(String projectId, String code);
+
+    String findDemandWorkType(String projectId, String code);
 }

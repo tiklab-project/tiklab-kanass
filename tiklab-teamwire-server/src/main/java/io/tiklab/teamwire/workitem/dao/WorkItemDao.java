@@ -353,7 +353,7 @@ public class WorkItemDao{
 
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class)
                 .notIn("id",array)
-                .eq("workTypeId", workItemQuery.getWorkTypeId())
+                .eq("workTypeSysId", workItemQuery.getWorkTypeId())
                 .eq("projectId", workItemQuery.getProjectId())
                 .orders(workItemQuery.getOrderParams())
                 .pagination(workItemQuery.getPageParam());

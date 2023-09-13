@@ -8,6 +8,9 @@ import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
+import io.tiklab.user.dmUser.service.DmUserService;
+import io.tiklab.user.user.model.User;
+import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,14 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return new RpcClientTeamWireUtil().rpcClient().getBean(WikiRepositoryService.class, new FixedLookup(url));
+    }
+
+    UserService userServiceRpc(){
+        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
+        systemUrlQuery.setName("kanass");
+        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
+        String url = systemUrlList.get(0).getSystemUrl();
+        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
     }
 
 
@@ -64,10 +75,9 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
     }
 
     @Override
-    public List<KanassRepository> findRepository(String id){
-        System.out.println("zoule");
-//        List<User> allUser = userServiceRpc().findAllUser();
-        return null;
+    public List<User> findRepositoryUserList(List<String> repositoryIds){
+        List<User> allUser = userServiceRpc().findAllUser();
+        return allUser;
     }
 
 }

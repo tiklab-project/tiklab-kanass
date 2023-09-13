@@ -203,4 +203,9 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         return workTypeDm;
     }
+
+    @Override
+    public String findDemandWorkType(String projectId, String code) {
+        return null;
+    }
 }
