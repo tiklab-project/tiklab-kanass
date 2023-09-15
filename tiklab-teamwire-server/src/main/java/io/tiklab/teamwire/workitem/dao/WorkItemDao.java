@@ -396,15 +396,28 @@ public class WorkItemDao{
      * @return
      */
     public Map<String, Object> WorkItemSearchSql(WorkItemQuery workItemQuery) {
-        String sql = new String();
+        String sql = " where";
         HashMap<String, Object> objectObjectHashMap = new HashMap<>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
         Map<String, String> sqlMap = new HashMap<String, String>();
         Object[] objects = {};
 
+        if(workItemQuery.getVersionId() != null && workItemQuery.getVersionId().length()>0){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.version_id = '" + workItemQuery.getVersionId() + "'");
+            }
+            paramMap.put("versionId", workItemQuery.getVersionId());
+        }
+
         if(workItemQuery.getWorkTypeId() != null && workItemQuery.getWorkTypeId().length()>0){
-            sql = sql.concat(" p.work_type_sys_id = '" + workItemQuery.getWorkTypeId() + "'");
-            paramMap.put("workTypeId", workItemQuery.getWorkTypeId());
+
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_type_sys_id = '" + workItemQuery.getWorkTypeId() + "'");
+            }else {
+                sql = sql.concat(" and p.work_type_sys_id = '" + workItemQuery.getWorkTypeId() + "'");
+            }
+            paramMap.put("workTypeSysId", workItemQuery.getWorkTypeId());
+
         }
 
         if(workItemQuery.getId() != null && workItemQuery.getId().length()>0){
@@ -426,7 +439,7 @@ public class WorkItemDao{
             s=s.concat(")");
 
             if(paramMap.isEmpty()){
-                sql = sql.concat("p.work_type_sys_id in " + s);
+                sql = sql.concat(" p.work_type_sys_id in " + s);
             }else {
                 sql = sql.concat("and p.work_type_sys_id in " + s);
             }
@@ -495,6 +508,9 @@ public class WorkItemDao{
             }
             paramMap.put("sprintIds", workItemQuery.getSprintIds());
         }
+
+
+
 
         if(workItemQuery.getWorkStatusId() != null && workItemQuery.getWorkStatusId().length()>0){
 
@@ -730,10 +746,10 @@ public class WorkItemDao{
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
         if(!ObjectUtils.isEmpty(o1)){
-            sql = sql.concat(" where " + String.valueOf(o1));
-            sql = sql.concat(" and parent_id is null");
+            sql = sql.concat( String.valueOf(o1));
+            sql = sql.concat(" and p.parent_id is null");
         }else {
-            sql = sql.concat(" where parent_id is null");
+            sql = sql.concat(" p.parent_id is null");
         }
         if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
             sql= sql.concat(" order by");
@@ -744,7 +760,7 @@ public class WorkItemDao{
             System.out.println(orderType);
             System.out.println(name);
             if(name.equals("id")){
-                sql = sql.concat(" split_part(id, '-', 1) " + orderType + ", cast(split_part (id, '-', 2) as integer) " + orderType + ",");
+                sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
             }else {
                 sql = sql.concat(" " + name + " " + orderType + "," );
             }
@@ -769,24 +785,24 @@ public class WorkItemDao{
         sql = "Select count(1) as total from pmc_work_item p";
         Object o1 = stringObjectMap.get("sql");
         if(!ObjectUtils.isEmpty(o1)){
-            sql = sql.concat(" where " + String.valueOf(o1));
-            sql = sql.concat(" and parent_id is null");
+            sql = sql.concat(String.valueOf(o1));
+            sql = sql.concat(" and p.parent_id is null");
         }else {
-            sql = sql.concat(" where parent_id is null");
+            sql = sql.concat(" p.parent_id is null");
         }
 
         Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
         WorkItemCount.put("all", allNum);
 
-        String sql1 =  sql.concat(" and work_type_code = 'demand'");
+        String sql1 =  sql.concat(" and p.work_type_code = 'demand'");
         Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         WorkItemCount.put("demand", demandNum);
 
-        String sql2 =  sql.concat(" and work_type_code = 'task'");
+        String sql2 =  sql.concat(" and p.work_type_code = 'task'");
         Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
         WorkItemCount.put("task", taskNum);
 
-        String sql3 =  sql.concat(" and work_type_code = 'defect'");
+        String sql3 =  sql.concat(" and p.work_type_code = 'defect'");
         Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
         WorkItemCount.put("defect", defectNum);
 
@@ -803,7 +819,7 @@ public class WorkItemDao{
 
         String sql0 = "";
         if(!ObjectUtils.isEmpty(o1)) {
-            sql0 = sql0.concat(sql + " where " + String.valueOf(o1));
+            sql0 = sql0.concat(sql + String.valueOf(o1));
         }else {
             sql0 = sql;
         }
@@ -811,20 +827,20 @@ public class WorkItemDao{
         WorkItemCount.put("all", allNum);
 
         if(!ObjectUtils.isEmpty(o1)){
-            sql = sql.concat(" where " + String.valueOf(o1) + "and");
+            sql = sql.concat(String.valueOf(o1) + "and");
         }else {
             sql = sql.concat(" where ");
         }
 
-        String sql1 =  sql.concat(" work_type_code = 'demand'");
+        String sql1 =  sql.concat(" p.work_type_code = 'demand'");
         Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         WorkItemCount.put("demand", demandNum);
 
-        String sql2 =  sql.concat(" work_type_code = 'task'");
+        String sql2 =  sql.concat(" p.work_type_code = 'task'");
         Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
         WorkItemCount.put("task", taskNum);
 
-        String sql3 =  sql.concat(" work_type_code = 'defect'");
+        String sql3 =  sql.concat(" p.work_type_code = 'defect'");
         Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
         WorkItemCount.put("defect", defectNum);
 
@@ -842,10 +858,10 @@ public class WorkItemDao{
         Object sql1 = stringObjectMap.get("sql");
 
         if(!ObjectUtils.isEmpty(sql1)){
-            sql = sql.concat(" where " + String.valueOf(sql1));
-            sql = sql.concat(" and parent_id is not null");
+            sql = sql.concat(String.valueOf(sql1));
+            sql = sql.concat(" and p.parent_id is not null");
         }else {
-            sql = sql.concat(" where parent_id is not null");
+            sql = sql.concat(" p.parent_id is not null");
         }
 
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
@@ -865,7 +881,7 @@ public class WorkItemDao{
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
         if(String.valueOf(o1).length()>0){
-            sql = sql.concat("where " + String.valueOf(o1));
+            sql = sql.concat( String.valueOf(o1));
         }
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         Pagination WorkItemList = jdbcTemplate.findPage(sql, new Object[]{}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
@@ -883,7 +899,7 @@ public class WorkItemDao{
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
         if(String.valueOf(o1).length()>0){
-            sql = sql.concat("where " + String.valueOf(o1));
+            sql = sql.concat(String.valueOf(o1));
         }
 //       List<WorkItemEntity> WorkItemList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(WorkItemEntity.class));
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();

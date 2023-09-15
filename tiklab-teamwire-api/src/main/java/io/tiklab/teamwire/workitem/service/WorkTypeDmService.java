@@ -85,7 +85,7 @@ public interface WorkTypeDmService {
      * @param code
      * @return
      */
-    WorkTypeDm findTaskWorkType(String projectId, String code);
+    WorkTypeDm findDmWorkTypeByCode(String projectId, String code);
 
     String findDemandWorkType(String projectId, String code);
 }

@@ -37,7 +37,7 @@ public interface WorkItemStatService {
      * 按项目，业务状态统计事项分布
      * @return
      */
-    List<WorkItemBusStatusStat> statProjectWorkItemByBusStatus(String projectId, String masterId);
+    List<WorkItemBusStatusStat> statProjectWorkItemByBusStatus(String projectId, String masterId,String sprintId, String versionId );
 
     /**
      * 按用户统计事项各个状态的数量

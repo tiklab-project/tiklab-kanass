@@ -23,6 +23,10 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="likeId",desc = "事项ID，精确匹配")
     private String likeId;
 
+
+    @ApiProperty(name ="epicView",desc = "是否史诗视图，精确匹配")
+    private Boolean epicView;
+
     @ApiProperty(name ="overdue",desc = "是否逾期")
     private Boolean overdue;
 
@@ -205,6 +209,14 @@ public class WorkItemQuery implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Boolean getEpicView() {
+        return epicView;
+    }
+
+    public void setEpicView(Boolean epicView) {
+        this.epicView = epicView;
     }
 
     public String getPlanId() {

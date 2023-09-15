@@ -95,11 +95,11 @@ public class WorkTypeDmController {
         return Result.ok(pagination);
     }
 
-    @RequestMapping(path = "/findTaskWorkType",method = RequestMethod.POST)
-    @ApiMethod(name = "findTaskWorkType",desc = "根据编码，项目id 查找事项类型")
+    @RequestMapping(path = "/findDmWorkTypeByCode",method = RequestMethod.POST)
+    @ApiMethod(name = "findDmWorkTypeByCode",desc = "根据编码，项目id 查找事项类型")
     @ApiParam(name = "code",desc = "项目id",required = true)
-    public Result<WorkTypeDm> findTaskWorkType(@NotNull String projectId, @NotNull String code){
-        WorkTypeDm workTypeDm = workTypeDmService.findTaskWorkType(projectId, code);
+    public Result<WorkTypeDm> findDmWorkTypeByCode(@NotNull String projectId, @NotNull String code){
+        WorkTypeDm workTypeDm = workTypeDmService.findDmWorkTypeByCode(projectId, code);
 
         return Result.ok(workTypeDm);
     }

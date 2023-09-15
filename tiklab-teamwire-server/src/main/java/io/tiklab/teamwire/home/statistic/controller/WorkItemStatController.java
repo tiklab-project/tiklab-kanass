@@ -66,8 +66,8 @@ public class WorkItemStatController {
     @RequestMapping(path="/statProjectWorkItemByBusStatus",method = RequestMethod.POST)
     @ApiMethod(name = "statProjectWorkItemByBusStatus",desc = "按项目，业务状态（未开始，进行中，逾期，结束）统计事项分布")
     @ApiParam(name = "projectId",desc = "项目Id",required = true)
-    public Result<List<WorkItemBusStatusStat>> statProjectWorkItemByBusStatus(@NotNull String projectId, String masterId){
-        List<WorkItemBusStatusStat> list = reporterService.statProjectWorkItemByBusStatus(projectId, masterId);
+    public Result<List<WorkItemBusStatusStat>> statProjectWorkItemByBusStatus(@NotNull String projectId, String masterId, String sprintId,String versionId){
+        List<WorkItemBusStatusStat> list = reporterService.statProjectWorkItemByBusStatus(projectId, masterId, sprintId, versionId);
 
         return Result.ok(list);
     }

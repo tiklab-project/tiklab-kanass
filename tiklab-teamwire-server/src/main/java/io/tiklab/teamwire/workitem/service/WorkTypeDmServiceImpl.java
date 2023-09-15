@@ -188,7 +188,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
     }
 
     @Override
-    public WorkTypeDm findTaskWorkType(String projectId, String code) {
+    public WorkTypeDm findDmWorkTypeByCode(String projectId, String code) {
         WorkTypeQuery workTypeQuery = new WorkTypeQuery();
         workTypeQuery.setCode(code);
         List<WorkType> workTypeList = workTypeService.findWorkTypeList(workTypeQuery);

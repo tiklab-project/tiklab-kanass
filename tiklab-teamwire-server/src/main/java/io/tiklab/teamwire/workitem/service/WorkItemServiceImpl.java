@@ -871,6 +871,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemQuery.setParentIdIsNull(false);
 
         long aTime3 = System.currentTimeMillis();
+        if(workItemQuery.getEpicView() != null && workItemQuery.getEpicView() == true){
+            workItemQuery.setWorkTypeId(null);
+            workItemQuery.setWorkTypeCode(null);
+        }
+
         List<WorkItemEntity> topChildWorkItemEntity = workItemDao.findTopChildWorkItem(workItemQuery);
         long bTime3 = System.currentTimeMillis();
 

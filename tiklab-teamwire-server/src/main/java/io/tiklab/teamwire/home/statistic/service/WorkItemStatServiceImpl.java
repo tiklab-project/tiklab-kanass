@@ -92,9 +92,9 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
     }
 
     @Override
-    public List<WorkItemBusStatusStat> statProjectWorkItemByBusStatus(String projectId, String masterId) {
+    public List<WorkItemBusStatusStat> statProjectWorkItemByBusStatus(String projectId, String masterId, String sprintId, String versionId) {
         //按状态统计事项
-        List<WorkItemBusStatusStat> list =  workItemStatDao.statProjectWorkItemByBusStatus(projectId, masterId);
+        List<WorkItemBusStatusStat> list =  workItemStatDao.statProjectWorkItemByBusStatus(projectId, masterId, sprintId, versionId);
 
         return list;
     }

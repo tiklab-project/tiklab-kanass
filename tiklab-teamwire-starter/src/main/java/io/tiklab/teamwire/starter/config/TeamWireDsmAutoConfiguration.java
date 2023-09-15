@@ -59,6 +59,9 @@ public class TeamWireDsmAutoConfiguration {
         dsmConfig.newVersion("1.0.6", new String[]{
                 "pmc_1.0.6"
         });
+        dsmConfig.newVersion("1.0.7", new String[]{
+                "pmc_1.0.7"
+        });
         return dsmConfig;
     }
 }

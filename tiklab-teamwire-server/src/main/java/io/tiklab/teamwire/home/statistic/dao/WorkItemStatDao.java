@@ -150,7 +150,7 @@ public class WorkItemStatDao {
      * 按业务状态统计项目下的事项分布
      * @return
      */
-    public List<WorkItemBusStatusStat> statProjectWorkItemByBusStatus(String projectId, String masterId) {
+    public List<WorkItemBusStatusStat> statProjectWorkItemByBusStatus(String projectId, String masterId, String sprintId, String versionId) {
         List<WorkItemBusStatusStat> list = new ArrayList<>();
 
         //统计总数
@@ -159,7 +159,13 @@ public class WorkItemStatDao {
         sql = sql.concat(" where t.project_id=? ");
 
         if(masterId != null){
-            sql.concat("ant t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "'");
+            sql = sql.concat(" and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
+        }
+        if(sprintId != null){
+            sql = sql.concat(" and t.sprint_id = '" + sprintId + "'");
+        }
+        if(versionId != null){
+            sql = sql.concat(" and t.version_id = '" + versionId + "'");
         }
         Integer totalCount = getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
         if(totalCount == 0){
@@ -200,7 +206,13 @@ public class WorkItemStatDao {
         sql = "select count(1) as endTotalCount from pmc_work_item t";
         sql = sql.concat(" where t.project_id= ? and t.work_status_code='START' or t.work_status_code='TODO'");
         if(masterId != null){
-            sql.concat(" ant t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "'");
+            sql = sql.concat(" and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
+        }
+        if(sprintId != null){
+            sql = sql.concat(" and t.sprint_id = '" + sprintId + "'");
+        }
+        if(versionId != null){
+            sql = sql.concat(" and t.version_id = '" + versionId + "'");
         }
 
         Integer nostartTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
@@ -214,9 +226,14 @@ public class WorkItemStatDao {
         sql = "select count(1) as endTotalCount from pmc_work_item t";
         sql = sql.concat(" where t.project_id= ? and t.work_status_code ='DONE'");
         if(masterId != null){
-            sql.concat(" ant t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "'");
+            sql = sql.concat(" and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
         }
-
+        if(sprintId != null){
+            sql = sql.concat(" and t.sprint_id = '" + sprintId + "'");
+        }
+        if(versionId != null){
+            sql = sql.concat(" and t.version_id = '" + versionId + "'");
+        }
         Integer endTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
 
         WorkItemBusStatusStat itemBusStatusStatEnd = new WorkItemBusStatusStat();
@@ -228,7 +245,13 @@ public class WorkItemStatDao {
         sql = "select count(1) as endTotalCount from pmc_work_item t";
         sql = sql.concat(" where t.project_id= ? and t.work_status_code ='PROGRESS'");
         if(masterId != null){
-            sql.concat(" ant t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "'");
+            sql = sql.concat(" and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
+        }
+        if(sprintId != null){
+            sql = sql.concat(" and t.sprint_id = '" + sprintId + "'");
+        }
+        if(versionId != null){
+            sql = sql.concat(" and t.version_id = '" + versionId + "'");
         }
         Integer processTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
 
@@ -244,7 +267,13 @@ public class WorkItemStatDao {
         sql = "select count(1) as endTotalCount from pmc_work_item t";
         sql = sql.concat(" where t.project_id= ? and t.work_status_code !='DONE' and ? > t.plan_end_time ");
         if(masterId != null){
-            sql.concat("ant t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "'");
+            sql = sql.concat("and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
+        }
+        if(sprintId != null){
+            sql = sql.concat(" and t.sprint_id = '" + sprintId + "'");
+        }
+        if(versionId != null){
+            sql = sql.concat(" and t.version_id = '" + versionId + "'");
         }
         Object[] params = new Object[]{projectId,newDate};
         Integer delayTotalCount = getJdbcTemplate().queryForObject(sql, params, Integer.class);
@@ -352,7 +381,7 @@ public class WorkItemStatDao {
         list.add(itemBusStatusStatAll);
 
         // 统计已完成的事项
-        sql = "select count(1) as endTotalCount from pmc_work_item t, flc_state f";
+        sql = "select count(1) as endTotalCount from pmc_work_item";
         sql = sql.concat(" where t.sprint_id= ? and f.state_type=3 and f.id=t.work_status_id");
         Integer endTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{sprintId},Integer.class);
 
