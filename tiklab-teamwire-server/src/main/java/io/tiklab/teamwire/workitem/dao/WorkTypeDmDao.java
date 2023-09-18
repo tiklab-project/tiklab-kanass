@@ -88,6 +88,7 @@ public class WorkTypeDmDao{
                 .eq("wd.workTypeId",workTypeDmQuery.getWorkTypeId())
                 .eq("wt.grouper", workTypeDmQuery.getGrouper())
                 .eq("wt.code", workTypeDmQuery.getCode())
+                .in("wt.code", workTypeDmQuery.getCodes())
                 .orders(workTypeDmQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkTypeDmEntity.class);

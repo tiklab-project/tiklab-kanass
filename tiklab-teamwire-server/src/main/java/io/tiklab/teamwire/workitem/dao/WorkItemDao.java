@@ -463,6 +463,24 @@ public class WorkItemDao{
             }
             paramMap.put("workTypeCode", workItemQuery.getWorkTypeCode());
         }
+        if(workItemQuery.getWorkTypeCodes() != null && workItemQuery.getWorkTypeCodes().size()>0){
+            List<String> workTypeCodes = workItemQuery.getWorkTypeCodes();
+            String s = new String();
+            s =  "(";
+            for(String workTypeCode :workTypeCodes){
+                s = s.concat("'" + workTypeCode + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s = s.concat(")");
+
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_type_code in " + s);
+            }else {
+                sql = sql.concat(" and p.work_type_code in " + s);
+            }
+            paramMap.put("workTypeCodes", workItemQuery.getWorkTypeCodes());
+        }
+
 
         if(workItemQuery.getProjectIds() != null && workItemQuery.getProjectIds().size()>0){
             List<String> projectIds = workItemQuery.getProjectIds();

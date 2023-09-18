@@ -35,10 +35,10 @@ public class SprintBurnDowmChartServiceImpl implements SprintBurnDowmChartServic
     @Autowired
     SprintService sprintService;
 
-//    @Scheduled(cron="0/10 * * * * ?")
-//    @Scheduled(cron="0 0 23 * * ?")
 
 
+//    @Scheduled(cron="0 0/1 * * * ?")
+    @Scheduled(cron="0 0 23 * * ?")
     public void everyProjectBurnDownCharts() {
         System.out.println("20");
         List<Sprint> allSprint = sprintService.findAllSprint();

@@ -52,6 +52,7 @@ public interface ProjectService {
 
     List<WorkTypeDm> initWorkType(@NotNull String projectId);
 
+    List<WorkTypeDm> initWorkTypeEpic(@NotNull String projectId);
     /**
     * 根据id查找项目
     * @param id

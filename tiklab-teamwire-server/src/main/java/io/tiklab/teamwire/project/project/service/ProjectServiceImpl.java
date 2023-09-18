@@ -263,7 +263,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         //初始事项类型
         initWorkType(id);
-
         return id;
     }
 
@@ -363,6 +362,28 @@ public class ProjectServiceImpl implements ProjectService {
         return workTypeDmList;
     }
 
+    /**
+     * 初始化项目类型，只初始化系统的
+     * @param projectId
+     */
+    public List<WorkTypeDm> initWorkTypeEpic(String projectId) {
+        List<WorkTypeDm> workTypeDmList = new ArrayList<>();
+        WorkTypeQuery workTypeQuery = new WorkTypeQuery();
+        workTypeQuery.setGrouper("system");
+        workTypeQuery.setCode("epic");
+        List<WorkType> workTypeList = workTypeService.findWorkTypeList(workTypeQuery);
+
+        for (WorkType workType : workTypeList) {
+            WorkTypeDm workTypeDm = new WorkTypeDm();
+            workTypeDm.setWorkType(workType);
+            workTypeDm.setFlow(workType.getFlow());
+            workTypeDm.setForm(workType.getForm());
+            workTypeDm.setProjectId(projectId);
+            WorkTypeDm workTypeDm1 = workTypeDmService.createWorkTypeDm(workTypeDm);
+            workTypeDmList.add(workTypeDm1);
+        }
+        return workTypeDmList;
+    }
     /**
      * 更新项目
      * @param project

@@ -105,11 +105,11 @@ public class WorkItemEntity implements Serializable {
 
     //计划开始时间
     @Column(name = "plan_begin_time")
-    private Date planBeginTime;
+    private String planBeginTime;
 
     //计划结束时间
     @Column(name = "plan_end_time")
-    private Date planEndTime;
+    private String planEndTime;
 
     @Column(name = "update_time")
     private String updateTime;
@@ -120,7 +120,7 @@ public class WorkItemEntity implements Serializable {
 
     //实际开始时间
     @Column(name = "actual_begin_time")
-    private Date actualBeginTime;
+    private String actualBeginTime;
 
     //实际结束时间
     @Column(name = "actual_end_time")
@@ -249,27 +249,27 @@ public class WorkItemEntity implements Serializable {
         this.parentId = parentId;
     }
 
-    public Date getPlanBeginTime() {
+    public String getPlanBeginTime() {
         return planBeginTime;
     }
 
-    public void setPlanBeginTime(Date planBeginTime) {
+    public void setPlanBeginTime(String planBeginTime) {
         this.planBeginTime = planBeginTime;
     }
 
-    public Date getPlanEndTime() {
+    public String getPlanEndTime() {
         return planEndTime;
     }
 
-    public void setPlanEndTime(Date planEndTime) {
+    public void setPlanEndTime(String planEndTime) {
         this.planEndTime = planEndTime;
     }
 
-    public Date getActualBeginTime() {
+    public String getActualBeginTime() {
         return actualBeginTime;
     }
 
-    public void setActualBeginTime(Date actualBeginTime) {
+    public void setActualBeginTime(String actualBeginTime) {
         this.actualBeginTime = actualBeginTime;
     }
 

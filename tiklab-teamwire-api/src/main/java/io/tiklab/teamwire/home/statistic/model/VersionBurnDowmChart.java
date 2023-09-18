@@ -1,27 +1,27 @@
 package io.tiklab.teamwire.home.statistic.model;
 
+import io.tiklab.beans.annotation.Mapper;
+import io.tiklab.core.BaseModel;
 import io.tiklab.join.annotation.Join;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
-import io.tiklab.beans.annotation.Mapper;
-import io.tiklab.core.BaseModel;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * 迭代事项数据动态统计模型
+ * 版本事项数据动态统计模型
  */
 @ApiModel
 @Mapper
 @Join
-public class SprintBurnDowmChart extends BaseModel{
+public class VersionBurnDowmChart extends BaseModel{
 
     @ApiProperty(name="id",desc="id",required = true)
     private String id;
 
     @NotNull
-    @ApiProperty(name="sprintId",desc="迭代名称",required = true)
-    private String sprintId;
+    @ApiProperty(name="versionId",desc="版本名称",required = true)
+    private String versionId;
 
     @ApiProperty(name="recordTime",desc="记录时间")
     private String recordTime;
@@ -38,7 +38,7 @@ public class SprintBurnDowmChart extends BaseModel{
     @ApiProperty(name="progressWorkitemCount",desc="进行中事项数量")
     private Integer progressWorkitemCount;
 
-    @ApiProperty(name="noStartWorkItemCount",desc="未开始事项数量")
+    @ApiProperty(name="noStartWorkitemCount",desc="未开始事项数量")
     private Integer noStartWorkitemCount;
 
     public String getId() {
@@ -48,12 +48,12 @@ public class SprintBurnDowmChart extends BaseModel{
     public void setId(String id) {
         this.id = id;
     }
-    public String getSprintId() {
-        return sprintId;
+    public String getVersionId() {
+        return versionId;
     }
 
-    public void setSprintId(String sprintId) {
-        this.sprintId = sprintId;
+    public void setVersionId(String versionId) {
+        this.versionId = versionId;
     }
 
     public String getRecordTime() {

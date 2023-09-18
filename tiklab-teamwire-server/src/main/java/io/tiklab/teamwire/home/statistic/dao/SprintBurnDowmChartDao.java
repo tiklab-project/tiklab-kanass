@@ -10,6 +10,7 @@ import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ public class SprintBurnDowmChartDao{
      * @param sprintBurnDowmChartEntity
      * @return
      */
+
     public String createSprintBurnDowmChart(SprintBurnDowmChartEntity sprintBurnDowmChartEntity) {
         //统计总数
         String sql = "select count(1) as totalCount from pmc_work_item t";
@@ -218,6 +220,7 @@ public class SprintBurnDowmChartDao{
      */
     public Pagination<SprintBurnDowmChartEntity> findSprintBurnDowmChartPage(SprintBurnDowmChartQuery sprintBurnDowmChartQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(SprintBurnDowmChartEntity.class)
+                .eq("sprintId", sprintBurnDowmChartQuery.getSprintId())
                 .orders(sprintBurnDowmChartQuery.getOrderParams())
                 .pagination(sprintBurnDowmChartQuery.getPageParam())
                 .get();

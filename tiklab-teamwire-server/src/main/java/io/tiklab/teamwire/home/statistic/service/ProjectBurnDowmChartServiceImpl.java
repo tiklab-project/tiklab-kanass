@@ -35,9 +35,8 @@ public class ProjectBurnDowmChartServiceImpl implements ProjectBurnDowmChartServ
     @Autowired
     ProjectService projectService;
 
-//    @Scheduled(cron="0 0 23 * * ?")
-//    @Scheduled(cron="0/10 * * * * ?")
-//    @Scheduled(cron="0 0 23 * * ?")
+//    @Scheduled(cron="0 0/1 * * * ?")
+    @Scheduled(cron="0 0 23 * * ?")
     public void everyProjectBurnDownCharts() {
         List<Project> ProjectList = projectService.findAllProject();
         for(int i=0;i<ProjectList.size();i++) {

@@ -163,6 +163,10 @@ public class WorkItemQuery implements Serializable {
     private String workTypeCode;
 
 
+
+    @ApiProperty(name ="workTypeCodes",desc = "事项类型Code，精确匹配")
+    private List<String> workTypeCodes;
+
     @ApiProperty(name ="workTypeNoInIds",desc = "事项类型ID，精确匹配")
     private List<String> workTypeNoInIds;
 
@@ -453,6 +457,13 @@ public class WorkItemQuery implements Serializable {
         this.workTypeCode = workTypeCode;
     }
 
+    public List<String> getWorkTypeCodes() {
+        return workTypeCodes;
+    }
+
+    public void setWorkTypeCodes(List<String> workTypeCodes) {
+        this.workTypeCodes = workTypeCodes;
+    }
 
     public String getTreePath() {
         return treePath;

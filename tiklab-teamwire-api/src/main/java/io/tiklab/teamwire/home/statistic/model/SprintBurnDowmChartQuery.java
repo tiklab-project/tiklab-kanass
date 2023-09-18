@@ -14,13 +14,24 @@ import java.util.List;
 @ApiModel
 public class SprintBurnDowmChartQuery {
 
+        @ApiProperty(name ="sprintId",desc = "迭代id")
+        private String sprintId;
         @ApiProperty(name ="orderParams",desc = "排序参数")
         private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
 
         @ApiProperty(name ="pageParam",desc = "分页参数")
         private Page pageParam = new Page();
 
-        public List<Order> getOrderParams() {
+        public String getSprintId() {
+            return sprintId;
+        }
+
+        public void setSprintId(String sprintId) {
+            this.sprintId = sprintId;
+        }
+
+
+    public List<Order> getOrderParams() {
             return orderParams;
         }
 

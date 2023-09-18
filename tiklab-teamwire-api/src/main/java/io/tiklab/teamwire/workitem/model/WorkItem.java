@@ -167,17 +167,17 @@ public class WorkItem extends BaseModel {
     @ApiProperty(name="planBeginTime",desc="计划开始时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JSONField(format = "yyyy-MM-dd")
-    private Date planBeginTime;
+    private String planBeginTime;
 
     @ApiProperty(name="planEndTime",desc="计划结束时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JSONField(format = "yyyy-MM-dd")
-    private Date planEndTime;
+    private String planEndTime;
 
     @ApiProperty(name="actualBeginTime",desc="实际开始时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JSONField(format = "yyyy-MM-dd")
-    private Date actualBeginTime;
+    private String actualBeginTime;
 
     @ApiProperty(name="actualEndTime",desc="实际结束时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -364,28 +364,27 @@ public class WorkItem extends BaseModel {
     }
 
 
-
-    public Date getPlanBeginTime() {
+    public String getPlanBeginTime() {
         return planBeginTime;
     }
 
-    public void setPlanBeginTime(Date planBeginTime) {
+    public void setPlanBeginTime(String planBeginTime) {
         this.planBeginTime = planBeginTime;
     }
 
-    public Date getPlanEndTime() {
+    public String getPlanEndTime() {
         return planEndTime;
     }
 
-    public void setPlanEndTime(Date planEndTime) {
+    public void setPlanEndTime(String planEndTime) {
         this.planEndTime = planEndTime;
     }
 
-    public Date getActualBeginTime() {
+    public String getActualBeginTime() {
         return actualBeginTime;
     }
 
-    public void setActualBeginTime(Date actualBeginTime) {
+    public void setActualBeginTime(String actualBeginTime) {
         this.actualBeginTime = actualBeginTime;
     }
 

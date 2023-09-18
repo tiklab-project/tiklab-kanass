@@ -25,6 +25,11 @@ public class WorkTypeDmQuery implements Serializable{
         @ApiProperty(name ="code",desc = "事项类型id，精准匹配")
         private String code;
 
+
+
+    @ApiProperty(name ="codes",desc = "事项类型id，精准匹配")
+        private String[] codes;
+
         @ApiProperty(name ="grouper",desc = "类型分组，系统system，自定义custom")
         private String grouper;
 
@@ -80,5 +85,13 @@ public class WorkTypeDmQuery implements Serializable{
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String[] getCodes() {
+        return codes;
+    }
+
+    public void setCodes(String[] codes) {
+        this.codes = codes;
     }
 }

@@ -2,6 +2,7 @@ package io.tiklab.teamwire.home.statistic.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.tiklab.join.annotation.Join;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.beans.annotation.Mapper;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel
 @Mapper
+@Join
 public class ProjectBurnDowmChart extends BaseModel{
 
     @ApiProperty(name="id",desc="id",required = true)
