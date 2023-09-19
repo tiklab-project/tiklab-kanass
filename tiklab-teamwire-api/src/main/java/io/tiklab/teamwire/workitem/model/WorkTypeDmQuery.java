@@ -27,14 +27,14 @@ public class WorkTypeDmQuery implements Serializable{
 
 
 
-    @ApiProperty(name ="codes",desc = "事项类型id，精准匹配")
+        @ApiProperty(name ="codes",desc = "事项类型id，精准匹配")
         private String[] codes;
 
         @ApiProperty(name ="grouper",desc = "类型分组，系统system，自定义custom")
         private String grouper;
 
         @ApiProperty(name ="orderParams",desc = "排序参数")
-        private List<Order> orderParams = OrderBuilders.instance().asc("workTypeId").get();
+        private List<Order> orderParams = OrderBuilders.instance().asc("code").get();
 
         @ApiProperty(name ="pageParam",desc = "分页参数")
         private Page pageParam = new Page();

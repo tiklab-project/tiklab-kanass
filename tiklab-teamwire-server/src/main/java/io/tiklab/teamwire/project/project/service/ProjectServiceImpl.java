@@ -65,6 +65,7 @@ import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -366,6 +367,7 @@ public class ProjectServiceImpl implements ProjectService {
      * 初始化项目类型，只初始化系统的
      * @param projectId
      */
+    @Override
     public List<WorkTypeDm> initWorkTypeEpic(String projectId) {
         List<WorkTypeDm> workTypeDmList = new ArrayList<>();
         WorkTypeQuery workTypeQuery = new WorkTypeQuery();
@@ -384,6 +386,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return workTypeDmList;
     }
+
     /**
      * 更新项目
      * @param project

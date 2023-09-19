@@ -35,6 +35,7 @@ postgresql:
   embbed:
     enable: true
   database: tiklab_teamwire
+
 #dfs config
 #dfs.server.enabled=false
 dfs:
