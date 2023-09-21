@@ -351,4 +351,49 @@ public class ProjectDao{
 
         return projectList;
     }
+
+    public void deleteWorkItem(String projectId){
+        String sql = "DELETE FROM pmc_work_item where project_id = '" + projectId + "'";
+        int update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update > 0){
+            logger.info("删除事项成功");
+        }else {
+            logger.info("删除事项失败");
+        }
+
+        sql = "DELETE FROM pmc_version where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update > 0){
+            logger.info("删除版本成功");
+        }else {
+            logger.info("删除版本失败");
+        }
+
+        sql = "DELETE FROM pmc_sprint where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update > 0){
+            logger.info("删除迭代成功");
+        }else {
+            logger.info("删除迭代失败");
+        }
+
+        sql = "DELETE FROM pmc_module where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update > 0){
+            logger.info("删除模块成功");
+        }else {
+            logger.info("删除模块失败");
+        }
+
+        sql = "DELETE FROM pmc_milestone where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update > 0){
+            logger.info("删除里程碑成功");
+        }else {
+            logger.info("删除里程碑失败");
+        }
+    }
+
+
+
 }

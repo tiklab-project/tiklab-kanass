@@ -458,22 +458,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * 删除项目下的事项
-     * @param id
+     * @param projectId
      */
-    public void deleteWorkItem(@NotNull String id){
-        WorkItemQuery workItemQuery = new WorkItemQuery();
-        workItemQuery.setProjectId(id);
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-        if(workItemList.size() > 0){
-            for (WorkItem workItem : workItemList) {
-                try {
-                    workItemService.deleteWorkItem(workItem.getId());
-                } catch (Exception e) {
-                    throw new ApplicationException(e);
-                }
-
-            }
-        }
+    public void deleteWorkItem(@NotNull String projectId){
+        projectDao.deleteWorkItem(projectId);
     }
 
     /**
