@@ -11,6 +11,8 @@ import io.tiklab.flow.transition.model.TransitionRule;
 import io.tiklab.flow.transition.model.TransitionRuleQuery;
 import io.tiklab.flow.transition.service.TransitionRuleService;
 import io.tiklab.rpc.annotation.Exporter;
+import io.tiklab.security.logging.model.LoggingQuery;
+import io.tiklab.security.logging.service.LoggingService;
 import io.tiklab.teamwire.project.project.service.ProjectService;
 import io.tiklab.teamwire.workitem.model.*;
 import io.tiklab.beans.BeanMapper;
@@ -85,6 +87,9 @@ public class WorkItemServiceImpl implements WorkItemService {
     StateNodeWorkRelationService stateNodeWorkRelationService;
 
     @Autowired
+    StateNodeService stateNodeService;
+
+    @Autowired
     JoinTemplate joinTemplate;
 
     @Autowired
@@ -93,8 +98,6 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Autowired
     StateNodeFlowService stateNodeflowService;
 
-    @Autowired
-    StateNodeService stateNodeService;
 
     @Autowired
     DmFlowService dmFlowService;
@@ -122,6 +125,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     FlowService flowService;
+
+    @Autowired
+    LoggingService loggingService;
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -1158,6 +1164,54 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItemNumByWorkType;
     }
 
+    public HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery) {
+    HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        // 全部事项数量
+        workItemQuery.setWorkStatusIds(null);
+        Integer allWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        WorkItemCount.put("all", allWorkItemNum);
+
+        //待办
+        StateNodeQuery stateNodeQuery = new StateNodeQuery();
+        stateNodeQuery.setQuickName("pending");
+        List<StateNode> pendingStateNodeList = stateNodeService.findQuickFilterStateNodeList(stateNodeQuery);
+        List<String> pendingStateNodeIds = new ArrayList<>();
+        for (StateNode stateNode : pendingStateNodeList) {
+            String id = stateNode.getId();
+            pendingStateNodeIds.add(id);
+        }
+        workItemQuery.setWorkStatusIds(pendingStateNodeIds);
+        Integer pendingWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        WorkItemCount.put("pending", pendingWorkItemNum);
+
+        // 完成
+        stateNodeQuery.setQuickName("done");
+        List<StateNode> doneFilterStateNodeList = stateNodeService.findQuickFilterStateNodeList(stateNodeQuery);
+        List<String> doneStateNodeIds = new ArrayList<>();
+        for (StateNode stateNode : doneFilterStateNodeList) {
+            String id = stateNode.getId();
+            doneStateNodeIds.add(id);
+        }
+        workItemQuery.setWorkStatusIds(doneStateNodeIds);
+        Integer doneWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        WorkItemCount.put("ending", doneWorkItemNum);
+
+        //我创建的
+        workItemQuery.setWorkStatusIds(null);
+        String loginId = LoginContext.getLoginId();
+        workItemQuery.setBuilderId(loginId);
+        Integer buildWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        WorkItemCount.put("creat", buildWorkItemNum);
+
+        // 逾期
+        workItemQuery.setBuilderId(null);
+        workItemQuery.setOverdue(true);
+        Integer overdueWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        WorkItemCount.put("overdue", overdueWorkItemNum);
+
+        return  WorkItemCount;
+    }
+
     @Override
     public Pagination<WorkItem> findCanBeRelationParentWorkItemList(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity> pagination = workItemDao.findCanBeRelationParentWorkItemList(workItemQuery);
@@ -1175,5 +1229,23 @@ public class WorkItemServiceImpl implements WorkItemService {
         joinTemplate.joinQuery(workItemList,  new String[]{"assigner", "workPriority", "workStatusNode", "workTypeSys"});
         return PaginationBuilder.build(pagination,workItemList);
     }
+
+
+    @Override
+    public HashMap<String, Integer> findWorkItemRelationModelCount(String workItemId, String workTypeCode) {
+        // 查找关联事项个数
+        HashMap<String, Integer> workItemRelationModelCount = workItemDao.findWorkItemRelationModelCount(workItemId, workTypeCode);
+
+        LoggingQuery loggingQuery = new LoggingQuery();
+        LinkedHashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
+        linkedHashMap.put("workItemId", workItemId);
+        loggingQuery.setContent(linkedHashMap);
+        loggingQuery.setBgroup("teamwire");
+        List<Logging> logList = loggingService.findLogList(loggingQuery);
+        workItemRelationModelCount.put("dynamic", logList.size());
+
+        return workItemRelationModelCount;
+    }
+
 
 }

@@ -416,23 +416,23 @@ public class ProjectServiceImpl implements ProjectService {
         //创建动态
         //creatDynamic(id,"delete", null);
 
-                //删除事项
-        //        deleteWorkItem(id);
-        //
-        //        //删除迭代
-        //        deleteSprint(id);
-        //
-        //        //删除版本
-        //        deleteVersion(id);
-        //
-        //        //删除模块
-        //        deleteModule(id);
-        //
-        //        //删除里程碑
-        //        deleteMileStone(id);
-        //
-        //        //删除事项类型
-        //        deleteWorkTypeDm(id);
+        //删除事项
+        deleteWorkItem(id);
+
+        //删除迭代
+        deleteSprint(id);
+
+        //删除版本
+        deleteVersion(id);
+
+        //删除模块
+        deleteModule(id);
+
+        //删除里程碑
+        deleteMileStone(id);
+
+        //删除事项类型
+        deleteWorkTypeDm(id);
         //        //删除项目
         projectDao.deleteProject(id);
 
@@ -828,8 +828,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public String creatProjectKey() {
-        return projectDao.creatProjectKey();
+    public String creatProjectKey(String projectName) {
+        return projectDao.creatProjectKey(projectName);
 
     }
 

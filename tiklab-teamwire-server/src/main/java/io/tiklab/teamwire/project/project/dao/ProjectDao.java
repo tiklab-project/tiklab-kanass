@@ -12,6 +12,7 @@ import io.tiklab.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.teamwire.workitem.entity.WorkItemEntity;
+import net.sourceforge.pinyin4j.PinyinHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 项目数据访问
@@ -104,10 +107,33 @@ public class ProjectDao{
         return jpaTemplate.findList(queryCondition, ProjectEntity.class);
     }
 
+    public String creatProjectKey(String projectName){
+        String pinYinHeadChar = getPinYinHeadChar(projectName);
+        int length = pinYinHeadChar.length();
+        if(length > 8){
+            pinYinHeadChar = pinYinHeadChar.substring(0, 8);
+        }
+        boolean repeatKey = isRepeatKey(pinYinHeadChar);
+        if(!repeatKey){
+            return pinYinHeadChar;
+        }else {
+            return creatRandomProjectKey();
+        }
+
+    }
+
+    /**
+     * 判断生成的key 是否重复
+     */
+    public boolean isRepeatKey(String key) {
+        String sql = "select project_key from pmc_project";
+        List<String> keys = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(String.class));
+        return keys.contains(key);
+    }
     /**
      * 自动生成key
      */
-    public String creatProjectKey(){
+    public String creatRandomProjectKey(){
         int length = new Random().nextInt(7) + 2; // 生成长度在 2 到 8 之间的随机数
         StringBuilder result = new StringBuilder();
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // 大写字母集合
@@ -116,10 +142,61 @@ public class ProjectDao{
             int randomIndex = new Random().nextInt(characters.length());
             result.append(characters.charAt(randomIndex));
         }
+        String key = result.toString();
 
-        return result.toString();
+
+       if(!isRepeatKey(key)){
+            return key;
+        }else{
+            String newKey = creatRandomProjectKey();
+            return newKey;
+        }
     }
 
+    /**
+     * 提取每个汉字的首字母(大写)
+     *
+     * @param str
+     * @return
+     */
+    public static String getPinYinHeadChar(String str) {
+        String convert = "";
+        for (int j = 0; j < str.length(); j++) {
+            char word = str.charAt(j);
+            // 提取汉字的首字母
+            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
+            if (pinyinArray != null) {
+                convert += pinyinArray[0].charAt(0);
+            }else {
+                convert += word;
+            }
+        }
+
+        return convert.toUpperCase();
+    }
+
+    /**
+     * 判断是否是中文
+     * @param str
+     * @return
+     */
+    public static boolean isChineseByReg(String str) {
+        String reg = "[\\u4e00-\\u9fa5]";
+        Pattern pattern = Pattern.compile(reg);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
+    }
+
+    /*
+     * 判断字符串是否为空
+     */
+
+//    public static boolean isNull(Object strData) {
+//        if (strData == null || String.valueOf(strData).trim().equals("")) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     /**
      * 验证项目key是否存在

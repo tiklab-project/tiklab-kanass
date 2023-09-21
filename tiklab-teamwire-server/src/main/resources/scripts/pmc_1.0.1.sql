@@ -294,12 +294,19 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ba2c6ec37566', '77f512ab7c53', 'f569dfa96880');
 
 
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('05a4fd811427', 'f3fdc893ff25', '323810f03653');
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('86912b2f65de', '4cf6d4dec7d0', '7fd9ce1c7be1');
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('d34704c82822', 'f3fdc893ff25', 'f899d7406414');
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('f1968b10de30', '4cf6d4dec7d0', '32521b1d228f');
+
+
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('1', 'admin', '管理员', 'system', '1', 1, 1);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('2', 'admin', '管理员', 'system', '2', 1, 1);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 2, 0);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('32521b1d228f', 'admin', '管理员', 'system', '2', 2, 0);
+
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('4559d54bc8b7', '普通用户', '初始化', 'system', '2', 1, 0);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('77f512ab7c53', '普通用户', '初始化', 'custom', '1', 1, 0);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 2, 0);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('32521b1d228f', 'admin', '管理员', 'system', '2', 2, 0);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('7fd9ce1c7be1', '普通用户', '初始化', 'system', '2', 2, 0);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('f899d7406414', 'admin', '管理员', 'system', '2', 2, 0);
 
@@ -664,11 +671,9 @@ INSERT INTO pcs_todo_task_template (id, title, link, bgroup, content) VALUES ('f
         <div style="font-size: 13px;"> ${receiveTime} </div>
     </div>');
 
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper,icon_url) VALUES ('1', '最低', NULL, NULL, 'system', 'proivilege1.png');
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('2', '低', NULL, NULL, 'system', 'proivilege2.png');
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('3', '中', NULL, NULL, 'system', 'proivilege3.png');
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('4', '高', NULL, NULL, 'system', 'proivilege4.png');
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('5', '最高', NULL, NULL, 'system', 'proivilege5.png');
+INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('04b440ad', '低', NULL, NULL, 'system', 'proivilege2.png');
+INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('faaecb3d', '中', NULL, NULL, 'system', 'proivilege3.png');
+INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('56035266', '高', NULL, NULL, 'system', 'proivilege4.png');
 
 
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('7055ebc6', '需求', '需求', 'demand', 1, '0c5d4ff9', '4d040c6d', 'workType1.png', 'system', 0);
@@ -844,7 +849,7 @@ INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, 
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('eecad17a', 'done', '024227ab', 690, 300, 40, 100, 2, 'DONE');
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('eedd26da', 'todo', '024227ab', 250, 300, 40, 100, 2, 'TODO');
 
-INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('7db3a0d1', '进行中', 'RROCESS');
+INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('7db3a0d1', '进行中', 'PROCESS');
 
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('19dc5e5e', '开始', '22751ea5', 'todo', '7db3a0d1', 'right1', 'left1');
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('1e76c11d', '创建', '4d040c6d', 'start', 'todo', 'right1', 'left1');

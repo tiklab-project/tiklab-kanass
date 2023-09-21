@@ -27,7 +27,7 @@ public class RecentQuery {
         @ApiProperty(name ="projectId",desc = "所属模型，精确匹配")
         private String projectId;
         @ApiProperty(name ="orderParams",desc = "排序参数")
-        private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
+        private List<Order> orderParams = OrderBuilders.instance().desc("recentTime").get();
 
         @ApiProperty(name ="pageParam",desc = "分页参数")
         private Page pageParam = new Page();

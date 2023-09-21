@@ -13,10 +13,7 @@ import io.tiklab.postin.annotation.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
@@ -245,6 +242,15 @@ public class WorkItemController {
         return Result.ok(workItemNumByWorkType);
     }
 
+    @RequestMapping(path = "/findWorkItemNumByQuickSearch",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemNumByQuickSearch",desc = "根据快速筛选查询事项状态查找事项数量")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<HashMap<String, Integer>> findWorkItemNumByQuickSearch(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByQuickSearch(workItemQuery);
+
+        return Result.ok(workItemNumByWorkType);
+    }
+
     @RequestMapping(path = "/findCanBeRelationParentWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findCanBeRelationParentWorkItemList",desc = "根据查询事项状态查找可被关联的上级事项")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -261,6 +267,14 @@ public class WorkItemController {
         Pagination<WorkItem> canBeRelationPerWorkItemList = workItemService.findCanBeRelationPerWorkItemList(workItemQuery);
 
         return Result.ok(canBeRelationPerWorkItemList);
+    }
+
+    @RequestMapping(path = "/findWorkItemRelationModelCount",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的前置事项")
+    public Result<HashMap<String, Integer>> findWorkItemRelationModelCount(@NotNull String workItemId, @NotNull String workTypeCode){
+        HashMap<String, Integer> workItemRelationModelCount = workItemService.findWorkItemRelationModelCount(workItemId, workTypeCode);
+
+        return Result.ok(workItemRelationModelCount);
     }
 
 }

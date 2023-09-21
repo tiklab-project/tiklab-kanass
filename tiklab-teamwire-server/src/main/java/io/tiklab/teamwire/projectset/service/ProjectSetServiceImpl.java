@@ -1,6 +1,7 @@
 package io.tiklab.teamwire.projectset.service;
 
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
 import io.tiklab.teamwire.project.project.service.ProjectService;
@@ -31,6 +32,7 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,15 +78,58 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         ProjectSetEntity projectSetEntity = BeanMapper.map(projectSet, ProjectSetEntity.class);
         String projectSetId = projectSetDao.createProjectSet(projectSetEntity);
 
-        //初始化项目权限
         String masterId = user.getId();
-        DmUser dmUser = new DmUser();
-        dmUser.setDomainId(projectSetId);
-        dmUser.setUser(user);;
-        dmUserService.createDmUser(dmUser);
-        dmRoleService.initDmRoles(projectSetId,masterId,"teamwire");
+        initProjectSetDmRole(masterId, projectSetId);
+
+        //初始化项目权限
+
+//        DmUser dmUser = new DmUser();
+//        dmUser.setDomainId(projectSetId);
+//        dmUser.setUser(user);;
+//        dmUserService.createDmUser(dmUser);
+//        dmRoleService.initDmRoles(projectSetId,masterId,"teamwire");
 
         return projectSetId;
+    }
+
+    public void initProjectSetDmRole(String masterId, String projectSetId){
+        List<PatchUser> patchUsers = new ArrayList<PatchUser>();
+        if(!masterId.equals("111111")){
+            // 初始化创建者
+            PatchUser patchUser = new PatchUser();
+            DmUser dmUser = new DmUser();
+            dmUser.setDomainId(projectSetId);
+            User user = new User();
+            user.setId(masterId);
+            dmUser.setUser(user);
+            patchUser.setId(masterId);
+            patchUser.setAdminRole(true);
+            patchUsers.add(patchUser);
+
+            // 初始化"111111"
+            PatchUser patchUser1 = new PatchUser();
+            DmUser dmUser1 = new DmUser();
+            dmUser1.setDomainId(projectSetId);
+            User user1 = new User();
+            user1.setId("111111");
+            dmUser1.setUser(user1);
+
+            patchUser1.setId("111111");
+            patchUser1.setAdminRole(true);
+            patchUsers.add(patchUser1);
+
+        }else {
+            PatchUser patchUser = new PatchUser();
+            DmUser dmUser = new DmUser();
+            dmUser.setDomainId(projectSetId);
+            User user = new User();
+            user.setId(masterId);
+            dmUser.setUser(user);
+            patchUser.setId(masterId);
+            patchUser.setAdminRole(true);
+            patchUsers.add(patchUser);
+        }
+        dmRoleService.initPatchDmRole(projectSetId,patchUsers, "teamwire");
     }
 
     @Override

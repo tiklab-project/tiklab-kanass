@@ -180,7 +180,11 @@ public interface WorkItemService {
 
     HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery);
 
+    HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery);
+
     Pagination<WorkItem>findCanBeRelationParentWorkItemList(WorkItemQuery workItemQuery);
 
     Pagination<WorkItem>findCanBeRelationPerWorkItemList(WorkItemQuery workItemQuery);
+
+    HashMap<String, Integer>findWorkItemRelationModelCount(String workItemId, String workTypeCode);
 }

@@ -120,7 +120,7 @@ public interface ProjectService {
 
     List<Project> findProjectListByKeyWords(String keyWord);
 
-    String creatProjectKey();
+    String creatProjectKey(String projectName);
 
 //    Pagination<WorkItem> findProjectByKeyWorks(WorkItemQuery workItemQuery);
 

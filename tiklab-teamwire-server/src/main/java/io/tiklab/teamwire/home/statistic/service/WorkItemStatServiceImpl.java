@@ -115,6 +115,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
         ProjectQuery projectQuery = new ProjectQuery();
         long aTime = System.currentTimeMillis();
         List<Project> projectList = projectService.findRecentProjectList(projectQuery);
+        if(projectList.size() <= 0)  return list;
 
         // 拼接projects
         if(projectList.size() > num){

@@ -14,13 +14,15 @@ import io.tiklab.dal.jpa.criterial.condition.OrQueryCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
+//import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -396,11 +398,18 @@ public class WorkItemDao{
      * @return
      */
     public Map<String, Object> WorkItemSearchSql(WorkItemQuery workItemQuery) {
-        String sql = " where";
+        String sql = "Select * from pmc_work_item p where";
         HashMap<String, Object> objectObjectHashMap = new HashMap<>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
         Map<String, String> sqlMap = new HashMap<String, String>();
         Object[] objects = {};
+
+        // 如果存在安装优先级查询，就链表查
+        List<Order> orderParams = workItemQuery.getOrderParams();
+        boolean priorityOrder = orderParams.stream().anyMatch(order -> order.getName().equals("work_priority_id"));
+        if(priorityOrder){
+            sql = "Select p.*, priority.sort from pmc_work_item p LEFT JOIN pmc_work_priority priority on priority.id = p.work_priority_id where";
+        }
 
         if(workItemQuery.getVersionId() != null && workItemQuery.getVersionId().length()>0){
             if(paramMap.isEmpty()){
@@ -760,7 +769,6 @@ public class WorkItemDao{
      */
     public Pagination<WorkItemEntity> findTopWorkItemIds(WorkItemQuery workItemQuery){
         String sql = new String();
-        sql = "Select * from pmc_work_item p";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
         if(!ObjectUtils.isEmpty(o1)){
@@ -779,7 +787,9 @@ public class WorkItemDao{
             System.out.println(name);
             if(name.equals("id")){
                 sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
-            }else {
+            } else if(name.equals("work_priority_id")){
+                sql = sql.concat(" priority.sort " + orderType + "," );
+            } else {
                 sql = sql.concat(" " + name + " " + orderType + "," );
             }
 
@@ -800,7 +810,6 @@ public class WorkItemDao{
         workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         String sql = new String();
-        sql = "Select count(1) as total from pmc_work_item p";
         Object o1 = stringObjectMap.get("sql");
         if(!ObjectUtils.isEmpty(o1)){
             sql = sql.concat(String.valueOf(o1));
@@ -827,12 +836,35 @@ public class WorkItemDao{
         return WorkItemCount;
     }
 
+    public Integer findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery){
+        HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        workItemQuery.setWorkTypeId(null);
+        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+        String sql = new String();
+        Object o1 = stringObjectMap.get("sql");
+
+        String sql0 = "";
+        if(!ObjectUtils.isEmpty(o1)) {
+
+            String s = String.valueOf(o1);
+            String where = StringUtils.substringAfter(s, "where");
+            if(!StringUtils.isEmpty(where)){
+                sql0 = "Select count(1) as total from pmc_work_item p where ";
+                sql0 = sql0.concat(sql + where);
+            }else {
+                sql0 = "Select count(1) as total from pmc_work_item p";
+            }
+        }
+        Integer num = jpaTemplate.getJdbcTemplate().queryForObject(sql0, new Object[]{}, Integer.class);
+
+        return num;
+    }
+
     public HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery){
         HashMap<String, Integer> WorkItemCount = new HashMap<>();
         workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         String sql = new String();
-        sql = "Select count(1) as total from pmc_work_item p";
         Object o1 = stringObjectMap.get("sql");
 
         String sql0 = "";
@@ -871,7 +903,6 @@ public class WorkItemDao{
      */
     public List<WorkItemEntity> findTopChildWorkItem(WorkItemQuery workItemQuery){
         String sql = new String();
-        sql = "Select * from pmc_work_item p ";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object sql1 = stringObjectMap.get("sql");
 
@@ -895,7 +926,6 @@ public class WorkItemDao{
      */
     public Pagination<WorkItemEntity> findConditionWorkItemPage(WorkItemQuery workItemQuery) {
         String sql = new String();
-        sql = "Select * from pmc_work_item p ";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
         if(String.valueOf(o1).length()>0){
@@ -913,7 +943,7 @@ public class WorkItemDao{
      */
     public Pagination<WorkItemEntity> findConditionWorkItemList(WorkItemQuery workItemQuery) {
         String sql = new String();
-        sql = "Select * from pmc_work_item p ";
+//        sql = "Select * from pmc_work_item p ";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
         if(String.valueOf(o1).length()>0){
@@ -1118,5 +1148,56 @@ public class WorkItemDao{
             preWorkItemIds.add(preId);
             findPostIds(preId, preWorkItemIds);
         }
+    }
+
+    public HashMap<String, Integer> findWorkItemRelationModelCount(String workItemId, String workTypeCode) {
+        HashMap<String, Integer> relationModel = new HashMap<String, Integer>();
+        String sql = new String();
+        // 查找关联事项个数
+        sql = "Select count(1) as total from pmc_work_relate where work_item_id = '" + workItemId +"' ";
+        Integer realtionNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        relationModel.put("relationWork", realtionNum);
+
+        //查找子事项
+        if(workTypeCode.equals("demand")){
+            sql = "Select count(1) as total from pmc_work_item where parent_id = '" + workItemId +"' and work_type_code = 'demand'";
+            Integer childrenWork = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            relationModel.put("childrenWork", childrenWork);
+
+            sql = "Select count(1) as total from pmc_work_item where parent_id = '" + workItemId +"' and work_type_code = 'task'";
+            Integer childrenTaskWork = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            relationModel.put("childrenTaskWork", childrenTaskWork);
+        }else {
+            sql = "Select count(1) as total from pmc_work_item where parent_id = '" + workItemId + "'";
+            Integer childrenWork = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            relationModel.put("childrenWork", childrenWork);
+        }
+
+        // 工时
+        sql = "Select count(1) as total from pmc_work_log where work_item_id = '" + workItemId + "'";
+        Integer workLog = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        relationModel.put("workLog", workLog);
+
+        // 动态
+//        sql = "Select count(1) as total from pmc_work_log where work_item_id = '" + workItemId;
+//        Integer workLog = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+//        relationModel.put("workLog", workLog);
+
+        // 评论
+        sql = "Select count(1) as total from pmc_work_comment where work_item_id = '" + workItemId + "'";
+        Integer workComment = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        relationModel.put("workComment", workComment);
+
+        // 文档
+        sql = "Select count(1) as total from pmc_work_item_document where work_item_id = '" + workItemId + "'";
+        Integer workDoucment = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        relationModel.put("workDoucment", workDoucment);
+
+        // 测试用例
+        sql = "Select count(1) as total from pmc_work_test_case where work_item_id = '" + workItemId + "'";
+        Integer workTestCase = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        relationModel.put("workTestCase", workTestCase);
+
+        return relationModel;
     }
 }
