@@ -413,31 +413,30 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public void deleteProject(@NotNull String id) {
-        //创建动态
-        //creatDynamic(id,"delete", null);
-
+        //删除模块、里程碑、事项类型、知识库、测试用例、模块、最近查看、项目燃尽图、关注的项目
+        projectDao.deleteProjectAndRelation(id);
         //删除事项
-        deleteWorkItem(id);
+        projectDao.deleteWorkItem(id);
 
         //删除迭代
-        deleteSprint(id);
+        projectDao.deleteSprint(id);
 
         //删除版本
-        deleteVersion(id);
+        projectDao.deleteVersion(id);
 
-        //删除模块
-        deleteModule(id);
+        //删除阶段
+        projectDao.deleteStage(id);
 
-        //删除里程碑
-        deleteMileStone(id);
-
-        //删除事项类型
-        deleteWorkTypeDm(id);
-        //        //删除项目
-        projectDao.deleteProject(id);
-
+        // 项目成员
+        dmUserService.deleteDmUserByDomainId(id);
+        // 项目角色、权限
         dmRoleService.deleteDmRoleByDomainId(id);
-
+        // 流程
+        dmFlowService.deleteProjectFlow(id);
+        // 表单
+        dmFormService.deleteProjectForm(id);
+        //删除项目
+        projectDao.deleteProject(id);
 
     }
 

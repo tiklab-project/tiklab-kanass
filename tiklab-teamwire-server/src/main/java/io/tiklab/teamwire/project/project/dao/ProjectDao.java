@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 项目数据访问
@@ -127,7 +128,7 @@ public class ProjectDao{
      */
     public boolean isRepeatKey(String key) {
         String sql = "select project_key from pmc_project";
-        List<String> keys = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(String.class));
+        List<String> keys = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         return keys.contains(key);
     }
     /**
@@ -319,7 +320,7 @@ public class ProjectDao{
         String sql = "select rs.id as id, rs.project_name as project_name, rs.project_type_id as project_type_id, rs.icon_url as icon_url from pmc_project rs left join pmc_recent rc on rs.id = rc.model_id where rc.model='project'\n" +
                 "and rc.master_id='" + master + "' order by rc.recent_time desc";
 
-        List<ProjectEntity> projectEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(ProjectEntity.class));
+        List<ProjectEntity> projectEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectEntity.class));
 
         return projectEntityList;
     }
@@ -352,48 +353,264 @@ public class ProjectDao{
         return projectList;
     }
 
-    public void deleteWorkItem(String projectId){
-        String sql = "DELETE FROM pmc_work_item where project_id = '" + projectId + "'";
-        int update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update > 0){
-            logger.info("删除事项成功");
+    public void deleteProjectAndRelation(String projectId){
+        // 里程碑
+        String sql = "DELETE FROM pmc_milestone where project_id = '" + projectId + "'";
+        Integer update =  jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除里程碑成功");
         }else {
-            logger.info("删除事项失败");
+            logger.info("删除里程碑失败");
         }
 
-        sql = "DELETE FROM pmc_version where project_id = '" + projectId + "'";
+        // 知识库
+        sql = "DELETE FROM pmc_project_wiki_repository where project_id = '" + projectId + "'";
         update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update > 0){
-            logger.info("删除版本成功");
+        if(update >= 0){
+            logger.info("删除知识库成功");
         }else {
-            logger.info("删除版本失败");
+            logger.info("删除知识库失败");
         }
 
-        sql = "DELETE FROM pmc_sprint where project_id = '" + projectId + "'";
+        // 测试用例
+        sql = "DELETE FROM pmc_project_test_repository where project_id = '" + projectId + "'";
         update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update > 0){
-            logger.info("删除迭代成功");
+        if(update >= 0){
+            logger.info("删除测试用例成功");
         }else {
-            logger.info("删除迭代失败");
+            logger.info("删除测试用例失败");
         }
 
+        // 事项类型
+        sql = "DELETE FROM pmc_work_type_dm where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项类型成功");
+        }else {
+            logger.info("删除事项类型失败");
+        }
+
+        // 模块
         sql = "DELETE FROM pmc_module where project_id = '" + projectId + "'";
         update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update > 0){
+        if(update >= 0){
             logger.info("删除模块成功");
         }else {
             logger.info("删除模块失败");
         }
 
-        sql = "DELETE FROM pmc_milestone where project_id = '" + projectId + "'";
+        // 最近查看
+        sql = "DELETE FROM pmc_recent where project_id = '" + projectId + "'";
         update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update > 0){
-            logger.info("删除里程碑成功");
+        if(update >= 0){
+            logger.info("删除最近查看成功");
         }else {
-            logger.info("删除里程碑失败");
+            logger.info("删除最近查看失败");
+        }
+
+        // 项目燃尽图
+        sql = "DELETE FROM pmc_project_burndowm where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除项目燃尽图成功");
+        }else {
+            logger.info("删除项目燃尽图失败");
+        }
+
+        // 关注的项目
+        sql = "DELETE FROM pmc_project_focus where project_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除关注的项目成功");
+        }else {
+            logger.info("删除关注的项目失败");
         }
     }
 
+    public void deleteWorkItem(String projectId){
+        String sql = "SELECT id FROM pmc_work_item where project_id = '" + projectId + "'";
+        List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+
+        if(workItemIdList.size() > 0){
+            String workItemIds = workItemIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
+            // 删除关联事项
+            sql = "DELETE FROM pmc_work_relate where work_item_id in (" + workItemIds + ")";
+            int update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项的关联事项成功");
+            }else {
+                logger.info("删除事项的关联事项失败");
+            }
+
+            // 删除日志
+            sql = "DELETE FROM pmc_work_log where work_item_id in (" + workItemIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项的工时成功");
+            }else {
+                logger.info("删除事项的工时失败");
+            }
+
+            // 删除文档
+            sql = "DELETE FROM pmc_work_item_document where work_item_id in (" + workItemIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项的文档成功");
+            }else {
+                logger.info("删除事项的文档失败");
+            }
+
+            // 删除动态
+
+            // 删除评论
+            sql = "DELETE FROM pmc_work_comment where work_item_id in (" + workItemIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项的评论成功");
+            }else {
+                logger.info("删除事项的评论失败");
+            }
+
+            // 删除测试用例
+            sql = "DELETE FROM pmc_work_test_case where work_item_id in (" + workItemIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项的测试用例成功");
+            }else {
+                logger.info("删除事项的评论失败");
+            }
+
+            // 删除附件
+            sql = "DELETE FROM pmc_work_attach where work_item_id in (" + workItemIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项的附件成功");
+            }else {
+                logger.info("删除事项的附件失败");
+            }
+
+            // 删除事项
+            sql = "DELETE FROM pmc_work_item where project_id = '" + projectId + "'";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除事项成功");
+            }else {
+                logger.info("删除事项失败");
+            }
+        }else {
+            return;
+        }
 
 
+
+    }
+
+    public void deleteSprint(String projectId){
+        String sql = "SELECT id FROM pmc_sprint where project_id = '" + projectId + "'";
+        List<String> sprintIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(sprintIdList.size() > 0){
+            String sprintIds = sprintIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
+
+
+            // 删除关注的迭代
+            sql = "DELETE FROM pmc_sprint_focus where sprint_id in (" + sprintIds + ")";
+            int update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除关注的迭代成功");
+            }else {
+                logger.info("删除关注的迭代失败");
+            }
+
+            // 删除迭代燃尽图数据
+            sql = "DELETE FROM pmc_sprint_burndowm where sprint_id in (" + sprintIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除迭代燃尽图数据成功");
+            }else {
+                logger.info("删除迭代燃尽图数据失败");
+            }
+
+            // 删除迭代
+            sql = "DELETE FROM pmc_sprint where project_id = '" + projectId + "'";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除迭代成功");
+            }else {
+                logger.info("删除迭代失败");
+            }
+        }else {
+            return;
+        }
+
+
+    }
+
+    public void deleteVersion(String projectId){
+        String sql = "SELECT id FROM pmc_version where project_id = '" + projectId + "'";
+        List<String> versionIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(versionIdList.size() > 0){
+            String versionIds = versionIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
+
+            // 删除关注的版本
+            sql = "DELETE FROM pmc_version_focus where version_id in (" + versionIds + ")";
+            int update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除关注的版本成功");
+            }else {
+                logger.info("删除关注的版本失败");
+            }
+
+            // 删除版本燃尽图数据
+            sql = "DELETE FROM pmc_version_burndowm where version_id in (" + versionIds + ")";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除版本燃尽图数据成功");
+            }else {
+                logger.info("删除版本燃尽图数据失败");
+            }
+
+            // 删除版本
+            sql = "DELETE FROM pmc_version where project_id = '" + projectId + "'";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除版本成功");
+            }else {
+                logger.info("删除版本失败");
+            }
+        }else {
+            return;
+        }
+
+
+    }
+
+    public void deleteStage(String projectId){
+        String sql = "SELECT id FROM pmc_stage where project_id = '" + projectId + "'";
+        List<String> stageIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(stageIdList.size() > 0){
+            String stageIds = stageIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
+
+            // 删除阶段的事项
+            sql = "DELETE FROM pmc_stage_work_item where stage_id in (" + stageIds + ")";
+            int update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除关注的版本成功");
+            }else {
+                logger.info("删除关注的版本失败");
+            }
+
+            // 删除阶段
+            sql = "DELETE FROM pmc_stage where project_id = '" + projectId + "'";
+            update = jpaTemplate.getJdbcTemplate().update(sql);
+            if(update >= 0){
+                logger.info("删除版本成功");
+            }else {
+                logger.info("删除版本失败");
+            }
+        }else {
+            return;
+        }
+
+
+    }
 }
