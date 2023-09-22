@@ -37,7 +37,7 @@
         <tiklab-todotask.version>1.0.0-SNAPSHOT</tiklab-todotask.version>
         <tiklab-security.version>1.0.0-SNAPSHOT</tiklab-security.version>
 
-        <tiklab-form.version>1.0.0.3</tiklab-form.version>
+        <tiklab-form.version>1.0.0.3-SNAPSHOT</tiklab-form.version>
         <tiklab-flow.version>1.0.0.4-SNAPSHOT</tiklab-flow.version>
         <tiklab-postin.version>1.0.0.3</tiklab-postin.version>
         <tiklab-teston.version>1.0.0.3</tiklab-teston.version>
