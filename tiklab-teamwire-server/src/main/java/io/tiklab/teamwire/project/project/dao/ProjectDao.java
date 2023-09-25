@@ -510,8 +510,6 @@ public class ProjectDao{
         List<String> sprintIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         if(sprintIdList.size() > 0){
             String sprintIds = sprintIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
-
-
             // 删除关注的迭代
             sql = "DELETE FROM pmc_sprint_focus where sprint_id in (" + sprintIds + ")";
             int update = jpaTemplate.getJdbcTemplate().update(sql);

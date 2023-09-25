@@ -22,6 +22,7 @@ import io.tiklab.teamwire.project.version.service.ProjectVersionService;
 import io.tiklab.teamwire.sprint.model.Sprint;
 import io.tiklab.teamwire.sprint.model.SprintQuery;
 import io.tiklab.teamwire.sprint.service.SprintService;
+import io.tiklab.teamwire.workitem.entity.WorkItemEntity;
 import io.tiklab.teamwire.workitem.model.*;
 import io.tiklab.teamwire.workitem.service.WorkTypeDmService;
 import io.tiklab.teamwire.workitem.service.WorkTypeService;
@@ -783,6 +784,17 @@ public class ProjectServiceImpl implements ProjectService {
         System.out.println(maps);
         return maps;
     }
+
+    public List<Map<String, Object>> findProjectWorkItemCount(String projectIds) {
+        String sql = "select project_id, work_status_code from pmc_work_item t where t.project_id in "+ projectIds;
+        long Time1 = System.currentTimeMillis();
+        List<Map<String, Object>> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        long aTime = System.currentTimeMillis();
+
+
+        return workItemList;
+    }
+
 
     /**
      * 查找我收藏的项目

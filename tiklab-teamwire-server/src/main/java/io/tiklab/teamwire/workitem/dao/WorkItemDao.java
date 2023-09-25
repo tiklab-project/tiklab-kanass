@@ -131,7 +131,7 @@ public class WorkItemDao{
         if(workItemQuery.getWorkStatusIds() != null){
             List<String> workStatusIds = workItemQuery.getWorkStatusIds();
             String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
-            queryBuilders.in("wi.workStatusId", arr);
+            queryBuilders.in("wi.workStatusNodeId", arr);
         }
 
         if(workItemQuery.getProjectIds() != null){
@@ -240,7 +240,7 @@ public class WorkItemDao{
         if(workItemQuery.getWorkStatusIds() != null){
             List<String> workStatusIds = workItemQuery.getWorkStatusIds();
             String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
-            queryBuilders.in("wi.workStatusId", arr);
+            queryBuilders.in("wi.workStatusNodeId", arr);
         }
 
         if(workItemQuery.getProjectIds() != null){
@@ -252,7 +252,7 @@ public class WorkItemDao{
         if(workItemQuery.getWorkTypeIds() != null){
             List<String> workTypeIdsIds = workItemQuery.getWorkTypeIds();
             String[] arr = workTypeIdsIds.toArray(new String[workTypeIdsIds.size()]);
-            queryBuilders.in("wi.workTypeId", arr);
+            queryBuilders.in("wi.workTypeSysId", arr);
         }
 
         if(workItemQuery.getAssignerIds() != null){

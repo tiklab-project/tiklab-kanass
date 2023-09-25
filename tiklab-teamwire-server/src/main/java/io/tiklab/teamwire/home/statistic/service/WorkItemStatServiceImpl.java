@@ -113,7 +113,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
     public List<ProjectWorkItemStat> statProjectWorkItemCount(Integer num) {
         List<ProjectWorkItemStat> list = new ArrayList<>();
         ProjectQuery projectQuery = new ProjectQuery();
-        long aTime = System.currentTimeMillis();
+
         List<Project> projectList = projectService.findRecentProjectList(projectQuery);
         if(projectList.size() <= 0)  return list;
 
@@ -121,45 +121,19 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
         if(projectList.size() > num){
             projectList = projectList.subList(0, num);
         }
-        String projectIds = new String();
-        if(projectList != null && projectList.size() > 0){
-            projectIds = "(";
-
-            for(Project item:projectList){
-                String projectId = item.getId();
-                projectIds = projectIds.concat("'" + projectId + "',");
-            }
-            projectIds = projectIds.substring(0, projectIds.length() - 1);
-            projectIds = projectIds.concat(")");
-        }
+        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
 
 
-        List<Map<String, Object>> doneWorkCount = projectService.findRecentProjectWorkItemCount(projectIds, "DONE");
-        List<Map<String, Object>> progress = projectService.findRecentProjectWorkItemCount(projectIds, "PROGRESS");
-
+        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemCount(projectIds);
         for (Project project : projectList) {
             ProjectWorkItemStat projectWorkItemStat = new ProjectWorkItemStat();
             projectWorkItemStat.setProject(project);
             String id = project.getId();
-            List<Map<String, Object>> doneWork = doneWorkCount.stream().filter(e -> e.get("project_id").equals(id)).collect(Collectors.toList());
-            if(doneWork.size() > 0){
-                Object count = doneWork.get(0).get("count");
-                Number countNum = (Number) count;
-                int doneNum = countNum.intValue();
-                projectWorkItemStat.setEndWorkItemCount(doneNum);
-            }else {
-                projectWorkItemStat.setEndWorkItemCount(0);
-            }
+            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+            projectWorkItemStat.setEndWorkItemCount(doneList.size());
 
-            List<Map<String, Object>> processWork = progress.stream().filter(e -> e.get("project_id").equals(id)).collect(Collectors.toList());
-            if(processWork.size() > 0){
-                Object count = processWork.get(0).get("count");
-                Number countNum = (Number) count;
-                int processNum = countNum.intValue();
-                projectWorkItemStat.setProcessWorkItemCount(processNum);
-            }else {
-                projectWorkItemStat.setProcessWorkItemCount(0);
-            }
+            List<Map<String, Object>> processList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("PROGRESS"))).collect(Collectors.toList());
+            projectWorkItemStat.setProcessWorkItemCount(processList.size());
             list.add(projectWorkItemStat);
         }
         return list;

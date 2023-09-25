@@ -121,12 +121,12 @@ public class WorkItemStatDao {
         list.add(itemBusStatusStatEnd);
 
         // 统计进行中的事项
-        sql = "select count(1) as endTotalCount from pmc_work_item t, pcs_flc_state_node f";
-        sql = sql.concat(" where t.work_status_code='DONE'");
+        sql = "select count(1) as endTotalCount from pmc_work_item t";
+        sql = sql.concat(" where t.work_status_code='TODO'");
         Integer processTotalCount = getJdbcTemplate().queryForObject(sql,Integer.class);
 
         WorkItemBusStatusStat itemBusStatusStatProcess= new WorkItemBusStatusStat();
-        itemBusStatusStatProcess.setStatusName("进行中");
+        itemBusStatusStatProcess.setStatusName("待办");
         itemBusStatusStatProcess.setGroupCount(processTotalCount);
         list.add(itemBusStatusStatProcess);
 
@@ -134,8 +134,8 @@ public class WorkItemStatDao {
         Date dNow = new Date( );
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
         String newDate = ft.format(dNow);
-        sql = "select count(1) as endTotalCount from pmc_work_item t, pcs_flc_state_node f";
-        sql = sql.concat(" where t.work_status_code='DONE' and ? > t.plan_end_time ");
+        sql = "select count(1) as endTotalCount from pmc_work_item t";
+        sql = sql.concat(" where t.work_status_code !='DONE' and ? > t.plan_end_time ");
         Integer delayTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{newDate}, Integer.class);
 
         WorkItemBusStatusStat itemBusStatusStatDelay= new WorkItemBusStatusStat();
@@ -175,7 +175,7 @@ public class WorkItemStatDao {
             list.add(itemBusStatusStatAll);
 
             WorkItemBusStatusStat itemBusStatusStatNoStart = new WorkItemBusStatusStat();
-            itemBusStatusStatNoStart.setStatusName("未完成事项");
+            itemBusStatusStatNoStart.setStatusName("待办事项");
             itemBusStatusStatNoStart.setGroupCount(0);
             list.add(itemBusStatusStatNoStart);
 
@@ -183,11 +183,6 @@ public class WorkItemStatDao {
             itemBusStatusStatEnd.setStatusName("已完成事项");
             itemBusStatusStatEnd.setGroupCount(0);
             list.add(itemBusStatusStatEnd);
-
-            WorkItemBusStatusStat itemBusStatusStatProcess= new WorkItemBusStatusStat();
-            itemBusStatusStatProcess.setStatusName("进行中事项");
-            itemBusStatusStatProcess.setGroupCount(0);
-            list.add(itemBusStatusStatProcess);
 
             WorkItemBusStatusStat itemBusStatusStatDelay= new WorkItemBusStatusStat();
             itemBusStatusStatDelay.setStatusName("已逾期事项");
@@ -216,9 +211,8 @@ public class WorkItemStatDao {
         }
 
         Integer nostartTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
-
         WorkItemBusStatusStat itemBusStatusStatNoStart = new WorkItemBusStatusStat();
-        itemBusStatusStatNoStart.setStatusName("未开始事项");
+        itemBusStatusStatNoStart.setStatusName("待办事项");
         itemBusStatusStatNoStart.setGroupCount(nostartTotalCount);
         list.add(itemBusStatusStatNoStart);
 
@@ -241,24 +235,6 @@ public class WorkItemStatDao {
         itemBusStatusStatEnd.setGroupCount(endTotalCount);
         list.add(itemBusStatusStatEnd);
 
-        // 统计进行中的事项
-        sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code ='PROGRESS'");
-        if(masterId != null){
-            sql = sql.concat(" and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
-        }
-        if(sprintId != null){
-            sql = sql.concat(" and t.sprint_id = '" + sprintId + "'");
-        }
-        if(versionId != null){
-            sql = sql.concat(" and t.version_id = '" + versionId + "'");
-        }
-        Integer processTotalCount = getJdbcTemplate().queryForObject(sql,new String[]{projectId},Integer.class);
-
-        WorkItemBusStatusStat itemBusStatusStatProcess= new WorkItemBusStatusStat();
-        itemBusStatusStatProcess.setStatusName("进行中事项");
-        itemBusStatusStatProcess.setGroupCount(processTotalCount);
-        list.add(itemBusStatusStatProcess);
 
         // 统计已逾期的事项
         Date dNow = new Date( );

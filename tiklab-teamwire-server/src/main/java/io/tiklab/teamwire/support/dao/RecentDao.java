@@ -106,6 +106,7 @@ public class RecentDao{
                 .eq("modelId", recentQuery.getModelId())
                 .eq("model", recentQuery.getModel())
                 .eq("projectId", recentQuery.getProjectId())
+                .eq("masterId", recentQuery.getMasterId())
                 .orders(recentQuery.getOrderParams())
                 .pagination(recentQuery.getPageParam())
                 .get();

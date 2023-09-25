@@ -1,5 +1,6 @@
 package io.tiklab.teamwire.project.version.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.beans.annotation.Mapper;
@@ -21,30 +22,27 @@ import java.sql.Date;
 @Mapper
 public class ProjectVersion extends BaseModel {
 
-    @ApiProperty(name="id",desc="唯一ID")
+    @ApiProperty(name = "id", desc = "唯一ID")
     private java.lang.String id;
 
-    @ApiProperty(name="name",desc="版本名称")
+    @ApiProperty(name = "name", desc = "版本名称")
     private java.lang.String name;
 
-    @ApiProperty(name="startTime",desc="开始日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @ApiProperty(name = "startTime", desc = "开始日期")
     private Date startTime;
 
-    @ApiProperty(name="publishDate",desc="发布日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @ApiProperty(name = "publishDate", desc = "发布日期")
     private Date publishDate;
 
-    @ApiProperty(name="relaPublishDate",desc="实际发布日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @ApiProperty(name = "relaPublishDate", desc = "实际发布日期")
     private Date relaPublishDate;
 
-    @ApiProperty(name="versionState",desc="项目状态")
-    private String  versionState;
+    @ApiProperty(name = "versionState", desc = "项目状态")
+    private String versionState;
 
-    @ApiProperty(name="project",desc="所属项目")
+    @ApiProperty(name = "project", desc = "所属项目")
     @Mappings({
-            @Mapping(source = "project.id",target = "projectId")
+            @Mapping(source = "project.id", target = "projectId")
     })
     @JoinQuery(key = "id")
     private Project project;
@@ -66,22 +64,6 @@ public class ProjectVersion extends BaseModel {
         this.name = name;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getPublishDate() {
-        return publishDate;
-    }
-
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
-
     public Project getProject() {
         return project;
     }
@@ -96,6 +78,22 @@ public class ProjectVersion extends BaseModel {
 
     public void setVersionState(String versionState) {
         this.versionState = versionState;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public Date getRelaPublishDate() {

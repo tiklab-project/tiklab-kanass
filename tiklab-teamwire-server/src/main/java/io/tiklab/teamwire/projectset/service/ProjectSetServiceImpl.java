@@ -213,16 +213,16 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     @Override
     public List<Project> findProjectSetDetailList(ProjectQuery projectQuery) {
         List<Project> projectList = projectService.findProjectList(projectQuery);
+        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemCount(projectIds);
         for (Project project : projectList) {
             String id = project.getId();
-            WorkItemQuery workItemQuery = new WorkItemQuery();
-            workItemQuery.setProjectId(id);
-            List<WorkItem> allWorkItem = workItemService.findWorkItemList(workItemQuery);
-            project.setWorklItemNumber(allWorkItem.size());
+            List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());
 
-            workItemQuery.setWorkStatusCode("DONE");
-            List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-            project.setQuantityNumber(workItemList.size());
+            project.setWorklItemNumber(allList.size());
+
+            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+            project.setQuantityNumber(doneList.size());
 
             DmUserQuery dmUserQuery = new DmUserQuery();
             dmUserQuery.setDomainId(id);

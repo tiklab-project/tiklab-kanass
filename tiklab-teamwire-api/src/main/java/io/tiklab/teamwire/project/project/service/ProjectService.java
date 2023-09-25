@@ -7,6 +7,7 @@ import io.tiklab.join.annotation.FindAll;
 import io.tiklab.join.annotation.FindOne;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
+import io.tiklab.teamwire.workitem.model.WorkItem;
 import io.tiklab.teamwire.workitem.model.WorkTypeDm;
 
 import javax.validation.Valid;
@@ -111,6 +112,7 @@ public interface ProjectService {
      */
     List<Project> findRecentProjectList(ProjectQuery projectQuery);
     List<Map<String, Object>> findRecentProjectWorkItemCount(String projectIds, String statusCode);
+    List<Map<String, Object>> findProjectWorkItemCount(String projectIds);
     /**
      * 查找收藏的项目
      * @param projectQuery

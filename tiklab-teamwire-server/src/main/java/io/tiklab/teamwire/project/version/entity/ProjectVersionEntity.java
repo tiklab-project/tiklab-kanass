@@ -60,21 +60,7 @@ public class ProjectVersionEntity implements Serializable {
         this.name = name;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getPublishDate() {
-        return publishDate;
-    }
-
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
 
     public String getProjectId() {
         return projectId;
@@ -90,6 +76,22 @@ public class ProjectVersionEntity implements Serializable {
 
     public void setVersionState(String versionState) {
         this.versionState = versionState;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public Date getRelaPublishDate() {

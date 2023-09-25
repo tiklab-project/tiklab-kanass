@@ -1,0 +1,1 @@
+ALTER TABLE pmc_version ALTER COLUMN publish_date TYPE varchar(64);
