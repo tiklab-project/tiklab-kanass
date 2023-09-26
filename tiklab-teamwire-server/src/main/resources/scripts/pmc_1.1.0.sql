@@ -1,1 +1,1 @@
-ALTER TABLE pmc_version ALTER COLUMN publish_date TYPE varchar(64);
+ALTER TABLE pmc_version ALTER COLUMN start_time TYPE TIMESTAMP USING start_time::timestamp without time zone;

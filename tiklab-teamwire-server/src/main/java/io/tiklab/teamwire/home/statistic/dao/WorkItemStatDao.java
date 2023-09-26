@@ -199,7 +199,7 @@ public class WorkItemStatDao {
 
         // 统计未开始的事项
         sql = "select count(1) as endTotalCount from pmc_work_item t";
-        sql = sql.concat(" where t.project_id= ? and t.work_status_code='START' or t.work_status_code='TODO'");
+        sql = sql.concat(" where t.project_id= ? and (t.work_status_code='START' or t.work_status_code='TODO')");
         if(masterId != null){
             sql = sql.concat(" and (t.assigner_id = '"+ masterId +"' or t.builder_id= '"+ masterId +"' or t.reporter_id= '"+ masterId + "')");
         }

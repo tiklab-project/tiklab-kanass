@@ -9,6 +9,7 @@ import io.tiklab.teamwire.project.test.model.ProjectTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCaseQuery;
 import io.tiklab.teamwire.workitem.service.WorkTestCaseService;
+import io.tiklab.user.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,4 +127,13 @@ public class WorkTestCaseController {
 
         return Result.ok(unRelationWorkTestCaseList);
     }
+
+    @RequestMapping(path="/findTestOnRepositoryUserList",method = RequestMethod.POST)
+    @ApiMethod(name = "findTestOnRepositoryUserList",desc = "findTestOnRepositoryUserList")
+    public Result<List<User>> findTestOnRepositoryUserList(String[] repositoryIds){
+        List<User> repositoryUserList = workTestCaseService.findTestOnRepositoryUserList(repositoryIds);
+
+        return Result.ok(repositoryUserList);
+    }
+
 }

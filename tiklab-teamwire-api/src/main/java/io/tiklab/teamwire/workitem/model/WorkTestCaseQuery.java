@@ -22,6 +22,9 @@ public class WorkTestCaseQuery {
         @ApiProperty(name ="testCaseIds",desc = "文档id，精确匹配")
         private String testCaseIds;
 
+        @ApiProperty(name ="creatUserId",desc = "创建者")
+        private String creatUserId;
+
         //只用于project查询 kanass 使用
         @ApiProperty(name ="name",desc = "文档名字")
         private String name;
@@ -104,5 +107,13 @@ public class WorkTestCaseQuery {
 
     public void setTestCaseIds(String testCaseIds) {
         this.testCaseIds = testCaseIds;
+    }
+
+    public String getCreatUserId() {
+        return creatUserId;
+    }
+
+    public void setCreatUserId(String creatUserId) {
+        this.creatUserId = creatUserId;
     }
 }

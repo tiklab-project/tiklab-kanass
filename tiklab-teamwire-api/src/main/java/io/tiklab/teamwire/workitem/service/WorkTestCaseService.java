@@ -4,6 +4,7 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.teamwire.project.test.model.ProjectTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCaseQuery;
+import io.tiklab.user.user.model.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -84,5 +85,7 @@ public interface WorkTestCaseService {
     Pagination<WorkTestCase> findWorkTestCasePage(WorkTestCaseQuery workTestCaseQuery);
 
     Pagination<ProjectTestCase> findUnRelationWorkTestCaseList(@NotNull @Valid WorkTestCaseQuery workTestCaseQuery);
+
+    List<User> findTestOnRepositoryUserList(String[] repositoryIds);
 
 }

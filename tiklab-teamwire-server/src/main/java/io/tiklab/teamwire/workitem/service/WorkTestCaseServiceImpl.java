@@ -20,6 +20,8 @@ import io.tiklab.teamwire.workitem.model.WorkTestCaseQuery;
 import io.tiklab.teston.test.test.model.TestCaseQuery;
 import io.tiklab.teston.test.test.model.TestCase;
 import io.tiklab.teston.test.test.service.TestCaseService;
+import io.tiklab.user.user.model.User;
+import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -56,6 +58,13 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         return new RpcClientTeamWireUtil().rpcClient().getBean(TestCaseService.class, new FixedLookup(url));
     }
 
+    UserService userServiceRpc(){
+        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
+        systemUrlQuery.setName("teston");
+        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
+        String url = systemUrlList.get(0).getSystemUrl();
+        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
+    }
 
     @Override
     public String createWorkTestCase(@NotNull List<WorkTestCase> workTestCase) {
@@ -201,7 +210,8 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         String[] documentIds = workTestCaseIds.toArray(stringIds);
         testCaseQuery.setNotInList(documentIds);
         testCaseQuery.setInList(repositoryIds);
-
+        testCaseQuery.setName(workTestCaseQuery.getName());
+        testCaseQuery.setCreateUser(workTestCaseQuery.getCreatUserId());
         Pagination<TestCase> testCasePage = testCaseServiceRpc().findTestCasePage(testCaseQuery);
 
 
@@ -226,6 +236,12 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         }
         projectTestCasePagination.setDataList(projectTestCaseList);
         return projectTestCasePagination;
+    }
+
+    @Override
+    public List<User> findTestOnRepositoryUserList(String[] repositoryIds) {
+        List<User> allUser = userServiceRpc().findAllUser();
+        return allUser;
     }
 
 }

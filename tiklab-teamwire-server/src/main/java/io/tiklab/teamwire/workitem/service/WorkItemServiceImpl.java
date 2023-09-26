@@ -1165,10 +1165,13 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     public HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery) {
-    HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        HashMap<String, Integer> WorkItemCount = new HashMap<>();
         // 全部事项数量
-        workItemQuery.setWorkStatusIds(null);
-        Integer allWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        WorkItemQuery workItemQuery1 = new WorkItemQuery();
+        workItemQuery1.setProjectIds(workItemQuery.getProjectIds());
+        workItemQuery1.setSprintIds(workItemQuery.getSprintIds());
+        workItemQuery1.setVersionId(workItemQuery.getVersionId());
+        Integer allWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("all", allWorkItemNum);
 
         //待办
@@ -1180,8 +1183,8 @@ public class WorkItemServiceImpl implements WorkItemService {
             String id = stateNode.getId();
             pendingStateNodeIds.add(id);
         }
-        workItemQuery.setWorkStatusIds(pendingStateNodeIds);
-        Integer pendingWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        workItemQuery1.setWorkStatusIds(pendingStateNodeIds);
+        Integer pendingWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("pending", pendingWorkItemNum);
 
         // 完成
@@ -1192,21 +1195,21 @@ public class WorkItemServiceImpl implements WorkItemService {
             String id = stateNode.getId();
             doneStateNodeIds.add(id);
         }
-        workItemQuery.setWorkStatusIds(doneStateNodeIds);
-        Integer doneWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        workItemQuery1.setWorkStatusIds(doneStateNodeIds);
+        Integer doneWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("ending", doneWorkItemNum);
 
         //我创建的
-        workItemQuery.setWorkStatusIds(null);
+        workItemQuery1.setWorkStatusIds(null);
         String loginId = LoginContext.getLoginId();
-        workItemQuery.setBuilderId(loginId);
-        Integer buildWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        workItemQuery1.setBuilderId(loginId);
+        Integer buildWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("creat", buildWorkItemNum);
 
         // 逾期
-        workItemQuery.setBuilderId(null);
-        workItemQuery.setOverdue(true);
-        Integer overdueWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
+        workItemQuery1.setBuilderId(null);
+        workItemQuery1.setOverdue(true);
+        Integer overdueWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("overdue", overdueWorkItemNum);
 
         return  WorkItemCount;
