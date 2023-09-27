@@ -49,7 +49,7 @@ public class StatisticWorkItemServiceImpl implements StatisticWorkItemService {
                 if(collectionField.equals("assigner") || collectionField.equals("builder") || collectionField.equals("reporter")){
                     User user = userService.findUser(item.getStatisticalId());
                     if(user != null){
-                        item.setStatisticalTitle(user.getName());
+                        item.setStatisticalTitle(user.getNickname());
                     }
 
                 }
