@@ -205,25 +205,6 @@ public class WorkItemDao{
                 .eq("wi.sprintId", workItemQuery.getSprintId())
                 .notIn("wi.id", workItemQuery.getIdNotIn());
 
-//        if(workItemQuery.getWorkTypeIds() != null){
-//            List<String> workTypeIdsIds = workItemQuery.getWorkTypeIds();
-//            String[] arr = workTypeIdsIds.toArray(new String[workTypeIdsIds.size()]);
-//            queryBuilders.in("wi.workTypeSysId", arr);
-//        }
-//
-//        if(workItemQuery.getWorkStatusIds() != null){
-//            List<String> workStatusIds = workItemQuery.getWorkStatusIds();
-//            String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
-//            queryBuilders.in("wi.workStatusNodeId", arr);
-//        }
-//
-//        if(workItemQuery.getLikeId() != null && workItemQuery.getTitle() != null){
-//            OrQueryCondition orQueryCondition = OrQueryBuilders.instance()
-//                    .like("id", workItemQuery.getLikeId())
-//                    .like("title", workItemQuery.getTitle())
-//                    .get();
-//            queryBuilders = queryBuilders.or(orQueryCondition);
-//        }
         if(workItemQuery.getVersionIdIsNull() != null) {
             if(workItemQuery.getVersionIdIsNull() == true){
                 queryBuilders = queryBuilders.isNull("wi.versionId");
@@ -282,6 +263,14 @@ public class WorkItemDao{
             List<String> rootIds = workItemQuery.getRootIds();
             String[] arr = rootIds.toArray(new String[rootIds.size()]);
             queryBuilders.in("wi.rootId", arr);
+        }
+
+        if(workItemQuery.getLikeId() != null){
+            OrQueryCondition orQueryBuildCondition1 = OrQueryBuilders.instance()
+                    .like("id", workItemQuery.getLikeId())
+                    .like("title", workItemQuery.getLikeId())
+                    .get();
+            queryBuilders = queryBuilders.or(orQueryBuildCondition1);
         }
         QueryCondition queryCondition = queryBuilders
                 .orders(workItemQuery.getOrderParams())
