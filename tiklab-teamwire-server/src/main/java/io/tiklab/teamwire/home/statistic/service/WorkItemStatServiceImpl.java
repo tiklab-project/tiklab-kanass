@@ -1,6 +1,5 @@
 package io.tiklab.teamwire.home.statistic.service;
 
-import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.teamwire.home.statistic.model.ProjectWorkItemStat;
 import io.tiklab.teamwire.home.statistic.model.WorkItemBusStatusStat;
 import io.tiklab.teamwire.home.statistic.model.WorkItemStatistic;
@@ -24,7 +23,6 @@ import io.tiklab.teamwire.workitem.service.WorkItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -124,7 +122,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
         String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
 
 
-        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemCount(projectIds);
+        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemStatus(projectIds);
         for (Project project : projectList) {
             ProjectWorkItemStat projectWorkItemStat = new ProjectWorkItemStat();
             projectWorkItemStat.setProject(project);

@@ -30,6 +30,7 @@ import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 仪表盘统计类目服务
@@ -128,17 +129,23 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      * @return
      */
     public Map<String, Object> statisticsProjectWorkItemCount(String projectSetId) {
+        // 查找项目
         ProjectQuery projectQuery = new ProjectQuery();
         projectQuery.setProjectSetId(projectSetId);
         List<Project> projectList = projectService.findProjectList(projectQuery);
 
         Map<String, Object> workItemTypeCountList = new HashMap<String, Object>();
+        if(projectList.size() <= 0)  return workItemTypeCountList;
+
         ArrayList<String> types = new ArrayList<>();
         Map<String, Object> workTypeCount = new HashMap<String, Object>();
         ArrayList<Object> integers = new ArrayList<>();
 
+        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+
+
+        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemType(projectIds);
         List<WorkType> allWorkType = workTypeService.findAllWorkType();
-        //安装事项类型循环查找每个类型，每个项目下的事项数量
         for (WorkType workType : allWorkType) {
             String workTypeId = workType.getId();
             String code = workType.getCode();
@@ -148,18 +155,15 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             ArrayList<Integer> integers1 = new ArrayList<>();
             for (Project project : projectList) {
                 String id = project.getId();
-                WorkItemQuery workItemQuery = new WorkItemQuery();
-                workItemQuery.setProjectId(id);
-                workItemQuery.setWorkTypeId(workTypeId);
-                List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-                int count = workItemList.size();
-                integers1.add(count);
+                List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_type_code").equals(code))).collect(Collectors.toList());
+                integers1.add(doneList.size());
                 project1.add(project);
             }
             integers.add(integers1);
             workTypeCount.put("project",project1);
 
         }
+
         workTypeCount.put("countList", integers);
         workItemTypeCountList.put("types", types);
         workItemTypeCountList.put("project", workTypeCount);
@@ -203,6 +207,7 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
 
     /**
      * 统计某段时间，以天，周，月，季，年为单位完成事项的数据
+     * 备注9.28修改
      * @param workItemCountQuery
      * @return
      */
@@ -215,19 +220,31 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         projectQuery.setProjectId(projectId);
         List<Project> projectList = projectService.findProjectList(projectQuery);
 
-        List<String> daylist = getDaylist(workItemCountQuery);
+        List<String> dayList = getDaylist(workItemCountQuery);
         List<Object> countList = new ArrayList<>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
+        List<String> projectIds = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
+        workItemCountQuery.setProjectIds(projectIds);
+        List<Map<String, Object>> endWorkItemList = projectInsightReportDao.statisticsProjectEndWorkItem(workItemCountQuery, dayList);
         for (Project project : projectList) {
             Map<String, Object> projectCount = new HashMap<String, Object>();
-            workItemCountQuery.setProjectId(project.getId());
-            List<Integer> projectCountList = statisticsProjectEndWorkItemCount(workItemCountQuery, daylist);
+            int size = dayList.size();
+            List<Integer> projectCountList = new ArrayList<>();
+            for (int i= 0; i< size-1; i++ ) {
+                String start= dayList.get(i);
+                String end = dayList.get(i+1);
+                List<Map<String, Object>> collect = endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
+                        toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
+                                work.get("project_id").equals(project.getId())))
+                        .collect(Collectors.toList());
+                projectCountList.add(collect.size());
+            }
             projectCount.put("project", project);
             projectCount.put("countList", projectCountList);
             countList.add(projectCount);
         }
 
-        paramMap.put("dateList", daylist);
+        paramMap.put("dateList", dayList);
         paramMap.put("projectCountList", countList);
 
         return paramMap;
@@ -757,11 +774,8 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         HashMap<String, Object> dayWorkItem = new HashMap<>();
         List<String> dayList = getDaylist(workItemCountQuery);
         int size = dayList.size();
-        List<Map<String, Integer>> countList = new ArrayList<Map<String, Integer>>();
-        for (int i= 0; i<size-1; i++ ) {
-            Map<String, Integer> everyCount = projectInsightReportDao.statisticsWorkItemTrend(workItemCountQuery);
-            countList.add(everyCount);
-        }
+        List<Map<String, Integer>> countList = projectInsightReportDao.findProjectBurnDowmOnTime(workItemCountQuery, dayList);
+
         dayWorkItem.put("date", dayList);
         dayWorkItem.put("conntList", countList);
 

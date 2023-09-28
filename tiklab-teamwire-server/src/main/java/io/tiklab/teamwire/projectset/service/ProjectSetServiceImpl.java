@@ -214,7 +214,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     public List<Project> findProjectSetDetailList(ProjectQuery projectQuery) {
         List<Project> projectList = projectService.findProjectList(projectQuery);
         String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
-        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemCount(projectIds);
+        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemStatus(projectIds);
         for (Project project : projectList) {
             String id = project.getId();
             List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());

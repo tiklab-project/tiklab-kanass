@@ -139,8 +139,7 @@ public class Project extends BaseModel{
     @ApiProperty(name="sprintList",desc="迭代")
     private List<Sprint> sprintList;
 
-    @NotNull
-    @ApiProperty(name="iconUrl",desc="项目类型icon",required = true)
+    @ApiProperty(name="iconUrl",desc="项目类型icon")
     private java.lang.String iconUrl;
 
     public java.lang.String getId() {

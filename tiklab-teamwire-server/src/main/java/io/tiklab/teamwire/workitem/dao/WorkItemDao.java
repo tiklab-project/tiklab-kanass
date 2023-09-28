@@ -181,6 +181,9 @@ public class WorkItemDao{
 //                .eq("wi.projectId",workItemQuery.getProjectId())
 //                .orders(workItemQuery.getOrderParams());
         String sql = "select count(1) as count from pmc_work_item t where t.project_id = '" + workItemQuery.getProjectId() + "'";
+        if(workItemQuery.getWorkTypeSysId() != null){
+            sql = sql.concat(" and t.work_type_sys_id = '" + workItemQuery.getWorkTypeSysId() + "'");
+        }
         Integer integer = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, new String[]{}, Integer.class);
         return integer;
     }

@@ -4,6 +4,8 @@ package io.tiklab.teamwire.home.insight.model;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 
+import java.util.List;
+
 
 /**
  * 事项统计条件模型
@@ -13,6 +15,9 @@ public class WorkItemCountQuery {
 
     @ApiProperty(name="projectId",desc="projectId")
     private String projectId;
+
+    @ApiProperty(name="projectIds",desc="projectIds")
+    private List<String> projectIds;
 
     @ApiProperty(name="projectSetId",desc="projectSetId")
     private String projectSetId;
@@ -120,5 +125,13 @@ public class WorkItemCountQuery {
 
     public void setSprintId(String sprintId) {
         this.sprintId = sprintId;
+    }
+
+    public List<String> getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(List<String> projectIds) {
+        this.projectIds = projectIds;
     }
 }

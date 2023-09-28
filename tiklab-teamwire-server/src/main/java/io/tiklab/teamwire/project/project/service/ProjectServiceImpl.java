@@ -785,17 +785,17 @@ public class ProjectServiceImpl implements ProjectService {
         return maps;
     }
 
-    public List<Map<String, Object>> findProjectWorkItemCount(String projectIds) {
+    public List<Map<String, Object>> findProjectWorkItemStatus(String projectIds) {
         String sql = "select project_id, work_status_code from pmc_work_item t where t.project_id in "+ projectIds;
-        long Time1 = System.currentTimeMillis();
         List<Map<String, Object>> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
-        long aTime = System.currentTimeMillis();
-
-
         return workItemList;
     }
 
-
+    public List<Map<String, Object>> findProjectWorkItemType(String projectIds) {
+        String sql = "select project_id, work_type_code from pmc_work_item t where t.project_id in "+ projectIds;
+        List<Map<String, Object>> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        return workItemList;
+    }
     /**
      * 查找我收藏的项目
      * @param projectQuery
