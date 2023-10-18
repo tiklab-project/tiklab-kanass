@@ -127,10 +127,12 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
             ProjectWorkItemStat projectWorkItemStat = new ProjectWorkItemStat();
             projectWorkItemStat.setProject(project);
             String id = project.getId();
-            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                    equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
             projectWorkItemStat.setEndWorkItemCount(doneList.size());
 
-            List<Map<String, Object>> processList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("PROGRESS"))).collect(Collectors.toList());
+            List<Map<String, Object>> processList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                    equals(id) && !workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
             projectWorkItemStat.setProcessWorkItemCount(processList.size());
             list.add(projectWorkItemStat);
         }

@@ -11,6 +11,7 @@ import io.tiklab.join.annotation.Join;
 import io.tiklab.join.annotation.JoinQuery;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.tiklab.teamwire.project.project.model.Project;
+import io.tiklab.user.user.model.User;
 
 import java.sql.Date;
 
@@ -27,6 +28,13 @@ public class ProjectVersion extends BaseModel {
 
     @ApiProperty(name = "name", desc = "版本名称")
     private java.lang.String name;
+
+    @ApiProperty(name="master",desc="负责人")
+    @Mappings({
+            @Mapping(source = "master.id",target = "master")
+    })
+    @JoinQuery(key = "id")
+    private User master;
 
     @ApiProperty(name = "startTime", desc = "开始日期")
     private Date startTime;
@@ -102,5 +110,13 @@ public class ProjectVersion extends BaseModel {
 
     public void setRelaPublishDate(Date relaPublishDate) {
         this.relaPublishDate = relaPublishDate;
+    }
+
+    public User getMaster() {
+        return master;
+    }
+
+    public void setMaster(User master) {
+        this.master = master;
     }
 }

@@ -560,12 +560,6 @@ INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5cde17f1b3
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('1a08cd5778cb', '1', '9633d9475886');
 
 
-
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('05a4fd811427', 'f3fdc893ff25', '323810f03653');
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('86912b2f65de', '4cf6d4dec7d0', '7fd9ce1c7be1');
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('d34704c82822', 'f3fdc893ff25', 'f899d7406414');
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('f1968b10de30', '4cf6d4dec7d0', '32521b1d228f');
-
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('177715b8d071', 'd34704c82822', 'f3fdc893ff25', '111111');
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('639f1838c88e', '05a4fd811427', 'f3fdc893ff25', '111111');
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('8061e9feec9f', '86912b2f65de', '4cf6d4dec7d0', '111111');

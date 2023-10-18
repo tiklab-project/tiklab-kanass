@@ -25,6 +25,8 @@ public class ProjectVersionEntity implements Serializable {
     @Column(name = "name",length = 64,notNull = true)
     private String name;
 
+    @Column(name = "master",length = 32)
+    private String master;
     // 开始时间
     @Column(name = "start_time")
     private Date startTime;
@@ -100,5 +102,13 @@ public class ProjectVersionEntity implements Serializable {
 
     public void setRelaPublishDate(Date relaPublishDate) {
         this.relaPublishDate = relaPublishDate;
+    }
+
+    public String getMaster() {
+        return master;
+    }
+
+    public void setMaster(String master) {
+        this.master = master;
     }
 }

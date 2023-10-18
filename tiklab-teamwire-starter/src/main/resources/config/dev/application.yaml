@@ -18,7 +18,7 @@ server:
 
 jdbc:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://172.13.1.17:5432/teamwire_ee?stringtype=unspecified
+  url: jdbc:postgresql://172.10.1.10:5432/tiklab_teamwire?stringtype=unspecified
   username: postgres
   password: darth2020
 
@@ -26,11 +26,11 @@ postgresql:
   type: local
   embbed:
     enable: false
-  database: teamwire_ee
+  database: tiklab_teamwire
 
 # 访问地址，用于显示日志，消息，待办的图标
 base:
-  url: http://192.168.10.5:8080
+  url: http://192.168.10.25:8080
 
 
 DATA_HOME: ${user.home}/tiklab/teamwire
@@ -63,12 +63,12 @@ eas:
   embbed:
     enable: true
   web:
-    address: http://192.168.10.5:3010
+    address: http://192.168.10.25:3010
   address: http://192.168.10.6:8080
 
 # homes 地址
 #homes:
-#  address: http://192.168.10.5:8080
+#  address: http://192.168.10.25:8080
 
 #plugin config
 plugin:
