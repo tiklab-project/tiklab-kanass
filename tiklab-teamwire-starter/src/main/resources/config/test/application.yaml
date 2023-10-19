@@ -90,5 +90,6 @@ file:
 client: web
 version: ce
 
-backup:
-    address: ${DATA_HOME}/backup
+backups:
+    time: 0 0 2 * * ?
+    dir: /data/teamwire
