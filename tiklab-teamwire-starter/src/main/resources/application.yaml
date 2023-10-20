@@ -1,79 +1,91 @@
 #系统名称
 
 app:
-  name: tiklab-teamwire
+    name: tiklab-teamwire
 spring:
-  profiles:
-    active: release
-  config:
-    import: optional:classpath:/config/${env:dev}/application.yaml
-
-
+    profiles:
+        active: release
+    config:
+        import: optional:classpath:/config/${env:dev}/application.yaml
 
 #web config
 server:
-  port: 8080
-
-# 访问地址，用于显示日志，消息，待办的图标
-base:
-  url: http://teamwire-ce.test.tiklab.net
-
-
-jdbc:
-  driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/tiklab_teamwire?stringtype=unspecified
-  username: postgres
-  password: darth2020
+    port: 8080
 
 DATA_HOME: /opt/tiklab/teamwire
 
-eas:
-  embbed:
-    enable: true
+base:
+    url: http://teamwire-ce.tiklab.net
+
+jdbc:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/teamwire?stringtype=unspecified
+    username: postgres
+    password: darth2020
 
 postgresql:
-  embbed:
-    enable: true
-  database: tiklab_teamwire
+    embbed:
+        enable: true
+    database: teamwire
+    db:
+        port: 5432
+        username: postgres
+        password: darth2020
+        address: ${DATA_HOME}/postgresql
 
+#eas config
+eas:
+    embbed:
+        enable: true
 #dfs config
 #dfs.server.enabled=false
 dfs:
-  server:
-    enabled: server
-    port: 4001
-    datapath: ${DATA_HOME}/files
-  client:
-    url: 127.0.0.1:4001
-    group: g1
-    bucket: teamwire
+    server:
+        enabled: true
+        port: 4001
+        datapath: ${DATA_HOME}/files
+    client:
+        url: 127.0.0.1:4001
+        group: g1
+        bucket: teamwire
 
 #dcs config
-#dcs.server.enabled=false
 dcs:
-  server:
-    enabled: true
-    port: 5000
-    datapath: ${DATA_HOME}/caches
-  client:
-    url: 127.0.0.1:5000
-    group: g1
-    database: dcs1
-    expire: 7200
+    server:
+        enabled: true
+        port: 5000
+        datapath: ${DATA_HOME}/caches
+    client:
+        url: 127.0.0.1:5000
+        group: g1
+        database: dcs1
+        expire: 7200
+
+#integration config
+
+homes:
+    address: http://192.168.10.6:8070
+
+file:
+    path: http://file.dev.tiklab.io
 
 
-
-#plugin config
-plugin:
-  path: ${DATA_HOME}/plugin
-
-#zip config
-unzip:
-  path: ${DATA_HOME}/unzip/Jire
 
 #license
 licences:
-  path: ${APP_HOME}/licences
+    path: ${APP_HOME}/src/main/resources/licences
+
+#plugin config
+plugin:
+    path: ${DATA_HOME}/plugin
+
+#zip config
+unzip:
+    path: ${DATA_HOME}/unzip/Jire
 
 client: web
 version: ce
+
+backups:
+    time: 0 0 2 * * ?
+    dir: /data/teamwire

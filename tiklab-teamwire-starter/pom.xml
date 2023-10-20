@@ -400,7 +400,7 @@
                             <descriptors>
                                 <descriptor>assembly/distribution-${assembly}.xml</descriptor>
                             </descriptors>
-                            <finalName>tiklab-teamwire-${version}-${timestamp}</finalName>
+                            <finalName>tiklab-teamwire-${version}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                         <phase>package</phase>

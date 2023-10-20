@@ -62,12 +62,6 @@ dcs:
         database: dcs1
         expire: 7200
 
-
-
-
-
-
-
 #license
 licences:
     path: ${APP_HOME}/src/main/resources/licences
