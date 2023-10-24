@@ -22,14 +22,14 @@ import java.sql.Date;
 public class Sprint extends BaseModel {
 
     @ApiProperty(name="id",desc="迭代ID")
-    private java.lang.String id;
+    private String id;
 
 
     @ApiProperty(name="sprintName",desc="迭代名称",eg="@text32")
-    private java.lang.String sprintName;
+    private String sprintName;
 
     @ApiProperty(name="desc",desc="迭代描述",eg="@text32")
-    private java.lang.String desc;
+    private String desc;
 
     @ApiProperty(name="master",desc="负责人")
     @Mappings({

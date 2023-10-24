@@ -212,17 +212,17 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         testCaseQuery.setInList(repositoryIds);
         testCaseQuery.setName(workTestCaseQuery.getName());
         testCaseQuery.setCreateUser(workTestCaseQuery.getCreatUserId());
-        Pagination<TestCase> testCasePage = testCaseServiceRpc().findTestCasePage(testCaseQuery);
+        Pagination<TestCase> testCaseListPage = testCaseServiceRpc().findTestCasePage(testCaseQuery);
 
 
         Pagination<ProjectTestCase> projectTestCasePagination = new Pagination<ProjectTestCase>();
-        projectTestCasePagination.setTotalRecord(testCasePage.getTotalRecord());
-        projectTestCasePagination.setTotalPage(testCasePage.getTotalPage());
-        projectTestCasePagination.setPageSize(testCasePage.getPageSize());
-        projectTestCasePagination.setCurrentPage(testCasePage.getCurrentPage());
+        projectTestCasePagination.setTotalRecord(testCaseListPage.getTotalRecord());
+        projectTestCasePagination.setTotalPage(testCaseListPage.getTotalPage());
+        projectTestCasePagination.setPageSize(testCaseListPage.getPageSize());
+        projectTestCasePagination.setCurrentPage(testCaseListPage.getCurrentPage());
 
         List<ProjectTestCase> projectTestCaseList = new ArrayList<ProjectTestCase>();
-        for (TestCase testCase : testCasePage.getDataList()) {
+        for (TestCase testCase : testCaseListPage.getDataList()) {
             ProjectTestCase projectTestCase = new ProjectTestCase();
             projectTestCase.setTestCaseName(testCase.getName());
             projectTestCase.setId(testCase.getId());

@@ -78,5 +78,5 @@ public interface VersionFocusService {
     * @return
     */
     Pagination<VersionFocus> findVersionFocusPage(VersionFocusQuery versionFocusQuery);
-
+    List<String> findFocusVersionIds();
 }

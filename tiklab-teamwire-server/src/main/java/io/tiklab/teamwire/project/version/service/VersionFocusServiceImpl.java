@@ -1,8 +1,10 @@
 package io.tiklab.teamwire.project.version.service;
 
 import io.tiklab.beans.BeanMapper;
+import io.tiklab.core.exception.ApplicationException;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
+import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.join.JoinTemplate;
 import io.tiklab.teamwire.project.version.dao.VersionFocusDao;
 import io.tiklab.teamwire.project.version.entity.VersionFocusEntity;
@@ -29,6 +31,14 @@ public class VersionFocusServiceImpl implements VersionFocusService {
 
     @Override
     public String createVersionFocus(@NotNull @Valid VersionFocus versionFocus) {
+        VersionFocusQuery versionFocusQuery = new VersionFocusQuery();
+        versionFocusQuery.setVersionId(versionFocus.getVersion().getId());
+        versionFocusQuery.setMasterId(versionFocus.getMasterId());
+        List<VersionFocus> versionFocusList = findVersionFocusList(versionFocusQuery);
+        int size = versionFocusList.size();
+        if(size > 0){
+            throw new ApplicationException("已经关注过");
+        }
         VersionFocusEntity versionFocusEntity = BeanMapper.map(versionFocus, VersionFocusEntity.class);
 
         return versionFocusDao.createVersionFocus(versionFocusEntity);
@@ -110,5 +120,14 @@ public class VersionFocusServiceImpl implements VersionFocusService {
         joinTemplate.joinQuery(versionFocusList);
 
         return PaginationBuilder.build(pagination,versionFocusList);
+    }
+
+    @Override
+    public List<String> findFocusVersionIds() {
+        String loginId = LoginContext.getLoginId();
+        List<String> focusVersionIds = versionFocusDao.findFocusVersionIds(loginId);
+
+
+        return focusVersionIds;
     }
 }

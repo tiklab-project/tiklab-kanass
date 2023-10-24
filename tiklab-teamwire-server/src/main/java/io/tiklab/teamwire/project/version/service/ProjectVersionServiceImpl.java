@@ -1,7 +1,9 @@
 package io.tiklab.teamwire.project.version.service;
 
-import io.tiklab.teamwire.project.version.model.ProjectVersion;
-import io.tiklab.teamwire.project.version.model.ProjectVersionQuery;
+import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.teamwire.project.version.dao.VersionFocusDao;
+import io.tiklab.teamwire.project.version.entity.VersionFocusEntity;
+import io.tiklab.teamwire.project.version.model.*;
 import io.tiklab.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
@@ -24,6 +26,8 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     @Autowired
     ProjectVersionDao projectVersionDao;
 
+    @Autowired
+    VersionFocusService versionFocusService;
     @Autowired
     JoinTemplate joinTemplate;
 
@@ -94,10 +98,15 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Override
     public Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery projectVersionQuery) {
-
         Pagination<ProjectVersionEntity>  pagination = projectVersionDao.findVersionPage(projectVersionQuery);
-
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(pagination.getDataList(), ProjectVersion.class);
+        List<String> focusVersionIds = versionFocusService.findFocusVersionIds();
+        for (ProjectVersion projectVersion : projectVersionList) {
+            String id = projectVersion.getId();
+            if(focusVersionIds.contains(id)){
+                projectVersion.setFocusIs(true);
+            }
+        }
 
         joinTemplate.joinQuery(projectVersionList);
 
@@ -110,6 +119,10 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         List<ProjectVersionEntity>  projectVersionListEntity = projectVersionDao.findVersionFocusList(projectVersionQuery);
 
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(projectVersionListEntity, ProjectVersion.class);
+        for (ProjectVersion projectVersion : projectVersionList) {
+            projectVersion.setFocusIs(true);
+        }
+
 
         joinTemplate.joinQuery(projectVersionList);
 

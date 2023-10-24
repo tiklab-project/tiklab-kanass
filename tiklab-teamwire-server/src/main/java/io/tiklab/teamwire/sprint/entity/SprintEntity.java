@@ -35,11 +35,11 @@ public class SprintEntity implements Serializable {
     private String desc;
 
     // 迭代所属项目
-    @Column(name = "project_id",length = 32,notNull = true)
+    @Column(name = "project_id",length = 12,notNull = true)
     private String projectId;
 
     // 迭代状态id
-    @Column(name = "sprint_state_id",length = 32)
+    @Column(name = "sprint_state_id",length = 12)
     private String sprintStateId;
 
     // 迭代开始日期

@@ -1,6 +1,5 @@
 package io.tiklab.teamwire.project.version.model;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.beans.annotation.Mapper;
@@ -9,7 +8,6 @@ import io.tiklab.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.join.annotation.Join;
 import io.tiklab.join.annotation.JoinQuery;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.user.user.model.User;
 
@@ -24,10 +22,10 @@ import java.sql.Date;
 public class ProjectVersion extends BaseModel {
 
     @ApiProperty(name = "id", desc = "唯一ID")
-    private java.lang.String id;
+    private String id;
 
     @ApiProperty(name = "name", desc = "版本名称")
-    private java.lang.String name;
+    private String name;
 
     @ApiProperty(name="master",desc="负责人")
     @Mappings({
@@ -39,14 +37,23 @@ public class ProjectVersion extends BaseModel {
     @ApiProperty(name = "startTime", desc = "开始日期")
     private Date startTime;
 
+    @ApiProperty(name = "focusIs", desc = "当前用户是否关注")
+    private boolean focusIs;
+
     @ApiProperty(name = "publishDate", desc = "发布日期")
     private Date publishDate;
 
     @ApiProperty(name = "relaPublishDate", desc = "实际发布日期")
     private Date relaPublishDate;
 
-    @ApiProperty(name = "versionState", desc = "项目状态")
-    private String versionState;
+
+
+    @ApiProperty(name="versionState",desc="版本状态")
+    @Mappings({
+            @Mapping(source = "versionState.id",target = "versionState")
+    })
+    @JoinQuery(key = "id")
+    private VersionState versionState;
 
     @ApiProperty(name = "project", desc = "所属项目")
     @Mappings({
@@ -80,11 +87,11 @@ public class ProjectVersion extends BaseModel {
         this.project = project;
     }
 
-    public String getVersionState() {
+    public VersionState getVersionState() {
         return versionState;
     }
 
-    public void setVersionState(String versionState) {
+    public void setVersionState(VersionState versionState) {
         this.versionState = versionState;
     }
 
@@ -118,5 +125,13 @@ public class ProjectVersion extends BaseModel {
 
     public void setMaster(User master) {
         this.master = master;
+    }
+
+    public boolean isFocusIs() {
+        return focusIs;
+    }
+
+    public void setFocusIs(boolean focusIs) {
+        this.focusIs = focusIs;
     }
 }

@@ -103,6 +103,7 @@ public class ProjectVersionDao {
                 .eq("projectId", ProjectVersionQuery.getProjectId())
                 .like("name", ProjectVersionQuery.getName())
                 .eq("versionState", ProjectVersionQuery.getVersionState())
+                .eq("masterId", ProjectVersionQuery.getMasterId())
                 .orders(ProjectVersionQuery.getOrderParams())
                 .pagination(ProjectVersionQuery.getPageParam())
                 .get();

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 迭代收藏数据访问
@@ -97,6 +98,7 @@ public class VersionFocusDao {
         QueryCondition queryCondition = QueryBuilders.createQuery(VersionFocusEntity.class, "vf")
                 .leftJoin(ProjectVersionEntity.class,"pv","pv.id=vf.versionId")
                 .eq("vf.masterId", versionFocusQuery.getMasterId ())
+                .eq("vf.versionId", versionFocusQuery.getVersionId ())
                 .eq("vf.projectId", versionFocusQuery.getProjectId())
                 .orders(versionFocusQuery.getOrderParams())
                 .get();
@@ -120,5 +122,10 @@ public class VersionFocusDao {
         return jpaTemplate.findPage(queryCondition,VersionFocusEntity.class);
     }
 
+    public List<String> findFocusVersionIds(String masterId) {
+        String sql = "select version_id from pmc_version_focus v where v.master_id = '"+ masterId + "'";
+        List<String> versionIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return versionIds;
+    }
 
 }
