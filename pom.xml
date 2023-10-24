@@ -12,9 +12,9 @@
     <artifactId>tiklab-teamwire</artifactId>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <properties>
-        <tiklab-teamwire.version>1.0.0</tiklab-teamwire.version>
+        <tiklab-teamwire.version>1.0.0-SNAPSHOT</tiklab-teamwire.version>
         <tiklab-mysql.version>1.0.0</tiklab-mysql.version>
         <tiklab-jdk.version>1.0.0</tiklab-jdk.version>
         <tiklab-toolkit.version>1.0.0</tiklab-toolkit.version>
