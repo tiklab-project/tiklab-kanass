@@ -46,15 +46,6 @@ public class ExportFileController {
         response.setContentLength(bytes.length);
         response.getOutputStream().write(bytes);
 
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        workbook.write(byteArrayOutputStream);
-//        byte[] bytes = byteArrayOutputStream.toByteArray();
-//        response.setContentLength(bytes.length);
-//        response.getOutputStream().write(bytes);
-//        byteArrayOutputStream.close();
-//
-//        workbook.close();
-
     }
 
 }

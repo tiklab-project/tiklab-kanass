@@ -39,8 +39,8 @@ public class ExportFileServiceImpl implements ExportFileService {
         Sheet sheet = sheets.createSheet();
         Row row = sheet.createRow(0);
         ArrayList<String> strings = new ArrayList<>();
-        strings.add("名称");
         strings.add("id");
+        strings.add("名称");
         strings.add("类型");
         strings.add("优先级");
         strings.add("负责人");
@@ -50,8 +50,8 @@ public class ExportFileServiceImpl implements ExportFileService {
         }
 
         ArrayList<String> stringKeys = new ArrayList<>();
-        stringKeys.add("title");
         stringKeys.add("id");
+        stringKeys.add("title");
         stringKeys.add("workTypeSys");
         stringKeys.add("workPriority");
         stringKeys.add("assigner");
@@ -74,8 +74,6 @@ public class ExportFileServiceImpl implements ExportFileService {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             sheets.write(byteArrayOutputStream);
             byte[] bytes = byteArrayOutputStream.toByteArray();
-//            response.setContentLength(bytes.length);
-//            response.getOutputStream().write(bytes);
             byteArrayOutputStream.close();
 
             out.close();
