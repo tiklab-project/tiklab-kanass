@@ -26,7 +26,7 @@
         <tiklab-postgresql.version>1.0.0</tiklab-postgresql.version>
         <tiklab-upgrade.version>1.0.0</tiklab-upgrade.version>
         <tiklab-rpc.version>1.0.0</tiklab-rpc.version>
-        <tiklab-plugin.version>1.0.0</tiklab-plugin.version>
+        <tiklab-plugin.version>1.0.1-SNAPSHOT</tiklab-plugin.version>
 
 
         <tiklab-user.version>1.0.0</tiklab-user.version>
