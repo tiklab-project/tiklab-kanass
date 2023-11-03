@@ -140,9 +140,9 @@ public class StatisticWorkItemDao {
             if(statisticWorkItemQuery.getSprintId() != null){
                 String sprintId = statisticWorkItemQuery.getSprintId();
                 params = new Object[]{sprintId};
-                sql = "select t.work_type_id as statisticalId,count(1) as groupCount from pmc_work_item t where" + sql1 + " and t.sprint_id = ? group by t.work_type_id";
+                sql = "select t.work_type_sys_id as statisticalId,count(1) as groupCount from pmc_work_item t where" + sql1 + " and t.sprint_id = ? group by t.work_type_sys_id";
             }else {
-                sql = "select t.work_type_id as statisticalId,count(1) as groupCount from pmc_work_item t where" + sql1 + " group by t.work_type_id";
+                sql = "select t.work_type_sys_id as statisticalId,count(1) as groupCount from pmc_work_item t where" + sql1 + " group by t.work_type_sys_id";
             }
         }
 
