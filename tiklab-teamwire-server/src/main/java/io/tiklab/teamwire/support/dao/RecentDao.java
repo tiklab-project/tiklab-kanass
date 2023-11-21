@@ -51,6 +51,16 @@ public class RecentDao{
         jpaTemplate.delete(RecentEntity.class,id);
     }
 
+    public void deleteRecentByIds(String ids){
+        String sql = "DELETE FROM pmc_recent where id in " + ids ;
+        int update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除多于的数据成功");
+        }else {
+            logger.info("删除多于的数据失败");
+        }
+    }
+
     public void deleteRecent(DeleteCondition deleteCondition){
         jpaTemplate.delete(deleteCondition);
     }

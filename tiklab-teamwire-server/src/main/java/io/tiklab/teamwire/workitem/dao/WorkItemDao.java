@@ -108,6 +108,7 @@ public class WorkItemDao{
                 .eq("wi.workStatusCode", workItemQuery.getWorkStatusCode())
                 .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
                 .eq("wi.sprintId", workItemQuery.getSprintId())
+                .in("wi.id", workItemQuery.getIds())
                 .notIn("wi.id", workItemQuery.getIdNotIn())
                 .orders(workItemQuery.getOrderParams());
 
@@ -528,9 +529,6 @@ public class WorkItemDao{
             paramMap.put("sprintIds", workItemQuery.getSprintIds());
         }
 
-
-
-
         if(workItemQuery.getWorkStatusId() != null && workItemQuery.getWorkStatusId().length()>0){
 
             if(paramMap.isEmpty()){
@@ -746,8 +744,8 @@ public class WorkItemDao{
             paramMap.put("overdue", overdue);
         }
 
-        sqlMap.put("sql", sql);
-        objectObjectHashMap.put("query", objects);
+//        sqlMap.put("sql", sql);
+        objectObjectHashMap.put("query", paramMap);
         objectObjectHashMap.put("sql", sql);
 
         return objectObjectHashMap;
@@ -763,10 +761,12 @@ public class WorkItemDao{
         String sql = new String();
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
-        if(!ObjectUtils.isEmpty(o1)){
+        Object query = stringObjectMap.get("query");
+        if(!ObjectUtils.isEmpty(query)){
             sql = sql.concat( String.valueOf(o1));
             sql = sql.concat(" and p.parent_id is null");
         }else {
+            sql = sql.concat( String.valueOf(o1));
             sql = sql.concat(" p.parent_id is null");
         }
         if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){

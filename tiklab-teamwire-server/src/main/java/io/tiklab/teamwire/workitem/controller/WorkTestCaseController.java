@@ -5,7 +5,7 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.postin.annotation.Api;
 import io.tiklab.postin.annotation.ApiMethod;
 import io.tiklab.postin.annotation.ApiParam;
-import io.tiklab.teamwire.project.test.model.ProjectTestCase;
+import io.tiklab.teamwire.project.project.model.test.model.ProjectTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCaseQuery;
 import io.tiklab.teamwire.workitem.service.WorkTestCaseService;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**

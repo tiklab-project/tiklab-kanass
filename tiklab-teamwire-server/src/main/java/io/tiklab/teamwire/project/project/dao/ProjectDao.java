@@ -109,7 +109,9 @@ public class ProjectDao{
     }
 
     public String creatProjectKey(String projectName){
-        String pinYinHeadChar = getPinYinHeadChar(projectName);
+        // 去掉名字中的数字
+        String projectName1 = projectName.replaceAll("\\d", "");
+        String pinYinHeadChar = getPinYinHeadChar(projectName1);
         int length = pinYinHeadChar.length();
         if(length > 8){
             pinYinHeadChar = pinYinHeadChar.substring(0, 8);
@@ -165,7 +167,7 @@ public class ProjectDao{
         for (int j = 0; j < str.length(); j++) {
             char word = str.charAt(j);
             // 提取汉字的首字母
-            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
+                String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
             if (pinyinArray != null) {
                 convert += pinyinArray[0].charAt(0);
             }else {

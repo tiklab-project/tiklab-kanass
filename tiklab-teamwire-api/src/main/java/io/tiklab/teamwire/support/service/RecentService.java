@@ -66,7 +66,7 @@ public interface RecentService {
     * @return
     */
     List<Recent> findRecentList(RecentQuery recentQuery);
-
+    List<Recent> findRecentListToModel(RecentQuery recentQuery);
     /**
     * 按分页查询最近访问的
     * @param recentQuery

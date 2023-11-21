@@ -86,6 +86,16 @@ public class RecentController {
         return Result.ok(recentList);
     }
 
+    @RequestMapping(path = "/findRecentListToModel",method = RequestMethod.POST)
+    @ApiMethod(name = "findRecentListToModel",desc = "查询最近访问列表")
+    @ApiParam(name = "recentQuery",desc = "查找最近访问的添加模型",required = true)
+    public Result<List<Recent>> findRecentListToModel(@RequestBody @Valid @NotNull RecentQuery recentQuery){
+        List<Recent> recentList = recentService.findRecentListToModel(recentQuery);
+
+        return Result.ok(recentList);
+    }
+
+
     @RequestMapping(path = "/findRecentPage",method = RequestMethod.POST)
     @ApiMethod(name = "findRecentPage",desc = "按分页查询最近访问的")
     @ApiParam(name = "recentQuery",desc = "查找最近访问的添加模型",required = true)

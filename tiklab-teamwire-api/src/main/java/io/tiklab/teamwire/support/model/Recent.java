@@ -25,6 +25,8 @@ public class Recent extends BaseModel {
     @ApiProperty(name="id",desc="id",required = true)
     private java.lang.String id;
 
+    @ApiProperty(name="object",desc="object")
+    private Object object;
     @ApiProperty(name="name",desc="name")
     private java.lang.String name;
 
@@ -127,5 +129,13 @@ public class Recent extends BaseModel {
 
     public void setProjectType(ProjectType projectType) {
         this.projectType = projectType;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
     }
 }

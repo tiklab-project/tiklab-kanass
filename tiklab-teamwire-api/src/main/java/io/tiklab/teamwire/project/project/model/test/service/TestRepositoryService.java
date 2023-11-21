@@ -1,6 +1,6 @@
-package io.tiklab.teamwire.project.test.service;
+package io.tiklab.teamwire.project.project.model.test.service;
 
-import io.tiklab.teamwire.project.test.model.TestRepository;
+import io.tiklab.teamwire.project.project.model.test.model.TestRepository;
 
 import java.util.List;
 

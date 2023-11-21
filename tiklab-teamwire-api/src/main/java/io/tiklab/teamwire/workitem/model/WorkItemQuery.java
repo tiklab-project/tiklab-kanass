@@ -20,6 +20,8 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="id",desc = "事项ID，精确匹配")
     private String id;
 
+    @ApiProperty(name ="ids",desc = "事项ID，精确匹配")
+    private String[] ids;
     @ApiProperty(name ="likeId",desc = "事项ID，精确匹配")
     private String likeId;
 
@@ -624,5 +626,13 @@ public class WorkItemQuery implements Serializable {
 
     public void setLikeId(String likeId) {
         this.likeId = likeId;
+    }
+
+    public String[] getIds() {
+        return ids;
+    }
+
+    public void setIds(String[] ids) {
+        this.ids = ids;
     }
 }
