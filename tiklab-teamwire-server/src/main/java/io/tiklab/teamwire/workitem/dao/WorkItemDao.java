@@ -56,13 +56,87 @@ public class WorkItemDao{
         jpaTemplate.update(workItemEntity);
     }
 
+    public String findWorkItemAndChildren(String workItemId) {
+        String sql = "SELECT id FROM pmc_work_item where tree_path like '%" + workItemId + "%'";
+        List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        workItemIdList.add(workItemId);
+        String workItemIds = workItemIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
+
+        return workItemIds;
+    }
 
     /**
      * 删除事项
-     * @param id
+     * @param workItemId
      */
-    public void deleteWorkItem(String id){
-        jpaTemplate.delete(WorkItemEntity.class,id);
+    public void deleteWorkItem(String workItemId){
+        String workItemIds = findWorkItemAndChildren(workItemId);
+
+        // 删除关联事项
+        String sql = "DELETE FROM pmc_work_relate where work_item_id in (" + workItemIds + ")";
+        int update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的关联事项成功");
+        }else {
+            logger.info("删除事项的关联事项失败");
+        }
+
+        // 删除日志
+        sql = "DELETE FROM pmc_work_log where work_item_id in (" + workItemIds + ")";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的工时成功");
+        }else {
+            logger.info("删除事项的工时失败");
+        }
+
+        // 删除文档
+        sql = "DELETE FROM pmc_work_item_document where work_item_id in (" + workItemIds + ")";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的文档成功");
+        }else {
+            logger.info("删除事项的文档失败");
+        }
+
+        // 删除动态
+
+        // 删除评论
+        sql = "DELETE FROM pmc_work_comment where work_item_id in (" + workItemIds + ")";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的评论成功");
+        }else {
+            logger.info("删除事项的评论失败");
+        }
+
+        // 删除测试用例
+        sql = "DELETE FROM pmc_work_test_case where work_item_id in (" + workItemIds + ")";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的测试用例成功");
+        }else {
+            logger.info("删除事项的评论失败");
+        }
+
+        // 删除附件
+        sql = "DELETE FROM pmc_work_attach where work_item_id in (" + workItemIds + ")";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的附件成功");
+        }else {
+            logger.info("删除事项的附件失败");
+        }
+
+        // 删除下级
+        sql = "DELETE FROM pmc_work_item where id in (" + workItemIds + ")";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项的下级事项");
+        }else {
+            logger.info("删除事项的下级事项");
+        }
+
     }
 
     /**

@@ -429,7 +429,7 @@ public class ProjectDao{
         }
     }
 
-    public void deleteWorkItem(String projectId){
+    public void deleteProjectWorkItem(String projectId){
         String sql = "SELECT id FROM pmc_work_item where project_id = '" + projectId + "'";
         List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
 

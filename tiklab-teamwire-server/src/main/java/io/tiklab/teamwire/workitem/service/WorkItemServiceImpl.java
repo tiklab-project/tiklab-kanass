@@ -662,36 +662,8 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Override
     public void deleteWorkItem(@NotNull String id) {
-        WorkItem workItem = findWorkItem(id);
-        Map<String, String> content = new HashMap<>();
-        content.put("workItemName", workItem.getTitle());
-
-        StateNodeWorkRelationQuery stateNodeWorkRelationQuery = new StateNodeWorkRelationQuery();
-        stateNodeWorkRelationQuery.setWorkId(id);
-        List<StateNodeWorkRelation> stateNodeWorkRelationList = stateNodeWorkRelationService.findStateNodeWorkRelationList(stateNodeWorkRelationQuery);
-        for (StateNodeWorkRelation stateNodeWorkRelation : stateNodeWorkRelationList) {
-            try {
-                stateNodeWorkRelationService.deleteStateNodeWorkRelation(stateNodeWorkRelation.getId());
-            }catch (Exception e){
-
-                throw new ApplicationException(2000,"删除失败" + e.getMessage());
-            }
-        }
-
-        FlowWorkRelationQuery flowWorkRelationQuery = new FlowWorkRelationQuery();
-        flowWorkRelationQuery.setWorkId(id);
-        List<FlowWorkRelation> flowWorkRelationList = flowWorkRelationService.findFlowWorkRelationList(flowWorkRelationQuery);
-        for (FlowWorkRelation flowWorkRelation : flowWorkRelationList) {
-            try {
-                flowWorkRelationService.deleteFlowWorkRelation(flowWorkRelation.getId());
-            }catch (Exception e){
-                throw new ApplicationException(2000,"删除失败" + e.getMessage());
-            }
-        }
-
-//        creatOplog(id,"delete", contentString, opLogTemplateId);
-        //添加动态
-//        creatDynamic(id,"delete",null);
+        String workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
+        dmFlowService.deleteWorkItemFlow(workItemAndChildren);
         //删除事项
         workItemDao.deleteWorkItem(id);
 

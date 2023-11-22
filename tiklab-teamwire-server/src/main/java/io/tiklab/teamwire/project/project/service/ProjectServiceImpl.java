@@ -417,7 +417,7 @@ public class ProjectServiceImpl implements ProjectService {
         //删除模块、里程碑、事项类型、知识库、测试用例、模块、最近查看、项目燃尽图、关注的项目
         projectDao.deleteProjectAndRelation(id);
         //删除事项
-        projectDao.deleteWorkItem(id);
+        projectDao.deleteProjectWorkItem(id);
 
         //删除迭代
         projectDao.deleteSprint(id);
@@ -461,7 +461,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @param projectId
      */
     public void deleteWorkItem(@NotNull String projectId){
-        projectDao.deleteWorkItem(projectId);
+        projectDao.deleteProjectWorkItem(projectId);
     }
 
     /**
