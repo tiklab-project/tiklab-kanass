@@ -38,7 +38,7 @@
         <tiklab-security.version>1.0.0</tiklab-security.version>
 
         <tiklab-form.version>1.0.0</tiklab-form.version>
-        <tiklab-flow.version>1.0.0</tiklab-flow.version>
+        <tiklab-flow.version>1.0.0-SNAPSHOT</tiklab-flow.version>
         <tiklab-postin.version>1.0.0</tiklab-postin.version>
         <tiklab-teston.version>1.0.0</tiklab-teston.version>
         <tiklab-kanass.version>1.0.0-SNAPSHOT</tiklab-kanass.version>
