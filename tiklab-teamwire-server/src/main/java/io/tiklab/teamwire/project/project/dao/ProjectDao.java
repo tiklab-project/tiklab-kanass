@@ -502,9 +502,6 @@ public class ProjectDao{
         }else {
             return;
         }
-
-
-
     }
 
     public void deleteSprint(String projectId){
@@ -541,7 +538,6 @@ public class ProjectDao{
         }else {
             return;
         }
-
 
     }
 

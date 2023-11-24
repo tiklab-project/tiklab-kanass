@@ -418,13 +418,10 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.deleteProjectAndRelation(id);
         //删除事项
         projectDao.deleteProjectWorkItem(id);
-
         //删除迭代
         projectDao.deleteSprint(id);
-
         //删除版本
         projectDao.deleteVersion(id);
-
         //删除阶段
         projectDao.deleteStage(id);
 
@@ -441,74 +438,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     }
 
-    /**
-     * 删除项目下的迭代
-     * @param id
-     */
-    public void deleteSprint(@NotNull String id){
-        SprintQuery sprintQuery = new SprintQuery();
-        sprintQuery.setProjectId(id);
-        List<Sprint> sprintList = sprintService.findSprintList(sprintQuery);
-        if(sprintList.size()>0){
-            for (Sprint sprint : sprintList) {
-                sprintService.deleteSprint(sprint.getId());
-            }
-        }
-    }
 
-    /**
-     * 删除项目下的事项
-     * @param projectId
-     */
-    public void deleteWorkItem(@NotNull String projectId){
-        projectDao.deleteProjectWorkItem(projectId);
-    }
-
-    /**
-     * 删除项目下的版本
-     * @param id
-     */
-    public void deleteVersion(@NotNull String id){
-        ProjectVersionQuery ProjectVersionQuery = new ProjectVersionQuery();
-        ProjectVersionQuery.setProjectId(id);
-        List<ProjectVersion> projectVersionList = projectVersionService.findVersionList(ProjectVersionQuery);
-        if(projectVersionList.size() >0){
-            for (ProjectVersion projectVersion : projectVersionList) {
-                projectVersionService.deleteVersion(projectVersion.getId());
-            }
-        }
-    }
-
-    /**
-     * 删除项目下的模块
-     * @param id
-     */
-    public void deleteModule(@NotNull String id){
-        ModuleQuery moduleQuery = new ModuleQuery();
-        moduleQuery.setProjectId(id);
-        List<Module> moduleList = moduleService.findModuleList(moduleQuery);
-        if(moduleList.size() > 0){
-            for (Module module : moduleList) {
-                moduleService.deleteModule(module.getId());
-            }
-        }
-    }
-
-    /**
-     * 删除项目下的里程碑
-     * @param id
-     */
-    public void deleteMileStone(@NotNull String id){
-        MilestoneQuery milestoneQuery = new MilestoneQuery();
-        milestoneQuery.setProjectId(id);
-        List<Milestone> milestoneList = milestoneService.findMilestoneList(milestoneQuery);
-        if(milestoneList.size() > 0){
-            for (Milestone milestone : milestoneList) {
-                milestoneService.deleteMilestone(milestone.getId());
-            }
-
-        }
-    }
 
     /**
      * 根据id 精确查找项目

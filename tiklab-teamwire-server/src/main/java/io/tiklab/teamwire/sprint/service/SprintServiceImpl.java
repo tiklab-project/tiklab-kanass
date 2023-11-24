@@ -99,8 +99,10 @@ public class SprintServiceImpl implements SprintService {
 
     @Override
     public void deleteSprint(@NotNull String id) {
-        creatDynamic(id,"delete");
         sprintDao.deleteSprint(id);
+
+        // 删除关注的迭代数据
+        sprintDao.deleteSprintFocus(id);
 
     }
 

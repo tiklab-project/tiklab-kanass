@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 迭代数据访问
@@ -51,6 +52,39 @@ public class SprintDao{
         jpaTemplate.delete(SprintEntity.class,id);
     }
 
+    public void deleteSprintFocus(String sprintId){
+        // 删除迭代与事项的关系
+        String sql = "UPDATE pmc_work_item SET sprint_id = NULL WHERE sprint_id = '" + sprintId + "'";
+        jpaTemplate.getJdbcTemplate().execute(sql);
+          // 删除关注的迭代
+        sql = "DELETE FROM pmc_sprint_focus where sprint_id = '" + sprintId + "'";
+        int update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除关注的迭代成功");
+        }else {
+            logger.info("删除关注的迭代失败");
+        }
+
+        // 删除迭代燃尽图数据
+        sql = "DELETE FROM pmc_sprint_burndowm where sprint_id = '" + sprintId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除迭代燃尽图数据成功");
+        }else {
+            logger.info("删除迭代燃尽图数据失败");
+        }
+
+        // 删除最近点击的迭代
+        sql = "DELETE FROM pmc_recent where model_id = '" + sprintId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除迭代燃尽图数据成功");
+        }else {
+            logger.info("删除迭代燃尽图数据失败");
+        }
+
+
+    }
     /**
      * 根据迭代id查找迭代
      * @param id

@@ -103,5 +103,10 @@ postin:
     server: http://192.168.10.3:8090
 
 backups:
+  pgsql:
+    dir: /opt/homebrew/opt/postgresql@15/bin
   time: 0 0 2 * * ?
-  dir: /data/teamwire
+  dir: ${DATA_HOME}
+  dfs:
+    dir: ${DATA_HOME}/files
+
