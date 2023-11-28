@@ -6,7 +6,7 @@ import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.teamwire.project.test.entity.ProjectTestRepositoryEntity;
-import io.tiklab.teamwire.project.project.model.test.model.ProjectTestRepositoryQuery;
+import io.tiklab.teamwire.project.test.model.ProjectTestRepositoryQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

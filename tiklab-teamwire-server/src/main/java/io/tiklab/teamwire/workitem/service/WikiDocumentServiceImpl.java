@@ -1,5 +1,6 @@
 package io.tiklab.teamwire.workitem.service;
 
+import io.tiklab.core.Result;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.kanass.document.model.WikiDocument;
 import io.tiklab.kanass.document.model.DocumentQuery;
@@ -10,10 +11,13 @@ import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
 import io.tiklab.teamwire.support.util.HttpClientTeamWireUtil;
+import io.tiklab.teamwire.support.util.PipelineRequestUtil;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
 import io.tiklab.teamwire.workitem.model.WorkItemDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocumentQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,14 +26,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class WikiDocumentServiceImpl implements WikiDocumentService {
-
+    @Autowired
+    PipelineRequestUtil pipelineRequestUtil;
     @Autowired
     WorkItemDocumentService workItemDocumentService;
 
     @Autowired
     SystemUrlService systemUrlService;
 
-    DocumentService documentServiceRpc(){
+    DocumentService get(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
@@ -54,10 +59,11 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
         String[] documentIds = workItemDocumentIds.toArray(stringIds);
         documentQuery.setIds(documentIds);
 
-        Pagination<WikiDocument> documentPage = documentServiceRpc().findDocumentPage(documentQuery);
+//        Pagination<WikiDocument> documentPage = documentServiceRpc().findDocumentPage(documentQuery);
 
-//        HttpClientTeamWireUtil httpClientTeamWireUtil = new HttpClientTeamWireUtil();
-//        httpClientTeamWireUtil.httpResposeJson("/api/" )
+        HttpHeaders httpHeaders = pipelineRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        Pagination<WikiDocument> documentPage = pipelineRequestUtil.requestPostPage(httpHeaders, "http://192.168.10.14:8060/api/document/findDocumentPage", documentQuery, WikiDocument.class);
+
 
         Pagination<KanassDocument> kanassDocumentPage = new Pagination<KanassDocument>();
         kanassDocumentPage.setTotalRecord(documentPage.getTotalRecord());

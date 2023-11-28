@@ -1,4 +1,4 @@
-package io.tiklab.teamwire.project.project.model.test.model;
+package io.tiklab.teamwire.project.test.model;
 
 import io.tiklab.beans.annotation.Mapper;
 import io.tiklab.beans.annotation.Mapping;

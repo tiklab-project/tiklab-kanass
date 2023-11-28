@@ -1,13 +1,13 @@
-package io.tiklab.teamwire.project.project.model.test.service;
+package io.tiklab.teamwire.project.test.service;
 
 import io.tiklab.core.page.Pagination;
 import io.tiklab.join.annotation.FindAll;
 import io.tiklab.join.annotation.FindList;
 import io.tiklab.join.annotation.FindOne;
 import io.tiklab.join.annotation.JoinProvider;
-import io.tiklab.teamwire.project.project.model.test.model.ProjectTestRepository;
-import io.tiklab.teamwire.project.project.model.test.model.ProjectTestRepositoryQuery;
-import io.tiklab.teamwire.project.project.model.test.model.TestRepository;
+import io.tiklab.teamwire.project.test.model.ProjectTestRepository;
+import io.tiklab.teamwire.project.test.model.ProjectTestRepositoryQuery;
+import io.tiklab.teamwire.project.test.model.TestRepository;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

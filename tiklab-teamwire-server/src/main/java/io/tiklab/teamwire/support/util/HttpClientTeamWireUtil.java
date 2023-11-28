@@ -2,10 +2,17 @@ package io.tiklab.teamwire.support.util;
 
 import com.alibaba.fastjson.JSONObject;
 import io.tiklab.core.Result;
+import io.tiklab.teamwire.support.model.SystemUrl;
+import io.tiklab.teamwire.support.model.SystemUrlQuery;
+import io.tiklab.teamwire.support.service.SystemUrlService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 public class HttpClientTeamWireUtil {
+
     public Result<Object> httpResposeJson(String url, Object params){
         Result result = new Result<>();
 
@@ -18,6 +25,8 @@ public class HttpClientTeamWireUtil {
         HttpEntity<String> requestEntity = new HttpEntity<>(jsonRequestBody, headers);
 
         RestTemplate restTemplate = new RestTemplate();
+
+
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         result =  JSONObject.parseObject(responseEntity.toString(),Result.class);
 

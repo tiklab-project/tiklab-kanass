@@ -3,8 +3,7 @@ package io.tiklab.teamwire.project.test.service;
 
 import io.tiklab.join.JoinTemplate;
 import io.tiklab.rpc.client.router.lookup.FixedLookup;
-import io.tiklab.teamwire.project.project.model.test.model.TestRepository;
-import io.tiklab.teamwire.project.project.model.test.service.TestRepositoryService;
+import io.tiklab.teamwire.project.test.model.TestRepository;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;

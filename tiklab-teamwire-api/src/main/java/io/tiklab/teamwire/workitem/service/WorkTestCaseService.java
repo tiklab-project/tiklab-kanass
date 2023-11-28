@@ -1,7 +1,7 @@
 package io.tiklab.teamwire.workitem.service;
 
 import io.tiklab.core.page.Pagination;
-import io.tiklab.teamwire.project.project.model.test.model.ProjectTestCase;
+import io.tiklab.teamwire.project.test.model.ProjectTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCaseQuery;
 import io.tiklab.user.user.model.User;
