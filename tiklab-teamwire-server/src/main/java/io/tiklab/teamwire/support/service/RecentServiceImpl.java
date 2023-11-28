@@ -53,7 +53,6 @@ public class RecentServiceImpl implements RecentService {
     public String createRecent(@NotNull @Valid Recent recent) {
         recent.setRecentTime(new Timestamp(System.currentTimeMillis()));
         recent.setMasterId(LoginContext.getLoginId());
-        String modelId = recent.getModelId();
         String id = new String();
         // 处理之前存储数据多于5条的情况
         String model = recent.getModel();

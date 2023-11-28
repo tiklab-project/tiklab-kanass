@@ -1,28 +1,17 @@
 package io.tiklab.teamwire.project.project.service;
 
 import com.alibaba.fastjson.JSONObject;
-import io.tiklab.core.order.Order;
-import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.privilege.role.model.PatchUser;
-import io.tiklab.teamwire.project.milestone.model.Milestone;
-import io.tiklab.teamwire.project.milestone.model.MilestoneQuery;
 import io.tiklab.teamwire.project.milestone.service.MilestoneService;
-import io.tiklab.teamwire.project.module.model.Module;
-import io.tiklab.teamwire.project.module.model.ModuleQuery;
 import io.tiklab.teamwire.project.module.service.ModuleService;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
 import io.tiklab.teamwire.project.project.model.ProjectType;
-import io.tiklab.teamwire.project.version.model.ProjectVersion;
-import io.tiklab.teamwire.project.version.model.ProjectVersionQuery;
 import io.tiklab.teamwire.project.version.service.ProjectVersionService;
-import io.tiklab.teamwire.sprint.model.Sprint;
-import io.tiklab.teamwire.sprint.model.SprintQuery;
 import io.tiklab.teamwire.sprint.service.SprintService;
-import io.tiklab.teamwire.workitem.entity.WorkItemEntity;
 import io.tiklab.teamwire.workitem.model.*;
 import io.tiklab.teamwire.workitem.service.WorkTypeDmService;
 import io.tiklab.teamwire.workitem.service.WorkTypeService;
@@ -30,19 +19,11 @@ import io.tiklab.beans.BeanMapper;
 import io.tiklab.core.exception.ApplicationException;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
-import io.tiklab.flow.flow.model.DmFlow;
-import io.tiklab.flow.flow.model.DmFlowQuery;
-import io.tiklab.flow.flow.model.Flow;
 import io.tiklab.flow.flow.service.DmFlowService;
 import io.tiklab.flow.flow.service.FlowService;
-import io.tiklab.flow.statenode.model.StateNodeFlow;
-import io.tiklab.flow.statenode.model.StateNodeFlowQuery;
 import io.tiklab.flow.statenode.service.StateNodeFlowService;
 import io.tiklab.flow.statenode.service.StateNodeService;
-import io.tiklab.flow.transition.model.Transition;
-import io.tiklab.flow.transition.model.TransitionQuery;
 import io.tiklab.flow.transition.service.TransitionService;
-import io.tiklab.form.form.model.*;
 import io.tiklab.form.form.service.DmFormService;
 import io.tiklab.form.form.service.FormFieldService;
 import io.tiklab.form.form.service.FormService;
@@ -66,8 +47,6 @@ import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -482,13 +461,14 @@ public class ProjectServiceImpl implements ProjectService {
 
         WorkItemQuery workItemQuery = new WorkItemQuery();
         workItemQuery.setProjectId(id);
-        Integer workItemListCount = workItemService.findWorkItemListCount(workItemQuery);
+        int workItemListCount = workItemService.findWorkItemListCount(workItemQuery);
 
         DmUserQuery dmUserQuery = new DmUserQuery();
         dmUserQuery.setDomainId(id);
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
 
-        project.setWorklItemNumber(workItemListCount);
+
+        project.setWorkItemNumber(workItemListCount);
         project.setMember(dmUserList.size());
         joinTemplate.joinQuery(project);
         return project;
@@ -625,7 +605,7 @@ public class ProjectServiceImpl implements ProjectService {
         String userId = LoginContext.getLoginId();
         projectQuery.setRecentMasterId(userId);
 
-        List<ProjectEntity> projectEntityList =  projectDao.findRecentProjectListOrderByDate(projectQuery);
+        List<ProjectEntity> projectEntityList =  projectDao.findAllRecentProjectList(projectQuery);
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
         joinTemplate.joinQuery(projectList);
 
@@ -685,6 +665,61 @@ public class ProjectServiceImpl implements ProjectService {
     public String creatProjectKey(String projectName) {
         return projectDao.creatProjectKey(projectName);
 
+    }
+
+    @Override
+    public List<Project> findProjectSortRecentTime(ProjectQuery projectQuery) {
+
+        List<Project> list = new ArrayList<>();
+        projectQuery.setRecentMasterId(LoginContext.getLoginId());
+        // 查找最近项目
+        List<ProjectEntity> projectSortRecentTime = projectDao.findProjectSortRecentTime(projectQuery);
+        List<Project> projectList = BeanMapper.mapList(projectSortRecentTime,Project.class);
+        joinTemplate.joinQuery(projectList);
+
+        int size = projectList.size();
+        if(size < 5){
+            List<String> collect = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
+            String projectId = projectQuery.getProjectId();
+            if(projectId != null){
+                collect.add(projectId);
+            }
+
+            //如果不够5条，查找我可见的项目
+            projectQuery.setProjectId(null);
+            List<Project> joinProjectList = findJoinProjectList(projectQuery);
+            // 去除已经被点击过的
+            joinProjectList = joinProjectList.stream().filter(item -> !collect.contains(item.getId())).collect(Collectors.toList());
+            int lackSize = 5 - size;
+            if(joinProjectList.size() > lackSize){
+                List<Project> projects = joinProjectList.subList(0, lackSize);
+                projectList.addAll(projects);
+            }else {
+                projectList.addAll(joinProjectList);
+            }
+
+        }
+        if(projectList.size() <= 0)  return list;
+
+        // 拼接projects
+        if(projectList.size() > 5){
+            projectList = projectList.subList(0, 5);
+        }
+        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+
+
+        List<Map<String, Object>> projectWorkItemCount = findProjectWorkItemStatus(projectIds);
+        for (Project project : projectList) {
+            String id = project.getId();
+            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                    equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+            project.setEndWorkItemNumber(doneList.size());
+
+            List<Map<String, Object>> processList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                    equals(id) && !workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+            project.setProcessWorkItemNumber(processList.size());
+        }
+        return projectList;
     }
 
 }

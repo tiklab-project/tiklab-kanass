@@ -8,7 +8,6 @@ import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
-import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package io.tiklab.teamwire.project.project.controller;
 
+import io.tiklab.teamwire.home.statistic.model.ProjectWorkItemStat;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
 import io.tiklab.teamwire.project.project.service.ProjectService;
@@ -205,8 +206,8 @@ public class ProjectController {
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
-    @RequestMapping(path = "/findRecentProjectPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findRecentProjectPage",desc = "根据查询对象查询最近的项目列表")
+    @RequestMapping(path = "/findRecentProjectList",method = RequestMethod.POST)
+    @ApiMethod(name = "findRecentProjectList",desc = "根据查询对象查询最近的项目列表")
     @ApiParam(name = "projectQuery",desc = "项目查询对象",required = true)
     public Result<List<Project>> findRecentProjectPage(@RequestBody ProjectQuery projectQuery){
         List<Project> projectList = projectService.findRecentProjectList(projectQuery);
@@ -219,7 +220,7 @@ public class ProjectController {
      * @pi.path:/project/findFocusProjectList
      * @pi.method:post
      * @pi.request-type:json
-     * @pi.param: model=projectQuery
+     * @pi.param: model=ProjectQuery
      */
     @RequestMapping(path = "/findFocusProjectList",method = RequestMethod.POST)
     @ApiMethod(name = "findFocusProjectList",desc = "根据查询对象查询关注的项目列表")
@@ -246,12 +247,35 @@ public class ProjectController {
         return Result.ok(projectListByKeyWords);
     }
 
+    /**
+     * @pi.name:根据标题关键字查找事项列表
+     * @pi.path:/project/creatProjectKey
+     * @pi.method:post
+     * @pi.request-type:formdata
+     * @pi.param: name=projectName;dataType=string;value=projectName;
+     */
     @RequestMapping(path = "/creatProjectKey",method = RequestMethod.POST)
     @ApiMethod(name = "creatProjectKey",desc = "根据标题关键字查找事项列表")
     public Result<String> creatProjectKey(@Valid @NotNull String projectName){
         String key = projectService.creatProjectKey(projectName);
 
         return Result.ok(key);
+    }
+
+    /**
+     * @pi.name:根据标题关键字查找事项列表
+     * @pi.path:/project/findProjectSortRecentTime
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=ProjectQuery
+     */
+    @RequestMapping(path = "/findProjectSortRecentTime",method = RequestMethod.POST)
+    @ApiMethod(name = "findProjectSortRecentTime",desc = "根据传入数量查找最近点击项目，数量不够用别的项目")
+    @ApiParam(name = "projectQuery",desc = "项目查询对象",required = true)
+    public Result<List<Project>> findProjectSortRecentTime(@RequestBody ProjectQuery projectQuery){
+        List<Project> projectSortRecentList = projectService.findProjectSortRecentTime(projectQuery);
+
+        return Result.ok(projectSortRecentList);
     }
 
 }

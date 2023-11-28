@@ -2,7 +2,6 @@ package io.tiklab.teamwire.project.project.dao;
 
 import io.tiklab.teamwire.project.project.entity.ProjectEntity;
 import io.tiklab.teamwire.project.project.entity.ProjectFocusEntity;
-import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
 import io.tiklab.teamwire.support.entity.RecentEntity;
 import io.tiklab.core.page.Pagination;
@@ -11,7 +10,6 @@ import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.dal.jpa.JpaTemplate;
-import io.tiklab.teamwire.workitem.entity.WorkItemEntity;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,6 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -317,7 +314,7 @@ public class ProjectDao{
      * @param projectQuery
      * @return
      */
-    public List<ProjectEntity> findRecentProjectListOrderByDate(ProjectQuery projectQuery){
+    public List<ProjectEntity> findAllRecentProjectList(ProjectQuery projectQuery){
         String master = projectQuery.getRecentMasterId();
         String sql = "select rs.id as id, rs.project_name as project_name, rs.project_type_id as project_type_id, rs.icon_url as icon_url from pmc_project rs left join pmc_recent rc on rs.id = rc.model_id where rc.model='project'\n" +
                 "and rc.master_id='" + master + "' order by rc.recent_time desc";
@@ -326,7 +323,19 @@ public class ProjectDao{
 
         return projectEntityList;
     }
+    public List<ProjectEntity> findProjectSortRecentTime(ProjectQuery projectQuery){
+        String master = projectQuery.getRecentMasterId();
 
+        String sql = "SELECT pr.*, rc.recent_time, rc.master_id as click_user from pmc_project pr LEFT JOIN pmc_recent rc on pr.id = rc.model_id where rc.model='project' and rc.master_id= '"+
+                master + "'";
+        String projectId = projectQuery.getProjectId();
+        if(projectId != null){
+            sql = sql + " and pr.id != '" + projectId + "'";
+        }
+        sql = sql + " order by rc.recent_time desc NULLS LAST";
+        List<ProjectEntity> projectEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectEntity.class));
+        return projectEntityList;
+    }
 
     /**
      * 查找我收藏的项目

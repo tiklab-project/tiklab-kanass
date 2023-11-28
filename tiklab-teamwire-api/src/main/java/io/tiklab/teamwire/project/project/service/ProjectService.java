@@ -5,6 +5,7 @@ import io.tiklab.join.annotation.FindList;
 import io.tiklab.join.annotation.JoinProvider;
 import io.tiklab.join.annotation.FindAll;
 import io.tiklab.join.annotation.FindOne;
+import io.tiklab.teamwire.home.statistic.model.ProjectWorkItemStat;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
 import io.tiklab.teamwire.workitem.model.WorkTypeDm;
@@ -124,7 +125,6 @@ public interface ProjectService {
     List<Project> findProjectListByKeyWords(String keyWord);
 
     String creatProjectKey(String projectName);
-
-//    Pagination<WorkItem> findProjectByKeyWorks(WorkItemQuery workItemQuery);
+    List<Project> findProjectSortRecentTime(ProjectQuery projectQuery);
 
 }

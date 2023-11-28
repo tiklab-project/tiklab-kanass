@@ -24,15 +24,6 @@ import java.util.List;
 @Mapper
 @Join
 public class Project extends BaseModel{
-//    public interface Insert{}
-//
-//    public interface Update{}
-
-//    @ApiProperty(name="id",desc = "项目ID")
-//    @NotNull(groups = {Update.class})
-//    @IndexField
-//    @IndexId
-//    private String id;
 
     /**
      * @pi.name: id
@@ -125,16 +116,19 @@ public class Project extends BaseModel{
     private java.lang.String projectState;
 
     @ApiProperty(name="percent",desc="完成率")
-    private Integer percent;
+    private int percent;
 
-    @ApiProperty(name="worklItemNumber",desc="事项数量")
-    private Integer worklItemNumber;
+    @ApiProperty(name="workItemNumber",desc="事项数量")
+    private int workItemNumber;
 
-    @ApiProperty(name="quantityNumber",desc="完成数量")
-    private Integer quantityNumber;
+    @ApiProperty(name="endWorkItemNumber",desc="完成数量")
+    private int endWorkItemNumber;
+
+    @ApiProperty(name="processWorkItemNumber",desc="进行中数量")
+    private int processWorkItemNumber;
 
     @ApiProperty(name="member",desc="成员")
-    private Integer member;
+    private int member;
 
     @ApiProperty(name="sprintList",desc="迭代")
     private List<Sprint> sprintList;
@@ -142,7 +136,7 @@ public class Project extends BaseModel{
     @ApiProperty(name="iconUrl",desc="项目类型icon")
     private java.lang.String iconUrl;
 
-    public java.lang.String getId() {
+    public String getId() {
         return id;
     }
 
@@ -158,7 +152,23 @@ public class Project extends BaseModel{
         this.projectKey = projectKey;
     }
 
-    public java.lang.String getProjectName() {
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getProjectLimits() {
+        return projectLimits;
+    }
+
+    public void setProjectLimits(String projectLimits) {
+        this.projectLimits = projectLimits;
+    }
+
+    public String getProjectName() {
         return projectName;
     }
 
@@ -174,22 +184,6 @@ public class Project extends BaseModel{
         this.projectType = projectType;
     }
 
-    public String getProjectSetId() {
-        return projectSetId;
-    }
-
-    public void setProjectSetId(String projectSetId) {
-        this.projectSetId = projectSetId;
-    }
-
-    public java.lang.String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public User getMaster() {
         return master;
     }
@@ -198,52 +192,20 @@ public class Project extends BaseModel{
         this.master = master;
     }
 
-    public Integer getPercent() {
-        return percent;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setPercent(Integer percent) {
-        this.percent = percent;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public Integer getWorklItemNumber() {
-        return worklItemNumber;
+    public String getProjectSetId() {
+        return projectSetId;
     }
 
-    public void setWorklItemNumber(Integer worklItemNumber) {
-        this.worklItemNumber = worklItemNumber;
-    }
-
-    public Integer getQuantityNumber() {
-        return quantityNumber;
-    }
-
-    public void setQuantityNumber(Integer quantityNumber) {
-        this.quantityNumber = quantityNumber;
-    }
-
-    public Integer getMember() {
-        return member;
-    }
-
-    public void setMember(Integer member) {
-        this.member = member;
-    }
-
-    public List<Sprint> getSprintList() {
-        return sprintList;
-    }
-
-    public void setSprintList(List<Sprint> sprintList) {
-        this.sprintList = sprintList;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setProjectSetId(String projectSetId) {
+        this.projectSetId = projectSetId;
     }
 
     public Date getStartTime() {
@@ -270,19 +232,59 @@ public class Project extends BaseModel{
         this.projectState = projectState;
     }
 
+    public int getPercent() {
+        return percent;
+    }
+
+    public void setPercent(int percent) {
+        this.percent = percent;
+    }
+
+    public int getWorkItemNumber() {
+        return workItemNumber;
+    }
+
+    public void setWorkItemNumber(int workItemNumber) {
+        this.workItemNumber = workItemNumber;
+    }
+
+    public int getEndWorkItemNumber() {
+        return endWorkItemNumber;
+    }
+
+    public void setEndWorkItemNumber(int endWorkItemNumber) {
+        this.endWorkItemNumber = endWorkItemNumber;
+    }
+
+    public int getProcessWorkItemNumber() {
+        return processWorkItemNumber;
+    }
+
+    public void setProcessWorkItemNumber(int processWorkItemNumber) {
+        this.processWorkItemNumber = processWorkItemNumber;
+    }
+
+    public int getMember() {
+        return member;
+    }
+
+    public void setMember(int member) {
+        this.member = member;
+    }
+
+    public List<Sprint> getSprintList() {
+        return sprintList;
+    }
+
+    public void setSprintList(List<Sprint> sprintList) {
+        this.sprintList = sprintList;
+    }
+
     public String getIconUrl() {
         return iconUrl;
     }
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
-    }
-
-    public String getProjectLimits() {
-        return projectLimits;
-    }
-
-    public void setProjectLimits(String projectLimits) {
-        this.projectLimits = projectLimits;
     }
 }

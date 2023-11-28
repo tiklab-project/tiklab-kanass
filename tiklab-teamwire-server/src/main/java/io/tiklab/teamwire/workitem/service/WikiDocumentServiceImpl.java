@@ -9,6 +9,7 @@ import io.tiklab.teamwire.project.wiki.model.KanassDocument;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
+import io.tiklab.teamwire.support.util.HttpClientTeamWireUtil;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
 import io.tiklab.teamwire.workitem.model.WorkItemDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocumentQuery;
@@ -36,11 +37,9 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
         return new RpcClientTeamWireUtil().rpcClient().getBean(DocumentService.class, new FixedLookup(url));
     }
 
-
-
-
     @Override
     public Pagination<KanassDocument> findUnRelationWorkDocumentList(WorkItemDocumentQuery workItemDocumentQuery) {
+
         DocumentQuery documentQuery = new DocumentQuery();
         documentQuery.setRepositoryId(workItemDocumentQuery.getRepositoryId());
         documentQuery.setRepositoryIds(workItemDocumentQuery.getRepositoryIds());
@@ -56,6 +55,9 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
         documentQuery.setIds(documentIds);
 
         Pagination<WikiDocument> documentPage = documentServiceRpc().findDocumentPage(documentQuery);
+
+//        HttpClientTeamWireUtil httpClientTeamWireUtil = new HttpClientTeamWireUtil();
+//        httpClientTeamWireUtil.httpResposeJson("/api/" )
 
         Pagination<KanassDocument> kanassDocumentPage = new Pagination<KanassDocument>();
         kanassDocumentPage.setTotalRecord(documentPage.getTotalRecord());

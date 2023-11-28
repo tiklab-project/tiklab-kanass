@@ -218,11 +218,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         for (Project project : projectList) {
             String id = project.getId();
             List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());
-
-            project.setWorklItemNumber(allList.size());
+            int size = allList.size();
+            project.setProcessWorkItemNumber(size);
 
             List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
-            project.setQuantityNumber(doneList.size());
+            project.setEndWorkItemNumber(doneList.size());
 
             DmUserQuery dmUserQuery = new DmUserQuery();
             dmUserQuery.setDomainId(id);
