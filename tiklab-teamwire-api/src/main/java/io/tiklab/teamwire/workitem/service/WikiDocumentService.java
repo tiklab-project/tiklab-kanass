@@ -1,7 +1,9 @@
 package io.tiklab.teamwire.workitem.service;
 
 import io.tiklab.core.page.Pagination;
+import io.tiklab.teamwire.project.wiki.model.DocumentQuery;
 import io.tiklab.teamwire.project.wiki.model.KanassDocument;
+import io.tiklab.teamwire.project.wiki.model.WikiDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocumentQuery;
 
 import javax.validation.Valid;
@@ -19,6 +21,6 @@ public interface WikiDocumentService {
     * @return
     */
     Pagination<KanassDocument> findUnRelationWorkDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
-
+    List<WikiDocument> findDocumentList(@NotNull @Valid DocumentQuery documentQuery);
 
 }

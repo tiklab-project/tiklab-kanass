@@ -6,14 +6,19 @@ import io.tiklab.postin.annotation.Api;
 import io.tiklab.postin.annotation.ApiMethod;
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
 import io.tiklab.teamwire.workitem.service.WorkRepositoryService;
+import io.tiklab.user.dmUser.model.DmUser;
+import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -37,8 +42,8 @@ public class WorkRepositoryController {
 
     @RequestMapping(path="/findRepositoryUserList",method = RequestMethod.POST)
     @ApiMethod(name = "findRepository",desc = "findRepository")
-    public Result<List<User>> findRepositoryUserList(List<String> repositoryIds){
-        List<User> repositoryUserList = workRepositoryService.findRepositoryUserList(repositoryIds);
+    public Result<List<DmUser>> findRepositoryUserList(@RequestBody @NotNull @Valid DmUserQuery dmUserQuery){
+        List<DmUser> repositoryUserList = workRepositoryService.findRepositoryUserList(dmUserQuery);
 
         return Result.ok(repositoryUserList);
     }

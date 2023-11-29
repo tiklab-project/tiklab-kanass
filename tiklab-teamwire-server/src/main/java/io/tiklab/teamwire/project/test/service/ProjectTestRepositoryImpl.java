@@ -4,7 +4,6 @@ import io.tiklab.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.join.JoinTemplate;
-import io.tiklab.rpc.client.router.lookup.FixedLookup;
 import io.tiklab.teamwire.project.test.dao.ProjectTestRepositoryDao;
 import io.tiklab.teamwire.project.test.entity.ProjectTestRepositoryEntity;
 import io.tiklab.teamwire.project.test.model.ProjectTestRepository;
@@ -13,8 +12,6 @@ import io.tiklab.teamwire.project.test.model.TestRepository;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.service.SystemUrlService;
 import io.tiklab.teamwire.support.support.SystemId;
-import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
-import io.tiklab.teston.repository.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +39,10 @@ public class ProjectTestRepositoryImpl implements ProjectTestRepositoryService {
 
     @Autowired
     SystemUrlService systemUrlService;
-    RepositoryService repositoryServiceRpc(){
+    String getSystemUrl(){
         SystemUrl systemUrl = systemUrlService.findSystemUrl(SystemId.TESTON_ID);
         String url = systemUrl.getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(RepositoryService.class, new FixedLookup(url));
+        return url;
     }
 
     @Override
@@ -142,7 +139,6 @@ public class ProjectTestRepositoryImpl implements ProjectTestRepositoryService {
 
         if(repositoryIds.size() > 0){
             repositoryList = testRepositoryService.findList(repositoryIds);
-
         }
 
 

@@ -1,6 +1,8 @@
 package io.tiklab.teamwire.workitem.service;
 
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
+import io.tiklab.user.dmUser.model.DmUser;
+import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.user.model.User;
 
 import java.util.List;
@@ -18,6 +20,6 @@ public interface WorkRepositoryService {
 
     List<KanassRepository> findList(List<String> idList);
 
-    List<User> findRepositoryUserList(List<String> repositoryIds);
+    List<DmUser> findRepositoryUserList(DmUserQuery dmUserQuery);
 
 }

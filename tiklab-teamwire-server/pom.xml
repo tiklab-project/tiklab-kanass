@@ -152,11 +152,7 @@
         </dependency>
         <!--其它-->
 
-        <dependency>
-            <groupId>io.tiklab</groupId>
-            <artifactId>tiklab-teston-api</artifactId>
-            <version>${tiklab-teston.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>io.tiklab</groupId>
             <artifactId>tiklab-postin-annotation</artifactId>
@@ -167,17 +163,11 @@
             <artifactId>tiklab-postin-client</artifactId>
             <version>${tiklab-postin.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.tiklab</groupId>
-            <artifactId>tiklab-kanass-api</artifactId>
-            <version>${tiklab-kanass.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.tiklab</groupId>
-            <artifactId>tiklab-postin-client</artifactId>
-            <version>${tiklab-postin.version}</version>
+            <artifactId>tiklab-privilege-api</artifactId>
+            <version>${tiklab-privilege.version}</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

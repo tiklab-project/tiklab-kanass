@@ -1,18 +1,13 @@
 package io.tiklab.teamwire.workitem.service;
 
-import io.tiklab.core.Result;
 import io.tiklab.core.page.Pagination;
-import io.tiklab.kanass.document.model.WikiDocument;
-import io.tiklab.kanass.document.model.DocumentQuery;
-import io.tiklab.kanass.document.service.DocumentService;
-import io.tiklab.rpc.client.router.lookup.FixedLookup;
+import io.tiklab.teamwire.project.wiki.model.DocumentQuery;
 import io.tiklab.teamwire.project.wiki.model.KanassDocument;
+import io.tiklab.teamwire.project.wiki.model.WikiDocument;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
-import io.tiklab.teamwire.support.util.HttpClientTeamWireUtil;
-import io.tiklab.teamwire.support.util.PipelineRequestUtil;
-import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
+import io.tiklab.teamwire.support.util.HttpRequestUtil;
 import io.tiklab.teamwire.workitem.model.WorkItemDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocumentQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +22,19 @@ import java.util.stream.Collectors;
 @Service
 public class WikiDocumentServiceImpl implements WikiDocumentService {
     @Autowired
-    PipelineRequestUtil pipelineRequestUtil;
+    HttpRequestUtil httpRequestUtil;
     @Autowired
     WorkItemDocumentService workItemDocumentService;
 
     @Autowired
     SystemUrlService systemUrlService;
 
-    DocumentService get(){
+    String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(DocumentService.class, new FixedLookup(url));
+        return url;
     }
 
     @Override
@@ -61,9 +56,9 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
 
 //        Pagination<WikiDocument> documentPage = documentServiceRpc().findDocumentPage(documentQuery);
 
-        HttpHeaders httpHeaders = pipelineRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-        Pagination<WikiDocument> documentPage = pipelineRequestUtil.requestPostPage(httpHeaders, "http://192.168.10.14:8060/api/document/findDocumentPage", documentQuery, WikiDocument.class);
-
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        Pagination<WikiDocument> documentPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/document/findDocumentPage", documentQuery, WikiDocument.class);
 
         Pagination<KanassDocument> kanassDocumentPage = new Pagination<KanassDocument>();
         kanassDocumentPage.setTotalRecord(documentPage.getTotalRecord());
@@ -85,4 +80,15 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
         kanassDocumentPage.setDataList(kanassDocumentList);
         return kanassDocumentPage;
     }
+
+    @Override
+    public List<WikiDocument> findDocumentList(DocumentQuery documentQuery) {
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        List<WikiDocument> wikiDocumentList = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/document/findDocumentList", documentQuery, WikiDocument.class);
+        
+        return wikiDocumentList;
+    }
+
+
 }

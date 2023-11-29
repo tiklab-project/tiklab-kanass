@@ -236,7 +236,7 @@ public class ProjectController {
      * @pi.path:/project/findProjectListByKeyWords
      * @pi.method:post
      * @pi.request-type:formdata
-     * @pi.param: name=keyWord;dataType=string;value=masterId;
+     * @pi.param: name=keyWord;dataType=string;value=keyWord;
      */
     @RequestMapping(path = "/findProjectListByKeyWords",method = RequestMethod.POST)
     @ApiMethod(name = "findProjectListByKeyWords",desc = "根据标题关键字查找事项列表")

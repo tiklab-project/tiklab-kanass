@@ -9,21 +9,25 @@ import io.tiklab.join.JoinTemplate;
 import io.tiklab.rpc.annotation.Exporter;
 import io.tiklab.rpc.client.router.lookup.FixedLookup;
 import io.tiklab.teamwire.project.test.model.ProjectTestCase;
+import io.tiklab.teamwire.project.test.model.TestCase;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
+import io.tiklab.teamwire.support.util.HttpRequestUtil;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
 import io.tiklab.teamwire.workitem.dao.WorkTestCaseDao;
 import io.tiklab.teamwire.workitem.entity.WorkTestCaseEntity;
 import io.tiklab.teamwire.workitem.model.WorkTestCase;
 import io.tiklab.teamwire.workitem.model.WorkTestCaseQuery;
 import io.tiklab.teston.test.test.model.TestCaseQuery;
-import io.tiklab.teston.test.test.model.TestCase;
-import io.tiklab.teston.test.test.service.TestCaseService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
@@ -43,19 +47,20 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
     @Autowired
     WorkTestCaseDao workTestCaseDao;
 
-
+    @Autowired
+    HttpRequestUtil httpRequestUtil;
     @Autowired
     JoinTemplate joinTemplate;
 
     @Autowired
     SystemUrlService systemUrlService;
 
-    TestCaseService testCaseServiceRpc(){
+    String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("teston");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(TestCaseService.class, new FixedLookup(url));
+        return url;
     }
 
     UserService userServiceRpc(){
@@ -161,7 +166,13 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         List<ProjectTestCase> list = new ArrayList<>();
         if (!ObjectUtils.isEmpty(workTestCaseList)){
             for (WorkTestCase workTestCase:workTestCaseList){
-                TestCase testCase = testCaseServiceRpc().findTestCase(workTestCase.getTestCaseId());
+                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+                String systemUrl = getSystemUrl();
+                MultiValueMap param = new LinkedMultiValueMap<>();
+                param.add("id", workTestCase.getTestCaseId());
+                TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
+
+//                TestCase testCase = testCaseServiceRpc().findTestCase(workTestCase.getTestCaseId());
                 ProjectTestCase projectTestCase = new ProjectTestCase();
 
                 if (!ObjectUtils.isEmpty(testCase)){
@@ -212,8 +223,10 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         testCaseQuery.setInList(repositoryIds);
         testCaseQuery.setName(workTestCaseQuery.getName());
         testCaseQuery.setCreateUser(workTestCaseQuery.getCreatUserId());
-        Pagination<TestCase> testCaseListPage = testCaseServiceRpc().findTestCasePage(testCaseQuery);
 
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        Pagination<TestCase> testCaseListPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/testCase/findTestCasePage", testCaseQuery, TestCase.class);
 
         Pagination<ProjectTestCase> projectTestCasePagination = new Pagination<ProjectTestCase>();
         projectTestCasePagination.setTotalRecord(testCaseListPage.getTotalRecord());

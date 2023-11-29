@@ -10,13 +10,13 @@ public class KanassDocument {
     @ApiProperty(name="id",desc="id")
     private String id;
 
-    @ApiProperty(name="KanassRepositoryName",desc="测试仓库名称")
+    @ApiProperty(name="KanassRepositoryName",desc="知识库名称")
     private String KanassRepositoryName;
 
-    @ApiProperty(name="KanassRepositoryId",desc="测试仓库id")
+    @ApiProperty(name="KanassRepositoryId",desc="知识库id")
     private String KanassRepositoryId;
 
-    @ApiProperty(name="DocumentName",desc="测试仓库名称")
+    @ApiProperty(name="DocumentName",desc="知识库名称")
     private String DocumentName;
 
     @ApiProperty(name="UserName",desc="父级阶段")

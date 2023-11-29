@@ -9,16 +9,21 @@ import io.tiklab.join.annotation.Join;
 
 import java.io.Serializable;
 import java.util.List;
-
 /**
  * 事项查找条件模型
+ * @pi.model: WorkItemQuery
  */
 @ApiModel
 @Join
 public class WorkItemQuery implements Serializable {
 
+    /**
+     * @pi.name: id
+     * @pi.value: String
+     */
     @ApiProperty(name ="id",desc = "事项ID，精确匹配")
     private String id;
+
 
     @ApiProperty(name ="ids",desc = "事项ID，精确匹配")
     private String[] ids;
@@ -29,6 +34,10 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="epicView",desc = "是否史诗视图，精确匹配")
     private Boolean epicView;
 
+    /**
+     * @pi.name: overdue
+     * @pi.value: 是否逾期
+     */
     @ApiProperty(name ="overdue",desc = "是否逾期")
     private Boolean overdue;
 

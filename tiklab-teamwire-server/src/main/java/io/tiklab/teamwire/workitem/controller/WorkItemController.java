@@ -22,7 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 事项控制器
+ * @pi.protocol: http
+ * @pi.groupName: 事项控制器
  */
 @RestController
 @RequestMapping("/workItem")
@@ -34,6 +35,14 @@ public class WorkItemController {
     @Autowired
     private WorkItemService workItemService;
 
+
+    /**
+     * @pi.name:创建事项
+     * @pi.path:/workItem/createWorkItem
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItem
+     */
     @RequestMapping(path="/createWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "createWorkItem",desc = "创建事项")
     @ApiParam(name = "workItem",desc = "事项DTO",required = true)
@@ -43,6 +52,13 @@ public class WorkItemController {
         return Result.ok(id);
     }
 
+    /**
+     * @pi.name:创建事项
+     * @pi.path:/workItem/updateWorkItem
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItem
+     */
     @RequestMapping(path="/updateWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "updateWorkItem",desc = "更新事项")
     @ApiParam(name = "workItem",desc = "事项DTO",required = true)
@@ -52,6 +68,13 @@ public class WorkItemController {
         return Result.ok();
     }
 
+    /**
+     * @pi.name:根据事项ID删除事项
+     * @pi.path:/workItem/deleteWorkItem
+     * @pi.method:post
+     * @pi.request-type:formdata
+     * @pi.param: name=id;dataType=string;value=id;
+     */
     @RequestMapping(path="/deleteWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "deleteWorkItem",desc = "根据事项ID删除事项")
     @ApiParam(name = "id",desc = "事项ID",required = true)
@@ -61,6 +84,13 @@ public class WorkItemController {
         return Result.ok();
     }
 
+    /**
+     * @pi.name:根据事项ID查找事项
+     * @pi.path:/workItem/findWorkItem
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItem
+     */
     @RequestMapping(path="/findWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItem",desc = "根据事项ID查找事项")
     @ApiParam(name = "id",desc = "事项ID",required = true)
@@ -70,6 +100,12 @@ public class WorkItemController {
         return Result.ok(workItem);
     }
 
+    /**
+     * @pi.name:查找所有事项
+     * @pi.path:/workItem/findAllWorkItem
+     * @pi.method:post
+     * @pi.request-type:json
+     */
     @RequestMapping(path="/findAllWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "findAllWorkItem",desc = "查找所有事项")
     public Result<List<WorkItem>> findAllWorkItem(){
@@ -78,7 +114,13 @@ public class WorkItemController {
         return Result.ok(workItemList);
     }
 
-
+    /**
+     * @pi.name:根据事项ID查找事项
+     * @pi.path:/workItem/findWorkItemList
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemList",desc = "根据查询对象查找事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -88,6 +130,13 @@ public class WorkItemController {
         return Result.ok(workItemList);
     }
 
+    /**
+     * @pi.name:根据事项ID查找事项
+     * @pi.path:/workItem/findWorkItemList
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findEpicSelectWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findEpicSelectWorkItemList",desc = "根据查询对象查找可被史诗添加的子事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -97,6 +146,13 @@ public class WorkItemController {
         return Result.ok(workItemList);
     }
 
+    /**
+     * @pi.name:根据查询对象查找可被其他类型  添加的子事项列表
+     * @pi.path:/workItem/findSelectWorkItemList
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findSelectWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findSelectWorkItemList",desc = "根据查询对象查找可被其他类型  添加的子事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -107,6 +163,13 @@ public class WorkItemController {
     }
 
 
+    /**
+     * @pi.name:根据查询对象查找事项列表树
+     * @pi.path:/workItem/findWorkItemListTree
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemListTree",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemListTree",desc = "根据查询对象查找事项列表树")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -116,6 +179,13 @@ public class WorkItemController {
         return Result.ok(workItemList);
     }
 
+    /**
+     * @pi.name:根据查询对象查找事项列表树
+     * @pi.path:/workItem/findConditionWorkItemPage
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findConditionWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findConditionWorkItemPage",desc = "根据查询对象查找事项列表树")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -125,7 +195,13 @@ public class WorkItemController {
         return Result.ok(workItemList);
     }
 
-
+    /**
+     * @pi.name:根据查询对象按分页查找事项列表
+     * @pi.path:/workItem/findWorkItemPage
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemPage",desc = "根据查询对象按分页查找事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -136,6 +212,13 @@ public class WorkItemController {
     }
 
 
+    /**
+     * @pi.name:根据查询对象按分页查找事项列表树
+     * @pi.path:/workItem/findWorkItemPageTree
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemPageTree",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemPageTree",desc = "根据查询对象按分页查找事项列表树")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -145,6 +228,13 @@ public class WorkItemController {
         return Result.ok(pagination);
     }
 
+    /**
+     * @pi.name:根据条件查找事项列表树
+     * @pi.path:/workItem/findWorkItemPageTreeByQuery
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemPageTreeByQuery",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemPageTreeByQuery",desc = "根据条件查找事项列表树")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -159,6 +249,13 @@ public class WorkItemController {
         return Result.ok(workItemList);
     }
 
+    /**
+     * @pi.name:根据查询对象查找事项看板列表
+     * @pi.path:/workItem/findWorkBoardList
+     * @pi.method:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkBoardList",desc = "根据查询对象查找事项看板列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)

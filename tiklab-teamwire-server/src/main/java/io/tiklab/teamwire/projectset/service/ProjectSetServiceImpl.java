@@ -1,6 +1,7 @@
 package io.tiklab.teamwire.projectset.service;
 
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.privilege.dmRole.service.DmRoleService;
 import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.teamwire.project.project.model.Project;
 import io.tiklab.teamwire.project.project.model.ProjectQuery;
@@ -16,7 +17,6 @@ import io.tiklab.teamwire.workitem.model.WorkItem;
 import io.tiklab.teamwire.workitem.model.WorkItemQuery;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.join.JoinTemplate;
-import io.tiklab.privilege.dmRole.service.DmRoleService;
 
 import io.tiklab.core.page.Pagination;
 import io.tiklab.beans.BeanMapper;

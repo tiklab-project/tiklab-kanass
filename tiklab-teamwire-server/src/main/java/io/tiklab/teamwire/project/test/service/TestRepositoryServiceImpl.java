@@ -1,16 +1,15 @@
 package io.tiklab.teamwire.project.test.service;
 
-
 import io.tiklab.join.JoinTemplate;
-import io.tiklab.rpc.client.router.lookup.FixedLookup;
 import io.tiklab.teamwire.project.test.model.TestRepository;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
-import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
+import io.tiklab.teamwire.support.util.HttpRequestUtil;
 import io.tiklab.teston.repository.model.Repository;
-import io.tiklab.teston.repository.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,20 +22,27 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
     SystemUrlService systemUrlService;
 
     @Autowired
+    HttpRequestUtil httpRequestUtil;
+    @Autowired
     JoinTemplate joinTemplate;
 
-    RepositoryService repositoryServiceRpc(){
+    String getSystemUrl(){
 
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("teston");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(RepositoryService.class, new FixedLookup(url));
+        return url;
     }
 
     @Override
     public List<TestRepository> findAllRepository() {
-        List<Repository> allRepository = repositoryServiceRpc().findAllRepository();
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        List<Repository> allRepository = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/repository/findAllRepository", null, Repository.class);
+
+
+//        List<Repository> allRepository = repositoryServiceRpc().findAllRepository();
         List<TestRepository> testRepositoryList = new ArrayList<>();
         for (Repository repository : allRepository) {
             TestRepository testRepository = new TestRepository();
@@ -52,7 +58,12 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
 
     @Override
     public List<TestRepository> findList(List<String> idList) {
-        List<Repository> list = repositoryServiceRpc().findList(idList);
+
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        List<Repository> list = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/repository/findList", idList, Repository.class);
+
+//        List<Repository> list = repositoryServiceRpc().findList(idList);
         joinTemplate.joinQuery(list);
         List<TestRepository> testRepositoryList = new ArrayList<>();
         for (Repository repository : list) {

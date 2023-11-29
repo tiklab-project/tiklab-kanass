@@ -1,14 +1,12 @@
 package io.tiklab.teamwire.workitem.service;
 
-import io.tiklab.kanass.document.model.WikiDocument;
-import io.tiklab.kanass.document.model.DocumentQuery;
-import io.tiklab.kanass.document.service.DocumentService;
-import io.tiklab.rpc.client.router.lookup.FixedLookup;
+import io.tiklab.teamwire.project.wiki.model.DocumentQuery;
 import io.tiklab.teamwire.project.wiki.model.KanassDocument;
+import io.tiklab.teamwire.project.wiki.model.WikiDocument;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
-import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
+import io.tiklab.teamwire.support.util.HttpRequestUtil;
 import io.tiklab.teamwire.workitem.model.WorkItemDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocumentQuery;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
@@ -23,7 +21,11 @@ import io.tiklab.beans.BeanMapper;
 import io.tiklab.join.JoinTemplate;
 import io.tiklab.rpc.annotation.Exporter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
@@ -43,17 +45,19 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
     WorkItemDocumentDao workItemDocumentDao;
 
     @Autowired
+    HttpRequestUtil httpRequestUtil;
+    @Autowired
     JoinTemplate joinTemplate;
 
     @Autowired
     SystemUrlService systemUrlService;
 
-    DocumentService documentServiceRpc(){
+    String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(DocumentService.class, new FixedLookup(url));
+        return url;
     }
     @Override
     public String createWorkItemDocument(@NotNull List<WorkItemDocument> workItemDocument) {
@@ -152,7 +156,16 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
             for (WorkItemDocument workItemDocument:workItemDocumentList){
                 DocumentQuery documentQuery = new DocumentQuery();
                 documentQuery.setId(workItemDocument.getDocumentId());
-                WikiDocument wikiDocument = documentServiceRpc().findDocument(workItemDocument.getDocumentId());
+
+                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+                String systemUrl = getSystemUrl();
+
+                MultiValueMap param = new LinkedMultiValueMap<>();
+                param.add("id", workItemDocument.getDocumentId());
+                WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/document/findDocument", param, WikiDocument.class);
+
+
+//                WikiDocument wikiDocument = documentServiceRpc().findDocument(workItemDocument.getDocumentId());
                 KanassDocument kanassDocument = new KanassDocument();
                 if (!ObjectUtils.isEmpty(wikiDocument)){
 

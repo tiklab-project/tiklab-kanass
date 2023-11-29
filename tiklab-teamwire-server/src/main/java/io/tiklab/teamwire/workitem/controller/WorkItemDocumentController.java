@@ -2,22 +2,16 @@ package io.tiklab.teamwire.workitem.controller;
 
 import io.tiklab.core.Result;
 import io.tiklab.core.page.Pagination;
-import io.tiklab.kanass.document.model.WikiDocument;
-import io.tiklab.kanass.document.model.DocumentQuery;
-import io.tiklab.kanass.document.service.DocumentService;
 import io.tiklab.postin.annotation.Api;
 import io.tiklab.postin.annotation.ApiMethod;
 import io.tiklab.postin.annotation.ApiParam;
-import io.tiklab.rpc.annotation.Reference;
 import io.tiklab.teamwire.project.wiki.model.KanassDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocument;
 import io.tiklab.teamwire.workitem.model.WorkItemDocumentQuery;
 import io.tiklab.teamwire.workitem.service.WorkItemDocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,9 +36,7 @@ public class WorkItemDocumentController {
     @Autowired
     private WorkItemDocumentService workItemDocumentService;
 
-    @Autowired
-    @Reference(address = "${kanass.address}")
-    private DocumentService documentService;
+
 
 
     @RequestMapping(path="/createWorkItemDocument",method = RequestMethod.POST)
@@ -117,32 +109,7 @@ public class WorkItemDocumentController {
         return Result.ok(documentPageByWorkItemId);
     }
 
-    @RequestMapping(path = "/findNotAssItemDocument",method = RequestMethod.POST)
-    @ApiMethod(name = "findNotAssItemDocument",desc = "通过对象查询该事项的文档")
-    @ApiParam(name = "workItemDocumentQuery",desc = "传参 事项id 和分页参数 name",required = true)
-    public Result<Pagination<WikiDocument>> findNotAssItemDocument(@RequestBody @Valid @NotNull WorkItemDocumentQuery workItemDocumentQuery){
-        //查询事项文档关联表
-        List<WorkItemDocument> itemDocumentList = workItemDocumentService.findWorkItemDocumentList(workItemDocumentQuery);
-        DocumentQuery documentQuery = new DocumentQuery();
-        BeanUtils.copyProperties(workItemDocumentQuery,documentQuery);
-        //分页查询所有文档
-        Pagination<WikiDocument> documentPage = documentService.findDocumentPage(documentQuery);
-        if (!ObjectUtils.isEmpty(documentPage)){
-                List<WikiDocument> wikiDocuments = documentPage.getDataList();
-            if (!ObjectUtils.isEmpty(itemDocumentList)){
-                for (WorkItemDocument document:itemDocumentList){
-                    List<WikiDocument> collect = wikiDocuments.stream().filter(a -> a.getId().equals(document.getDocumentId())).collect(Collectors.toList());
-                    if (!ObjectUtils.isEmpty(collect)){
-                        collect.stream().map(a -> {
-                            a.setRele(true);
-                            return a;
-                        }).collect(Collectors.toList());
-                    }
-                }
-            }
-        }
-        return Result.ok(documentPage);
-    }
+
 
     @RequestMapping(path="/deleteWorkItemDocumentRele",method = RequestMethod.POST)
     @ApiMethod(name = "deleteWorkItemDocumentRele",desc = "通过文档id 和事项id 删除")

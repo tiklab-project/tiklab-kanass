@@ -1,16 +1,21 @@
 package io.tiklab.teamwire.workitem.service;
 
-import io.tiklab.kanass.repository.model.WikiRepository;
-import io.tiklab.kanass.repository.service.WikiRepositoryService;
 import io.tiklab.rpc.client.router.lookup.FixedLookup;
 import io.tiklab.teamwire.project.wiki.model.KanassRepository;
+import io.tiklab.teamwire.project.wiki.model.WikiDocument;
+import io.tiklab.teamwire.project.wiki.model.WikiRepository;
 import io.tiklab.teamwire.support.model.SystemUrl;
 import io.tiklab.teamwire.support.model.SystemUrlQuery;
 import io.tiklab.teamwire.support.service.SystemUrlService;
+import io.tiklab.teamwire.support.util.HttpRequestUtil;
 import io.tiklab.teamwire.support.util.RpcClientTeamWireUtil;
+import io.tiklab.user.dmUser.model.DmUser;
+import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,26 +27,32 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
     @Autowired
     SystemUrlService systemUrlService;
 
-    WikiRepositoryService repositoryServiceRpc(){
+    @Autowired
+    HttpRequestUtil httpRequestUtil;
+
+    String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(WikiRepositoryService.class, new FixedLookup(url));
+        return url;
     }
 
-    UserService userServiceRpc(){
-        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("kanass");
-        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
-        String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
-    }
+//    UserService userServiceRpc(){
+//        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
+//        systemUrlQuery.setName("kanass");
+//        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
+//        String url = systemUrlList.get(0).getSystemUrl();
+//        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
+//    }
 
 
     @Override
     public List<KanassRepository> findAllRepository() {
-        List<WikiRepository> allRepository = repositoryServiceRpc().findAllRepository();
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        List<WikiRepository> allRepository = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/repository/findAllRepository", null, WikiRepository.class);
+
         List<KanassRepository> kanassRepositoryList = new ArrayList<KanassRepository>();
         for (WikiRepository wikiRepository : allRepository) {
             KanassRepository kanassRepository = new KanassRepository();
@@ -58,7 +69,12 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
 
     @Override
     public List<KanassRepository> findList(List<String> idList) {
-        List<WikiRepository> list = repositoryServiceRpc().findList(idList);
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        List<WikiRepository> list = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/repository/findList", idList, WikiRepository.class);
+
+
+//        List<WikiRepository> list = repositoryServiceRpc().findList(idList);
         List<KanassRepository> kanassRepositoryList = new ArrayList<KanassRepository>();
         for (WikiRepository wikiRepository : list) {
             KanassRepository kanassRepository = new KanassRepository();
@@ -74,9 +90,13 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
     }
 
     @Override
-    public List<User> findRepositoryUserList(List<String> repositoryIds){
-        List<User> allUser = userServiceRpc().findAllUser();
-        return allUser;
+    public List<DmUser> findRepositoryUserList(DmUserQuery dmUserQuery){
+//        List<User> allUser = userServiceRpc().findAllUser();
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        List<DmUser> dmUsers = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/dmUser/findDmUserList", dmUserQuery, DmUser.class);
+
+        return dmUsers;
     }
 
 }
