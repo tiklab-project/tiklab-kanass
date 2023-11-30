@@ -39,7 +39,7 @@ public class WorkItemController {
     /**
      * @pi.name:创建事项
      * @pi.path:/workItem/createWorkItem
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItem
      */
@@ -55,7 +55,7 @@ public class WorkItemController {
     /**
      * @pi.name:创建事项
      * @pi.path:/workItem/updateWorkItem
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItem
      */
@@ -71,7 +71,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据事项ID删除事项
      * @pi.path:/workItem/deleteWorkItem
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=id;dataType=string;value=id;
      */
@@ -87,9 +87,9 @@ public class WorkItemController {
     /**
      * @pi.name:根据事项ID查找事项
      * @pi.path:/workItem/findWorkItem
-     * @pi.method:post
-     * @pi.request-type:json
-     * @pi.param: model=WorkItem
+     * @pi.methodType:post
+     * @pi.request-type:formdata
+     * @pi.param: name=id;dataType=string;value=id;
      */
     @RequestMapping(path="/findWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItem",desc = "根据事项ID查找事项")
@@ -103,8 +103,8 @@ public class WorkItemController {
     /**
      * @pi.name:查找所有事项
      * @pi.path:/workItem/findAllWorkItem
-     * @pi.method:post
-     * @pi.request-type:json
+     * @pi.methodType:post
+     * @pi.request-type:none
      */
     @RequestMapping(path="/findAllWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "findAllWorkItem",desc = "查找所有事项")
@@ -117,7 +117,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据事项ID查找事项
      * @pi.path:/workItem/findWorkItemList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -133,7 +133,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据事项ID查找事项
      * @pi.path:/workItem/findWorkItemList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -149,7 +149,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据查询对象查找可被其他类型  添加的子事项列表
      * @pi.path:/workItem/findSelectWorkItemList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -166,7 +166,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据查询对象查找事项列表树
      * @pi.path:/workItem/findWorkItemListTree
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -182,7 +182,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据查询对象查找事项列表树
      * @pi.path:/workItem/findConditionWorkItemPage
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -198,7 +198,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据查询对象按分页查找事项列表
      * @pi.path:/workItem/findWorkItemPage
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -215,7 +215,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据查询对象按分页查找事项列表树
      * @pi.path:/workItem/findWorkItemPageTree
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -231,7 +231,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据条件查找事项列表树
      * @pi.path:/workItem/findWorkItemPageTreeByQuery
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -252,7 +252,7 @@ public class WorkItemController {
     /**
      * @pi.name:根据查询对象查找事项看板列表
      * @pi.path:/workItem/findWorkBoardList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
@@ -265,7 +265,13 @@ public class WorkItemController {
         return Result.ok(workBoardList);
     }
 
-
+    /**
+     * @pi.name:根据查询对象查找事项看板列表
+     * @pi.path:/workItem/findChangePageWorkBoardList
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findChangePageWorkBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findChangePageWorkBoardList",desc = "根据查询对象查找事项看板列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -275,6 +281,13 @@ public class WorkItemController {
         return Result.ok(changePageWorkBoardList);
     }
 
+    /**
+     * @pi.name:根据查询对象查找事项看板列表
+     * @pi.path:/workItem/findWorkUserGroupBoardList
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkUserGroupBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkUserGroupBoardList",desc = "根据查询对象查找事项看板列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -294,8 +307,15 @@ public class WorkItemController {
 //        return Result.ok(workBoard);
 //    }
 
+    /**
+     * @pi.name:根据查询对象按分页查找未被史诗关联的事项列表
+     * @pi.path:/workItem/findUnEpicWorkItemPage
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findUnEpicWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findUnEpicWorkItemPage",desc = "根据查询对象按分页查找事项列表")
+    @ApiMethod(name = "findUnEpicWorkItemPage",desc = "根据查询对象按分页查找未被史诗关联的事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findUnEpicWorkItemPage(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> pagination = workItemService.findUnEpicWorkItemPage(workItemQuery);
@@ -303,6 +323,13 @@ public class WorkItemController {
         return Result.ok(pagination);
     }
 
+    /**
+     * @pi.name:根据查询对象按分页查找未被计划关联的事项列表
+     * @pi.path:/workItem/findUnPlanWorkItemPage
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findUnPlanWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findUnPlanWorkItemPage",desc = "根据查询对象按分页查找事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -312,6 +339,13 @@ public class WorkItemController {
         return Result.ok(pagination);
     }
 
+    /**
+     * @pi.name:根据名称查找事项列表
+     * @pi.path:/workItem/findWorkItemByKeyWorks
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemByKeyWorks",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemByKeyWorks",desc = "根据查询对象按分页查找事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -321,6 +355,13 @@ public class WorkItemController {
         return Result.ok(pagination);
     }
 
+    /**
+     * @pi.name:按照分类查找各个事项类型的事项数量
+     * @pi.path:/workItem/findWorkItemNumByWorkType
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemNumByWorkType",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemNumByWorkType",desc = "根据查询对象按分页查找事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -330,6 +371,13 @@ public class WorkItemController {
         return Result.ok(workItemNumByWorkType);
     }
 
+    /**
+     * @pi.name:查找各个事项状态的事项数量
+     * @pi.path:/workItem/findWorkItemNumByWorkStatus
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemNumByWorkStatus",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemNumByWorkStatus",desc = "根据查询事项状态查找事项数量")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -339,6 +387,13 @@ public class WorkItemController {
         return Result.ok(workItemNumByWorkType);
     }
 
+    /**
+     * @pi.name:按照快速搜索条件查找各个条件下事项的数量
+     * @pi.path:/workItem/findWorkItemNumByQuickSearch
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemNumByQuickSearch",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemNumByQuickSearch",desc = "根据快速筛选查询事项状态查找事项数量")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -348,6 +403,13 @@ public class WorkItemController {
         return Result.ok(workItemNumByWorkType);
     }
 
+    /**
+     * @pi.name:根据查询事项状态查找可被关联的上级事项
+     * @pi.path:/workItem/findCanBeRelationParentWorkItemList
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findCanBeRelationParentWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findCanBeRelationParentWorkItemList",desc = "根据查询事项状态查找可被关联的上级事项")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -357,6 +419,13 @@ public class WorkItemController {
         return Result.ok(canBeRelationParentWorkItemList);
     }
 
+    /**
+     * @pi.name:根据查询事项状态查找可被关联的前置事项
+     * @pi.path:/workItem/findCanBeRelationPerWorkItemList
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findCanBeRelationPerWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findCanBeRelationPerWorkItemList",desc = "根据查询事项状态查找可被关联的前置事项")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
@@ -366,6 +435,13 @@ public class WorkItemController {
         return Result.ok(canBeRelationPerWorkItemList);
     }
 
+    /**
+     * @pi.name:根据查询事项关联各个模型的数量，ex: 关联事项，下级事项， 日志， 文档，动态等
+     * @pi.path:/workItem/findWorkItemRelationModelCount
+     * @pi.methodType:post
+     * @pi.request-type:json
+     * @pi.param: model=WorkItemQuery
+     */
     @RequestMapping(path = "/findWorkItemRelationModelCount",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的前置事项")
     public Result<HashMap<String, Integer>> findWorkItemRelationModelCount(@NotNull String workItemId, @NotNull String workTypeCode){

@@ -42,7 +42,7 @@ public class ProjectController {
     /**
      * @pi.name:创建项目
      * @pi.path:/project/createProject
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=Project
      */
@@ -59,7 +59,7 @@ public class ProjectController {
     /**
      * @pi.name:更新项目
      * @pi.path:/project/updateProject
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=Project
      */
@@ -76,7 +76,7 @@ public class ProjectController {
     /**
      * @pi.name:根据项目ID删除项目
      * @pi.path:/project/deleteProject
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=id;dataType=string;value=id;
      */
@@ -92,7 +92,7 @@ public class ProjectController {
     /**
      * @pi.name:根据项目ID查找项目
      * @pi.path:/project/findProject
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=id;dataType=string;value=id;
      */
@@ -108,7 +108,7 @@ public class ProjectController {
     /**
      * @pi.name:根据项目ID查找项目和事项数量
      * @pi.path:/project/findProjectAndWorkNum
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=id;dataType=string;value=id;
      */
@@ -124,7 +124,7 @@ public class ProjectController {
     /**
      * @pi.name:根据项目ID查找项目和事项数量
      * @pi.path:/project/findAllProject
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:none
      */
     @RequestMapping(path="/findAllProject",method = RequestMethod.POST)
@@ -138,7 +138,7 @@ public class ProjectController {
     /**
      * @pi.name:根据查询对象查询项目列表
      * @pi.path:/project/findProjectList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
@@ -154,7 +154,7 @@ public class ProjectController {
     /**
      * @pi.name:查询我负责的项目列表
      * @pi.path:/project/findMaterProjectList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=masterId;dataType=string;value=masterId;
      */
@@ -170,7 +170,7 @@ public class ProjectController {
     /**
      * @pi.name:查询我参与的项目列表
      * @pi.path:/project/findJoinProjectList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
@@ -186,7 +186,7 @@ public class ProjectController {
     /**
      * @pi.name:根据查询对象按分页查询项目列表
      * @pi.path:/project/findProjectPage
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
@@ -202,7 +202,7 @@ public class ProjectController {
     /**
      * @pi.name:根据查询对象查询最近的项目列表
      * @pi.path:/project/findRecentProjectPage
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
@@ -218,7 +218,7 @@ public class ProjectController {
     /**
      * @pi.name:根据查询对象查询关注的项目列表
      * @pi.path:/project/findFocusProjectList
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
@@ -234,7 +234,7 @@ public class ProjectController {
     /**
      * @pi.name:根据标题关键字查找事项列表
      * @pi.path:/project/findProjectListByKeyWords
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=keyWord;dataType=string;value=keyWord;
      */
@@ -250,7 +250,7 @@ public class ProjectController {
     /**
      * @pi.name:根据标题关键字查找事项列表
      * @pi.path:/project/creatProjectKey
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:formdata
      * @pi.param: name=projectName;dataType=string;value=projectName;
      */
@@ -265,7 +265,7 @@ public class ProjectController {
     /**
      * @pi.name:根据标题关键字查找事项列表
      * @pi.path:/project/findProjectSortRecentTime
-     * @pi.method:post
+     * @pi.methodType:post
      * @pi.request-type:json
      * @pi.param: model=ProjectQuery
      */
