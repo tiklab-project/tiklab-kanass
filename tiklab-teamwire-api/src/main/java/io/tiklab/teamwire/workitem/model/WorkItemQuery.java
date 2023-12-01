@@ -24,6 +24,8 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="id",desc = "事项ID，精确匹配")
     private String id;
 
+    @ApiProperty(name ="statisticsNum",desc = "统计数量")
+    private Boolean statisticsNum;
 
     @ApiProperty(name ="ids",desc = "事项ID，精确匹配")
     private String[] ids;
@@ -643,5 +645,13 @@ public class WorkItemQuery implements Serializable {
 
     public void setIds(String[] ids) {
         this.ids = ids;
+    }
+
+    public Boolean getStatisticsNum() {
+        return statisticsNum;
+    }
+
+    public void setStatisticsNum(Boolean statisticsNum) {
+        this.statisticsNum = statisticsNum;
     }
 }

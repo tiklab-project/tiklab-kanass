@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * 事项服务接口
@@ -187,4 +188,6 @@ public interface WorkItemService {
     Pagination<WorkItem>findCanBeRelationPerWorkItemList(WorkItemQuery workItemQuery);
 
     HashMap<String, Integer>findWorkItemRelationModelCount(String workItemId, String workTypeCode);
+
+    List<Map<String, Object>> findWorkItemNum(String colunm, String ids);
 }

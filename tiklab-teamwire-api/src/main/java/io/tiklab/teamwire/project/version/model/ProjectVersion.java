@@ -46,6 +46,8 @@ public class ProjectVersion extends BaseModel {
     @ApiProperty(name = "relaPublishDate", desc = "实际发布日期")
     private Date relaPublishDate;
 
+    @ApiProperty(name = "workNumber", desc = "事项数量")
+    private int workNumber;
 
 
     @ApiProperty(name="versionState",desc="版本状态")
@@ -133,5 +135,13 @@ public class ProjectVersion extends BaseModel {
 
     public void setFocusIs(boolean focusIs) {
         this.focusIs = focusIs;
+    }
+
+    public int getWorkNumber() {
+        return workNumber;
+    }
+
+    public void setWorkNumber(int workNumber) {
+        this.workNumber = workNumber;
     }
 }

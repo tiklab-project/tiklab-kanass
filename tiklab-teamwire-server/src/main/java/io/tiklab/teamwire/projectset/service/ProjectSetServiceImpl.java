@@ -234,23 +234,6 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
 
 
-    @Override
-    public List<Sprint> findSprintList(String projectId) {
-        //查询迭代
-        List<Sprint> sprintList = findSprint(projectId);
-        List<Sprint> collect = sprintList.stream().map(sprint -> {
-            List<WorkItem> workItemList = findWorkItemList(sprint.getId(),1);
-            //添加总数
-            sprint.setWorkNumber(workItemList.size());
-
-            sprint.setQuantityNumber(0);
-            return sprint;
-        }).collect(Collectors.toList());
-        joinTemplate.joinQuery(collect);
-       return collect;
-    }
-
-
 
     @Override
     public Map findProjectIsOrNotRe()  {

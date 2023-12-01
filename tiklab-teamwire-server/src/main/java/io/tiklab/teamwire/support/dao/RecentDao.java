@@ -101,6 +101,7 @@ public class RecentDao{
                 .eq("modelId", recentQuery.getModelId())
                 .eq("masterId", recentQuery.getMasterId())
                 .eq("model", recentQuery.getModel())
+                .eq("projectId", recentQuery.getProjectId())
                 .orders(recentQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition,RecentEntity.class);

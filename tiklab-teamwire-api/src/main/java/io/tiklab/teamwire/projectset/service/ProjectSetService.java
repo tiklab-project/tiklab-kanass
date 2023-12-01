@@ -101,13 +101,6 @@ public interface ProjectSetService {
     void addRelevance(ProjectSet projectSet);
 
     /**
-     * 根据项目id查询相关的迭代
-     * @param
-     * @return
-     */
-    List<Sprint> findSprintList(String projectId);
-
-    /**
      * 根据条件查找关注的项目集列表
      * @param projectSetQuery
      * @return

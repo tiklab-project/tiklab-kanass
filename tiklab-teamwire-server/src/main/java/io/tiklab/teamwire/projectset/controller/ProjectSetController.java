@@ -122,14 +122,6 @@ public class ProjectSetController {
 
         return Result.ok(projectList);
     }
-    @RequestMapping(path = "/findSprintList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintList",desc = "根据项目id查询相关的迭代")
-    @ApiParam(name = "projectId",desc = "项目id",required = true)
-    public Result<List<Sprint>> findSprintList(@NotNull String projectId){
-        List<Sprint> projectList = projectSetService.findSprintList(projectId);
-
-        return Result.ok(projectList);
-    }
 
     @RequestMapping(path = "/findProjectIsOrNotRe",method = RequestMethod.POST)
     @ApiMethod(name = "findProjectIsOrNotRe",desc = "查询所有关联项目集项目和未关联项目")

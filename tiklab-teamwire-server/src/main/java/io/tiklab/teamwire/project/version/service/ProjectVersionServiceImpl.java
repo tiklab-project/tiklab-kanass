@@ -10,12 +10,16 @@ import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.join.JoinTemplate;
 import io.tiklab.teamwire.project.version.dao.ProjectVersionDao;
 import io.tiklab.teamwire.project.version.entity.ProjectVersionEntity;
+import io.tiklab.teamwire.sprint.model.Sprint;
+import io.tiklab.teamwire.workitem.service.WorkItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
 * 项目版本服务
@@ -25,6 +29,9 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Autowired
     ProjectVersionDao projectVersionDao;
+
+    @Autowired
+    WorkItemService workItemService;
 
     @Autowired
     VersionFocusService versionFocusService;
@@ -90,7 +97,15 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         List<ProjectVersionEntity> projectVersionEntityList = projectVersionDao.findVersionList(ProjectVersionQuery);
 
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(projectVersionEntityList, ProjectVersion.class);
-
+        // 查找版本的事项数量
+        String versionIds = "(" + projectVersionList.stream().map(item -> "'" + item.getId() + "'").
+                collect(Collectors.joining(", ")) + ")";
+        List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("version_id", versionIds);
+        for (ProjectVersion version : projectVersionList) {
+            String id = version.getId();
+            List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("version_id").equals(id)).collect(Collectors.toList());
+            version.setWorkNumber(countList.size());
+        }
         joinTemplate.joinQuery(projectVersionList);
 
         return projectVersionList;
@@ -100,13 +115,26 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     public Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery projectVersionQuery) {
         Pagination<ProjectVersionEntity>  pagination = projectVersionDao.findVersionPage(projectVersionQuery);
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(pagination.getDataList(), ProjectVersion.class);
-        List<String> focusVersionIds = versionFocusService.findFocusVersionIds();
-        for (ProjectVersion projectVersion : projectVersionList) {
-            String id = projectVersion.getId();
-            if(focusVersionIds.contains(id)){
-                projectVersion.setFocusIs(true);
+
+        if(projectVersionList.size() > 0){
+            List<String> focusVersionIds = versionFocusService.findFocusVersionIds();
+            String versionIds = "(" + projectVersionList.stream().map(item -> "'" + item.getId() + "'").
+                    collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> versionCount = workItemService.findWorkItemNum("version_id", versionIds);
+
+
+            for (ProjectVersion projectVersion : projectVersionList) {
+                String id = projectVersion.getId();
+                if(focusVersionIds.contains(id)){
+                    projectVersion.setFocusIs(true);
+                }
+
+                List<Map<String, Object>> countList = versionCount.stream().filter(item -> item.get("version_id").equals(id)).collect(Collectors.toList());
+                projectVersion.setWorkNumber(countList.size());
             }
+
         }
+        // 查找版本的事项数量
 
         joinTemplate.joinQuery(projectVersionList);
 

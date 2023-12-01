@@ -29,6 +29,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
 * 迭代服务
@@ -151,8 +154,20 @@ public class SprintServiceImpl implements SprintService {
     @Override
     public List<Sprint> findSprintList(SprintQuery sprintQuery) {
         List<SprintEntity> sprintEntityList = sprintDao.findSprintList(sprintQuery);
-
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
+        if(sprintList.size() > 0){
+            String sprintIds = "(" + sprintEntityList.stream().map(item -> "'" + item.getId() + "'").
+                    collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("sprint_id", sprintIds);
+            for (Sprint sprint : sprintList) {
+                String id = sprint.getId();
+                List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("sprint_id").equals(id)).collect(Collectors.toList());
+                sprint.setWorkNumber(countList.size());
+            }
+        }
+        // 查找迭代的事项数量
+
+
 
         joinTemplate.joinQuery(sprintList);
         return sprintList;

@@ -252,14 +252,18 @@ public class WorkItemDao{
     }
 
     public Integer findWorkItemListCount(WorkItemQuery workItemQuery) {
-//        QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class,"wi")
-//                .eq("wi.projectId",workItemQuery.getProjectId())
-//                .orders(workItemQuery.getOrderParams());
-        String sql = "select count(1) as count from pmc_work_item t where t.project_id = '" + workItemQuery.getProjectId() + "'";
-        if(workItemQuery.getWorkTypeSysId() != null){
-            sql = sql.concat(" and t.work_type_sys_id = '" + workItemQuery.getWorkTypeSysId() + "'");
+        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+        String sql = new String();
+        Object o1 = stringObjectMap.get("sql");
+        Object query = stringObjectMap.get("query");
+        Integer integer = new Integer(0);
+        if(!ObjectUtils.isEmpty(query)){
+            sql = sql.concat( String.valueOf(o1));
+            integer = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, new String[]{}, Integer.class);
+        }else {
+            integer = 0;
         }
-        Integer integer = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, new String[]{}, Integer.class);
+
         return integer;
     }
 
@@ -476,6 +480,10 @@ public class WorkItemDao{
         boolean priorityOrder = orderParams.stream().anyMatch(order -> order.getName().equals("work_priority_id"));
         if(priorityOrder){
             sql = "Select p.*, priority.sort from pmc_work_item p LEFT JOIN pmc_work_priority priority on priority.id = p.work_priority_id where";
+        }
+        Boolean statisticsNum = workItemQuery.getStatisticsNum();
+        if(statisticsNum != null && statisticsNum == true){
+            sql = "Select count(1) as count from pmc_work_item p where";
         }
 
         if(workItemQuery.getVersionId() != null && workItemQuery.getVersionId().length()>0){
@@ -1265,5 +1273,19 @@ public class WorkItemDao{
         relationModel.put("workTestCase", workTestCase);
 
         return relationModel;
+    }
+
+    /**
+     * 查找不同字段关联的事项数量
+     * @param colunm
+     * @param ids
+     * @return
+     */
+    public List<Map<String, Object>> findWorkItemNum(String colunm, String ids) {
+        String sql = "select id, " + colunm  + " from pmc_work_item where " +  colunm  + " in "+ ids;
+
+//        String sql =  "select " + colunm + ", count(1) as total from pmc_work_item where " + colunm +" in "+ ids + "  group by " + colunm;
+        List<Map<String, Object>> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        return workItemList;
     }
 }

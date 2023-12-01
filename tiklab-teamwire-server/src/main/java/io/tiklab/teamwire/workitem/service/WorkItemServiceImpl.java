@@ -718,8 +718,8 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Override
     public Integer findWorkItemListCount(WorkItemQuery workItemQuery) {
+        workItemQuery.setStatisticsNum(true);
         Integer size = workItemDao.findWorkItemListCount(workItemQuery);
-
         return size;
     }
 
@@ -1220,6 +1220,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemRelationModelCount.put("dynamic", logList.size());
 
         return workItemRelationModelCount;
+    }
+
+    @Override
+    public List<Map<String, Object>> findWorkItemNum(String colunm, String ids) {
+        List<Map<String, Object>> workItemNum = workItemDao.findWorkItemNum(colunm, ids);
+        return  workItemNum;
     }
 
 
