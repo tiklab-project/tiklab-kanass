@@ -40,8 +40,7 @@ public class Module extends BaseModel {
     @ApiProperty(name="children",desc="下级事项列表")
     private List<Module> children;
 
-    @ApiProperty(name="root_id",desc="根节点")
-    private String rootId;
+
 
     @ApiProperty(name="desc",desc="模块描述")
     private java.lang.String desc;
@@ -92,13 +91,6 @@ public class Module extends BaseModel {
         this.parent = parent;
     }
 
-    public String getRootId() {
-        return rootId;
-    }
-
-    public void setRootId(String rootId) {
-        this.rootId = rootId;
-    }
 
     public List<Module> getChildren() {
         return children;

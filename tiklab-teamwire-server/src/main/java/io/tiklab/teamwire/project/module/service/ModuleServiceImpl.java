@@ -33,15 +33,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public String createModule(@NotNull @Valid Module module) {
         ModuleEntity moduleEntity = BeanMapper.map(module, ModuleEntity.class);
-        Module parent = module.getParent();
         String moduleId = moduleDao.createModule(moduleEntity);
-        moduleEntity.setId(moduleId);
-        if(parent != null && parent.getId() != null && !parent.equals("nullString")){
-            moduleEntity.setRootId(parent.getRootId());
-        }else {
-            moduleEntity.setRootId(moduleId);
-        }
-        moduleDao.updateModule(moduleEntity);
 
         return moduleId;
     }
@@ -49,14 +41,6 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public void updateModule(@NotNull @Valid Module module) {
         ModuleEntity moduleEntity = BeanMapper.map(module, ModuleEntity.class);
-        Module parent = module.getParent();
-        String id = moduleEntity.getId();
-
-        if((parent != null && parent.getId() != null ) && !parent.getId().equals("nullstring")){
-            moduleEntity.setRootId(parent.getRootId());
-        }else {
-            moduleEntity.setRootId(id);
-        }
         moduleDao.updateModule(moduleEntity);
     }
 
