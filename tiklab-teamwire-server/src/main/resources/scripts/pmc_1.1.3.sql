@@ -1,2 +1,1 @@
 ALTER TABLE pmc_module ADD COLUMN parent_id VARCHAR(12);
-ALTER TABLE pmc_module ADD COLUMN root_id VARCHAR(12) not NULL DEFAULT id;
