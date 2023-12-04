@@ -9,8 +9,10 @@ import io.tiklab.core.BaseModel;
 import io.tiklab.join.annotation.Join;
 import io.tiklab.join.annotation.JoinQuery;
 import io.tiklab.teamwire.project.project.model.Project;
+import io.tiklab.teamwire.workitem.model.WorkItem;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 模块模型
@@ -25,7 +27,21 @@ public class Module extends BaseModel {
 
     @NotNull
     @ApiProperty(name="moduleName",desc="模块名称",required = true)
-    private java.lang.String moduleName;
+    private String moduleName;
+
+
+    @ApiProperty(name="parent",desc="上级事项")
+    @Mappings({
+            @Mapping(source = "parent.id",target = "parentId")
+    })
+    @JoinQuery(key = "id")
+    private Module parent;
+
+    @ApiProperty(name="children",desc="下级事项列表")
+    private List<Module> children;
+
+    @ApiProperty(name="root_id",desc="根节点")
+    private String rootId;
 
     @ApiProperty(name="desc",desc="模块描述")
     private java.lang.String desc;
@@ -66,5 +82,29 @@ public class Module extends BaseModel {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Module getParent() {
+        return parent;
+    }
+
+    public void setParent(Module parent) {
+        this.parent = parent;
+    }
+
+    public String getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
+    public List<Module> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Module> children) {
+        this.children = children;
     }
 }

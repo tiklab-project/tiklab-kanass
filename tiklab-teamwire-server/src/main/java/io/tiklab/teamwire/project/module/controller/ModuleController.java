@@ -92,6 +92,14 @@ public class ModuleController {
         return Result.ok(moduleList);
     }
 
+    @RequestMapping(path = "/findModuleListTree",method = RequestMethod.POST)
+    @ApiMethod(name = "findModuleListTree",desc = "根据查询对象查询模块列表")
+    @ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
+    public Result<List<Module>> findModuleListTree(@RequestBody @Valid @NotNull ModuleQuery moduleQuery){
+        List<Module> moduleList = moduleService.findModuleListTree(moduleQuery);
+
+        return Result.ok(moduleList);
+    }
 
     @RequestMapping(path = "/findModulePage",method = RequestMethod.POST)
     @ApiMethod(name = "findModulePage",desc = "根据查询对象按分页查询模块列表")

@@ -24,6 +24,16 @@ public class ModuleEntity implements Serializable {
     @Column(name = "module_name",length = 64,notNull = true)
     private String moduleName;
 
+    @Column(name = "parent_id",length = 12)
+    private String parentId;
+
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
+    @Column(name = "root_id",length = 12)
+    private String rootId;
+
     //模块描述
     @Column(name = "description",length = 64)
     private String desc;
@@ -62,5 +72,17 @@ public class ModuleEntity implements Serializable {
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getRootId() {
+        return rootId;
     }
 }
