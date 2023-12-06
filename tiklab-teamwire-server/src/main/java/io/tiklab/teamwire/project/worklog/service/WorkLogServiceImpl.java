@@ -49,12 +49,11 @@ public class WorkLogServiceImpl implements WorkLogService {
         workLog.setWorkDate(new Timestamp(System.currentTimeMillis()));
 
         //设置工作人
-        String createUserId = LoginContext.getLoginId();
-        User user = userService.findUser(createUserId);
-        workLog.setUser(user);
-        logger.info("log add user:{}",user.getName());
+//        String createUserId = LoginContext.getLoginId();
+//        User user = userService.findUser(createUserId);
+//        workLog.setUser(user);
+//        logger.info("log add user:{}",user.getName());
         WorkLogEntity workLogEntity = BeanMapper.map(workLog, WorkLogEntity.class);
-
         return workLogDao.createWorkLog(workLogEntity);
     }
 
