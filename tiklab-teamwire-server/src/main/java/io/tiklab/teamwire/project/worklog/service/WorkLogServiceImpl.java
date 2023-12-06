@@ -12,8 +12,11 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.join.JoinTemplate;
 import io.tiklab.teamwire.project.worklog.entity.WorkLogEntity;
+import io.tiklab.teamwire.workitem.service.WorkItemServiceImpl;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +31,7 @@ import java.util.*;
 */
 @Service
 public class WorkLogServiceImpl implements WorkLogService {
-
+    private static Logger logger = LoggerFactory.getLogger(WorkLogServiceImpl.class);
     @Autowired
     WorkLogDao workLogDao;
 
@@ -47,9 +50,9 @@ public class WorkLogServiceImpl implements WorkLogService {
 
         //设置工作人
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userService.findUser(createUserId);
         workLog.setUser(user);
-
+        logger.info("log add user:{}",user.getName());
         WorkLogEntity workLogEntity = BeanMapper.map(workLog, WorkLogEntity.class);
 
         return workLogDao.createWorkLog(workLogEntity);
