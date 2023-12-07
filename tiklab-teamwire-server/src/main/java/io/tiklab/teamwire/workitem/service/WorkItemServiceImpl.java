@@ -189,18 +189,20 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("workItemId", workItem.getId());
         content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
         content.put("projectId", workItem.getProject().getId());
-        content.put("receiverIcon",receiver.getName().substring(0, 1));
+        content.put("receiverIcon",receiver.getNickname().substring(0, 1));
         content.put("receiver", receiver);
 
         if(workItem.getSprint() != null) {
             content.put("sprintId", workItem.getSprint().getId());
         }
-
+        if(workItem.getProjectVersion() != null) {
+            content.put("versionId", workItem.getProjectVersion().getId());
+        }
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
 
         content.put("createUser", user);
-        content.put("createUserIcon",user.getName().substring( 0, 1));
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
 
         Message message = new Message();
@@ -248,13 +250,16 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("workItemId", workItem.getId());
         content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
         content.put("projectId", workItem.getProject().getId());
-        content.put("receiverIcon",receiver.getName().substring(0, 1));
+        content.put("receiverIcon",receiver.getNickname().substring(0, 1));
         content.put("receiver", receiver);
         if(workItem.getSprint() != null) {
             content.put("sprintId", workItem.getSprint().getId());
         }
+        if(workItem.getProjectVersion() != null) {
+            content.put("versionId", workItem.getProjectVersion().getId());
+        }
         content.put("createUser", user);
-        content.put("createUserIcon",user.getName().substring( 0, 1));
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         task.setContent(JSON.toJSONString(content));
         task.setBaseUrl(baseUrl);
@@ -337,11 +342,13 @@ public class WorkItemServiceImpl implements WorkItemService {
         logContent.put("projectId", workItem.getProject().getId());
         logContent.put("master", user);
         logContent.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        logContent.put("createUserIcon",user.getName().substring( 0, 1));
+        logContent.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         if(workItem.getSprint() != null) {
             logContent.put("sprintId", workItem.getSprint().getId());
         }
-
+        if(workItem.getProjectVersion() != null) {
+            logContent.put("versionId", workItem.getProjectVersion().getId());
+        }
 
         LoggingType opLogType = new LoggingType();
         opLogType.setId(OpLogTemplateConstant.TEAMWIRE_LOGTYPE_WORKITEMUPDATE);
@@ -377,7 +384,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         log.setUser(user);
-        content.put("master", user.getName());
+        content.put("master", user.getNickname());
         content.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
         LoggingTemplate opLogTemplate = new LoggingTemplate();
@@ -390,7 +397,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         log.setModule("workItem");
         log.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        content.put("createUserIcon",user.getName().substring( 0, 1));
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         log.setContent(JSONObject.toJSONString(content));
         log.setBaseUrl(baseUrl);
         opLogByTemplService.createLog(log);
@@ -413,7 +420,6 @@ public class WorkItemServiceImpl implements WorkItemService {
 
 
         //设置事项类型code,关联的系统事项类型
-
         WorkTypeDm workTypeDm = workTypeDmService.findWorkTypeDm(workTypeId);
         workItem.setWorkTypeCode(workTypeDm.getWorkType().getCode());
         workItem.setWorkTypeSys(workTypeDm.getWorkType());
@@ -434,10 +440,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.createWorkItem(workItemEntity);
-        // 设置事项跟流程节点关联关系
 
 
-        //如果更新父级，更新根节点
+        //如果父级为空，更新根节点
         if(workItem.getParentWorkItem() == null){
             WorkItem workItem1 = new WorkItem();
             workItem1.setRootId(id);
@@ -468,6 +473,8 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         creatWorkItemDynamic(content);
 
+
+        creatTodoTask(workItem1, workItem1.getBuilder());
         //添加索引
 
         return id;

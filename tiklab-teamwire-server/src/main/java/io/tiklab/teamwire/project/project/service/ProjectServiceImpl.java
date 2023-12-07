@@ -153,9 +153,9 @@ public class ProjectServiceImpl implements ProjectService {
         User user = userService.findOne(createUserId);
 
         log.setUser(user);
-        content.put("master", user.getName());
+        content.put("master", user.getNickname());
         content.put("creatTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        content.put("createUserIcon",user.getName().substring( 0, 1));
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
 
         LoggingType opLogType = new LoggingType();
         opLogType.setId(OpLogTemplateProject.TEAMWIRE_LOGTYPE_PROJECTADD);
@@ -181,8 +181,8 @@ public class ProjectServiceImpl implements ProjectService {
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
 
-        content.put("master", user.getName());
-        content.put("createUserIcon",user.getName().substring( 0, 1));
+        content.put("master", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("sendTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
         String msg = JSONObject.toJSONString(content);

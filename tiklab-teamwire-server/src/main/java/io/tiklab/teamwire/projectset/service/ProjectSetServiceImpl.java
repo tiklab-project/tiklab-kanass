@@ -219,7 +219,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
             String id = project.getId();
             List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());
             int size = allList.size();
-            project.setProcessWorkItemNumber(size);
+            project.setWorkItemNumber(size);
 
             List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
             project.setEndWorkItemNumber(doneList.size());
