@@ -27,7 +27,7 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
 
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("kanass");
+        systemUrlQuery.setName("sward");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return url;
@@ -35,7 +35,7 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
 
 //    UserService userServiceRpc(){
 //        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-//        systemUrlQuery.setName("kanass");
+//        systemUrlQuery.setName("sward");
 //        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
 //        String url = systemUrlList.get(0).getSystemUrl();
 //        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));

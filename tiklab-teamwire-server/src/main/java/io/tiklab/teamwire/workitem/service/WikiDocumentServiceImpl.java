@@ -31,7 +31,7 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
 
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("kanass");
+        systemUrlQuery.setName("sward");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return url;

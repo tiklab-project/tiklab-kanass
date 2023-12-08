@@ -41,7 +41,7 @@
         <tiklab-flow.version>1.0.0-SNAPSHOT</tiklab-flow.version>
         <tiklab-postin.version>1.0.1-SNAPSHOT</tiklab-postin.version>
         <tiklab-teston.version>1.0.1-SNAPSHOT</tiklab-teston.version>
-        <tiklab-kanass.version>1.0.1-SNAPSHOT</tiklab-kanass.version>
+        <thoughtware-sward.version>1.0.1-SNAPSHOT</thoughtware-sward.version>
         <poi.version>5.2.3</poi.version>
         <itextpdf.version>5.5.5</itextpdf.version>
         <itextasian.version>5.2.0</itextasian.version>

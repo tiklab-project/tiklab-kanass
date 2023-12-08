@@ -25,11 +25,11 @@ public class WorkTestCaseQuery {
         @ApiProperty(name ="creatUserId",desc = "创建者")
         private String creatUserId;
 
-        //只用于project查询 kanass 使用
+        //只用于project查询 sward 使用
         @ApiProperty(name ="name",desc = "文档名字")
         private String name;
 
-        //只用于project查询 kanass 使用
+        //只用于project查询 sward 使用
         @ApiProperty(name ="repositoryId",desc = "空间id")
         private String repositoryId;
 

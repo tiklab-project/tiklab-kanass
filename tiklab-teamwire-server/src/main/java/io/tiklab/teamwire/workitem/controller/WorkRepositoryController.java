@@ -28,7 +28,7 @@ public class WorkRepositoryController {
     private static Logger logger = LoggerFactory.getLogger(WikiDocumentController.class);
 
 //    @Autowired
-//    @Reference(address = "${kanass.address}")
+//    @Reference(address = "${sward.address}")
     @Autowired
     private WorkRepositoryService workRepositoryService;
 
