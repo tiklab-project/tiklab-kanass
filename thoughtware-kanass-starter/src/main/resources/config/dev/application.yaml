@@ -33,7 +33,7 @@ base:
   url: http://192.168.10.14:8080
 
 
-DATA_HOME: ${user.home}/kanass/kanass
+DATA_HOME: ${user.home}/thoughtware/kanass
 
 #dfs config
 dfs:
