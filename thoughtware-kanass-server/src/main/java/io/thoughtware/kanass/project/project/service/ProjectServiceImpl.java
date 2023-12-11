@@ -33,7 +33,7 @@ import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
 import io.thoughtware.security.logging.model.Logging;
 import io.thoughtware.security.logging.model.LoggingType;
-import io.thoughtware.security.logging.service.LoggingByTemplService;
+import io.thoughtware.security.logging.service.LoggingByTempService;
 import io.thoughtware.kanass.project.project.dao.ProjectDao;
 import io.thoughtware.kanass.project.project.entity.ProjectEntity;
 import io.thoughtware.kanass.project.project.support.MessageTemplateProject;
@@ -82,7 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Autowired
-    LoggingByTemplService opLogByTemplService;
+    LoggingByTempService opLogByTemplService;
 
     @Autowired
     UserService userService;

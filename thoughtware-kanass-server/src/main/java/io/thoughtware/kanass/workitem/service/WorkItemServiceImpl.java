@@ -32,7 +32,7 @@ import io.thoughtware.message.setting.model.MessageType;
 import io.thoughtware.security.logging.model.Logging;
 import io.thoughtware.security.logging.model.LoggingTemplate;
 import io.thoughtware.security.logging.model.LoggingType;
-import io.thoughtware.security.logging.service.LoggingByTemplService;
+import io.thoughtware.security.logging.service.LoggingByTempService;
 import io.thoughtware.kanass.workitem.dao.WorkItemDao;
 import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
 import io.thoughtware.kanass.workitem.support.MessageTemplateConstant;
@@ -118,7 +118,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Autowired
     TransitionRuleService transitionRuleService;
     @Autowired
-    LoggingByTemplService opLogByTemplService;
+    LoggingByTempService opLogByTemplService;
 
     @Autowired
     TaskByTempService taskByTempService;
