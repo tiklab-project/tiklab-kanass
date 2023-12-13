@@ -43,12 +43,20 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.0.1", new String[]{
                 "pmc_1.0.1",
                 "flow_1.0.1",
+                "message_1.0.1",
+                //SecurityDsm
+                "oplog_1.0.1",
+                //TodoTaskDsm
+                "todotask_1.0.1",
 
         });
         dsmConfig.newVersion("1.0.2", new String[]{
+                "message_1.0.2",
+                "oplog_1.0.2"
         });
         dsmConfig.newVersion("1.0.3", new String[]{
-                "pmc_1.0.3"
+                "pmc_1.0.3",
+                "message_1.0.3"
         });
         dsmConfig.newVersion("1.0.4", new String[]{
                 "pmc_1.0.4"

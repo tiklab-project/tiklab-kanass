@@ -6,7 +6,7 @@ package io.thoughtware.kanass.project.project.support;
 public class OpLogTemplateProject {
 
     //日志类型
-    public static final String TEAMWIRE_LOGTYPE_PROJECTADD = "ff0a79e4fc61";
+    public static final String KANASS_LOGTYPE_PROJECTADD = "ff0a79e4fc61";
 
 
     //日志模板

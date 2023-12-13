@@ -158,16 +158,16 @@ public class ProjectServiceImpl implements ProjectService {
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
 
         LoggingType opLogType = new LoggingType();
-        opLogType.setId(OpLogTemplateProject.TEAMWIRE_LOGTYPE_PROJECTADD);
+        opLogType.setId("KANASS_LOGTYPE_PROJECTADD");
         log.setActionType(opLogType);
 
         log.setBgroup("kanass");
-        log.setLoggingTemplateId(OpLogTemplateProject.TEAMWIRE_LOGTEMPLATE_PROJECTADD);
         log.setModule("project");
         log.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        log.setContent(JSONObject.toJSONString(content));
+        log.setData(JSONObject.toJSONString(content));
         log.setBaseUrl(baseUrl);
-
+        log.setLink("/projectDetail/${projectId}/workTable");
+        log.setAction(content.get("projectName"));
         opLogByTemplService.createLog(log);
     }
 
@@ -175,13 +175,13 @@ public class ProjectServiceImpl implements ProjectService {
      * 发送消息
      * @param content
      */
-    void sendMessageForCreat(Map<String, String> content ){
+    void sendMessageForCreatUser(Map<String, String> content ){
         SendMessageNotice messageDispatchNotice = new SendMessageNotice();
 
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
 
-        content.put("master", user.getNickname());
+        content.put("createUser", user.getNickname());
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("sendTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
@@ -192,6 +192,8 @@ public class ProjectServiceImpl implements ProjectService {
         messageDispatchNotice.setQywechatData(msg);
         messageDispatchNotice.setEmailData(msg);
         messageDispatchNotice.setBaseUrl(baseUrl);
+        messageDispatchNotice.setLink("/index/${projectType}/${projectId}/survey");
+        messageDispatchNotice.setAction(content.get("projectName"));
         messageDispatchNoticeService.createMessageItem(messageDispatchNotice);
     }
 
@@ -238,9 +240,7 @@ public class ProjectServiceImpl implements ProjectService {
         if(projectType.getType().equals("nomal")){
             content.put("projectType", "projectNomalDetail");
         }
-
         creatDynamic(content);
-        sendMessageForCreat(content);
 
         //初始事项类型
         initWorkType(id);

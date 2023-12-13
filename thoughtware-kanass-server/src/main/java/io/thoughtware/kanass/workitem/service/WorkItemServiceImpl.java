@@ -207,9 +207,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         Message message = new Message();
         MessageType messageType = new MessageType();
-        messageType.setId(MessageTemplateConstant.TEAMWIRE_MESSAGETYPE_TASKTODO);
+        messageType.setId("KANASS_MESSAGETYPE_TASKTODO");
         message.setMessageType(messageType);
-        message.setMessageSendTypeId("site");
+
         message.setData(content);
 
         List<MessageReceiver> objects = new ArrayList<>();
@@ -218,9 +218,63 @@ public class WorkItemServiceImpl implements WorkItemService {
         objects.add(messageReceiver);
         message.setMessageReceiverList(objects);
         message.setBaseUrl(baseUrl);
-
+        message.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        message.setAction(workItem.getTitle());
+        message.setMessageSendTypeId("site");
+        message.setSendId(user.getId());
+        singleSendMessageService.sendMessage(message);
+        message.setMessageSendTypeId("email");
+        singleSendMessageService.sendMessage(message);
+        message.setMessageSendTypeId("qywechat");
         singleSendMessageService.sendMessage(message);
 
+    }
+
+    void sendMessageForUpdateStatus(WorkItem OldWorkItem, WorkItem workItem, User receiver){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("workItemTitle", workItem.getTitle());
+        content.put("workItemId", workItem.getId());
+        content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
+        content.put("projectId", workItem.getProject().getId());
+        content.put("receiverIcon",receiver.getNickname().substring(0, 1));
+        content.put("receiver", receiver);
+        content.put("oldValue", OldWorkItem.getWorkStatusNode().getName());
+        content.put("newValue", workItem.getWorkStatusNode().getName());
+        if(workItem.getSprint() != null) {
+            content.put("sprintId", workItem.getSprint().getId());
+        }
+        if(workItem.getProjectVersion() != null) {
+            content.put("versionId", workItem.getProjectVersion().getId());
+        }
+        String createUserId = LoginContext.getLoginId();
+        User user = userService.findOne(createUserId);
+
+        content.put("createUser", user);
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        Message message = new Message();
+        MessageType messageType = new MessageType();
+        messageType.setId("KANASS_MESSAGETYPE_UPDATESTATUS");
+        message.setMessageType(messageType);
+        message.setData(content);
+
+
+        List<MessageReceiver> objects = new ArrayList<>();
+        MessageReceiver messageReceiver = new MessageReceiver();
+        messageReceiver.setUserId(receiver.getId());
+        objects.add(messageReceiver);
+        message.setMessageReceiverList(objects);
+        message.setBaseUrl(baseUrl);
+        message.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        message.setAction(workItem.getTitle());
+        message.setSendId(user.getId());
+        message.setMessageSendTypeId("site");
+        singleSendMessageService.sendMessage(message);
+        message.setMessageSendTypeId("email");
+        singleSendMessageService.sendMessage(message);
+        message.setMessageSendTypeId("qywechat");
+        singleSendMessageService.sendMessage(message);
     }
 
 
@@ -235,10 +289,9 @@ public class WorkItemServiceImpl implements WorkItemService {
         task.setTitle("待办事项");
 
         task.setAssignUser(receiver);
-        task.setTemplateId(TodoTemplateConstant.TEAMWIRE_TODOTEMPLATE_WORKITEMTODO);
 
         TaskType taskType = new TaskType();
-        taskType.setId(TodoTemplateConstant.TEAMWIRE_TODOTYPE_WORKITEMTODO);
+        taskType.setId("KANASS_TODOTYPE_WORKITEMTODO");
         task.setTodoType(taskType);
 
         String createUserId = LoginContext.getLoginId();
@@ -261,8 +314,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        task.setContent(JSON.toJSONString(content));
+        task.setData(JSON.toJSONString(content));
         task.setBaseUrl(baseUrl);
+        task.setAction(workItem.getTitle());
+        task.setLink("/projectDetail/${projectId}/work/${workItemId}");
         taskByTempService.createTask(task);
     }
 
@@ -325,7 +380,7 @@ public class WorkItemServiceImpl implements WorkItemService {
      * @param logContent
      * @param workItem
      */
-    void creatUpdateOplog( Map<String, Object> logContent, WorkItem workItem){
+    void creatUpdateOplog(Map<String, Object> logContent, WorkItem workItem, String actionType){
 
         Logging log = new Logging();
         log.setBgroup("kanass");
@@ -351,23 +406,20 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         LoggingType opLogType = new LoggingType();
-        opLogType.setId(OpLogTemplateConstant.TEAMWIRE_LOGTYPE_WORKITEMUPDATE);
+        opLogType.setId(actionType);
         log.setActionType(opLogType);
 
-        LoggingTemplate opLogTemplate = new LoggingTemplate();
         Object updateField = logContent.get("updateField");
         log.setBaseUrl(baseUrl);
+        log.setAction(workItem.getTitle());
+        log.setLink("/projectDetail/${projectId}/work/${workItemId}");
         if ("assigner".equals(updateField)) {
-            log.setLoggingTemplateId(OpLogTemplateConstant.TEAMWIRE_LOGTEMPLATE_WORKITEMASSIGNER);
-            log.setContent(JSON.toJSONString(logContent));
-
+            log.setData(JSON.toJSONString(logContent));
             opLogByTemplService.createLog(log);
-
         }
 
         if ("workStatusNode".equals(updateField)) {
-            log.setLoggingTemplateId(OpLogTemplateConstant.TEAMWIRE_LOGTEMPLATE_WORKITEMSTATUS);
-            log.setContent(JSON.toJSONString(logContent));
+           log.setData(JSON.toJSONString(logContent));
             opLogByTemplService.createLog(log);
         }
 
@@ -381,25 +433,23 @@ public class WorkItemServiceImpl implements WorkItemService {
         Logging log = new Logging();
         log.setBgroup("kanass");
 
+        LoggingType opLogType = new LoggingType();
+        opLogType.setId("KANASS_LOGTYPE_WORKITEMADD");
+        log.setActionType(opLogType);
+
+        log.setModule("workItem");
+        log.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         log.setUser(user);
         content.put("master", user.getNickname());
         content.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-
-        LoggingTemplate opLogTemplate = new LoggingTemplate();
-        opLogTemplate.setId(OpLogTemplateConstant.TEAMWIRE_LOGTEMPLATE_WORKITEMADD);
-        log.setLoggingTemplateId(OpLogTemplateConstant.TEAMWIRE_LOGTEMPLATE_WORKITEMADD);
-
-        LoggingType opLogType = new LoggingType();
-        opLogType.setId(OpLogTemplateConstant.TEAMWIRE_LOGTYPE_WORKITEMADD);
-        log.setActionType(opLogType);
-
-        log.setModule("workItem");
-        log.setCreateTime(new Timestamp(System.currentTimeMillis()));
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
-        log.setContent(JSONObject.toJSONString(content));
+        log.setData(JSONObject.toJSONString(content));
+        log.setLink("/projectDetail/${projectId}/work/${workItemId}");
         log.setBaseUrl(baseUrl);
+        log.setAction(content.get("workItemTitle"));
         opLogByTemplService.createLog(log);
     }
 
@@ -472,8 +522,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("workItemIcon", workItem1.getWorkTypeSys().getIconUrl());
 
         creatWorkItemDynamic(content);
-
-
         creatTodoTask(workItem1, workItem1.getBuilder());
         //添加索引
 
@@ -510,11 +558,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             workItem.setRootId(id);
             workItem.setTreePath("nullstring");
         }
-        //更新事项状态
-        if(updateField != null  && updateField.equals("workStatusNode")){
-            updateWorkItemStatus(workItem);
-            updateByTransitionRule(workItem, oldWorkItem);
-        }
 
         Object oldValue = getFieldValueByName(updateField, oldWorkItem);
 
@@ -537,6 +580,17 @@ public class WorkItemServiceImpl implements WorkItemService {
         Object newValue = getFieldValueByName(updateField, newWorkItem);
         logContent.put("newValue", newValue);
 
+        //更新事项状态
+        if(updateField != null  && updateField.equals("workStatusNode")){
+            updateWorkItemStatus(workItem);
+            creatUpdateOplog(logContent, newWorkItem, "KANASS_LOGTYPE_WORKUPDATESTATUS");
+            String transitionId = workItem.getTransitionId();
+            if(transitionId != null){
+                updateByTransitionRule(newWorkItem, oldWorkItem, transitionId);
+            }
+
+        }
+
         // 若更新负责人发送待办、消息和更新日志
         if(updateField != null  && updateField.equals("assigner")){
             String assignerId = workItem.getAssigner().getId();
@@ -550,13 +604,14 @@ public class WorkItemServiceImpl implements WorkItemService {
                 user.setName("wu");
                 logContent.put("oldValue", user);
             }
+            creatUpdateOplog(logContent, newWorkItem, "KANASS_LOGTYPE_WORKUPDATEMASTER");
         }
 
         if(updateField != null  && updateField.equals("workStatusNode")){
 
             setFlowRelation(newWorkItem);
         }
-        creatUpdateOplog(logContent, newWorkItem);
+
 
     }
 
@@ -584,7 +639,6 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
             }
 
-
         }
 
         // 查找状态对应的项目状态
@@ -608,21 +662,18 @@ public class WorkItemServiceImpl implements WorkItemService {
 
 
     }
-    void updateByTransitionRule(WorkItem workItem, WorkItem oldWorkItem){
-
-        String transitionId = workItem.getTransitionId();
-        if(transitionId != null){
-            TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
-            transitionRuleQuery.setTransitionId(transitionId);
-            List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
-            for (TransitionRule transitionRule : transitionRuleList) {
-                User allocationUser = transitionRule.getAllocationUser();
-                // 修改事项负责人
-                workItem.setAssigner(allocationUser);
-                // 发送消息和待办事项
-                creatTodoTask(oldWorkItem, allocationUser);
-                sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
-            }
+    void updateByTransitionRule(WorkItem workItem, WorkItem oldWorkItem, String transitionId){
+        TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
+        transitionRuleQuery.setTransitionId(transitionId);
+        List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
+        for (TransitionRule transitionRule : transitionRuleList) {
+            User allocationUser = transitionRule.getAllocationUser();
+            // 修改事项负责人
+            workItem.setAssigner(allocationUser);
+            // 发送消息和待办事项
+            creatTodoTask(oldWorkItem, allocationUser);
+            sendMessageForUpdateStatus(oldWorkItem, workItem, allocationUser);
+            sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
         }
     }
     void setFlowRelation(WorkItem workItem){

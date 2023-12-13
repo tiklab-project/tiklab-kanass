@@ -1,109 +1,71 @@
-UPDATE "pcs_todo_task_template" SET "title" = '初始化密码', "link" = NULL, "bgroup" = 'eas', "content" = '${username}请及时修改初始密码。' WHERE "id" = '280485bff145';
-UPDATE "pcs_todo_task_template" SET "title" = '待办事项', "link" = 'index/projectDetail/${projectId}/work/${workItemId}', "bgroup" = 'kanass', "content" = '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;flex-shrink: 1;min-width: 0;">
-            <div style="width: 25px; height: 25px; line-height: 25px;border-radius: 25px;text-align: center; color: #fff;"  class = "todo-user-icon">${createUserIcon}</div>
-            <div style="display: flex;flex-direction: column;padding: 0 20px;flex-shrink: 1;min-width: 0;">
-                <div>${createUser.nickname}向您分配了事项 </div>
-                <div style="line-height: 30px; display: flex; align-items: center; height: 30px;">
-                    <div class="todo-work-title" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">${workItemTitle}</div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;flex-shrink: 0"> ${receiveTime} </div>
-    </div>' WHERE "id" = 'ff0a79e4fc61';
+DELETE FROM pcs_mec_message;
+DELETE FROM pcs_mec_message_dispatch_item;
+
+DELETE FROM pcs_mec_message_notice;
+DELETE FROM pcs_mec_message_notice_connect_orga;
+DELETE FROM pcs_mec_message_notice_connect_role;
+DELETE FROM pcs_mec_message_notice_connect_user;
+DELETE FROM pcs_mec_message_notice_connect_usergroup;
+
+DELETE FROM pcs_mec_message_receiver;
+DELETE FROM pcs_mec_message_send_type;
+DELETE FROM pcs_mec_message_template;
+DELETE FROM pcs_mec_message_type;
+
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('8a67e9486921', '部门消息类型', '部门消息类型', 'eas');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('KANASS_MESSAGETYPE_TASKTODO', '给你分配了事项', '任务通知', 'kanass');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES (' KANASS_MESSAGETYPE_UPDATESTATUS', '更改事项状态', '事项变更', 'kanass');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('KANASS_MESSAGETYPE_PROJECTADDUSER', '邀请你进入项目', '项目添加', 'kanass');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('USER_UPDATE', '修改用户信息', '修改用户信息', 'darth');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('USER_CREATE', '创建用户', '创建用户', 'darth');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('USER_DELETE', '更新用户信息', '更新用户信息', 'darth');
+INSERT INTO "pcs_mec_message_type" ("id", "name", "description", "bgroup") VALUES ('USER_LOGIN', '登录应用', '登录应用', 'darth');
 
 
-		UPDATE "pcs_op_log_template" SET "title" = '事项添加', "content" = ' <div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div
-                class = "dynamic-user-icon"
-                style="width: 25px; height: 25px; line-height: 25px; border-radius: 32px; text-align: center; color: #fff;">
-                ${createUserIcon}
-            </div>
-            <div style="display: flex; flex-direction: column; padding: 0 10px;">
-                <div> <span style="padding-right: 10px;">${master}创建了${workItemTypeName} </div>
-                <div class="dynamic-work-title"
-                        style="cursor: pointer; height: 40px; line-height: 40px; border-radius: 5px;">
-                        ${workItemTitle} </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${createTime} </div>
-    </div>', "link" = 'projectDetail/${projectId}/work/${workItemId}', "bgroup" = 'kanass', "abstract_content" = '${master}添加事项' WHERE "id" = 'f621925c6e63';
-UPDATE "pcs_op_log_template" SET "title" = '项目添加日志', "content" = '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;gap: 20px;">
-        <div style="display: flex;align-items: center;gap: 10px;">
-            <div
-               class = "dynamic-user-icon"
-                style="width: 25px; height: 25px; line-height: 25px;   border-radius: 32px;text-align: center; color: #fff;">
-                ${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column;">
-                <div>${master} 创建了项目 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('10afc24dcf3e', '8a67e9486921', 'email', '${username}在当前${createtime}创建了部门', '${username}用户在当前${createtime}执行${type}部门操作', NULL, 'eas', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('6df5949fc3c1', '8a67e9486921', 'qywechat', NULL, '# ${title}\n> 类型:<font color=\\\"comment\\\">${type}</font>\n> 创建用户<font color=\\\"comment\\\">${username}</font>\n> 操作时间:<font color=\\\"comment\\\">${time}</font>\n\n', NULL, 'eas', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('93c1d468dbca', '8a67e9486921', 'dingding', '# ${title}', '\n# 创建${title}部门\n> 类型:<font color=\\\"comment\\\">${type}</font>\n> 操作用户<font color=\\\"comment\\\">${username}</font>\n> 操作时间:<font color=\\\"comment\\\">${time}</font>\n\n ', NULL, 'eas', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('e3096cc78a47', '8a67e9486921', 'site', '${username}在当前${time}执行${type}部门操作', '${username}用户在当前${time}执行${type}部门操作', NULL, 'eas', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('65135e38383d', 'a12523a2d65b', 'dingding', '项目添加-钉钉', '**项目添加通知**${master} 添加了项目 <font color=info> ${projectName}</font>状态![图片](${projectIcon})', NULL, 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('ffe7cb993f47', 'KANASS_MESSAGETYPE_TASKTODO', 'dingding', '任务通知-钉钉', '**事项待办通知**${createUser.nickname} 向您分配了事项 <font color=info> ${workItemTitle}</font>![图片](${workTypeIcon})</div>', '/index/prodetail/{id}/{project.id}', 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('1f90ca2b7420', 'KANASS_MESSAGETYPE_UPDATESTATUS', 'dingding', '事项状态变更-钉钉', '**事项状态变更通知**${createUser.nickname} 更新了 <font color=info> ${workItemTitle}</font>状态![图片](${workTypeIcon})${oldValue. name} -> ${newValue. name}', '/index/work/workone/${workItemId}', 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('6800f0954b41', 'KANASS_MESSAGETYPE_UPDATESTATUS', 'email', '事项状态变更-邮箱', '<div style="display: flex;  align-items: center;  font-size: 14px;  justify-content: space-between;"> <div style="display: flex;align-items: center;"> <div style="width: 25px;height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;"> ${createUserIcon}</div> <div style="display: flex;  flex-direction: column;  padding: 0 20px;"> <div> <span style="padding-right: 10px;"> ${master.nickname} </span> 更新了 <span style="color: #5d70ea;font-size: 13px; font-weight: 500;"> ${workItemTitle} </span> 状态 </div> <div style="line-height: 40px; display: flex; align-items: center; height: 40px;"> <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;"> ${oldValue. name} </div> ——— <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;"> ${newValue. name} </div> </div> </div> </div> <div style="font-size: 13px;"> ${receiveTime} </div> </div>', NULL, 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('USER_LOGIN', 'USER_LOGIN', 'site', '登录应用', '${name}登录应用', '/work', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('fc30b7434a89', 'a12523a2d65b', 'qywechat', NULL, '**项目添加通知**${master} 添加了项目 <font color=info> ${projectName}</font>状态![图片](${projectIcon})', NULL, 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('USER_CREATE', 'USER_CREATE', 'site', '创建用户', '创建用户', NULL, 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('9fd5b40149ea', 'a12523a2d65b', 'site', '项目添加消息', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;"> <div style="display: flex;align-items: center;"> <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div> <div style="display: flex; flex-direction: column; padding: 0 20px;"> <div> <span style="padding-right: 10px;"> ${master} </span> 创建了项目 </div> <div style="line-height: 40px; display: flex; align-items: center; height: 40px;"> <div style="font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;"> <img src=${projectIcon} alt="" width="16px" height="16px"> </div> <div style="color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;"> ${projectName} </div> </div> </div> </div> <div style="font-size: 13px;"> ${sendTime} </div> </div>', '/index/${projectType}/${projectId}/survey', 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('KANASS_MESSAGETEMPLATE_UPDATEASSIGNER', 'KANASS_MESSAGETYPE_TASKTODO', 'site', '任务待办-站内信', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;"> <div style="display: flex;align-items: center;"> <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div> <div style="display: flex; flex-direction: column; padding: 0 10px; width: 250px"> <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div> <div style="line-height: 30px; display: flex; align-items: center; height: 30px;"> <img src="${workTypeIcon}" alt="" width="16px" height="16px"> <div style="color: #5d70ea; margin-left: 10px;text-overflow: ellipsis;white-space: nowrap;height: 30px;overflow: hidden;">${workItemTitle}</div> </div> </div> </div> <div style="font-size: 13px;"> ${receiveTime} </div> </div>', '/index/work/workone/${workItemId}', 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('0588213d423b', 'KANASS_MESSAGETYPE_TASKTODO', 'email', '任务待办-邮箱', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;"> <div style="display: flex;align-items: center;"> <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div> <div style="display: flex; flex-direction: column; padding: 0 10px; width: 250px"> <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div> <div style="line-height: 30px; display: flex; align-items: center; height: 30px;"> <img src="${workTypeIcon}" alt="" width="16px" height="16px"> <div style="color: #5d70ea; margin-left: 10px;text-overflow: ellipsis;white-space: nowrap;height: 30px;overflow: hidden;">${workItemTitle}</div> </div> </div> </div> <div style="font-size: 13px;"> ${receiveTime} </div> </div>', NULL, 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('c386e011802a', 'KANASS_MESSAGETYPE_TASKTODO', 'qywechat', '任务待办-企业微信', '**事项待办通知**${createUser.nickname} 向您分配了事项 <font color=info> ${workItemTitle}</font>![图片](${workTypeIcon})', '', 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('fc20ed1a0aca', 'KANASS_MESSAGETYPE_UPDATESTATUS', 'qywechat', '事项状态变更-企业微信', '**事项状态变更通知**${createUser.nickname} 更新了 <font color=info> ${workItemTitle}</font>状态![图片](${workTypeIcon})${oldValue. name} -> ${newValue. name}', NULL, 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('9f71be8a74e0', 'a12523a2d65b', 'email', '项目添加-邮箱', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;"> <div style="display: flex;align-items: center;"> <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div> <div style="display: flex; flex-direction: column; padding: 0 20px;"> <div> <span style="padding-right: 10px;"> ${master} </span> 创建了项目 </div> <div style="line-height: 40px; display: flex; align-items: center; height: 40px;"> <div style="font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;"> <img src=${projectIcon} alt="" width="16px" height="16px"> </div> <div style="color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;"> ${projectName} </div> </div> </div> </div> <div style="font-size: 13px;"> ${sendTime} </div> </div>', NULL, 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('KANASS_MESSAGETEMPLATE_UPDATESTATUS', 'KANASS_MESSAGETYPE_UPDATESTATUS', 'site', '事项状态变更-站内信', '<div style="display: flex;  align-items: center;  font-size: 14px;  justify-content: space-between;"> <div style="display: flex;align-items: center;"> <div style="width: 25px;height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;"> ${createUserIcon}</div> <div style="display: flex;  flex-direction: column;  padding: 0 20px;"> <div> <span style="padding-right: 10px;"> ${master.nickname} </span> 更新了 <span style="color: #5d70ea;font-size: 13px; font-weight: 500;"> ${workItemTitle} </span> 状态 </div> <div style="line-height: 40px; display: flex; align-items: center; height: 40px;"> <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;"> ${oldValue. name} </div> ——— <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;"> ${newValue. name} </div> </div> </div> </div> <div style="font-size: 13px;"> ${receiveTime} </div> </div>', '/index/work/workone/${workItemId}', 'kanass', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('8c56f747497a', 'USER_UPDATE', 'email', '更新用户信息', '${userName}更新用户${name} ${message} ', '/setting/user', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('e9fd730456d4', 'USER_CREATE', 'email', '创建用户', '${userName}创建${name}', '/setting/user', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('998613ab7e71', 'USER_LOGIN', 'email', '登录应用', '${userName}登录应用', '/work', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('fe6108ae3666', 'USER_DELETE', 'email', '删除用户', '${userName}删除用户${name}', '/setting/user', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('41dd07a55856', 'USER_UPDATE', 'qywechat', NULL, '${userName}更新用户${name} ${message} ', '/setting/user', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('34d48bf413a7', 'USER_CREATE', 'qywechat', NULL, '${userName}创建用户${name}', '/setting/user', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('c9fe98a3344a', 'USER_DELETE', 'qywechat', NULL, '${userName}删除用户${name}', '/setting/user', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('d8d2e673fbb6', 'USER_LOGIN', 'qywechat', NULL, '${userName}登录应用', '/work', 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('USER_UPDATE', 'USER_UPDATE', 'site', '修改用户信息', '修改用户信息', NULL, 'darth', NULL);
+INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('USER_DELETE', 'USER_DELETE', 'site', '更新用户信息', '更新用户信息', NULL, 'darth', NULL);
 
-                    <div
-                        class="dynamic-work-title"
-                        style="cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;">
-                        ${projectName} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${creatTime} </div>
-    </div>', "link" = '/index/${projectType}/${projectId}/survey', "bgroup" = 'kanass', "abstract_content" = '${master}添加项目' WHERE "id" = 'c5613dbc2726';
-UPDATE "pcs_op_log_template" SET "title" = '事项负责人修改', "content" = '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between; gap: 20px;">
-        <div style="display: flex;align-items: center; gap: 10px; flex-shrink: 1;min-width: 0;">
-            <div
-                class = "dynamic-user-icon"
-                style="width: 25px; height: 25px; line-height: 25px;
-                border-radius: 32px;text-align: center; color: #fff; flex-shrink: 0;">
-                ${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; flex-shrink: 1;min-width: 0;">
-                <div style="line-height: 30px;">${master.nickname}更新了负责人</div>
-                <div style="line-height: 30px; display: flex; align-items: center; height: 40px;">
-                    <div class="dynamic-work-title" style="
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    flex: 1;
-                    margin-right: 10px;
-                    cursor: pointer;
-                    max-width: 400px;
-                    cursor: pointer;
-                "> ${workItemTitle}</div>
-                    <div
-                        style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;">
-                        ${oldValue. nickname} </div> ——— <div
-                        style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;">
-                        ${newValue.nickname} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px; flex-shrink: 0;"> ${receiveTime} </div>
-    </div>', "link" = 'projectDetail/${projectId}/work/${workItemId}', "bgroup" = 'kanass', "abstract_content" = '${master.nickname}更换负责人' WHERE "id" = '4c4d9114ddc0';
-UPDATE "pcs_op_log_template" SET "title" = '事项状态修改', "content" = '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between; gap: 20px;">
-        <div style="display: flex;align-items: center; gap: 10px; flex-shrink: 1;min-width: 0;">
-            <div
-                class = "dynamic-user-icon"
-                style="width: 25px; height: 25px; line-height: 25px;
-                border-radius: 32px;text-align: center; color: #fff;">
-                ${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; flex-shrink: 1;min-width: 0;">
-                <div style="line-height: 30px;"> ${master.nickname}更新了状态 </div>
-                <div style="line-height: 30px; display: flex; align-items: center; height: 40px;">
-                    <div class="dynamic-work-title" style="
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    flex: 1;
-                    margin-right: 10px;
-                    cursor: pointer;
-                    max-width: 400px
-                ">  ${workItemTitle}</div>
-                    <div
-                        style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;">
-                        ${oldValue. name} </div> ——— <div
-                        style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;">
-                        ${newValue. name} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px; flex-shrink: 0;"> ${receiveTime} </div>
-    </div>', "link" = 'index/projectDetail/${projectId}/work/${workItemId}', "bgroup" = 'kanass', "abstract_content" = '${master.nickname}更新了状态' WHERE "id" = '31d39e6f981a';
+DELETE FROM pcs_todo_task_type;
+DELETE FROM pcs_todo_task;
+DELETE FROM pcs_todo_task_template;
+
+INSERT INTO "pcs_todo_task_type" ("id", "name", "bgroup") VALUES ('KANASS_TODOTYPE_WORKITEMTODO', '给你分配了事项', 'kanass');
+
+DELETE FROM pcs_op_log_type;
+DELETE FROM pcs_op_log;
+DELETE FROM pcs_op_log_template;
+
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('KANASS_LOGTYPE_WORKITEMADD', '添加事项', 'kanass');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('KANASS_LOGTYPE_PROJECTADD', '添加了项目', 'kanass');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('KANASS_LOGTYPE_WORKUPDATEMASTER', '更新了事项负责人', 'kanass');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('KANASS_LOGTYPE_WORKUPDATESTATUS', '更新了事项状态', 'kanass');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('USER_LOGIN', '登录应用', 'darth');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('USER_UPDATE', '修改用户信息', 'darth');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('USER_CREATE', '创建用户', 'darth');
+INSERT INTO "pcs_op_log_type" ("id", "name", "bgroup") VALUES ('USER_DELETE', '更新用户信息', 'darth');
