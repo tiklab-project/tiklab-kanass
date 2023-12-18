@@ -213,22 +213,25 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     @Override
     public List<Project> findProjectSetDetailList(ProjectQuery projectQuery) {
         List<Project> projectList = projectService.findProjectList(projectQuery);
-        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
-        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemStatus(projectIds);
-        for (Project project : projectList) {
-            String id = project.getId();
-            List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());
-            int size = allList.size();
-            project.setWorkItemNumber(size);
+        if(projectList.size() > 0){
+            String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemStatus(projectIds);
+            for (Project project : projectList) {
+                String id = project.getId();
+                List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());
+                int size = allList.size();
+                project.setWorkItemNumber(size);
 
-            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
-            project.setEndWorkItemNumber(doneList.size());
+                List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+                project.setEndWorkItemNumber(doneList.size());
 
-            DmUserQuery dmUserQuery = new DmUserQuery();
-            dmUserQuery.setDomainId(id);
-            List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
-            project.setMember(dmUserList.size());
+                DmUserQuery dmUserQuery = new DmUserQuery();
+                dmUserQuery.setDomainId(id);
+                List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+                project.setMember(dmUserList.size());
+            }
         }
+
         return projectList;
     }
 

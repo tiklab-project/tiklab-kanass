@@ -1272,7 +1272,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         LoggingQuery loggingQuery = new LoggingQuery();
         LinkedHashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put("workItemId", workItemId);
-        loggingQuery.setContent(linkedHashMap);
+        loggingQuery.setData(linkedHashMap);
         loggingQuery.setBgroup("kanass");
         List<Logging> logList = loggingService.findLogList(loggingQuery);
         workItemRelationModelCount.put("dynamic", logList.size());
