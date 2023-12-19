@@ -59,6 +59,9 @@ public class RecentServiceImpl implements RecentService {
             case "project":
                 id = createRecentByCondition(recent, 5);
                 break;
+            case "projectSet":
+                id = createRecentByCondition(recent, 5);
+                break;
             case "workItem":
                 id = createRecentByCondition(recent, 10);
                 break;

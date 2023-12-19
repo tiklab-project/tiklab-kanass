@@ -34,7 +34,7 @@ public class ProjectVersion extends BaseModel {
     @JoinQuery(key = "id")
     private User master;
 
-    @ApiProperty(name = "startTime", desc = "开始日期")
+        @ApiProperty(name = "startTime", desc = "开始日期")
     private Date startTime;
 
     @ApiProperty(name = "focusIs", desc = "当前用户是否关注")

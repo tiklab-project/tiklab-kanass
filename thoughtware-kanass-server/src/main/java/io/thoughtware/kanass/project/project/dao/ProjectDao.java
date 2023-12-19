@@ -99,6 +99,7 @@ public class ProjectDao{
                 .eq("projectState", projectQuery.getProjectState())
                 .eq("projectLimits",projectQuery.getProjectLimits())
                 .in("id",projectQuery.getProjectIds())
+                .in("projectSetId", projectQuery.getProjectSetIds())
                 .orders(projectQuery.getOrderParams())
                 .get();
 

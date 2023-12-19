@@ -16,6 +16,11 @@ public class ProjectSetQuery {
         @ApiProperty(name ="name",desc = "项目集名称，模糊匹配")
         private String name;
 
+        @ApiProperty(name ="projectSetId",desc = "项目集id，模糊匹配")
+        private String projectSetId;
+
+        @ApiProperty(name ="projectSetIds",desc = "项目集id，模糊匹配")
+        private String[] projectSetIds;
         @ApiProperty(name ="master",desc = "项目集负责人id，精确匹配")
         private String master;
 
@@ -28,6 +33,8 @@ public class ProjectSetQuery {
         @ApiProperty(name ="recentMasterId",desc = "点击人")
         private String focusMasterId;
 
+        @ApiProperty(name ="projectSetLimits",desc = "查看范围")
+        private String projectSetLimits;
         @ApiProperty(name ="orderParams",desc = "排序参数")
         private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
 
@@ -100,5 +107,29 @@ public class ProjectSetQuery {
 
         public void setFocusMasterId(String focusMasterId) {
                 this.focusMasterId = focusMasterId;
+        }
+
+        public String getProjectSetId() {
+                return projectSetId;
+        }
+
+        public void setProjectSetId(String projectSetId) {
+                this.projectSetId = projectSetId;
+        }
+
+        public String getProjectSetLimits() {
+                return projectSetLimits;
+        }
+
+        public void setProjectSetLimits(String projectSetLimits) {
+                this.projectSetLimits = projectSetLimits;
+        }
+
+        public String[] getProjectSetIds() {
+                return projectSetIds;
+        }
+
+        public void setProjectSetIds(String[] projectSetIds) {
+                this.projectSetIds = projectSetIds;
         }
 }

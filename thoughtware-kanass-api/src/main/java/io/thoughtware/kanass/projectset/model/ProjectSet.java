@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.projectset.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
 import io.thoughtware.beans.annotation.Mapper;
@@ -59,7 +61,9 @@ public class ProjectSet extends BaseModel{
     private java.lang.Integer isDelete;
 
     @ApiProperty(name="creatTime",desc="创建时间")
-    private java.sql.Date creatTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String creatTime;
 
     @ApiProperty(name="updateTime",desc="更新时间")
     private java.sql.Date updateTime;
@@ -116,13 +120,15 @@ public class ProjectSet extends BaseModel{
     public void setIsDelete(java.lang.Integer isDelete) {
         this.isDelete = isDelete;
     }
-    public java.sql.Date getCreatTime() {
+
+    public String getCreatTime() {
         return creatTime;
     }
 
-    public void setCreatTime(java.sql.Date creatTime) {
+    public void setCreatTime(String creatTime) {
         this.creatTime = creatTime;
     }
+
     public java.sql.Date getUpdateTime() {
         return updateTime;
     }

@@ -51,6 +51,13 @@ INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id",
 INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('USER_UPDATE', 'USER_UPDATE', 'site', '修改用户信息', '修改用户信息', NULL, 'darth', NULL);
 INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('USER_DELETE', 'USER_DELETE', 'site', '更新用户信息', '更新用户信息', NULL, 'darth', NULL);
 
+
+INSERT INTO "pcs_mec_message_send_type" ("id", "name", "description", "bgroup") VALUES ('site', '站内信', '在系统中通知消息类型', NULL);
+INSERT INTO "pcs_mec_message_send_type" ("id", "name", "description", "bgroup") VALUES ('email', '邮件通知类型', '通过邮件发送通知', NULL);
+INSERT INTO "pcs_mec_message_send_type" ("id", "name", "description", "bgroup") VALUES ('qywechat', '企业微信通知类型', '通过企业微信群发送通知', NULL);
+INSERT INTO "pcs_mec_message_send_type" ("id", "name", "description", "bgroup") VALUES ('dingding', '钉钉通知类型', '通过钉钉微信群发送通知', NULL);
+INSERT INTO "pcs_mec_message_send_type" ("id", "name", "description", "bgroup") VALUES ('app', 'APP', 'APP中展示消息', NULL);
+
 DELETE FROM pcs_todo_task_type;
 DELETE FROM pcs_todo_task;
 DELETE FROM pcs_todo_task_template;

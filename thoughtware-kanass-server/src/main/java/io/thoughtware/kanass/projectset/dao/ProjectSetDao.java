@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.projectset.dao;
 
+import io.thoughtware.dal.jpa.criterial.condition.OrQueryCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.thoughtware.kanass.projectset.entity.ProjectSetEntity;
 import io.thoughtware.kanass.projectset.entity.ProjectSetFocusEntity;
 import io.thoughtware.kanass.projectset.model.ProjectSetQuery;
@@ -106,11 +108,28 @@ public class ProjectSetDao{
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectSetEntity.class)
                 .like("name", projectSetQuery.getName())
                 .eq("master", projectSetQuery.getMaster())
+                .in("id", projectSetQuery.getProjectSetIds())
+                .eq("projectSetLimits", projectSetQuery.getProjectSetLimits())
                 .orders(projectSetQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, ProjectSetEntity.class);
     }
 
+    public List<ProjectSetEntity> findJoinProjectSetList(ProjectSetQuery projectSetQuery) {
+
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectSetEntity.class);
+        OrQueryCondition orQueryBuildCondition = OrQueryBuilders.instance()
+                .eq("projectSetLimits","0")
+                .in("id",projectSetQuery.getProjectSetIds())
+                .get();
+        QueryCondition queryCondition = queryBuilders.or(orQueryBuildCondition)
+                .like("name", projectSetQuery.getName())
+                .eq("master", projectSetQuery.getMaster())
+                .orders(projectSetQuery.getOrderParams())
+                .pagination(projectSetQuery.getPageParam())
+                .get();
+        return jpaTemplate.findList(queryCondition, ProjectSetEntity.class);
+    }
     /**
      * 根据条件按分页查询项目集列表
      * @param projectSetQuery
@@ -146,13 +165,12 @@ public class ProjectSetDao{
      * @return
      */
     public List<ProjectSetEntity> findRecentProjectSetList(ProjectSetQuery projectSetQuery){
-        QueryCondition queryBuilders =  QueryBuilders.createQuery(ProjectSetEntity.class, "ps")
-                .leftJoin(RecentEntity.class,"re","re.modelId=ps.id")
-                .like("ps.name", projectSetQuery.getName())
-                .eq("re.masterId", projectSetQuery.getRecentMasterId())
-                .orders(projectSetQuery.getOrderParams())
-                .get();
-        return jpaTemplate.findList(queryBuilders, ProjectSetEntity.class);
+        String master = projectSetQuery.getRecentMasterId();
+        String sql = "select ps.* from pmc_project_set ps left join pmc_recent rc on ps.id = rc.model_id where rc.model='projectSet' and rc.master_id= '" +
+                master + "' order by rc.recent_time desc";
+        List<ProjectSetEntity> projectSetEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectSetEntity.class));
+
+        return projectSetEntityList;
     }
 
 

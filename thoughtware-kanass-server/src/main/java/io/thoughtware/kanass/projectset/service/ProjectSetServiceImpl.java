@@ -1,6 +1,7 @@
 package io.thoughtware.kanass.projectset.service;
 
 import io.thoughtware.eam.common.context.LoginContext;
+import io.thoughtware.kanass.project.project.entity.ProjectEntity;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
 import io.thoughtware.privilege.role.model.PatchUser;
 import io.thoughtware.kanass.project.project.model.Project;
@@ -32,10 +33,8 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -75,19 +74,14 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         projectSet.setMaster(user);
 
         projectSet.setCreator(createUserId);
+        String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        projectSet.setCreatTime(format);
+
         ProjectSetEntity projectSetEntity = BeanMapper.map(projectSet, ProjectSetEntity.class);
         String projectSetId = projectSetDao.createProjectSet(projectSetEntity);
 
         String masterId = user.getId();
         initProjectSetDmRole(masterId, projectSetId);
-
-        //初始化项目权限
-
-//        DmUser dmUser = new DmUser();
-//        dmUser.setDomainId(projectSetId);
-//        dmUser.setUser(user);;
-//        dmUserService.createDmUser(dmUser);
-//        dmRoleService.initDmRoles(projectSetId,masterId,"kanass");
 
         return projectSetId;
     }
@@ -141,6 +135,17 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
     @Override
     public void deleteProjectSet(@NotNull String id) {
+        // 删除项目集与项目的关联
+        ProjectQuery projectQuery = new ProjectQuery();
+        projectQuery.setProjectSetId(id);
+        List<Project> projectList = projectService.findProjectList(projectQuery);
+        if(projectList.size() > 0){
+            for (Project project : projectList) {
+                project.setProjectSetId("nullstring");
+                projectService.updateProject(project);
+            }
+        }
+
         projectSetDao.deleteProjectSet(id);
     }
 
@@ -192,7 +197,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         List<ProjectSetEntity> projectSetEntityList = projectSetDao.findProjectSetList(projectSetQuery);
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
-
+        findProjectNum(projectSetList);
         joinTemplate.joinQuery(projectSetList);
 
         return projectSetList;
@@ -241,7 +246,8 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     @Override
     public Map findProjectIsOrNotRe()  {
         Map projectMap = new HashMap<>();
-        List<Project> allProject = projectService.findAllProject();
+        ProjectQuery projectQuery = new ProjectQuery();
+        List<Project> allProject = projectService.findJoinProjectList(projectQuery);
         if (!allProject.isEmpty()){
             //已关联的项目
             List<Project> relatedProjects = allProject.stream().filter(a -> !StringUtils.isEmpty(a.getProjectSetId()) ).collect(Collectors.toList());
@@ -303,7 +309,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         List<ProjectSetEntity> projectSetEntityList = projectSetDao.findFocusProjectSetList(projectSetQuery);
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
-
+        findProjectNum(projectSetList);
         joinTemplate.joinQuery(projectSetList);
 
         return projectSetList;
@@ -317,11 +323,91 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         List<ProjectSetEntity> projectSetEntityList = projectSetDao.findRecentProjectSetList(projectSetQuery);
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
-
+        findProjectNum(projectSetList);
         joinTemplate.joinQuery(projectSetList);
 
         return projectSetList;
     }
 
+//    @Override
+    /**
+     * 查看我能看到的所有项目集
+     */
+    @Override
+    public List<ProjectSet> findJoinProjectSetList(ProjectSetQuery projectSetQuery){
+        // 查找我所参与的私有项目
+        DmUserQuery dmUserQuery = new DmUserQuery();
+        String createUserId = LoginContext.getLoginId();
+        dmUserQuery.setUserId(createUserId);
+        List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+        List<String> privateProjectSetIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+
+        String[] ids = privateProjectSetIds.toArray(new String[privateProjectSetIds.size()]);
+        projectSetQuery.setProjectSetIds(ids);
+
+        List<ProjectSetEntity> joinProjectSetList = projectSetDao.findJoinProjectSetList(projectSetQuery);
+        List<ProjectSet> projectSetList = BeanMapper.mapList(joinProjectSetList,ProjectSet.class);
+
+        findProjectNum(projectSetList);
+        joinTemplate.joinQuery(projectSetList);
+        return projectSetList;
+
+    }
+
+
+    public void findProjectNum(List<ProjectSet> projectSetList){
+        int size = projectSetList.size();
+        if(size > 0){
+            List<String>  projectSetIds = projectSetList.stream().map(item -> item.getId() ).collect(Collectors.toList());
+            String[] list = projectSetIds.toArray(new String[projectSetIds.size()]);
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setProjectSetIds(list);
+            List<Project> projectList = projectService.findProjectList(projectQuery);
+            for (ProjectSet projectSet : projectSetList) {
+                List<Project> collect = projectList.stream().filter(item -> item.getProjectSetId().equals(projectSet.getId())).collect(Collectors.toList());
+                projectSet.setProjectNumber(collect.size());
+            }
+
+        }
+    }
+
+    /**
+     * 查找最近的5个点击的，没有5个，用最近添加的凑
+     * @param projectSetQuery
+     * @return
+     */
+    @Override
+    public List<ProjectSet> findProjectSetSortRecentTime(ProjectSetQuery projectSetQuery) {
+
+        // 查找最近项目集合
+        List<ProjectSet> recentProjectSetList = findRecentProjectSetList(projectSetQuery);
+        String projectSetId = projectSetQuery.getProjectSetId();
+        if(projectSetId != null){
+            recentProjectSetList = recentProjectSetList.stream().filter(item -> !item.getId().equals(projectSetId)).collect(Collectors.toList());
+        }
+
+        int size = recentProjectSetList.size();
+        if(size < 5){
+            List<String> collect = recentProjectSetList.stream().map(item -> item.getId()).collect(Collectors.toList());
+
+            if(projectSetId != null){
+                collect.add(projectSetId);
+            }
+            //如果不够5条，查找我可见的项目
+            projectSetQuery.setProjectSetId(null);
+            List<ProjectSet> joinProjectSetList = findJoinProjectSetList(projectSetQuery);
+            // 去除已经被点击过的
+            joinProjectSetList = joinProjectSetList.stream().filter(item -> !collect.contains(item.getId())).collect(Collectors.toList());
+            int lackSize = 5 - size;
+            if(joinProjectSetList.size() > lackSize){
+                List<ProjectSet> projectSets = joinProjectSetList.subList(0, lackSize);
+                recentProjectSetList.addAll(projectSets);
+            }else {
+                recentProjectSetList.addAll(joinProjectSetList);
+            }
+        }
+
+        return recentProjectSetList;
+    }
 
 }

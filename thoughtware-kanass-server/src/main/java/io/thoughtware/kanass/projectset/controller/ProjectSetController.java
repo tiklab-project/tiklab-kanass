@@ -139,5 +139,19 @@ public class ProjectSetController {
         return Result.ok();
     }
 
+    @RequestMapping(path = "/findJoinProjectSetList",method = RequestMethod.POST)
+    @ApiMethod(name = "findJoinProjectSetList",desc = "查找用户能查看的所有项目集")
+    @ApiParam(name = "projectSetQuery",desc = "查询参数",required = true)
+    public Result<List<ProjectSet>> findJoinProjectSetList(@RequestBody @NotNull @Valid ProjectSetQuery projectSetQuery){
+        List<ProjectSet> joinProjectSetList = projectSetService.findJoinProjectSetList(projectSetQuery);
+        return Result.ok(joinProjectSetList);
+    }
 
+    @RequestMapping(path = "/findProjectSetSortRecentTime",method = RequestMethod.POST)
+    @ApiMethod(name = "findProjectSetSortRecentTime",desc = "查找用户能查看的所有项目集")
+    @ApiParam(name = "projectSetQuery",desc = "查询参数",required = true)
+    public Result<List<ProjectSet>> findProjectSetSortRecentTime(@RequestBody @NotNull @Valid ProjectSetQuery projectSetQuery){
+        List<ProjectSet> joinProjectSetList = projectSetService.findProjectSetSortRecentTime(projectSetQuery);
+        return Result.ok(joinProjectSetList);
+    }
 }

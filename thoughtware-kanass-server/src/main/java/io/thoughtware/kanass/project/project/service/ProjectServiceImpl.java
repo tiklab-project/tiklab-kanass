@@ -540,7 +540,6 @@ public class ProjectServiceImpl implements ProjectService {
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
         List<String> privateProjectIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
 
-
         //查找所有公开项目
         projectQuery.setProjectLimits("0");
         List<Project> projectListCommons = findProjectList(projectQuery);

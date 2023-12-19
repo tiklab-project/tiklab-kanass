@@ -112,4 +112,8 @@ public interface ProjectSetService {
      * @return
      */
     List<ProjectSet> findRecentProjectSetList(ProjectSetQuery projectSetQuery);
+
+    List<ProjectSet> findJoinProjectSetList(ProjectSetQuery projectSetQuery);
+
+    List<ProjectSet> findProjectSetSortRecentTime(ProjectSetQuery projectSetQuery);
 }

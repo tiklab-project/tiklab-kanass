@@ -825,6 +825,38 @@ public class WorkItemDao{
             paramMap.put("overdue", overdue);
         }
 
+        if(workItemQuery.getVersionIdIsNull() != null && workItemQuery.getVersionIdIsNull() == true) {
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.version_id is null");
+            }else {
+                sql = sql.concat(" and p.version_id is null");
+            }
+        }
+
+        if(workItemQuery.getVersionId() != null) {
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.version_id = '" + workItemQuery.getVersionId() + "'");
+            }else {
+                sql = sql.concat(" and p.version_id = '" + workItemQuery.getVersionId() + "'");
+            }
+        }
+
+        if(workItemQuery.getSprintIdIsNull() != null && workItemQuery.getSprintIdIsNull() == true) {
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.sprint_id is null");
+            }else {
+                sql = sql.concat(" and p.sprint_id is null");
+            }
+        }
+
+        if(workItemQuery.getSprintId() != null) {
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.sprint_id = '" + workItemQuery.getSprintId() + "'");
+            }else {
+                sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getSprintId() + "'");
+            }
+        }
+
 //        sqlMap.put("sql", sql);
         objectObjectHashMap.put("query", paramMap);
         objectObjectHashMap.put("sql", sql);
@@ -865,8 +897,8 @@ public class WorkItemDao{
             } else {
                 sql = sql.concat(" " + name + " " + orderType + "," );
             }
-
         }
+
         if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
             sql= sql.substring(0, sql.length() - 1);
         }
@@ -1001,9 +1033,32 @@ public class WorkItemDao{
         String sql = new String();
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
-        if(String.valueOf(o1).length()>0){
-            sql = sql.concat( String.valueOf(o1));
+        Object query = stringObjectMap.get("query");
+        if(!ObjectUtils.isEmpty(query)){
+            sql = sql.concat(String.valueOf(o1));
+        }else {
+            return null;
         }
+        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+            sql= sql.concat(" order by");
+        }
+        for (Order orderParam : workItemQuery.getOrderParams()) {
+            OrderTypeEnum orderType = orderParam.getOrderType();
+            String name = orderParam.getName();
+            System.out.println(orderType);
+            System.out.println(name);
+            if(name.equals("id")){
+                sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
+            } else if(name.equals("work_priority_id")){
+                sql = sql.concat(" priority.sort " + orderType + "," );
+            } else {
+                sql = sql.concat(" " + name + " " + orderType + "," );
+            }
+        }
+        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+            sql= sql.substring(0, sql.length() - 1);
+        }
+
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         Pagination WorkItemList = jdbcTemplate.findPage(sql, new Object[]{}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
         return WorkItemList;

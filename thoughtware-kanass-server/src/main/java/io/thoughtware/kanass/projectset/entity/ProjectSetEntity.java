@@ -51,11 +51,10 @@ public class ProjectSetEntity implements Serializable {
 
     // 创建日期
     @Column(name = "creat_time",length = 32)
-    private Date creatTime;
-
+    private String creatTime;
     // 更新日期
     @Column(name = "update_time",length = 32)
-    private Date updateTime;
+    private String updateTime;
 
     // 项目集可见范围
     @Column(name = "project_set_limits",length = 32,notNull = true)
@@ -125,19 +124,19 @@ public class ProjectSetEntity implements Serializable {
         this.isDelete = isDelete;
     }
 
-    public Date getCreatTime() {
+    public String getCreatTime() {
         return creatTime;
     }
 
-    public void setCreatTime(Date creatTime) {
+    public void setCreatTime(String creatTime) {
         this.creatTime = creatTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
