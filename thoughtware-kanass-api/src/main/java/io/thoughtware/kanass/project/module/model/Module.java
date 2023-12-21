@@ -24,8 +24,7 @@ public class Module extends BaseModel {
     @ApiProperty(name="id",desc="模块ID")
     private java.lang.String id;
 
-    @NotNull
-    @ApiProperty(name="moduleName",desc="模块名称",required = true)
+    @ApiProperty(name="moduleName",desc="模块名称")
     private String moduleName;
 
 

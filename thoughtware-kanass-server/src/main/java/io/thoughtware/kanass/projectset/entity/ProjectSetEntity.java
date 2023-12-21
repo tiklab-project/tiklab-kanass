@@ -46,6 +46,9 @@ public class ProjectSetEntity implements Serializable {
     @Column(name = "master",length = 32,notNull = true)
     private String master;
 
+    @Column(name = "color")
+    private Integer color;
+
     @Column(name = "is_delete",length = 32)
     private Integer isDelete;
 
@@ -170,5 +173,13 @@ public class ProjectSetEntity implements Serializable {
 
     public void setProjectSetLimits(String projectSetLimits) {
         this.projectSetLimits = projectSetLimits;
+    }
+
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
     }
 }

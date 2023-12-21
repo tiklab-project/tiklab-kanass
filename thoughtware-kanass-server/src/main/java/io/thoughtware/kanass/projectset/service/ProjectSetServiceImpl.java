@@ -72,10 +72,14 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         projectSet.setMaster(user);
-
+        int color = new Random().nextInt(3) + 1;
+        System.out.println(color);
+        projectSet.setColor(color);
         projectSet.setCreator(createUserId);
         String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         projectSet.setCreatTime(format);
+
+
 
         ProjectSetEntity projectSetEntity = BeanMapper.map(projectSet, ProjectSetEntity.class);
         String projectSetId = projectSetDao.createProjectSet(projectSetEntity);

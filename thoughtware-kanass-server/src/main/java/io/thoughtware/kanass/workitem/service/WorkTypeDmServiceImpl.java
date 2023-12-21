@@ -1,14 +1,14 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.flow.flow.model.*;
+import io.thoughtware.flow.flow.service.FlowModelRelationService;
+import io.thoughtware.flow.flow.service.FlowWorkRelationService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.beans.BeanMapper;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.flow.flow.model.DmFlow;
-import io.thoughtware.flow.flow.model.DmFlowQuery;
-import io.thoughtware.flow.flow.model.Flow;
 import io.thoughtware.flow.flow.service.DmFlowService;
 import io.thoughtware.flow.flow.service.FlowService;
 import io.thoughtware.form.form.model.DmForm;
@@ -47,6 +47,9 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
     DmFlowService dmFlowService;
 
     @Autowired
+    FlowModelRelationService flowModelRelationService;
+
+    @Autowired
     FlowService flowService;
 
     @Autowired
@@ -65,12 +68,22 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         DmFlowQuery dmFlowQuery = new DmFlowQuery();
         dmFlowQuery.setDomainId(workTypeDm.getProjectId());
         dmFlowQuery.setGlobalFlowId(flow.getId());
+
+        // 创建流程与事项类型关联记录
+        FlowModelRelation flowModelRelation = new FlowModelRelation();
+        // 查找当前项目是否已经复制过当前这个系统的流程
         DmFlow dmFlow = dmFlowService.existDmFlow(dmFlowQuery);
         if(dmFlow != null){
+            // 若复制过，直接关联到事项类型
             workTypeDm.setFlow(dmFlow.getFlow());
+            // 设置流程与事项类型的关联
+            flowModelRelation.setFlowId(dmFlow.getFlow().getId());
         }else {
+            // 若没复制过，则复制，并关联
             Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
             workTypeDm.setFlow(flow1);
+            // 设置流程与事项类型的关联,关联复制出来时间的流程
+            flowModelRelation.setFlowId(flow1.getId());
         }
 
         Form form = workTypeDm.getForm();
@@ -89,6 +102,13 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
         String workTypeDm1 = workTypeDmDao.createWorkTypeDm(workTypeDmEntity);
+        // 事项类型与流程关联
+        flowModelRelation.setModelId(workTypeDm1);
+        flowModelRelation.setModelName(workTypeDm.getWorkType().getName());
+        flowModelRelation.setBgroup("kanass");
+        flowModelRelation.setModelType("workTypeDm");
+        flowModelRelationService.createFlowModelRelation(flowModelRelation);
+
         workTypeDm.setId(workTypeDm1);
         return workTypeDm;
     }

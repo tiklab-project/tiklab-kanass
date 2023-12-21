@@ -224,6 +224,8 @@ public class WorkItemServiceImpl implements WorkItemService {
         singleSendMessageService.sendMessage(message);
         message.setMessageSendTypeId("qywechat");
         singleSendMessageService.sendMessage(message);
+        message.setMessageSendTypeId("dingding");
+        singleSendMessageService.sendMessage(message);
 
     }
 

@@ -12,6 +12,7 @@ import io.thoughtware.join.annotation.Join;
 import io.thoughtware.join.annotation.JoinQuery;
 import io.thoughtware.user.user.model.User;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -23,29 +24,32 @@ import java.util.List;
 public class ProjectSet extends BaseModel{
 
     @ApiProperty(name="id",desc="id")
-    private java.lang.String id;
+    private String id;
 
 
     @ApiProperty(name="name",desc="项目集名字",required = true)
-    private java.lang.String name;
+    private String name;
 
 
     @ApiProperty(name="startTime",desc="项目集开始时间",required = true)
-    private java.sql.Date startTime;
+    private Date startTime;
 
 
     @ApiProperty(name="endTime",desc="项目集结束时间",required = true)
-    private java.sql.Date endTime;
+    private Date endTime;
 
     @ApiProperty(name="remark",desc="项目集备注")
-    private java.lang.String remark;
+    private String remark;
 
 
     @ApiProperty(name="sort",desc="项目集排序",required = true)
-    private java.lang.Integer sort;
+    private Integer sort;
 
     @ApiProperty(name = "creator",desc = "项目集创建者")
     private String creator;
+
+    @ApiProperty(name = "color",desc = "项目集颜色")
+    private Integer color;
 
     @ApiProperty(name="master",desc="负责人",required = true)
     @Mappings({
@@ -179,5 +183,13 @@ public class ProjectSet extends BaseModel{
 
     public void setProjectSetLimits(String projectSetLimits) {
         this.projectSetLimits = projectSetLimits;
+    }
+
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
     }
 }

@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.flow.flow.model.FlowModelRelation;
+import io.thoughtware.flow.flow.service.FlowModelRelationService;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -40,10 +42,22 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     @Autowired
     WorkTypeDmService workTypeDmService;
 
+    @Autowired
+    FlowModelRelationService flowModelRelationService;
+
     @Override
     public String createWorkType(@NotNull @Valid WorkType workType) {
         WorkTypeEntity workTypeEntity = BeanMapper.map(workType, WorkTypeEntity.class);
         String workTypeId = workTypeDao.createWorkType(workTypeEntity);
+
+        // 创建事项类型时候，创建类型与流程的关联记录
+        FlowModelRelation flowModelRelation = new FlowModelRelation();
+        flowModelRelation.setFlowId(workType.getFlow().getId());
+        flowModelRelation.setModelId(workTypeId);
+        flowModelRelation.setModelName(workType.getName());
+        flowModelRelation.setModelType("workType");
+        flowModelRelation.setBgroup("kanass");
+        flowModelRelationService.createFlowModelRelation(flowModelRelation);
         return workTypeId;
     }
 

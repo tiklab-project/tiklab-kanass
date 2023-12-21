@@ -52,7 +52,8 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.0.2", new String[]{
                 "message_1.0.2",
-                "oplog_1.0.2"
+                "oplog_1.0.2",
+                "flow_1.0.2",
         });
         dsmConfig.newVersion("1.0.3", new String[]{
                 "pmc_1.0.3",
@@ -75,6 +76,15 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.1.2", new String[]{
                 "pmc_1.1.2"
+        });
+        dsmConfig.newVersion("1.1.3", new String[]{
+                "pmc_1.1.3"
+        });
+        dsmConfig.newVersion("1.1.4", new String[]{
+                "pmc_1.1.4"
+        });
+        dsmConfig.newVersion("1.1.5", new String[]{
+                "pmc_1.1.5"
         });
         return dsmConfig;
     }
