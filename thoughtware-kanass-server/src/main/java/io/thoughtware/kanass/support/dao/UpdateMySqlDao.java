@@ -237,7 +237,7 @@ public class UpdateMySqlDao {
                     exeSql(tableName,"node_id", 8);
                     exeSql(tableName,"flow_id", 8);
                 }
-                if (("pcs_flc_state_node_work_relation").equals(tableName)){
+                if (("pcs_flc_state_node_relation").equals(tableName)){
                     exeSql(tableName,"id", 12);
                     exeSql(tableName,"node_id", 8);
                     // ???
