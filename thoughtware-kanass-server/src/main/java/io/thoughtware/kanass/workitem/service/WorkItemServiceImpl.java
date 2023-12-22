@@ -6,7 +6,7 @@ import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.flow.service.FlowWorkRelationService;
 import io.thoughtware.flow.statenode.model.*;
-import io.thoughtware.flow.statenode.service.StateNodeWorkRelationService;
+import io.thoughtware.flow.statenode.service.StateNodeRelationService;
 import io.thoughtware.flow.transition.model.TransitionRule;
 import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
@@ -30,7 +30,6 @@ import io.thoughtware.message.message.model.MessageReceiver;
 import io.thoughtware.message.message.service.SingleSendMessageService;
 import io.thoughtware.message.setting.model.MessageType;
 import io.thoughtware.security.logging.model.Logging;
-import io.thoughtware.security.logging.model.LoggingTemplate;
 import io.thoughtware.security.logging.model.LoggingType;
 import io.thoughtware.security.logging.service.LoggingByTempService;
 import io.thoughtware.kanass.workitem.dao.WorkItemDao;
@@ -81,7 +80,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     FlowWorkRelationService flowWorkRelationService;
 
     @Autowired
-    StateNodeWorkRelationService stateNodeWorkRelationService;
+    StateNodeRelationService stateNodeRelationService;
 
     @Autowired
     StateNodeService stateNodeService;
@@ -359,14 +358,14 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         //设置节点跟事项关联
-        StateNodeWorkRelation stateNodeWorkRelation = new StateNodeWorkRelation();
-        stateNodeWorkRelation.setWorkId(id);
-        stateNodeWorkRelation.setWorkName(workItem.getTitle());
-        stateNodeWorkRelation.setStateNodeId(stateNode.getId());
-        stateNodeWorkRelation.setNodeId(stateNode.getNode().getId());
-        stateNodeWorkRelation.setProjectId(workItem.getProject().getId());
+        StateNodeRelation stateNodeRelation = new StateNodeRelation();
+        stateNodeRelation.setWorkId(id);
+        stateNodeRelation.setWorkName(workItem.getTitle());
+        stateNodeRelation.setStateNodeId(stateNode.getId());
+        stateNodeRelation.setNodeId(stateNode.getNode().getId());
+        stateNodeRelation.setProjectId(workItem.getProject().getId());
         try {
-            stateNodeWorkRelationService.createStateNodeWorkRelation(stateNodeWorkRelation);
+            stateNodeRelationService.createStateNodeWorkRelation(stateNodeRelation);
         }catch (Exception e){
             throw new ApplicationException(e);
         }
@@ -676,25 +675,25 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
     }
     void setFlowRelation(WorkItem workItem){
-        StateNodeWorkRelation stateNodeWorkRelation = new StateNodeWorkRelation();
-        StateNodeWorkRelationQuery stateNodeWorkRelationQuery = new StateNodeWorkRelationQuery();
-        stateNodeWorkRelationQuery.setWorkId(workItem.getId());
+        StateNodeRelation stateNodeRelation = new StateNodeRelation();
+        StateNodeRelationQuery stateNodeRelationQuery = new StateNodeRelationQuery();
+        stateNodeRelationQuery.setWorkId(workItem.getId());
 
-        List<StateNodeWorkRelation> stateNodeWorkRelationList = stateNodeWorkRelationService.findStateNodeWorkRelationList(stateNodeWorkRelationQuery);
-        if(stateNodeWorkRelationList.size() > 0){
-            String id = stateNodeWorkRelationList.get(0).getId();
-            stateNodeWorkRelation.setId(id);
-            stateNodeWorkRelation.setWorkName(workItem.getTitle());
-            stateNodeWorkRelation.setStateNodeId(workItem.getWorkStatus().getId());
-            stateNodeWorkRelation.setNodeId(workItem.getWorkStatusNode().getId());
-            stateNodeWorkRelationService.updateStateNodeWorkRelation(stateNodeWorkRelation);
+        List<StateNodeRelation> stateNodeRelationList = stateNodeRelationService.findStateNodeWorkRelationList(stateNodeRelationQuery);
+        if(stateNodeRelationList.size() > 0){
+            String id = stateNodeRelationList.get(0).getId();
+            stateNodeRelation.setId(id);
+            stateNodeRelation.setWorkName(workItem.getTitle());
+            stateNodeRelation.setStateNodeId(workItem.getWorkStatus().getId());
+            stateNodeRelation.setNodeId(workItem.getWorkStatusNode().getId());
+            stateNodeRelationService.updateStateNodeWorkRelation(stateNodeRelation);
         }else {
-            stateNodeWorkRelation.setWorkId(workItem.getId());
-            stateNodeWorkRelation.setWorkName(workItem.getTitle());
-            stateNodeWorkRelation.setStateNodeId(workItem.getWorkStatus().getId());
-            stateNodeWorkRelation.setNodeId(workItem.getWorkStatusNode().getId());
-            stateNodeWorkRelation.setProjectId(workItem.getProject().getId());
-            stateNodeWorkRelationService.createStateNodeWorkRelation(stateNodeWorkRelation);
+            stateNodeRelation.setWorkId(workItem.getId());
+            stateNodeRelation.setWorkName(workItem.getTitle());
+            stateNodeRelation.setStateNodeId(workItem.getWorkStatus().getId());
+            stateNodeRelation.setNodeId(workItem.getWorkStatusNode().getId());
+            stateNodeRelation.setProjectId(workItem.getProject().getId());
+            stateNodeRelationService.createStateNodeWorkRelation(stateNodeRelation);
         }
 
     }
