@@ -2,7 +2,6 @@ package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
-import io.thoughtware.flow.flow.service.FlowWorkRelationService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.beans.BeanMapper;

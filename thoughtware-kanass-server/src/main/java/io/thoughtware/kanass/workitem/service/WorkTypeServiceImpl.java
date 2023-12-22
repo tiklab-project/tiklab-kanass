@@ -2,6 +2,7 @@ package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.flow.flow.model.FlowModelRelation;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
+import io.thoughtware.form.form.model.FormModelRelation;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -58,6 +59,8 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         flowModelRelation.setModelType("workType");
         flowModelRelation.setBgroup("kanass");
         flowModelRelationService.createFlowModelRelation(flowModelRelation);
+
+
         return workTypeId;
     }
 

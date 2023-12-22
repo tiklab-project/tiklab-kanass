@@ -194,7 +194,7 @@ public class ProjectServiceImpl implements ProjectService {
         messageDispatchNotice.setBaseUrl(baseUrl);
         messageDispatchNotice.setLink("/index/${projectType}/${projectId}/survey");
         messageDispatchNotice.setAction(content.get("projectName"));
-        messageDispatchNoticeService.createMessageItem(messageDispatchNotice);
+//        messageDispatchNoticeService.createMessageItem(messageDispatchNotice);
     }
 
     @Override
