@@ -1,8 +1,10 @@
 package io.thoughtware.kanass.sprint.service;
 
+import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.service.ProjectService;
+import io.thoughtware.kanass.project.project.support.MessageTemplateProject;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.model.SprintQuery;
 import io.thoughtware.kanass.sprint.model.SprintState;
@@ -18,18 +20,23 @@ import io.thoughtware.kanass.sprint.entity.SprintEntity;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
+import io.thoughtware.message.message.model.Message;
+import io.thoughtware.message.message.model.MessageReceiver;
+import io.thoughtware.message.message.model.SendMessageNotice;
+import io.thoughtware.message.message.service.SendMessageNoticeService;
+import io.thoughtware.message.setting.model.MessageType;
 import io.thoughtware.user.dmUser.model.DmUser;
 import io.thoughtware.user.dmUser.model.DmUserQuery;
 import io.thoughtware.user.user.model.User;
 import io.thoughtware.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,26 +63,47 @@ public class SprintServiceImpl implements SprintService {
     @Autowired
     WorkItemService workItemService;
 
-    /**
-     * 添加动态
-     */
-    void creatDynamic(String id,String type){
-        Sprint sprint = findOne(id);
-        String createUserId = LoginContext.getLoginId();
-        Project project = projectService.findOne(sprint.getProject().getId());
-        User user = userService.findOne(createUserId);
-        Date newDate = new Date();
+    @Value("${base.url:null}")
+    String baseUrl;
 
-        //创建动态
-//        Dynamic dynamic = new Dynamic();
-//        dynamic.setDynamicType(type);
-//        dynamic.setName(sprint.getSprintName());
-//        dynamic.setModelId(sprint.getId());
-//        dynamic.setUser(user);
-//        dynamic.setDynamicTime(newDate);
-//        dynamic.setProject(project);
-//        dynamic.setModel("sprint");
-//        dynamicService.createDynamic(dynamic);
+    @Autowired
+    SendMessageNoticeService sendMessageNoticeService;
+
+
+
+    /**
+     * 发送消息
+     * @param sprint
+     */
+    void sendMessageForCreatSprint(Sprint sprint ){
+        String projectId = sprint.getProject().getId();
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("spintName", sprint.getSprintName());
+        content.put("sprintId", sprint.getId());
+        content.put("projectId", sprint.getProject().getId());
+
+        Message message = new Message();
+        MessageType messageType = new MessageType();
+        messageType.setId("KANASS_MESSAGETYPE_TASKTODO");
+        message.setMessageType(messageType);
+        message.setData(content);
+
+        String createUserId = LoginContext.getLoginId();
+        User user = userService.findOne(createUserId);
+        content.put("createUser", user);
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+        SendMessageNotice sendMessageNotice = new SendMessageNotice();
+        String msg = JSONObject.toJSONString(content);
+
+        sendMessageNotice.setBaseUrl(baseUrl);
+        sendMessageNotice.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
+        sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/survey");
+        sendMessageNotice.setAction(sprint.getSprintName());
+        sendMessageNotice.setSendId(user.getId());
+        sendMessageNotice.setSiteData(msg);
+        sendMessageNotice.setDomainId(projectId);
+        sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
     }
 
     @Override
@@ -87,6 +115,8 @@ public class SprintServiceImpl implements SprintService {
 
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
+        sprint = findSprint(id);
+        sendMessageForCreatSprint(sprint);
         return id;
     }
 

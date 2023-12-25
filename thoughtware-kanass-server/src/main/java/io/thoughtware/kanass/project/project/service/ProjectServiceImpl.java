@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.dal.jpa.JpaTemplate;
 import io.thoughtware.eam.common.context.LoginContext;
+import io.thoughtware.message.message.service.MessageDmNoticeService;
 import io.thoughtware.privilege.role.model.PatchUser;
 import io.thoughtware.kanass.project.milestone.service.MilestoneService;
 import io.thoughtware.kanass.project.module.service.ModuleService;
@@ -138,7 +139,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ProjectTypeService projectTypeService;
 
-
+    @Autowired
+    MessageDmNoticeService messageDmNoticeService;
     @Value("${base.url:null}")
     String baseUrl;
 
@@ -244,6 +246,8 @@ public class ProjectServiceImpl implements ProjectService {
 
         //初始事项类型
         initWorkType(id);
+        // 复制项目通知方案
+        messageDmNoticeService.initMessageDmNotice(id);
         return id;
     }
 
@@ -382,7 +386,6 @@ public class ProjectServiceImpl implements ProjectService {
         Map<String, String> content = new HashMap<>();
         content.put("projectId", id);
         content.put("projectName", project.getProjectName());
-        //creatDynamic(project.getId(),"update", null);
 
 
     }

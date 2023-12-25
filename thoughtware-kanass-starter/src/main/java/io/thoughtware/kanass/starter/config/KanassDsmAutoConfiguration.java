@@ -43,6 +43,7 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.0.1", new String[]{
                 "pmc_1.0.1",
                 "flow_1.0.1",
+                "form_1.0.1",
                 "message_1.0.1",
                 //SecurityDsm
                 "oplog_1.0.1",
@@ -63,7 +64,8 @@ public class KanassDsmAutoConfiguration {
                 "pmc_1.0.4"
         });
         dsmConfig.newVersion("1.0.5", new String[]{
-                "pmc_1.0.5"
+                "pmc_1.0.5",
+                "message_1.0.5"
         });
         dsmConfig.newVersion("1.0.6", new String[]{
                 "pmc_1.0.6"

@@ -922,6 +922,10 @@ public class WorkItemDao{
         }else {
             sql = sql.concat(" p.parent_id is null");
         }
+        int index = sql.indexOf("where");
+
+        sql = "Select count(1) as total from pmc_work_item p " + sql.substring(index);
+
 
         Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
         WorkItemCount.put("all", allNum);
@@ -937,6 +941,10 @@ public class WorkItemDao{
         String sql3 =  sql.concat(" and p.work_type_code = 'defect'");
         Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
         WorkItemCount.put("defect", defectNum);
+
+        String sql4 =  sql.concat(" and p.work_type_code = 'epic'");
+        Integer epicNum = jpaTemplate.getJdbcTemplate().queryForObject(sql4, new Object[]{}, Integer.class);
+        WorkItemCount.put("epic", epicNum);
 
         return WorkItemCount;
     }

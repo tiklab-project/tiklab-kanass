@@ -1,8 +1,12 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.flow.flow.model.Flow;
 import io.thoughtware.flow.flow.model.FlowModelRelation;
+import io.thoughtware.flow.flow.model.FlowModelRelationQuery;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
 import io.thoughtware.form.form.model.FormModelRelation;
+import io.thoughtware.form.form.model.FormModelRelationQuery;
+import io.thoughtware.form.form.service.FormModelRelationService;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -17,6 +21,7 @@ import io.thoughtware.core.page.Pagination;
 import io.thoughtware.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -46,6 +51,9 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     @Autowired
     FlowModelRelationService flowModelRelationService;
 
+    @Autowired
+    FormModelRelationService formModelRelationService;
+
     @Override
     public String createWorkType(@NotNull @Valid WorkType workType) {
         WorkTypeEntity workTypeEntity = BeanMapper.map(workType, WorkTypeEntity.class);
@@ -60,7 +68,13 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         flowModelRelation.setBgroup("kanass");
         flowModelRelationService.createFlowModelRelation(flowModelRelation);
 
-
+        FormModelRelation formModelRelation = new FormModelRelation();
+        formModelRelation.setFormId(workType.getForm().getId());
+        formModelRelation.setModelId(workTypeId);
+        formModelRelation.setModelName(workType.getName());
+        formModelRelation.setModelType("workType");
+        formModelRelation.setBgroup("kanass");
+        formModelRelationService.createFormModelRelation(formModelRelation);
         return workTypeId;
     }
 
@@ -68,18 +82,47 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     public void updateWorkType(@NotNull @Valid WorkType workType) {
         WorkTypeEntity workTypeEntity = BeanMapper.map(workType, WorkTypeEntity.class);
 
+        String workTypeId = workType.getId();
+        Flow flow = workType.getFlow();
+        if(!ObjectUtils.isEmpty(flow)){
+            FlowModelRelationQuery flowModelRelationQuery = new FlowModelRelationQuery();
+            flowModelRelationQuery.setModelId(workTypeId);
+            List<FlowModelRelation> flowModelRelationList = flowModelRelationService.findFlowModelRelationList(flowModelRelationQuery);
+            for (FlowModelRelation flowModelRelation : flowModelRelationList) {
+                // 设置新的流程与当前事项类型的关系
+                flowModelRelation.setFlowId(flow.getId());
+                flowModelRelation.setModelName(workType.getName());
+                flowModelRelationService.updateFlowModelRelation(flowModelRelation);
+            }
+        }
+        Form form = workType.getForm();
+        if(!ObjectUtils.isEmpty(form)){
+            FormModelRelationQuery formModelRelationQuery = new FormModelRelationQuery();
+            formModelRelationQuery.setModelId(workTypeId);
+
+            List<FormModelRelation> formModelRelationList = formModelRelationService.findFormModelRelationList(formModelRelationQuery);
+            for (FormModelRelation formModelRelation : formModelRelationList) {
+                formModelRelation.setFormId(form.getId());
+                formModelRelation.setModelName(workType.getName());
+                formModelRelationService.updateFormModelRelation(formModelRelation);
+            }
+        }
         workTypeDao.updateWorkType(workTypeEntity);
     }
 
     @Override
     public String deleteWorkType(@NotNull String id) {
-        WorkItemQuery workItemQuery = new WorkItemQuery();
-        workItemQuery.setWorkTypeId(id);
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-        if(workItemList != null && workItemList.size()>0){
+        // 查找当前事项类型有项目内事项类型关联
+        WorkTypeDmQuery workTypeDmQuery = new WorkTypeDmQuery();
+        workTypeDmQuery.setWorkTypeId(id);
+        List<WorkTypeDm> workTypeDmList = workTypeDmService.findWorkTypeDmList(workTypeDmQuery);
+        if(workTypeDmList != null && workTypeDmList.size()>0){
             throw new SystemException(3001,"类型使用中，不可删除");
         }else {
             workTypeDao.deleteWorkType(id);
+            // 删除关联关系
+            formModelRelationService.deleteFormModelRelationByModalId(id);
+            flowModelRelationService.deleteFlowModelRelationByModelId(id);
             return "SUCCESS";
         }
     }

@@ -224,11 +224,6 @@ public class UpdateMySqlDao {
                     exeSql(tableName,"id", 8);
                     exeSql(tableName,"grouper", 12);
                 }
-                if (("pcs_flc_flow_work_relation").equals(tableName)){
-                    exeSql(tableName,"id", 12);
-                    exeSql(tableName,"flow_id", 8);
-                    exeSql(tableName,"project_id", 12);
-                }
                 if (("pcs_flc_state_node").equals(tableName)){
                     exeSql(tableName,"id", 8);
                 }

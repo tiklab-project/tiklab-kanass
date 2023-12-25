@@ -2,6 +2,8 @@ package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
+import io.thoughtware.form.form.model.FormModelRelation;
+import io.thoughtware.form.form.service.FormModelRelationService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.beans.BeanMapper;
@@ -49,6 +51,9 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
     FlowModelRelationService flowModelRelationService;
 
     @Autowired
+    FormModelRelationService formModelRelationService;
+
+    @Autowired
     FlowService flowService;
 
     @Autowired
@@ -70,6 +75,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         // 创建流程与事项类型关联记录
         FlowModelRelation flowModelRelation = new FlowModelRelation();
+
         // 查找当前项目是否已经复制过当前这个系统的流程
         DmFlow dmFlow = dmFlowService.existDmFlow(dmFlowQuery);
         if(dmFlow != null){
@@ -90,13 +96,18 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         dmFormQuery.setDomainId(workTypeDm.getProjectId());
         dmFormQuery.setGlobalFormId(form.getId());
         DmForm dmForm = dmFormService.existDmForm(dmFormQuery);
+        FormModelRelation formModelRelation = new FormModelRelation();
+
         if(dmForm != null){
             workTypeDm.setForm(dmForm.getForm());
+            formModelRelation.setFormId(dmForm.getForm().getId());
+
         }else {
             String formId = dmFormService.cloneFormById(form.getId(),workTypeDm.getProjectId());
             Form form1 = new Form();
             form1.setId(formId);
             workTypeDm.setForm(form1);
+            formModelRelation.setFormId(formId);
         }
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
@@ -108,6 +119,12 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         flowModelRelation.setModelType("workTypeDm");
         flowModelRelationService.createFlowModelRelation(flowModelRelation);
 
+        // 事项类型与表单关联
+        formModelRelation.setModelId(workTypeDm1);
+        formModelRelation.setModelName(workTypeDm.getWorkType().getName());
+        formModelRelation.setBgroup("kanass");
+        formModelRelation.setModelType("workTypeDm");
+        formModelRelationService.createFormModelRelation(formModelRelation);
         workTypeDm.setId(workTypeDm1);
         return workTypeDm;
     }
@@ -125,7 +142,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         workItemQuery.setWorkTypeId(id);
         List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
         int size = workItemList.size();
-        if(workItemList != null && workItemList.size()>0){
+        if(workItemList != null && size>0){
             throw new SystemException(3001,"类型使用中，不可删除");
         }else {
             workTypeDmDao.deleteWorkTypeDm(id);

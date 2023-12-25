@@ -132,6 +132,11 @@
         </dependency>
         <dependency>
             <groupId>io.thoughtware</groupId>
+            <artifactId>thoughtware-user-server</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.thoughtware</groupId>
             <artifactId>thoughtware-form-api</artifactId>
             <version>${thoughtware-form.version}</version>
         </dependency>

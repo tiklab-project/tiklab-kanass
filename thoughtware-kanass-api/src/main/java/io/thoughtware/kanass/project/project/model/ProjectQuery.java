@@ -92,7 +92,7 @@ public class ProjectQuery implements Serializable {
      * @pi.model: Order
      */
     @ApiProperty(name ="orderParams",desc = "排序参数")
-    private List<Order> orderParams = OrderBuilders.instance().asc("projectName").get();
+    private List<Order> orderParams = OrderBuilders.instance().desc("projectName").get();
 
     /**
      * @pi.model: Page

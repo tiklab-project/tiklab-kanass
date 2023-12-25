@@ -9,6 +9,7 @@ import io.thoughtware.flow.statenode.service.StateNodeRelationService;
 import io.thoughtware.flow.transition.model.TransitionRule;
 import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
+import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.security.logging.model.LoggingQuery;
 import io.thoughtware.security.logging.service.LoggingService;
@@ -26,7 +27,6 @@ import io.thoughtware.flow.statenode.service.StateNodeService;
 import io.thoughtware.join.JoinTemplate;
 import io.thoughtware.message.message.model.Message;
 import io.thoughtware.message.message.model.MessageReceiver;
-import io.thoughtware.message.message.service.SingleSendMessageService;
 import io.thoughtware.message.setting.model.MessageType;
 import io.thoughtware.security.logging.model.Logging;
 import io.thoughtware.security.logging.model.LoggingType;
@@ -95,7 +95,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     DmFlowService dmFlowService;
 
     @Autowired
-    SingleSendMessageService singleSendMessageService;
+    SendMessageNoticeService sendMessageNoticeService;
 
 
     @Autowired
@@ -191,7 +191,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setData(content);
 
 
-        singleSendMessageService.sendMessage(message);
+        sendMessageNoticeService.sendMessage(message);
 //        message.setMessageSendTypeId("email");
 //        singleSendMessageService.sendMessage(message);
 //        message.setMessageSendTypeId("qywechat");
@@ -246,7 +246,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setMessageSendTypeId("site");
         // 发送者
         message.setSendId(user.getId());
-        singleSendMessageService.sendMessage(message);
+        sendMessageNoticeService.sendMessage(message);
 //        message.setMessageSendTypeId("email");
 //        singleSendMessageService.sendMessage(message);
 //        message.setMessageSendTypeId("qywechat");
@@ -296,7 +296,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setAction(workItem.getTitle());
         message.setSendId(user.getId());
         message.setMessageSendTypeId("site");
-        singleSendMessageService.sendMessage(message);
+        sendMessageNoticeService.sendMessage(message);
 //        message.setMessageSendTypeId("email");
 //        singleSendMessageService.sendMessage(message);
 //        message.setMessageSendTypeId("qywechat");
