@@ -916,10 +916,12 @@ public class WorkItemDao{
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         String sql = new String();
         Object o1 = stringObjectMap.get("sql");
-        if(!ObjectUtils.isEmpty(o1)){
+        Object query = stringObjectMap.get("query");
+        if(!ObjectUtils.isEmpty(query)){
             sql = sql.concat(String.valueOf(o1));
             sql = sql.concat(" and p.parent_id is null");
         }else {
+            sql = sql.concat( String.valueOf(o1));
             sql = sql.concat(" p.parent_id is null");
         }
         int index = sql.indexOf("where");
