@@ -34,7 +34,7 @@ postgresql:
 eas:
     embbed:
         enable: false
-    address: http://eas-ce.demo.kanass.net
+    address: http://e.eas.thoughtware.cn
 #dfs config
 #dfs.server.enabled=false
 dfs:
