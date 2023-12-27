@@ -59,7 +59,7 @@ dcs:
     expire: 7200
 #address: http://eas.local.kanass.net
 #  address: http://eas.dev.kanass.net
-darth:
+eas:
   embbed:
     enable: true
   web:
