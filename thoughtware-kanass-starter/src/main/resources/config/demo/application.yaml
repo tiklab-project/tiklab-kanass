@@ -1,6 +1,6 @@
     #application config
 app:
-    name: thoughtware-kanass
+    name: thoughtware-kanass-ce
 spring:
     profiles:
         active: demo
@@ -9,10 +9,10 @@ spring:
 server:
     port: 8080
 
-DATA_HOME: /opt/kanass/kanass
+DATA_HOME: /opt/thoughtware/kanass-ee
 
 base:
-    url: http://kanass-ce.demo.kanass.net
+    url: http://kanass-ce.demo.thoughtware.cn
 
 jdbc:
     driverClassName: org.postgresql.Driver
@@ -34,32 +34,29 @@ postgresql:
 eas:
     embbed:
         enable: false
-    address: http://e.eas.thoughtware.cn
+    address: http://eas-ce.demo.thoughtware.cn
 #dfs config
 #dfs.server.enabled=false
 dfs:
     server:
         enabled: true
-        port: 4001
+        port: 4000
         datapath: ${DATA_HOME}/files
     client:
-        url: 127.0.0.1:4001
+        url: 127.0.0.1:4000
         group: g1
         bucket: kanass
 
-#dcs config
-#dcs.server.enabled=false
-#dcs:
-#    server:
-#        enabled: true
-#        port: 5000
-#        datapath: ${DATA_HOME}/caches
-#    client:
-#        url: 127.0.0.1:5000
-#        group: g1
-#        database: dcs1
-#        expire: 7200
-
+dcs:
+    server:
+        enabled: true
+        port: 6000
+        datapath: ${DATA_HOME}/caches
+    client:
+        url: 127.0.0.1:6000
+        group: g1
+        database: dcs1
+        expire: 7200
 #integration config
 
 homes:
@@ -72,7 +69,7 @@ file:
 
 #license
 licences:
-    path: ${APP_HOME}/src/main/resources/licences
+    path: ${APP_HOME}/licences
 
 #plugin config
 plugin:
@@ -88,3 +85,5 @@ version: ce
 backups:
     time: 0 0 2 * * ?
     dir: /data/kanass
+    dfs:
+        dir: ${DATA_HOME}/files
