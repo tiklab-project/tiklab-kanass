@@ -13,8 +13,8 @@ import io.thoughtware.kanass.support.model.Recent;
 import io.thoughtware.kanass.support.model.RecentQuery;
 
 
-import io.thoughtware.beans.BeanMapper;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.beans.BeanMapper;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.kanass.workitem.service.WorkItemService;

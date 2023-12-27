@@ -2,7 +2,7 @@ package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.kanass.workitem.model.WorkStatus;
 import io.thoughtware.kanass.workitem.model.WorkStatusQuery;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.kanass.workitem.dao.WorkStatusDao;

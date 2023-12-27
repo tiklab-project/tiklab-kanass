@@ -13,12 +13,12 @@ import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.form.form.model.Form;
 import io.thoughtware.form.form.model.FormQuery;
 import io.thoughtware.form.form.service.FormService;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.workitem.dao.WorkTypeDao;
 import io.thoughtware.kanass.workitem.entity.WorkTypeEntity;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;

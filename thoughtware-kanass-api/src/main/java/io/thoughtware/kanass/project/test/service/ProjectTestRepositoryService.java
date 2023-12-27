@@ -1,10 +1,10 @@
 package io.thoughtware.kanass.project.test.service;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.join.annotation.FindAll;
-import io.thoughtware.join.annotation.FindList;
-import io.thoughtware.join.annotation.FindOne;
-import io.thoughtware.join.annotation.JoinProvider;
+import io.thoughtware.toolkit.join.annotation.FindAll;
+import io.thoughtware.toolkit.join.annotation.FindList;
+import io.thoughtware.toolkit.join.annotation.FindOne;
+import io.thoughtware.toolkit.join.annotation.JoinProvider;
 import io.thoughtware.kanass.project.test.model.ProjectTestRepository;
 import io.thoughtware.kanass.project.test.model.ProjectTestRepositoryQuery;
 import io.thoughtware.kanass.project.test.model.TestRepository;

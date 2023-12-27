@@ -3,8 +3,8 @@ package io.thoughtware.kanass.project.epic.service;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.core.page.Pagination;
 
-import io.thoughtware.join.annotation.FindList;
-import io.thoughtware.join.annotation.FindOne;
+import io.thoughtware.toolkit.join.annotation.FindList;
+import io.thoughtware.toolkit.join.annotation.FindOne;
 import io.thoughtware.kanass.project.epic.model.EpicWorkItem;
 import io.thoughtware.kanass.project.epic.model.EpicWorkItemQuery;
 

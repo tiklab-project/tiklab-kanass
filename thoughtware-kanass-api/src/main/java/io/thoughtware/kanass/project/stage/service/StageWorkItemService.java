@@ -2,10 +2,10 @@ package io.thoughtware.kanass.project.stage.service;
 
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.join.annotation.FindAll;
-import io.thoughtware.join.annotation.FindList;
-import io.thoughtware.join.annotation.FindOne;
-import io.thoughtware.join.annotation.JoinProvider;
+import io.thoughtware.toolkit.join.annotation.FindAll;
+import io.thoughtware.toolkit.join.annotation.FindList;
+import io.thoughtware.toolkit.join.annotation.FindOne;
+import io.thoughtware.toolkit.join.annotation.JoinProvider;
 import io.thoughtware.kanass.project.stage.model.StageWorkItemQuery;
 import io.thoughtware.kanass.project.stage.model.StageWorkItem;
 

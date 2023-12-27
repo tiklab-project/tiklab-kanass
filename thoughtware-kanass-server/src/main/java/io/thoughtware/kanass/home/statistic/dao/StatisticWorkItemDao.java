@@ -224,6 +224,9 @@ public class StatisticWorkItemDao {
                 s= s.substring(0, s.length() - 1);
                 s = s.concat(")");
                 sql1 = " t.project_id in " + s + " and ";
+            }else {
+                list = null;
+                return;
             }
         }
 
@@ -310,6 +313,9 @@ public class StatisticWorkItemDao {
                 s= s.substring(0, s.length() - 1);
                 s = s.concat(")");
                 sql1 = " t.project_id in " + s + " and ";
+            }else {
+                list = null;
+                return;
             }
         }
 
@@ -400,62 +406,66 @@ public class StatisticWorkItemDao {
                 s = s.concat(")");
                 sql1 = " t.project_id in " + s + " and ";
             }
+            int dateRangerInt = dateRanger;
+            int month = dateRangerInt / 30;
+            int remainder = dateRangerInt % 30;
+            if(remainder > 0){
+                month ++;
+            }
+
+            int buildCountTotal = 0;
+            int endCountTotal = 0;
+
+            for(int date = month - 1; date >= 0; date--){
+                String startTime = getPastDate(date*30);
+                String endTime = getPastDate(date*30 + 30);
+                WorkItemBuildAndEndStatistic workItemBuildAndEndStatistic = new WorkItemBuildAndEndStatistic();
+                workItemBuildAndEndStatistic.setTime(startTime.substring(0,10));
+
+                //统计新增事项
+                sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.build_time between ? and  ?";
+                Object[] params = new Object[]{endTime,startTime};
+                if( statisticWorkItemQuery.getSprintId() != null ){
+                    String sprintId = statisticWorkItemQuery.getSprintId();
+                    sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.sprint_id = ? and t.build_time between ? and  ?";
+                    params = new Object[]{sprintId,endTime,startTime};
+                }
+                Integer buildCount = getJdbcTemplate().queryForObject(sql,params,Integer.class);
+
+                //统计完成事项
+                sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.actual_end_time between ? and ?";
+                Object[] params1 = new Object[]{endTime,startTime};
+                if( statisticWorkItemQuery.getSprintId() != null ){
+                    String sprintId = statisticWorkItemQuery.getSprintId();
+                    sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.sprint_id = ? and t.actual_end_time between ? and  ?";
+                    params1 = new Object[]{sprintId,endTime,startTime};
+                }
+                Integer endCount = getJdbcTemplate().queryForObject(sql,params1,Integer.class);
+
+                //计数统计
+                if(collectionType.equals("count")){
+                    workItemBuildAndEndStatistic.setBuildCount(buildCount);
+                    workItemBuildAndEndStatistic.setEndCount(endCount);
+                }
+
+                //累计统计
+                if(collectionType.equals("countTotal")){
+                    int buildCountInt = buildCount;
+                    buildCountTotal = buildCountTotal + buildCountInt;
+                    workItemBuildAndEndStatistic.setBuildCount(buildCountTotal);
+
+                    int endCountInt = endCount;
+                    endCountTotal = endCountTotal + endCountInt;
+                    workItemBuildAndEndStatistic.setEndCount(endCountTotal);
+                }
+                list.add(workItemBuildAndEndStatistic);
+            }
+        }else {
+            list = null;
+            return;
         }
 
-        int dateRangerInt = dateRanger;
-        int month = dateRangerInt / 30;
-        int remainder = dateRangerInt % 30;
-        if(remainder > 0){
-            month ++;
-        }
 
-        int buildCountTotal = 0;
-        int endCountTotal = 0;
-
-        for(int date = month - 1; date >= 0; date--){
-            String startTime = getPastDate(date*30);
-            String endTime = getPastDate(date*30 + 30);
-            WorkItemBuildAndEndStatistic workItemBuildAndEndStatistic = new WorkItemBuildAndEndStatistic();
-            workItemBuildAndEndStatistic.setTime(startTime.substring(0,10));
-
-            //统计新增事项
-            sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.build_time between ? and  ?";
-            Object[] params = new Object[]{endTime,startTime};
-            if( statisticWorkItemQuery.getSprintId() != null ){
-                String sprintId = statisticWorkItemQuery.getSprintId();
-                sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.sprint_id = ? and t.build_time between ? and  ?";
-                params = new Object[]{sprintId,endTime,startTime};
-            }
-            Integer buildCount = getJdbcTemplate().queryForObject(sql,params,Integer.class);
-
-            //统计完成事项
-            sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.actual_end_time between ? and ?";
-            Object[] params1 = new Object[]{endTime,startTime};
-            if( statisticWorkItemQuery.getSprintId() != null ){
-                String sprintId = statisticWorkItemQuery.getSprintId();
-                sql = "select count(1) as totalCount from pmc_work_item t where " + sql1 + "t.sprint_id = ? and t.actual_end_time between ? and  ?";
-                params1 = new Object[]{sprintId,endTime,startTime};
-            }
-            Integer endCount = getJdbcTemplate().queryForObject(sql,params1,Integer.class);
-
-            //计数统计
-            if(collectionType.equals("count")){
-                workItemBuildAndEndStatistic.setBuildCount(buildCount);
-                workItemBuildAndEndStatistic.setEndCount(endCount);
-            }
-
-            //累计统计
-            if(collectionType.equals("countTotal")){
-                int buildCountInt = buildCount;
-                buildCountTotal = buildCountTotal + buildCountInt;
-                workItemBuildAndEndStatistic.setBuildCount(buildCountTotal);
-
-                int endCountInt = endCount;
-                endCountTotal = endCountTotal + endCountInt;
-                workItemBuildAndEndStatistic.setEndCount(endCountTotal);
-            }
-            list.add(workItemBuildAndEndStatistic);
-        }
     }
 
     /**
@@ -490,6 +500,9 @@ public class StatisticWorkItemDao {
                 s= s.substring(0, s.length() - 1);
                 s = s.concat(")");
                 sql1 = " t.project_id in " + s + " and ";
+            }else {
+                list = null;
+                return;
             }
         }
         int dateRangerInt = dateRanger;
@@ -576,6 +589,9 @@ public class StatisticWorkItemDao {
                 s= s.substring(0, s.length() - 1);
                 s = s.concat(")");
                 sql1 = " t.project_id in " + s + " and ";
+            }else {
+                list = null;
+                return;
             }
         }
         int dateRangerInt = dateRanger;

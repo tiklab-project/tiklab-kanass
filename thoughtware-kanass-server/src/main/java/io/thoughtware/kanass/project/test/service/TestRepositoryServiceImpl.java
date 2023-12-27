@@ -1,6 +1,6 @@
 package io.thoughtware.kanass.project.test.service;
 
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.test.model.TestRepository;
 import io.thoughtware.kanass.support.model.SystemUrl;
 import io.thoughtware.kanass.support.model.SystemUrlQuery;

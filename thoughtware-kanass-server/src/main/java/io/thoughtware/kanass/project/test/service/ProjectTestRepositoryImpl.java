@@ -1,9 +1,9 @@
 package io.thoughtware.kanass.project.test.service;
 
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.test.dao.ProjectTestRepositoryDao;
 import io.thoughtware.kanass.project.test.entity.ProjectTestRepositoryEntity;
 import io.thoughtware.kanass.project.test.model.ProjectTestRepository;

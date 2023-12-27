@@ -2,7 +2,7 @@ package io.thoughtware.kanass.home.statistic.model;
 
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
-import io.thoughtware.join.annotation.Join;
+import io.thoughtware.toolkit.join.annotation.Join;
 
 /**
  * 事项创建与解决统计模型

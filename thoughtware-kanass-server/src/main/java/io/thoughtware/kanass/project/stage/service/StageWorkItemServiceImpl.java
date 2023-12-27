@@ -1,11 +1,11 @@
 package io.thoughtware.kanass.project.stage.service;
 
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.stage.dao.StageWorkItemDao;
 import io.thoughtware.kanass.project.stage.entity.StageWorkItemEntity;
 import io.thoughtware.kanass.project.stage.model.Stage;

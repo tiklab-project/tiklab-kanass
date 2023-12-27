@@ -6,12 +6,12 @@ import io.thoughtware.kanass.project.project.model.ProjectType;
 import io.thoughtware.kanass.project.project.model.ProjectTypeQuery;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.project.dao.ProjectTypeDao;
 import io.thoughtware.kanass.project.project.entity.ProjectTypeEntity;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

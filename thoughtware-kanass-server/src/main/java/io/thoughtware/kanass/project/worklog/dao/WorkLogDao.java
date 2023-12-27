@@ -238,36 +238,56 @@ public class WorkLogDao{
             userGroupList =  jdbc.query(sql, paramMap, new BeanPropertyRowMapper(ProjectLog.class));
             userIds.add(searchUserId);
         }
-
+//        List<Project> projectList = new ArrayList<>();
         //查找项目集的所有项目，在此范围分组统计人员日志
-        if(workLogQuery.getProjectSetId() != null){
+        if(workLogQuery.getProjectSetId() != null || (workLogQuery.getProjectSetId() == null && projectId1 == null)){
+            List<Project> projectList = new ArrayList<Project>();
             ProjectQuery projectQuery = new ProjectQuery();
-            projectQuery.setProjectSetId(workLogQuery.getProjectSetId());
-            List<Project> projectList = projectService.findProjectList(projectQuery);
-            String s = new String();
-            s =  "(";
-            for (Project project : projectList) {
+            if(workLogQuery.getProjectSetId() != null){
+                projectQuery.setProjectSetId(workLogQuery.getProjectSetId());
+                projectList = projectService.findProjectList(projectQuery);
+            }else {
+                projectList = projectService.findJoinProjectList(projectQuery);
+            }
 
-                DmUserQuery dmUserQuery1 = new DmUserQuery();
-                String id = project.getId();
-                if(StringUtils.isEmpty(projectId1)){
+            String projectIdList = new String();
+            projectIdList =  "(";
+            if(projectList.size() > 0){
+                for (Project project : projectList) {
+                    DmUserQuery dmUserQuery1 = new DmUserQuery();
+                    String id = project.getId();
+                    dmUserQuery1.setDomainId(id);
+                    List<DmUser> dmUserList1 = dmUserService.findDmUserList(dmUserQuery1);
+                    List<User> userList = dmUserList1.stream().map(DmUser::getUser).collect(Collectors.toList());
+                    List<String> userListIds = userList.stream().map(User::getId).collect(Collectors.toList());
+                    userIds.addAll(userListIds);
+
+                    // 获取项目集项目ids
                     projectIds.add(id);
-                    s = s.concat("'" + id + "',");
-
+                    projectIdList = projectIdList.concat("'" + id + "',");
                 }
-                dmUserQuery1.setDomainId(id);
-                List<DmUser> dmUserList1 = dmUserService.findDmUserList(dmUserQuery1);
-                List<User> users = dmUserList1.stream().map(DmUser::getUser).collect(Collectors.toList());
-                List<String> roleIds = users.stream().map(User::getId).collect(Collectors.toList());
-                userIds.addAll(roleIds);
+//                if(!StringUtils.isEmpty(projectId1)){
+//                    projectIds.add(projectId1);
+//                    projectIdList = projectIdList.concat("'" + projectId1 + "',");
+//                }
+                projectIdList= projectIdList.substring(0, projectIdList.length() - 1);
+                projectIdList = projectIdList.concat(")");
+                sql = "select worker as userId,sum(takeup_time) as total from pmc_work_log t where project_id in " + projectIdList + " and work_date > (:startTime) and work_date < (:endTime) group by t.worker";
+                userGroupList =  jdbc.query(sql, paramMap, new BeanPropertyRowMapper(ProjectLog.class));
             }
-            if(!StringUtils.isEmpty(projectId1)){
-                projectIds.add(projectId1);
-                s = s.concat("'" + projectId1 + "',");
-            }
-            s= s.substring(0, s.length() - 1);
-            s = s.concat(")");
-            sql = "select worker as userId,sum(takeup_time) as total from pmc_work_log t where project_id in " + s + " and work_date > (:startTime) and work_date < (:endTime) group by t.worker";
+        }
+        if(projectId1 != null){
+            // 获取项目的成员
+            projectIds.add(projectId1);
+
+            DmUserQuery dmUserQuery1 = new DmUserQuery();
+            dmUserQuery1.setDomainId(projectId1);
+            List<DmUser> dmUserList1 = dmUserService.findDmUserList(dmUserQuery1);
+            List<User> users = dmUserList1.stream().map(DmUser::getUser).collect(Collectors.toList());
+            List<String> roleIds = users.stream().map(User::getId).collect(Collectors.toList());
+            userIds.addAll(roleIds);
+
+            sql = "select worker as userId,sum(takeup_time) as total from pmc_work_log t where project_id = '" + projectId1 + "' and work_date > (:startTime) and work_date < (:endTime) group by t.worker";
             userGroupList =  jdbc.query(sql, paramMap, new BeanPropertyRowMapper(ProjectLog.class));
         }
 
@@ -425,7 +445,17 @@ public class WorkLogDao{
             //按照项目分组日志，和计算这个项目一共花费的工时
             sql = "select project_id,sum(takeup_time) as total from pmc_work_log t where work_date > (:startTime) and work_date < (:endTime) group by t.project_id";
             projectGroupList = jdbc.query(sql, paramMap, new BeanPropertyRowMapper(ProjectLog.class));
-
+        }
+        //如果查找全部项目
+        if(workLogQuery.getProjectSetId() == null && searchProjectId == null){
+            ProjectQuery projectQuery = new ProjectQuery();
+            List<Project> projectList = projectService.findJoinProjectList(projectQuery);
+            for (Project project : projectList) {
+                projectIds.add(project.getId());
+            }
+            //按照项目分组日志，和计算这个项目一共花费的工时
+            sql = "select project_id,sum(takeup_time) as total from pmc_work_log t where work_date > (:startTime) and work_date < (:endTime) group by t.project_id";
+            projectGroupList = jdbc.query(sql, paramMap, new BeanPropertyRowMapper(ProjectLog.class));
         }
         for (String projectId : projectIds) {
             //统计每个项目的下所有成员的日志
@@ -643,6 +673,19 @@ public class WorkLogDao{
             ProjectQuery projectQuery = new ProjectQuery();
             projectQuery.setProjectSetId(workLogQuery.getProjectSetId());
             List<Project> projectList = projectService.findProjectList(projectQuery);
+            for (Project project : projectList) {
+                projectIds.add(project.getId());
+            }
+            sql = "select project_id,sum(takeup_time) as total from pmc_work_log t where work_date > (:startTime) and work_date < (:endTime) group by t.project_id";
+            projectGroupList = jdbc.query(sql, paramMap, new BeanPropertyRowMapper(ProjectLog.class));
+
+        }
+
+        //没有项目id与项目集id,查找所有项目
+        if(workLogQuery.getProjectSetId() == null && searchProjectId == null ){
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setProjectSetId(workLogQuery.getProjectSetId());
+            List<Project> projectList = projectService.findJoinProjectList(projectQuery);
             for (Project project : projectList) {
                 projectIds.add(project.getId());
             }

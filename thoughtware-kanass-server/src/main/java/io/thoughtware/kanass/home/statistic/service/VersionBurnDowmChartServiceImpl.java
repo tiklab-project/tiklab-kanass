@@ -1,9 +1,9 @@
 package io.thoughtware.kanass.home.statistic.service;
 
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.home.statistic.dao.VersionBurnDowmChartDao;
 import io.thoughtware.kanass.home.statistic.entity.VersionBurnDowmChartEntity;
 import io.thoughtware.kanass.home.statistic.model.VersionBurnDowmChart;

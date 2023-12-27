@@ -2,10 +2,10 @@ package io.thoughtware.kanass.project.module.service;
 
 import io.thoughtware.kanass.project.module.model.Module;
 import io.thoughtware.kanass.project.module.model.ModuleQuery;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.module.dao.ModuleDao;
 import io.thoughtware.kanass.project.module.entity.ModuleEntity;
 import org.springframework.beans.factory.annotation.Autowired;

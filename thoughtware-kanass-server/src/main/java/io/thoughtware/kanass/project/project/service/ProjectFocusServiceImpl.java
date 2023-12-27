@@ -3,10 +3,10 @@ package io.thoughtware.kanass.project.project.service;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.project.model.ProjectFocus;
 import io.thoughtware.kanass.project.project.model.ProjectFocusQuery;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.project.dao.ProjectFocusDao;
 import io.thoughtware.kanass.project.project.entity.ProjectFocusEntity;
 

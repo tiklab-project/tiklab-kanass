@@ -1,9 +1,9 @@
 package io.thoughtware.kanass.project.version.service;
 
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.version.model.VersionState;
 import io.thoughtware.kanass.project.version.model.VersionStateQuery;
 import io.thoughtware.kanass.project.version.dao.VersionStateDao;

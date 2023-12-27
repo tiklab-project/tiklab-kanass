@@ -7,7 +7,7 @@ import io.thoughtware.kanass.workitem.dao.WorkPriorityDao;
 import io.thoughtware.kanass.workitem.entity.WorkPriorityEntity;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

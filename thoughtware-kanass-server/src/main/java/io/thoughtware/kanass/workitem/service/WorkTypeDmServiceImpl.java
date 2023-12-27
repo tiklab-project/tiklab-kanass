@@ -6,7 +6,7 @@ import io.thoughtware.form.form.model.FormModelRelation;
 import io.thoughtware.form.form.service.FormModelRelationService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -16,7 +16,7 @@ import io.thoughtware.form.form.model.DmForm;
 import io.thoughtware.form.form.model.DmFormQuery;
 import io.thoughtware.form.form.model.Form;
 import io.thoughtware.form.form.service.DmFormService;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.workitem.dao.WorkTypeDmDao;
 import io.thoughtware.kanass.workitem.entity.WorkTypeDmEntity;
 

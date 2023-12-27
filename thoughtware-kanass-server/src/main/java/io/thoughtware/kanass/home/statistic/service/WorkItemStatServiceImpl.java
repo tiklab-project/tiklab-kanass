@@ -9,12 +9,12 @@ import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkItemQuery;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.flow.statenode.model.StateNode;
 import io.thoughtware.flow.statenode.service.StateNodeService;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.home.statistic.dao.WorkItemStatDao;
 
 import io.thoughtware.kanass.workitem.entity.WorkItemEntity;

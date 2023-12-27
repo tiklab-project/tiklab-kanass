@@ -3,12 +3,12 @@ package io.thoughtware.kanass.sprint.service;
 import io.thoughtware.kanass.sprint.model.SprintState;
 import io.thoughtware.kanass.sprint.model.SprintStateQuery;
 import io.thoughtware.core.page.PaginationBuilder;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.sprint.entity.SprintStateEntity;
 import io.thoughtware.kanass.sprint.dao.SprintStateDao;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

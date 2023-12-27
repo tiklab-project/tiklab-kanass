@@ -219,30 +219,32 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         String projectId = workItemCountQuery.getProjectId();
         projectQuery.setProjectId(projectId);
         List<Project> projectList = projectService.findProjectList(projectQuery);
-
         List<String> dayList = getDaylist(workItemCountQuery);
         List<Object> countList = new ArrayList<>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        List<String> projectIds = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
-        workItemCountQuery.setProjectIds(projectIds);
-        List<Map<String, Object>> endWorkItemList = projectInsightReportDao.statisticsProjectEndWorkItem(workItemCountQuery, dayList);
-        for (Project project : projectList) {
-            Map<String, Object> projectCount = new HashMap<String, Object>();
-            int size = dayList.size();
-            List<Integer> projectCountList = new ArrayList<>();
-            for (int i= 0; i< size-1; i++ ) {
-                String start= dayList.get(i);
-                String end = dayList.get(i+1);
-                List<Map<String, Object>> collect = endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
-                        toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
-                                work.get("project_id").equals(project.getId())))
-                        .collect(Collectors.toList());
-                projectCountList.add(collect.size());
+        if(projectList.size() > 0){
+            List<String> projectIds = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
+            workItemCountQuery.setProjectIds(projectIds);
+            List<Map<String, Object>> endWorkItemList = projectInsightReportDao.statisticsProjectEndWorkItem(workItemCountQuery, dayList);
+            for (Project project : projectList) {
+                Map<String, Object> projectCount = new HashMap<String, Object>();
+                int size = dayList.size();
+                List<Integer> projectCountList = new ArrayList<>();
+                for (int i= 0; i< size-1; i++ ) {
+                    String start= dayList.get(i);
+                    String end = dayList.get(i+1);
+                    List<Map<String, Object>> collect = endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
+                                    toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
+                                    work.get("project_id").equals(project.getId())))
+                            .collect(Collectors.toList());
+                    projectCountList.add(collect.size());
+                }
+                projectCount.put("project", project);
+                projectCount.put("countList", projectCountList);
+                countList.add(projectCount);
             }
-            projectCount.put("project", project);
-            projectCount.put("countList", projectCountList);
-            countList.add(projectCount);
         }
+
 
         paramMap.put("dateList", dayList);
         paramMap.put("projectCountList", countList);

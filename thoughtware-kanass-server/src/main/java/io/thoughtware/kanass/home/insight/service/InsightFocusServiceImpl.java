@@ -1,10 +1,10 @@
 package io.thoughtware.kanass.home.insight.service;
 
-import io.thoughtware.beans.BeanMapper;
+import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.eam.common.context.LoginContext;
-import io.thoughtware.join.JoinTemplate;
+import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.home.insight.dao.InsightFocusDao;
 import io.thoughtware.kanass.home.insight.entity.InsightFocusEntity;
 import io.thoughtware.kanass.home.insight.model.InsightFocus;

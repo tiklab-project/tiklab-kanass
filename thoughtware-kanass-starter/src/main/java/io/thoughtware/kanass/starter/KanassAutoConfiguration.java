@@ -5,6 +5,7 @@ import io.thoughtware.dcs.boot.starter.annotation.EnableDcsClient;
 import io.thoughtware.dcs.boot.starter.annotation.EnableDcsServer;
 import io.thoughtware.dfs.boot.starter.annotation.EnableDfsClient;
 import io.thoughtware.dfs.boot.starter.annotation.EnableDfsServer;
+import io.thoughtware.dsm.boot.starter.annotation.EnableDsm;
 import io.thoughtware.eam.boot.starter.annotation.EnableEamClient;
 import io.thoughtware.eam.boot.starter.annotation.EnableEamServer;
 import io.thoughtware.flow.starter.EnableFlowServer;
@@ -37,6 +38,7 @@ import org.springframework.context.annotation.Configuration;
 //platform
 @EnableToolkit
 @EnableDal
+@EnableDsm
 @EnableDfsServer
 @EnableDfsClient
 @EnableDcsServer

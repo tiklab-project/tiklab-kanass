@@ -2,14 +2,14 @@ package io.thoughtware.kanass.workitem.model;
 
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
-import io.thoughtware.beans.annotation.Mapper;
-import io.thoughtware.beans.annotation.Mapping;
-import io.thoughtware.beans.annotation.Mappings;
+import io.thoughtware.toolkit.beans.annotation.Mapper;
+import io.thoughtware.toolkit.beans.annotation.Mapping;
+import io.thoughtware.toolkit.beans.annotation.Mappings;
 import io.thoughtware.core.BaseModel;
 import io.thoughtware.flow.flow.model.Flow;
 import io.thoughtware.form.form.model.Form;
-import io.thoughtware.join.annotation.Join;
-import io.thoughtware.join.annotation.JoinQuery;
+import io.thoughtware.toolkit.join.annotation.Join;
+import io.thoughtware.toolkit.join.annotation.JoinQuery;
 
 import javax.validation.constraints.NotNull;
 

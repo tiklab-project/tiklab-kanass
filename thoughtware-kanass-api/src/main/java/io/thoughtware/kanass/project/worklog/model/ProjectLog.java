@@ -1,6 +1,6 @@
 package io.thoughtware.kanass.project.worklog.model;
 
-import io.thoughtware.join.annotation.Join;
+import io.thoughtware.toolkit.join.annotation.Join;
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
 import io.thoughtware.kanass.project.project.model.Project;

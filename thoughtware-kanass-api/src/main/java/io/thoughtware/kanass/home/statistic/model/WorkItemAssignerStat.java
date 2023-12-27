@@ -2,7 +2,7 @@ package io.thoughtware.kanass.home.statistic.model;
 
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
-import io.thoughtware.join.annotation.Join;
+import io.thoughtware.toolkit.join.annotation.Join;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.thoughtware.user.user.model.User;
 

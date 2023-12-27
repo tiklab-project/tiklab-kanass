@@ -5,7 +5,7 @@ import io.thoughtware.postin.annotation.ApiProperty;
 import io.thoughtware.core.page.Page;
 import io.thoughtware.core.order.Order;
 import io.thoughtware.core.order.OrderBuilders;
-import io.thoughtware.join.annotation.Join;
+import io.thoughtware.toolkit.join.annotation.Join;
 
 import java.io.Serializable;
 import java.util.List;
