@@ -9,7 +9,7 @@ spring:
 server:
     port: 8080
 
-DATA_HOME: /opt/thoughtware/kanass-ee
+DATA_HOME: /opt/thoughtware/kanass-ce
 
 base:
     url: http://kanass-ce.demo.thoughtware.cn
