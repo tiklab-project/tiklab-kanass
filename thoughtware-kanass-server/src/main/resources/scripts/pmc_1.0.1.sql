@@ -650,20 +650,6 @@ INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_cont
         <div style="font-size: 13px;"> ${createTime} </div>
     </div>', 'index/work/workone/${workItemId}', 'kanass', '${master}添加事项');
 
-INSERT INTO pcs_todo_task_type (id, name, bgroup) VALUES ('c30aac12c4be', '事项待办', 'kanass');
-INSERT INTO pcs_todo_task_template (id, title, link, bgroup, content) VALUES ('ff0a79e4fc61', '待办事项', 'index/work/workone/${workItemId}', 'kanass', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
-                <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div>
-                <div style="line-height: 30px; display: flex; align-items: center; height: 30px;">
-                <img src=${workTypeIcon} alt="" width="16px" height="16px">
-                    <div style="color: #5d70ea; margin-left: 10px;">${workItemTitle}</div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
-    </div>');
 
 INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('04b440ad', '低', NULL, NULL, 'system', 'proivilege2.png');
 INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('faaecb3d', '中', NULL, NULL, 'system', 'proivilege3.png');
@@ -673,6 +659,7 @@ INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) V
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('7055ebc6', '需求', '需求', 'demand', 1, '0c5d4ff9', '4d040c6d', 'workType1.png', 'system', 0);
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('778222e0', '任务', '任务', 'task', 2, '515f17bd', '4d040c6d', 'workType2.png', 'system', 0);
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('98121701', '缺陷', '缺陷', 'defect', 3, '607f6be6', '4d040c6d', 'workType3.png', 'system', 0);
+INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('13240f85', '需求集', '需求集', 'epic', 4, '0c5d4ff9', '4d040c6d', '/image/99597455c4ad1412', 'system', 0);
 
 INSERT INTO pmc_project_type (id, type, name, description, icon_url) VALUES ('5a46432a', 'scrum', '敏捷式项目', '敏捷式项目', 'project1.png');
 INSERT INTO pmc_project_type (id, type, name, description, icon_url) VALUES ('ea782c6d', 'nomal', '瀑布研发项目', '瀑布研发项目', 'project2.png');
@@ -681,113 +668,6 @@ INSERT INTO pmc_sprint_status (id, name, description, sort, grouper) VALUES ('00
 INSERT INTO pmc_sprint_status (id, name, description, sort, grouper) VALUES ('111111', '进行中', '进行中', 2, 'system');
 INSERT INTO pmc_sprint_status (id, name, description, sort, grouper) VALUES ('222222', '已完成', '已完成', 3, 'system');
 
-INSERT INTO pcs_mec_message_notice (id, message_type_id, type, bgroup, message_send_type_id) VALUES ('7fcf0ff78d62', 'c36a8358f8e2', 1, 'kanass', 'dingding,email,qywechat,site');
-INSERT INTO pcs_mec_message_notice (id, message_type_id, type, bgroup, message_send_type_id) VALUES ('d616bdf8fbc1', 'a12523a2d65b', 1, 'kanass', 'dingding,email,qywechat,site');
-INSERT INTO pcs_mec_message_notice (id, message_type_id, type, bgroup, message_send_type_id) VALUES ('fb0c8fe5cae9', 'f5f8a45722db', 1, 'kanass', 'dingding,email,qywechat,site');
-
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('1f90ca2b7420', 'c36a8358f8e2', 'dingding', '事项状态变更-钉钉', '**事项状态变更通知**${createUser.nickname} 更新了 <font color=info> ${workItemTitle}</font>状态![图片](${workTypeIcon})${oldValue. name} -> ${newValue. name}', '/index/work/workone/${workItemId}', 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('65135e38383d', 'a12523a2d65b', 'dingding', '项目添加-钉钉', '**项目添加通知**${master} 添加了项目 <font color=info> ${projectName}</font>状态![图片](${projectIcon})', NULL, 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('8a9808957cf4', 'f5f8a45722db', 'site', '任务待办-站内信', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 10px; width: 250px">
-                <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div>
-                <div style="line-height: 30px; display: flex; align-items: center; height: 30px;"> <img
-                        src="${workTypeIcon}" alt="" width="16px" height="16px">
-                    <div style="color: #5d70ea; margin-left: 10px;text-overflow: ellipsis;white-space: nowrap;height: 30px;overflow: hidden;">${workItemTitle}</div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
-    </div>', '/index/work/workone/${workItemId}', 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('0588213d423b', 'f5f8a45722db', 'email', '任务待办-邮箱', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 10px; width: 250px">
-                <div> <span style="font-weight: 600;"> ${createUser.name} </span> 向您分配了事项 </div>
-                <div style="line-height: 30px; display: flex; align-items: center; height: 30px;"> <img
-                        src="${workTypeIcon}" alt="" width="16px" height="16px">
-                    <div style="color: #5d70ea; margin-left: 10px;text-overflow: ellipsis;white-space: nowrap;height: 30px;overflow: hidden;">${workItemTitle}</div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
-    </div>', NULL, 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('6800f0954b41', 'c36a8358f8e2', 'email', '事项状态变更-邮箱', '<div
-        style="display: flex;  align-items: center;  font-size: 14px;  justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px;height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;">
-                ${createUserIcon}</div>
-            <div style="display: flex;  flex-direction: column;  padding: 0 20px;">
-                <div> <span style="padding-right: 10px;"> ${master.nickname} </span> 更新了
-                <span style="color: #5d70ea;font-size: 13px; font-weight: 500;"> ${workItemTitle} </span> 状态 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;">
-                        ${oldValue. name}
-                    </div> ———
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;"> ${newValue. name} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
-    </div>', NULL, 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('c386e011802a', 'f5f8a45722db', 'qywechat', '任务待办-企业微信', '**事项待办通知**${createUser.nickname} 向您分配了事项 <font color=info> ${workItemTitle}</font>![图片](${workTypeIcon})', '', 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('fc20ed1a0aca', 'c36a8358f8e2', 'qywechat', '事项状态变更-企业微信', '**事项状态变更通知**${createUser.nickname} 更新了 <font color=info> ${workItemTitle}</font>状态![图片](${workTypeIcon})${oldValue. name} -> ${newValue. name}', NULL, 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('fc30b7434a89', 'a12523a2d65b', 'qywechat', NULL, '**项目添加通知**${master} 添加了项目 <font color=info> ${projectName}</font>状态![图片](${projectIcon})', NULL, 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('ffe7cb993f47', 'f5f8a45722db', 'dingding', '任务通知-钉钉', '**事项待办通知**${createUser.nickname} 向您分配了事项 <font color=info> ${workItemTitle}</font>![图片](${workTypeIcon})</div>', '/index/prodetail/{id}/{project.id}', 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('142f281b3dd9', 'c36a8358f8e2', 'site', '事项状态变更-站内信', '<div
-        style="display: flex;  align-items: center;  font-size: 14px;  justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div
-                style="width: 25px;height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;">
-                ${createUserIcon}</div>
-            <div style="display: flex;  flex-direction: column;  padding: 0 20px;">
-                <div>
-                    <span style="padding-right: 10px;"> ${master.nickname} </span> 更新了
-                    <span style="color: #5d70ea;font-size: 13px; font-weight: 500;"> ${workItemTitle} </span> 状态
-                </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;">
-                        ${oldValue. name}
-                    </div> ———
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;"> ${newValue. name} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
-    </div>', '/index/work/workone/${workItemId}', 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('9fd5b40149ea', 'a12523a2d65b', 'site', '项目添加消息', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
-                <div> <span style="padding-right: 10px;"> ${master} </span> 创建了项目 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;">
-                    <img src=${projectIcon} alt="" width="16px" height="16px"> </div>
-                    <div style="color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;"> ${projectName} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${sendTime} </div>
-    </div>', '/index/${projectType}/${projectId}/survey', 'kanass', NULL);
-INSERT INTO pcs_mec_message_template (id, msg_type_id, msg_send_type_id, title, content, link, bgroup, link_params) VALUES ('9f71be8a74e0', 'a12523a2d65b', 'email', '项目添加-邮箱', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 25px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
-                <div> <span style="padding-right: 10px;"> ${master} </span> 创建了项目 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;">
-                    <img src=${projectIcon} alt="" width="16px" height="16px"> </div>
-                    <div style="color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;"> ${projectName} </div>
-                </div>
-            </div>
-        </div>
-        <div style="font-size: 13px;"> ${sendTime} </div>
-    </div>', NULL, 'kanass', NULL);
-
-INSERT INTO pcs_mec_message_type (id, name, description, bgroup) VALUES ('a12523a2d65b', '项目添加', '项目添加', 'kanass');
-INSERT INTO pcs_mec_message_type (id, name, description, bgroup) VALUES ('c36a8358f8e2', '事项变更', '事项变更', 'kanass');
-INSERT INTO pcs_mec_message_type (id, name, description, bgroup) VALUES ('f5f8a45722db', '任务通知', '任务通知', 'kanass');
 
 INSERT INTO pcs_mec_webhook (id, name, type, hook, secret, url, product, project, send_type, params, description) VALUES ('61f8b3bba61a', '企业微信', 2, 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f82568d4-2a86-45e6-9b55-c42df09a60f2', NULL, 'http://project.dev.doublekit.io', NULL, NULL, 1, 'text', NULL);
 INSERT INTO pcs_mec_webhook (id, name, type, hook, secret, url, product, project, send_type, params, description) VALUES ('95444abff27f', '钉钉', 1, 'https://oapi.dingtalk.com/robot/send?access_token=49886270bff587fbd2da563e194667b5f669acf4b71751729ba9c24a084237ac', 'SEC72979f777deef91fdeeb4faad8ac70a4730168ee3b04dacbf52757279209e4a8', 'http://project.dev.doublekit.io', NULL, NULL, 1, 'text', NULL);
@@ -818,13 +698,21 @@ INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('e281dc36d76e', '流水线启动失败', 'workItem', 'matflow-4', '111111', 'f3fdc893ff25', '2022-12-13 12:19:56');
 
 
+--INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', 'c323f12b', '22751ea5');
+--INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('b81aef3b', '4cf6d4dec7d0', '7055ebc6', 'cd46de1f', '22751ea5');
+--INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '9c338860', '024227ab');
+--INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('d3ef6551', '4cf6d4dec7d0', '778222e0', '12267b6d', '22751ea5');
+--INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', 'c430e1ad', '024227ab');
+--INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '0e425461', '024227ab');
+
 INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', 'c323f12b', '22751ea5');
 INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('b81aef3b', '4cf6d4dec7d0', '7055ebc6', 'cd46de1f', '22751ea5');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '9c338860', '024227ab');
 INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('d3ef6551', '4cf6d4dec7d0', '778222e0', '12267b6d', '22751ea5');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('43b1e1ee', '4cf6d4dec7d0', '13240f85', 'cd46de1f', '22751ea5');
 INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', 'c430e1ad', '024227ab');
 INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '0e425461', '024227ab');
-
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '9c338860', '024227ab');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('e884d1b3', 'f3fdc893ff25', '13240f85', '0e425461', '024227ab');
 
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('024227ab', '事项流程', '事项流程', 'custom', 0, 2);
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('22751ea5', '事项流程', '事项流程', 'custom', 0, 2);
@@ -857,3 +745,9 @@ INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, fro
 
 INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('9bcc1be0', '4cf6d4dec7d0', '22751ea5', '4d040c6d');
 INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('b422fc1b', 'f3fdc893ff25', '024227ab', '4d040c6d');
+
+
+INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('000000', '未开始', '未开始', 1, 'system');
+INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('111111', '进行中', '进行中', 2, 'system');
+INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('222222', '已完成', '已完成', 3, 'system');
+

@@ -1,1 +1,0 @@
-ALTER TABLE pmc_module ADD COLUMN parent_id VARCHAR(12);

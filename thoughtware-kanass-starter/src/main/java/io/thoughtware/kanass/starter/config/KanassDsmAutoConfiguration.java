@@ -63,43 +63,12 @@ public class KanassDsmAutoConfiguration {
                 "message_1.0.3"
         });
         dsmConfig.newVersion("1.0.4", new String[]{
-                "pmc_1.0.4",
                 "message_1.0.4"
         });
         dsmConfig.newVersion("1.0.5", new String[]{
-                "pmc_1.0.5",
                 "message_1.0.5"
         });
-        dsmConfig.newVersion("1.0.6", new String[]{
-                "pmc_1.0.6"
-        });
-        dsmConfig.newVersion("1.0.7", new String[]{
-                "pmc_1.0.7"
-        });
-        dsmConfig.newVersion("1.0.8", new String[]{
-                "pmc_1.0.8"
-        });
-        dsmConfig.newVersion("1.0.9", new String[]{
-                "pmc_1.0.9"
-        });
-        dsmConfig.newVersion("1.1.0", new String[]{
-                "pmc_1.1.0"
-        });
-        dsmConfig.newVersion("1.1.1", new String[]{
-                "pmc_1.1.1"
-        });
-        dsmConfig.newVersion("1.1.2", new String[]{
-                "pmc_1.1.2"
-        });
-        dsmConfig.newVersion("1.1.3", new String[]{
-                "pmc_1.1.3"
-        });
-        dsmConfig.newVersion("1.1.3", new String[]{
-                "pmc_1.1.3"
-        });
-        dsmConfig.newVersion("1.1.4", new String[]{
-                "pmc_1.1.4"
-        });
+
         dsmConfig.newVersion("1.1.5", new String[]{
                 "pmc_1.1.5"
         });

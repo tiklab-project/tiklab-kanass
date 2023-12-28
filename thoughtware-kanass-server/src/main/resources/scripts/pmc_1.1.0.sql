@@ -1,1 +1,0 @@
-ALTER TABLE pmc_version ALTER COLUMN start_time TYPE TIMESTAMP USING start_time::timestamp without time zone;

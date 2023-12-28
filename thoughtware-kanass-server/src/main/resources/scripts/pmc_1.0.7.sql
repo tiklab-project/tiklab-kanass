@@ -1,1 +1,0 @@
-INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('13240f85', '需求集', '需求集', 'epic', 4, '0c5d4ff9', '4d040c6d', '/image/99597455c4ad1412', 'system', 0);

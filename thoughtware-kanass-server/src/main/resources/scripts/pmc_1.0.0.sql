@@ -28,6 +28,7 @@ CREATE TABLE pmc_module(
         id VARCHAR(12) PRIMARY KEY,
         module_name VARCHAR(64) NOT NULL,
         description TEXT,
+        parent_id VARCHAR(12),
         project_id VARCHAR(12) NOT NULL
 
 );
@@ -56,11 +57,28 @@ CREATE TABLE pmc_sprint_status(
 CREATE TABLE pmc_version(
         id VARCHAR(12) PRIMARY KEY,
         name VARCHAR(64) NOT NULL,
+        master VARCHAR(12) NOT NULL,
         publish_date timestamp NOT NULL,
-        start_time VARCHAR(32) NOT NULL,
+        start_time timestamp NOT NULL,
         project_id VARCHAR(12) NOT NULL,
         version_state VARCHAR(32) NOT NULL,
         rela_publish_date timestamp
+
+);
+CREATE TABLE pmc_version_focus(
+        id VARCHAR(12) PRIMARY KEY,
+        version_id VARCHAR(12),
+        master_id VARCHAR(12),
+        project_id VARCHAR(12),
+        sort int
+);
+
+CREATE TABLE pmc_version_status(
+        id VARCHAR(32) PRIMARY KEY,
+        name VARCHAR(64) ,
+        description VARCHAR(64),
+        sort integer,
+        grouper VARCHAR(32)
 );
 
 CREATE TABLE pmc_work_item(
@@ -95,7 +113,8 @@ CREATE TABLE pmc_work_item(
         surplus_time int,
         work_type_sys_id VARCHAR(8) NOT NULL,
         work_status_node_id VARCHAR(8) NOT NULL,
-        each_type VARCHAR(64)
+        each_type VARCHAR(64),
+        update_time timestamp
 );
 
 
@@ -182,8 +201,10 @@ CREATE TABLE pmc_project_set(
         master VARCHAR(12) NOT NULL,
         is_delete int,
         creat_time timestamp,
-        update_time timestamp
+        update_time timestamp,
+        color int NOT NULL
 );
+
 
 CREATE TABLE pmc_epic(
         id VARCHAR(12) PRIMARY KEY,
@@ -442,3 +463,30 @@ CREATE TABLE pmc_insight_focus(
         master_id VARCHAR(12),
         sort int
 );
+
+CREATE TABLE pmc_version_burndowm(
+        id VARCHAR(12) NOT NULL PRIMARY KEY,
+        version_id VARCHAR(12) NOT NULL,
+        record_time timestamp,
+        remain_workitem_count int,
+        total_workitem_count int,
+        end_workitem_count int,
+        progress_workitem_count int,
+        nostart_workitem_count int,
+        remain_bug_count int,
+        total_bug_count int,
+        end_bug_count int,
+        progress_bug_count int,
+        nostart_bug_count int,
+        remain_demand_count int,
+        total_demand_count int,
+        end_demand_count int,
+        progress_demand_count int,
+        nostart_demand_count int,
+        remain_task_count int,
+        total_task_count int,
+        end_task_count int,
+        progress_task_count int,
+        nostart_task_count int
+);
+
