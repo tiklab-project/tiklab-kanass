@@ -1,6 +1,6 @@
 #!/bin/sh
 #-------------------------------------------------------------------------------------------------------------
-APP_MAIN="io.thoughtware.kanass.starter.TeamWireApplication"
+APP_MAIN="io.thoughtware.kanass.starter.KanassApplication"
 
 DIRS=$(dirname "$PWD")
 JDK_VERSION=jdk-16.0.2
