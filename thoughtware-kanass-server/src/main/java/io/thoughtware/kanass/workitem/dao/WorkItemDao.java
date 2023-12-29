@@ -1346,6 +1346,7 @@ public class WorkItemDao{
      * @return
      */
     public List<Map<String, Object>> findWorkItemNum(String colunm, String ids) {
+
         String sql = "select id, " + colunm  + " from pmc_work_item where " +  colunm  + " in "+ ids;
 
 //        String sql =  "select " + colunm + ", count(1) as total from pmc_work_item where " + colunm +" in "+ ids + "  group by " + colunm;

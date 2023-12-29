@@ -94,15 +94,18 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         List<ProjectVersionEntity> projectVersionEntityList = projectVersionDao.findVersionList(ProjectVersionQuery);
 
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(projectVersionEntityList, ProjectVersion.class);
-        // 查找版本的事项数量
-        String versionIds = "(" + projectVersionList.stream().map(item -> "'" + item.getId() + "'").
-                collect(Collectors.joining(", ")) + ")";
-        List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("version_id", versionIds);
-        for (ProjectVersion version : projectVersionList) {
-            String id = version.getId();
-            List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("version_id").equals(id)).collect(Collectors.toList());
-            version.setWorkNumber(countList.size());
+        if(projectVersionList.size() > 0){
+            String versionIds = "(" + projectVersionList.stream().map(item -> "'" + item.getId() + "'").
+                    collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("version_id", versionIds);
+            for (ProjectVersion version : projectVersionList) {
+                String id = version.getId();
+                List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("version_id").equals(id)).collect(Collectors.toList());
+                version.setWorkNumber(countList.size());
+            }
         }
+        // 查找版本的事项数量
+
         joinTemplate.joinQuery(projectVersionList);
 
         return projectVersionList;
