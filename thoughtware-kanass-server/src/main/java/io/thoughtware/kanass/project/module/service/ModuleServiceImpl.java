@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
 * 模块服务
@@ -91,6 +92,31 @@ public class ModuleServiceImpl implements ModuleService {
         for(Module module:moduleList){
             joinTemplate.joinQuery(module);
         }
+        return moduleList;
+    }
+
+
+    public List<Module> findSeleteParentModuleList(String id) {
+        List<ModuleEntity> moduleEntityList = moduleDao.findAllModule();
+
+        // 获取父级id
+        List<ModuleEntity> editModule = moduleEntityList.stream().filter(item -> item.getId().equals(id)).collect(Collectors.toList());
+        ModuleEntity moduleEntity = editModule.get(0);
+        String parentId = moduleEntity.getParentId();
+
+        // 获取第一级子级id
+        List<ModuleEntity> firstChildrenModuleList = moduleEntityList.stream().filter(item -> (item.getParentId()!= null && item.getParentId().equals(id))).collect(Collectors.toList());
+        List<String> firstChildrenModuleIds = firstChildrenModuleList.stream().map(item -> item.getId()).collect(Collectors.toList());
+
+        moduleEntityList = moduleEntityList.stream().filter(item -> item.getParentId() == null ||
+                !firstChildrenModuleIds.contains(item.getParentId()) &&
+                !item.getParentId().equals(id)).collect(Collectors.toList());
+        //
+        moduleEntityList = moduleEntityList.stream().filter(item -> !item.getId().equals(id) && !item.getId().equals(parentId)
+                ).collect(Collectors.toList());
+
+        List<Module> moduleList = BeanMapper.mapList(moduleEntityList,Module.class);
+        joinTemplate.joinQuery(moduleList);
         return moduleList;
     }
 

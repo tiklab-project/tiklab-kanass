@@ -186,7 +186,7 @@ public class WorkLogDao{
      */
     public Pagination<WorkLogEntity> findWorkLogPage(WorkLogQuery workLogQuery) {
         String sql = new String();
-        sql = "Select * from pmc_work_log l ";
+        sql = "Select * from pmc_work_log ";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workLogQuery);
         Object o1 = stringObjectMap.get("sql");
         if(String.valueOf(o1).length()>0){

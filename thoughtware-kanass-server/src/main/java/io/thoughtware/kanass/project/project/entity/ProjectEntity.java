@@ -66,7 +66,7 @@ public class ProjectEntity implements Serializable {
 
     //icon
     @Column(name = "icon_url",length = 64)
-    private String iconUrl = "";
+    private String iconUrl;
 
     public String getId() {
         return id;

@@ -68,6 +68,8 @@ public interface ModuleService {
      * @return
      */
     List<Module> findModuleList(ModuleQuery moduleQuery);
+
+    List<Module> findSeleteParentModuleList(String id);
     List<Module> findModuleListTree(ModuleQuery moduleQuery);
     /**
      * 根据条件按分页查找模块

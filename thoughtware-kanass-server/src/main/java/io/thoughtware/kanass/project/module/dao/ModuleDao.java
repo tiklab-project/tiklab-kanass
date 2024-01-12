@@ -89,6 +89,22 @@ public class ModuleDao{
         return jpaTemplate.findList(queryCondition, ModuleEntity.class);
     }
 
+
+//    public List<ModuleEntity> findModuleList(String moduleId) {
+//        // 获取第一层下级的ids
+//        String sql = "SELECT id from pmc_module WHERE parent_id = " + moduleId;
+//        List<String> moduleIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+//
+//        // 获取第二层下级
+//        sql = "SELECT id from pmc_module WHERE parent_id in " + moduleIds;
+//        List<String> secondModuleIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+//        moduleIds.addAll(secondModuleIds);
+//        // 获取父级
+//        sql = "SELECT parent_id from pmc_module WHERE id = " + moduleId;
+//        List<String>  parentIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+//        moduleIds.addAll(parentIds);
+//    }
+
     /**
      * 根据条件按分页查找模块
      * @param moduleQuery

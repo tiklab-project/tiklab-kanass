@@ -281,7 +281,9 @@ public class WorkItemDao{
                 .eq("wi.projectId", workItemQuery.getProjectId())
                 .eq("wi.assignerId", workItemQuery.getAssignerId())
                 .eq("wi.sprintId", workItemQuery.getSprintId())
+                .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
                 .notIn("wi.id", workItemQuery.getIdNotIn());
+
 
         if(workItemQuery.getVersionIdIsNull() != null) {
             if(workItemQuery.getVersionIdIsNull() == true){
@@ -425,7 +427,7 @@ public class WorkItemDao{
 
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class)
                 .notIn("id",array)
-                .eq("workTypeSysId", workItemQuery.getWorkTypeId())
+                .eq("workTypeId", workItemQuery.getWorkTypeId())
                 .eq("projectId", workItemQuery.getProjectId())
                 .orders(workItemQuery.getOrderParams())
                 .pagination(workItemQuery.getPageParam());

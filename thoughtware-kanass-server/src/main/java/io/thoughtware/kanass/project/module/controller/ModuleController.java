@@ -92,6 +92,15 @@ public class ModuleController {
         return Result.ok(moduleList);
     }
 
+    @RequestMapping(path = "/findSeleteParentModuleList",method = RequestMethod.POST)
+    @ApiMethod(name = "findSeleteParentModuleList",desc = "根据查询对象查询模块列表")
+    @ApiParam(name = "id",desc = "模块查询对象",required = true)
+    public Result<List<Module>> findSeleteParentModuleList(@NotNull String id){
+        List<Module> moduleList = moduleService.findSeleteParentModuleList(id);
+
+        return Result.ok(moduleList);
+    }
+
     @RequestMapping(path = "/findModuleListTree",method = RequestMethod.POST)
     @ApiMethod(name = "findModuleListTree",desc = "根据查询对象查询模块列表")
     @ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
