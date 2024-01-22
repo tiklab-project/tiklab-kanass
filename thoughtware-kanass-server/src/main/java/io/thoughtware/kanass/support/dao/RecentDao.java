@@ -102,6 +102,7 @@ public class RecentDao{
                 .eq("masterId", recentQuery.getMasterId())
                 .eq("model", recentQuery.getModel())
                 .eq("projectId", recentQuery.getProjectId())
+                .pagination(recentQuery.getPageParam())
                 .orders(recentQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition,RecentEntity.class);
