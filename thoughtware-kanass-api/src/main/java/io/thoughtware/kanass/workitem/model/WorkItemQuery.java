@@ -109,6 +109,8 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="versionId",desc = "解决版本ID，精确匹配")
     private String versionId;
 
+    @ApiProperty(name ="versionIs",desc = "解决版本IDs，精确匹配")
+    private List<String> versionIds;
     @ApiProperty(name ="versionIdIsNull",desc = "versionId是否为空,true:为空")
     private Boolean versionIdIsNull;
 
@@ -653,5 +655,13 @@ public class WorkItemQuery implements Serializable {
 
     public void setStatisticsNum(Boolean statisticsNum) {
         this.statisticsNum = statisticsNum;
+    }
+
+    public List<String> getVersionIds() {
+        return versionIds;
+    }
+
+    public void setVersionIds(List<String> versionIds) {
+        this.versionIds = versionIds;
     }
 }

@@ -783,7 +783,7 @@ public class WorkItemDao{
             String buildTimeStart = workItemQuery.getBuildTimeStart();
             buildTimeStart = buildTimeStart.concat(" 00:00:00");
             String buildTimeEnd = workItemQuery.getBuildTimeEnd();
-            buildTimeStart = buildTimeStart.concat(" 23:59:59");
+            buildTimeEnd = buildTimeEnd.concat(" 23:59:59");
             if(paramMap.isEmpty()){
                 sql = sql.concat(" p.build_time >= '"+ buildTimeStart + "' and p.build_time <= '" + buildTimeEnd + "'");
             }else {
@@ -843,6 +843,24 @@ public class WorkItemDao{
             }
         }
 
+        if(workItemQuery.getVersionIds() != null && workItemQuery.getVersionIds().size()>0){
+            List<String> versionIds = workItemQuery.getVersionIds();
+            String s = new String();
+            s =  "(";
+            for(String versionId:versionIds){
+                s = s.concat("'" + versionId + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s = s.concat(")");
+
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.version_id in " + s);
+            }else {
+                sql = sql.concat(" and p.version_id in " + s);
+            }
+            paramMap.put("versionIds", workItemQuery.getVersionIds());
+        }
+
         if(workItemQuery.getSprintIdIsNull() != null && workItemQuery.getSprintIdIsNull() == true) {
             if(paramMap.isEmpty()){
                 sql = sql.concat(" p.sprint_id is null");
@@ -851,13 +869,13 @@ public class WorkItemDao{
             }
         }
 
-        if(workItemQuery.getSprintId() != null) {
-            if(paramMap.isEmpty()){
-                sql = sql.concat(" p.sprint_id = '" + workItemQuery.getSprintId() + "'");
-            }else {
-                sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getSprintId() + "'");
-            }
-        }
+//        if(workItemQuery.getSprintId() != null) {
+//            if(paramMap.isEmpty()){
+//                sql = sql.concat(" p.sprint_id = '" + workItemQuery.getSprintId() + "'");
+//            }else {
+//                sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getSprintId() + "'");
+//            }
+//        }
 
 //        sqlMap.put("sql", sql);
         objectObjectHashMap.put("query", paramMap);
