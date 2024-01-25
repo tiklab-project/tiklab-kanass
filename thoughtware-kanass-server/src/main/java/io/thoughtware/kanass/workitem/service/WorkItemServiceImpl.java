@@ -709,17 +709,21 @@ public class WorkItemServiceImpl implements WorkItemService {
         transitionRuleQuery.setTransitionId(transitionId);
         List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
         for (TransitionRule transitionRule : transitionRuleList) {
-            User allocationUser = transitionRule.getAllocationUser();
-            // 修改事项负责人
-            workItem.setAssigner(allocationUser);
+            if(transitionRule.getUserType() == "user"){
+                User allocationUser = transitionRule.getAllocationUser();
+                // 修改事项负责人
+                workItem.setAssigner(allocationUser);
+                WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+                workItemDao.updateWorkItem(workItemEntity);
+                // 发送消息和待办事项
+                WorkItem newWorkItem = findWorkItem(id);
+                creatTodoTask(oldWorkItem, allocationUser);
+                sendMessageForUpdateStatus(oldWorkItem, newWorkItem, allocationUser);
+                sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
+            }
+            if(transitionRule.getUserType() == "role"){
 
-            WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-            workItemDao.updateWorkItem(workItemEntity);
-            // 发送消息和待办事项
-            WorkItem newWorkItem = findWorkItem(id);
-            creatTodoTask(oldWorkItem, allocationUser);
-            sendMessageForUpdateStatus(oldWorkItem, newWorkItem, allocationUser);
-            sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
+            }
         }
     }
 
