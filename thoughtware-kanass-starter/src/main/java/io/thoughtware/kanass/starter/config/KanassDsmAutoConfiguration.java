@@ -60,7 +60,8 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.0.3", new String[]{
                 "pmc_1.0.3",
-                "message_1.0.3"
+                "message_1.0.3",
+                "flow_1.0.3"
         });
         dsmConfig.newVersion("1.0.4", new String[]{
                 "message_1.0.4"
@@ -70,6 +71,9 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.1.5", new String[]{
                 "pmc_1.1.5"
+        });
+        dsmConfig.newVersion("1.1.6", new String[]{
+                "pmc_1.1.6"
         });
         return dsmConfig;
     }

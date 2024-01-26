@@ -8,7 +8,9 @@ import io.thoughtware.flow.statenode.model.*;
 import io.thoughtware.flow.statenode.service.StateNodeRelationService;
 import io.thoughtware.flow.transition.model.TransitionRule;
 import io.thoughtware.flow.transition.model.TransitionRuleQuery;
+import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
+import io.thoughtware.flow.transition.service.TransitionRuleUserService;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.security.logging.model.LoggingQuery;
@@ -97,6 +99,8 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Autowired
     SendMessageNoticeService sendMessageNoticeService;
 
+    @Autowired
+    BusinessRoleService businessRoleService;
 
     @Autowired
     ProjectService projectService;
@@ -565,7 +569,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "title":
                 updateTitle(workItem);
                 break;
-
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                 workItemDao.updateWorkItem(workItemEntity);
@@ -705,27 +708,39 @@ public class WorkItemServiceImpl implements WorkItemService {
      */
     void updateByTransitionRule(WorkItem workItem, WorkItem oldWorkItem, String transitionId){
         String id = workItem.getId();
-        TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
-        transitionRuleQuery.setTransitionId(transitionId);
-        List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
-        for (TransitionRule transitionRule : transitionRuleList) {
-            if(transitionRule.getUserType() == "user"){
-                User allocationUser = transitionRule.getAllocationUser();
-                // 修改事项负责人
-                workItem.setAssigner(allocationUser);
-                WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-                workItemDao.updateWorkItem(workItemEntity);
-                // 发送消息和待办事项
-                WorkItem newWorkItem = findWorkItem(id);
-                creatTodoTask(oldWorkItem, allocationUser);
-                sendMessageForUpdateStatus(oldWorkItem, newWorkItem, allocationUser);
-                sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
-            }
-            if(transitionRule.getUserType() == "role"){
-
-            }
+        User transitionRuleUser = businessRoleService.findTransitionRuleUser(transitionId, id);
+        if(transitionRuleUser != null && transitionRuleUser.getId() != null){
+            workItem.setAssigner(transitionRuleUser);
+            WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+            workItemDao.updateWorkItem(workItemEntity);
+            // 发送消息和待办事项
+            WorkItem newWorkItem = findWorkItem(id);
+            creatTodoTask(oldWorkItem, transitionRuleUser);
+            sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
+            sendMessageForUpdateAssigner(oldWorkItem, transitionRuleUser);
         }
+
+//        TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
+//        transitionRuleQuery.setTransitionId(transitionId);
+//        List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
+//        for (TransitionRule transitionRule : transitionRuleList) {
+//            if(transitionRule.getUserType() == "user"){
+//                User allocationUser = null;
+//                // 修改事项负责人
+//                workItem.setAssigner(allocationUser);
+//                WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+//                workItemDao.updateWorkItem(workItemEntity);
+//                // 发送消息和待办事项
+//                WorkItem newWorkItem = findWorkItem(id);
+//                creatTodoTask(oldWorkItem, allocationUser);
+//                sendMessageForUpdateStatus(oldWorkItem, newWorkItem, allocationUser);
+//                sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
+//            }
+//            if(transitionRule.getUserType() == "role"){
+//            }
+//        }
     }
+
 
     void updateFlowRelation(WorkItem workItem){
         StateNodeRelation stateNodeRelation = new StateNodeRelation();
