@@ -612,7 +612,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateWorkItemStatus(workItem, oldWorkItem);
         String transitionId = workItem.getTransitionId();
         if(transitionId != null){
-            updateByTransitionRule(workItem,oldWorkItem, transitionId);
+            updateByTransitionRule(workItem, oldWorkItem, transitionId);
         }
 
     }
@@ -674,7 +674,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         HashMap<String, Object> logContent = new HashMap<>();
         logContent.put("oldValue", oldWorkItem.getWorkStatusNode());
 
-
         // 查找状态对应的项目状态
         StateNode workStatusNode = workItem.getWorkStatusNode();
         StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
@@ -719,26 +718,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
             sendMessageForUpdateAssigner(oldWorkItem, transitionRuleUser);
         }
-
-//        TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
-//        transitionRuleQuery.setTransitionId(transitionId);
-//        List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
-//        for (TransitionRule transitionRule : transitionRuleList) {
-//            if(transitionRule.getUserType() == "user"){
-//                User allocationUser = null;
-//                // 修改事项负责人
-//                workItem.setAssigner(allocationUser);
-//                WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-//                workItemDao.updateWorkItem(workItemEntity);
-//                // 发送消息和待办事项
-//                WorkItem newWorkItem = findWorkItem(id);
-//                creatTodoTask(oldWorkItem, allocationUser);
-//                sendMessageForUpdateStatus(oldWorkItem, newWorkItem, allocationUser);
-//                sendMessageForUpdateAssigner(oldWorkItem, allocationUser);
-//            }
-//            if(transitionRule.getUserType() == "role"){
-//            }
-//        }
     }
 
 

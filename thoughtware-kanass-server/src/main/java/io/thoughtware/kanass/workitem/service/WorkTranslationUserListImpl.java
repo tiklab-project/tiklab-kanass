@@ -48,5 +48,11 @@ public class WorkTranslationUserListImpl implements TransitionRuleUserService {
         return user;
     }
 
+    @Override
+    public Void changeBusinessMaster(String id, String domainId) {
+
+        return null;
+    }
+
 
 }
