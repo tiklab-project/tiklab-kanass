@@ -266,8 +266,8 @@
         </dependency>
         <dependency>
             <groupId>io.thoughtware</groupId>
-            <artifactId>thoughtware-upgrade-starter</artifactId>
-            <version>${thoughtware-upgrade.version}</version>
+            <artifactId>thoughtware-install-starter</artifactId>
+            <version>${thoughtware-install.version}</version>
         </dependency>
         <dependency>
             <groupId>io.thoughtware</groupId>
@@ -308,12 +308,6 @@
             <groupId>io.thoughtware</groupId>
             <artifactId>thoughtware-plugin-spring-boot-starter</artifactId>
             <version>${thoughtware-plugin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.thoughtware</groupId>
-            <artifactId>thoughtware-todotask-spring-boot-starter</artifactId>
-            <version>${thoughtware-todotask.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.thoughtware</groupId>
