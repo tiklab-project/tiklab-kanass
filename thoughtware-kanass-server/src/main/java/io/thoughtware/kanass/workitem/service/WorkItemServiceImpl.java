@@ -10,7 +10,7 @@ import io.thoughtware.flow.transition.model.TransitionRule;
 import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
-import io.thoughtware.flow.transition.service.TransitionRuleUserService;
+import io.thoughtware.flow.transition.service.TransitionService;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.security.logging.model.LoggingQuery;
@@ -92,7 +92,6 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Autowired
     StateNodeFlowService stateNodeflowService;
 
-
     @Autowired
     DmFlowService dmFlowService;
 
@@ -113,6 +112,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     TransitionRuleService transitionRuleService;
+
+    @Autowired
+    TransitionService transitionService;
     @Autowired
     LoggingByTempService opLogByTemplService;
 
@@ -707,7 +709,14 @@ public class WorkItemServiceImpl implements WorkItemService {
      */
     void updateByTransitionRule(WorkItem workItem, WorkItem oldWorkItem, String transitionId){
         String id = workItem.getId();
-        User transitionRuleUser = businessRoleService.findTransitionRuleUser(transitionId, id);
+        TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
+        transitionRuleQuery.setTransitionId(transitionId);
+        List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
+        List<TransitionRule> distributionWork = transitionRuleList.stream().filter(item -> item.getRuleType().equals("distributionWork")).
+                collect(Collectors.toList());
+        TransitionRule transitionRule = distributionWork.get(0);
+        User transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
+
         if(transitionRuleUser != null && transitionRuleUser.getId() != null){
             workItem.setAssigner(transitionRuleUser);
             WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);

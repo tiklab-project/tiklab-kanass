@@ -3,10 +3,12 @@ package io.thoughtware.kanass.workitem.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
 import io.thoughtware.flow.transition.service.TransitionRuleUserService;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.service.ProjectService;
+import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.user.user.model.User;
@@ -14,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Primary
@@ -68,38 +73,51 @@ public class WorkTranslationUserListImpl implements TransitionRuleUserService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        String comparison = new String();
-        String status = new String();
-        String workRelation = new String();
         try {
-            comparison = statusMap.get("comparison");
-            status = statusMap.get("status");
-            workRelation = statusMap.get("workRelation");
-
-            switch (workRelation){
-                case "childrenWork":
-                    isShowTransition = comparisonChildrenWorkStatus(comparison, status, domainId);
-                    break;
+            // 如果设置了子事项限制父级的流转规则
+            boolean childWorkStatus = statusMap.containsKey("childWorkStatus");
+            if(childWorkStatus){
+                isShowTransition = comparisonChildrenWorkStatus(domainId);
             }
+            boolean preDependWorkStatus = statusMap.containsKey("preDependWorkStatus");
+            if(preDependWorkStatus){
+                isShowTransition = comparisonPredepandWorkStatus(domainId);
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return isShowTransition;
     }
 
-    public Boolean comparisonChildrenWorkStatus(String comparison, String status, String domainId) {
+    public Boolean comparisonChildrenWorkStatus(String domainId) {
         Boolean isShowTransition = true;
-        WorkItemQuery workItemQuery = new WorkItemQuery();
-        switch (comparison){
-            case "pass":
-//                getStatusBeforePass(status)
-                break;
+        WorkItemQuery childWorkItemQuery = new WorkItemQuery();
+        childWorkItemQuery.setParentId(domainId);
+        List<WorkItem> childWorkItemList = workItemService.findWorkItemList(childWorkItemQuery);
+        if(childWorkItemList.size() > 0){
+            List<WorkItem> noDoneWorkItemList = childWorkItemList.stream().filter(work -> !work.getWorkStatusNode().equals("DONE")).
+                    collect(Collectors.toList());
+            if(noDoneWorkItemList.size() > 0){
+                isShowTransition = false;
+            }
         }
-        workItemQuery.setParentId(domainId);
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-        return  isShowTransition;
+
+        return isShowTransition;
     }
 
+    public Boolean comparisonPredepandWorkStatus(String domainId){
+        Boolean isShowTransition = true;
+        WorkItem workItem = workItemService.findWorkItem(domainId);
+        WorkItem preDependWorkItem = workItem.getPreDependWorkItem();
+        if(preDependWorkItem != null){
+            String workStatusCode = preDependWorkItem.getWorkStatusCode();
+            if(!workStatusCode.equals("DONE")){
+                isShowTransition = false;
+            }
+        }
+        return isShowTransition;
 
+    }
 
 }
