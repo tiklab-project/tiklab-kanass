@@ -712,21 +712,26 @@ public class WorkItemServiceImpl implements WorkItemService {
         TransitionRuleQuery transitionRuleQuery = new TransitionRuleQuery();
         transitionRuleQuery.setTransitionId(transitionId);
         List<TransitionRule> transitionRuleList = transitionRuleService.findTransitionRuleList(transitionRuleQuery);
-        List<TransitionRule> distributionWork = transitionRuleList.stream().filter(item -> item.getRuleType().equals("distributionWork")).
-                collect(Collectors.toList());
-        TransitionRule transitionRule = distributionWork.get(0);
-        User transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
+        if(transitionRuleList.size() > 0){
+            List<TransitionRule> distributionWork = transitionRuleList.stream().filter(item -> item.getRuleType().equals("distributionWork")).
+                    collect(Collectors.toList());
+            if(distributionWork.size() > 0){
+                TransitionRule transitionRule = distributionWork.get(0);
+                User transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
+                if(transitionRuleUser != null && transitionRuleUser.getId() != null){
+                    workItem.setAssigner(transitionRuleUser);
+                    WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+                    workItemDao.updateWorkItem(workItemEntity);
+                    // 发送消息和待办事项
+                    WorkItem newWorkItem = findWorkItem(id);
+                    creatTodoTask(oldWorkItem, transitionRuleUser);
+                    sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
+                    sendMessageForUpdateAssigner(oldWorkItem, transitionRuleUser);
+                }
+            }
 
-        if(transitionRuleUser != null && transitionRuleUser.getId() != null){
-            workItem.setAssigner(transitionRuleUser);
-            WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-            workItemDao.updateWorkItem(workItemEntity);
-            // 发送消息和待办事项
-            WorkItem newWorkItem = findWorkItem(id);
-            creatTodoTask(oldWorkItem, transitionRuleUser);
-            sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
-            sendMessageForUpdateAssigner(oldWorkItem, transitionRuleUser);
         }
+
     }
 
 
@@ -1255,6 +1260,12 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Override
     public HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery) {
         HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkType(workItemQuery);
+        return workItemNumByWorkType;
+    }
+
+    @Override
+    public HashMap<String, Integer> findWorkItemListNumByWorkType(WorkItemQuery workItemQuery) {
+        HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemListNumByWorkType(workItemQuery);
         return workItemNumByWorkType;
     }
 

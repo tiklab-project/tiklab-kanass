@@ -371,6 +371,15 @@ public class WorkItemController {
         return Result.ok(workItemNumByWorkType);
     }
 
+    @RequestMapping(path = "/findWorkItemListNumByWorkType",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemListNumByWorkType",desc = "根据查询对象按分页查找事项列表")
+    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    public Result<Pagination<WorkItem>> findWorkItemListNumByWorkType(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemListNumByWorkType(workItemQuery);
+
+        return Result.ok(workItemNumByWorkType);
+    }
+
     /**
      * @pi.name:查找各个事项状态的事项数量
      * @pi.path:/workItem/findWorkItemNumByWorkStatus

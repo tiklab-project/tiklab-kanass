@@ -179,6 +179,8 @@ public interface WorkItemService {
 
     HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery);
 
+    HashMap<String, Integer> findWorkItemListNumByWorkType(WorkItemQuery workItemQuery);
+
     HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery);
 
     HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery);

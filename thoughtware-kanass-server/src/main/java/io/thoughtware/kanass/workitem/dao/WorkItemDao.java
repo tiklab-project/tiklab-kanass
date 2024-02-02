@@ -869,15 +869,6 @@ public class WorkItemDao{
             }
         }
 
-//        if(workItemQuery.getSprintId() != null) {
-//            if(paramMap.isEmpty()){
-//                sql = sql.concat(" p.sprint_id = '" + workItemQuery.getSprintId() + "'");
-//            }else {
-//                sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getSprintId() + "'");
-//            }
-//        }
-
-//        sqlMap.put("sql", sql);
         objectObjectHashMap.put("query", paramMap);
         objectObjectHashMap.put("sql", sql);
 
@@ -945,9 +936,7 @@ public class WorkItemDao{
             sql = sql.concat(" p.parent_id is null");
         }
         int index = sql.indexOf("where");
-
         sql = "Select count(1) as total from pmc_work_item p " + sql.substring(index);
-
 
         Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
         WorkItemCount.put("all", allNum);
@@ -971,6 +960,45 @@ public class WorkItemDao{
         return WorkItemCount;
     }
 
+    public HashMap<String, Integer> findWorkItemListNumByWorkType(WorkItemQuery workItemQuery){
+        HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        workItemQuery.setWorkTypeId(null);
+        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+        String sql = new String();
+        Object o1 = stringObjectMap.get("sql");
+        Object query = stringObjectMap.get("query");
+        sql = sql.concat(String.valueOf(o1));
+//        if(!ObjectUtils.isEmpty(query)){
+//            sql = sql.concat(String.valueOf(o1));
+//            sql = sql.concat(" and p.parent_id is null");
+//        }else {
+//            sql = sql.concat( String.valueOf(o1));
+//            sql = sql.concat(" p.parent_id is null");
+//        }
+        int index = sql.indexOf("where");
+        sql = "Select count(1) as total from pmc_work_item p " + sql.substring(index);
+
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        WorkItemCount.put("all", allNum);
+
+        String sql1 =  sql.concat(" and p.work_type_code = 'demand'");
+        Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        WorkItemCount.put("demand", demandNum);
+
+        String sql2 =  sql.concat(" and p.work_type_code = 'task'");
+        Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        WorkItemCount.put("task", taskNum);
+
+        String sql3 =  sql.concat(" and p.work_type_code = 'defect'");
+        Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        WorkItemCount.put("defect", defectNum);
+
+        String sql4 =  sql.concat(" and p.work_type_code = 'epic'");
+        Integer epicNum = jpaTemplate.getJdbcTemplate().queryForObject(sql4, new Object[]{}, Integer.class);
+        WorkItemCount.put("epic", epicNum);
+
+        return WorkItemCount;
+    }
     public Integer findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery){
         HashMap<String, Integer> WorkItemCount = new HashMap<>();
         workItemQuery.setWorkTypeId(null);
