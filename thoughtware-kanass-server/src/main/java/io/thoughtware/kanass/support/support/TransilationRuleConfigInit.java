@@ -40,7 +40,7 @@ public class TransilationRuleConfigInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-//        initTransilationRuleConfigInit();
+        initTransilationRuleConfigInit();
     }
 
     public void initTransilationRuleConfigInit(){
