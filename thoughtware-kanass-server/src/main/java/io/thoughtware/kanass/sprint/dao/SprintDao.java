@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.sprint.dao;
 
+import io.thoughtware.kanass.home.statistic.model.WorkItemStatistic;
 import io.thoughtware.kanass.sprint.entity.SprintEntity;
 import io.thoughtware.kanass.sprint.entity.SprintFocusEntity;
 import io.thoughtware.kanass.sprint.model.SprintQuery;
@@ -124,6 +125,15 @@ public class SprintDao{
                 .orders(sprintQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, SprintEntity.class);
+    }
+
+    public List<SprintEntity> findSelectSprintList(SprintQuery sprintQuery) {
+        String currentSprintId = sprintQuery.getCurrentSprintId();
+        String projectId = sprintQuery.getProjectId();
+        String sql = "SELECT * FROM pmc_sprint WHERE id != '" + currentSprintId + "' and " +
+                "sprint_state_id != '222222' and project_id = '" + projectId + "'";
+        List<SprintEntity> sprintEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(SprintEntity.class));
+        return sprintEntityList;
     }
 
     /**

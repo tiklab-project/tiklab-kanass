@@ -58,10 +58,10 @@ public class SprintServiceImpl implements SprintService {
     ProjectService projectService;
 
     @Autowired
-    UserService userService;
+    WorkItemService workItemService;
 
     @Autowired
-    WorkItemService workItemService;
+    UserService userService;
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -124,7 +124,11 @@ public class SprintServiceImpl implements SprintService {
     @Override
     public void updateSprint(@NotNull @Valid Sprint sprint) {
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
-
+        SprintState sprintState = sprint.getSprintState();
+        // 如果状态更新为完成
+        if(sprintState.getId().equals("222222")){
+            workItemService.updateBatchWorkItemSprint(sprint.getId(), sprint.getNewSprintId());
+        }
         sprintDao.updateSprint(sprintEntity);
 
     }
@@ -196,7 +200,13 @@ public class SprintServiceImpl implements SprintService {
         }
         // 查找迭代的事项数量
 
+        joinTemplate.joinQuery(sprintList);
+        return sprintList;
+    }
 
+    public List<Sprint> findSelectSprintList(SprintQuery sprintQuery) {
+        List<SprintEntity> sprintEntityList = sprintDao.findSelectSprintList(sprintQuery);
+        List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
         joinTemplate.joinQuery(sprintList);
         return sprintList;

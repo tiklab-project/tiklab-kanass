@@ -26,6 +26,12 @@ public class SprintQuery {
     @ApiProperty(name ="sprintStateId",desc = "迭代状态id，模糊匹配")
     private String sprintStateId;
 
+    @ApiProperty(name ="currentSprintId",desc = "迭代状态id，模糊匹配")
+    private String currentSprintId;
+
+    @ApiProperty(name ="notSprintStateId",desc = "迭代状态id，模糊匹配")
+    private String notSprintStateId;
+
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("sprintName").get();
 
@@ -78,5 +84,21 @@ public class SprintQuery {
 
     public void setSprintStateId(String sprintStateId) {
         this.sprintStateId = sprintStateId;
+    }
+
+    public String getCurrentSprintId() {
+        return currentSprintId;
+    }
+
+    public void setCurrentSprintId(String currentSprintId) {
+        this.currentSprintId = currentSprintId;
+    }
+
+    public String getNotSprintStateId() {
+        return notSprintStateId;
+    }
+
+    public void setNotSprintStateId(String notSprintStateId) {
+        this.notSprintStateId = notSprintStateId;
     }
 }

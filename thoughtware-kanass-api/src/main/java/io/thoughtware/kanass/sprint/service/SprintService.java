@@ -74,6 +74,8 @@ public interface SprintService {
      */
     List<Sprint> findSprintList(SprintQuery sprintQuery);
 
+    List<Sprint> findSelectSprintList(SprintQuery sprintQuery);
+
     /**
      * 根据条件查找我收藏的迭代
      * @param sprintQuery

@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.workitem.dao;
 
+import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.order.Order;
 import io.thoughtware.core.order.OrderTypeEnum;
 import io.thoughtware.kanass.project.epic.entity.EpicWorkItemEntity;
@@ -1401,4 +1402,24 @@ public class WorkItemDao{
         List<Map<String, Object>> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
         return workItemList;
     }
+
+    public void updateBatchWorkItemSprint(String oldSprintId, String newSprintId){
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        if(newSprintId != null){
+            String sql = "update pmc_work_item SET sprint_id = '" + newSprintId + "' WHERE sprint_id = '" + oldSprintId + "'";
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e){
+                throw new ApplicationException(2000,"批量更新事项迭代失败" + e.getMessage());
+            }
+        }else {
+            String sql = "update pmc_work_item SET sprint_id = null WHERE sprint_id = '" + oldSprintId + "'";
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e){
+                throw new ApplicationException(2000,"批量更新事项迭代失败" + e.getMessage());
+            }
+        }
+    }
+
 }

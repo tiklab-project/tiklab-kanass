@@ -192,4 +192,7 @@ public interface WorkItemService {
     HashMap<String, Integer>findWorkItemRelationModelCount(String workItemId, String workTypeCode);
 
     List<Map<String, Object>> findWorkItemNum(String colunm, String ids);
+
+    //批量更新事项的迭代
+    void updateBatchWorkItemSprint(@NotNull String oldSprintId, String newSprintId);
 }

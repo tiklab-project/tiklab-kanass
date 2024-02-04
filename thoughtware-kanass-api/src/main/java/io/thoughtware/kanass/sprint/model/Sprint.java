@@ -24,6 +24,9 @@ public class Sprint extends BaseModel {
     @ApiProperty(name="id",desc="迭代ID")
     private String id;
 
+    @ApiProperty(name="newSprintId",desc="迭代ID")
+    private String newSprintId;
+
 
     @ApiProperty(name="sprintName",desc="迭代名称",eg="@text32")
     private String sprintName;
@@ -135,19 +138,19 @@ public class Sprint extends BaseModel {
         this.quantityNumber = quantityNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Sprint{" +
-                "id='" + id + '\'' +
-                ", sprintName='" + sprintName + '\'' +
-                ", desc='" + desc + '\'' +
-                ", master=" + master +
-                ", project=" + project +
-                ", sprintState=" + sprintState +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Sprint{" +
+//                "id='" + id + '\'' +
+//                ", sprintName='" + sprintName + '\'' +
+//                ", desc='" + desc + '\'' +
+//                ", master=" + master +
+//                ", project=" + project +
+//                ", sprintState=" + sprintState +
+//                ", startTime=" + startTime +
+//                ", endTime=" + endTime +
+//                '}';
+//    }
 
     public Integer getWorkNumber() {
         return workNumber;
@@ -155,5 +158,13 @@ public class Sprint extends BaseModel {
 
     public void setWorkNumber(Integer workNumber) {
         this.workNumber = workNumber;
+    }
+
+    public String getNewSprintId() {
+        return newSprintId;
+    }
+
+    public void setNewSprintId(String newSprintId) {
+        this.newSprintId = newSprintId;
     }
 }

@@ -91,6 +91,15 @@ public class SprintController {
         return Result.ok(sprintList);
     }
 
+    @RequestMapping(path = "/findSelectSprintList",method = RequestMethod.POST)
+    @ApiMethod(name = "findSelectSprintList",desc = "根据条件查找迭代列表")
+    @ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
+    public Result<List<Sprint>> findSelectSprintList(@RequestBody @Valid @NotNull SprintQuery sprintQuery){
+        List<Sprint> sprintList = sprintService.findSelectSprintList(sprintQuery);
+
+        return Result.ok(sprintList);
+    }
+
 
     @RequestMapping(path = "/findSprintPage",method = RequestMethod.POST)
     @ApiMethod(name = "findSprintPage",desc = "根据条件按照分页查找迭代")

@@ -11,6 +11,7 @@ import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
 import io.thoughtware.flow.transition.service.TransitionService;
+import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.security.logging.model.LoggingQuery;
@@ -97,6 +98,12 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     SendMessageNoticeService sendMessageNoticeService;
+
+    @Autowired
+    WorkSprintService workSprintService;
+
+    @Autowired
+    WorkVersionService workVersionService;
 
     @Autowired
     BusinessRoleService businessRoleService;
@@ -571,6 +578,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "title":
                 updateTitle(workItem);
                 break;
+            case "sprint":
+                updateWorkItemSprint(workItem);
+                break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                 workItemDao.updateWorkItem(workItemEntity);
@@ -582,6 +592,44 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
         updateFlowRelation(workItem);
+    }
+
+    public void updateWorkItemSprint(WorkItem workItem){
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+
+        // 更新事项的迭代
+        WorkItem oldWorkItem = findWorkItem(workItem.getId());
+        WorkSprintQuery workSprintQuery = new WorkSprintQuery();
+        workSprintQuery.setWorkItemId(workItem.getId());
+        Sprint oldSprint = oldWorkItem.getSprint();
+        if(oldSprint != null){
+            workSprintQuery.setSprintId(oldSprint.getId());
+        }
+        List<WorkSprint> workSprintList = workSprintService.findWorkSprintList(workSprintQuery);
+        Sprint newSprint = workItem.getSprint();
+        if(workSprintList.size() > 0){
+            String workSprintId = workSprintList.get(0).getId();
+            if(newSprint != null && !newSprint.getId().equals("nullstring")){
+                // 如果已经有关联，更新事项与迭代关联
+                WorkSprint workSprint = new WorkSprint();
+                workSprint.setId(workSprintId);
+                workSprint.setSprintId(newSprint.getId());
+                workSprint.setWorkItemId(workItem.getId());
+                workSprintService.updateWorkSprint(workSprint);
+            }else {
+                // 如果已经有关联更新到没有关联迭代，更新事项与迭代关联
+                workSprintService.deleteWorkSprint(workSprintId);
+            }
+        }else {
+            // 如果之前没有关联过事项，现在关联了
+            if(newSprint != null && newSprint.getId() != "nullstring"){
+                WorkSprint workSprint = new WorkSprint();
+                workSprint.setSprintId(newSprint.getId());
+                workSprint.setWorkItemId(workItem.getId());
+                workSprintService.createWorkSprint(workSprint);
+            }
+        }
+        workItemDao.updateWorkItem(workItemEntity);
     }
     // 更新上级事项
     public void updateParentWorkItem(WorkItem workItem){
@@ -1366,6 +1414,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         List<Map<String, Object>> workItemNum = workItemDao.findWorkItemNum(colunm, ids);
         return  workItemNum;
     }
+
+    @Override
+    public void updateBatchWorkItemSprint(String oldSprintId, String newSprintId) {
+        workItemDao.updateBatchWorkItemSprint(oldSprintId, newSprintId);
+    }
+
 
 
 }

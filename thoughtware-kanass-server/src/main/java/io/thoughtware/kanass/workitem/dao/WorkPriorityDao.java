@@ -82,7 +82,7 @@ public class WorkPriorityDao{
      */
     public List<WorkPriorityEntity> findWorkPriorityList(WorkPriorityQuery workPriorityQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkPriorityEntity.class)
-                .like("name", workPriorityQuery.getName())
+                .eq("name", workPriorityQuery.getName())
                 .orders(workPriorityQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkPriorityEntity.class);

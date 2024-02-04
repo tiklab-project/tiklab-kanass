@@ -459,4 +459,12 @@ public class WorkItemController {
         return Result.ok(workItemRelationModelCount);
     }
 
+    @RequestMapping(path = "/updateBatchWorkItemSprint",method = RequestMethod.POST)
+    @ApiMethod(name = "updateBatchWorkItemSprint",desc = "批量更新事项迭代")
+    public Result<Void> updateBatchWorkItemSprint(@NotNull String oldSprintId, String newSprintId){
+        workItemService.updateBatchWorkItemSprint(oldSprintId, newSprintId);
+
+        return Result.ok();
+    }
+
 }
