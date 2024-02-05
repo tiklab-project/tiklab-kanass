@@ -1,7 +1,9 @@
 package io.thoughtware.kanass.project.version.service;
 
+import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.version.model.*;
+import io.thoughtware.kanass.workitem.service.WorkVersionService;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -32,6 +34,10 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Autowired
     VersionFocusService versionFocusService;
+
+    @Autowired
+    WorkVersionService workVersionService;
+
     @Autowired
     JoinTemplate joinTemplate;
 
@@ -45,8 +51,27 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     @Override
     public void updateVersion(@NotNull @Valid ProjectVersion projectVersion) {
         ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
-
+        VersionState versionState = projectVersion.getVersionState();
+        if(versionState.getId().equals("222222")){
+            // 创建新的迭代与事项的记录
+            String versionId = projectVersion.getId();
+            String newVersionId = projectVersion.getNewVersionId();
+            List<String> versionWorkItemIds = workItemService.findVersionWorkItemIds(versionId);
+            String valueString = "";
+            for (String workItemId : versionWorkItemIds) {
+                String id = UuidGenerator.getRandomIdByUUID(12);
+                String sql = "('" + id + "', '" + workItemId + "', '" + newVersionId + "'),";
+                valueString = valueString.concat(sql);
+            }
+            int length = valueString.length() - 1;
+            String substring = valueString.substring(0, length);
+            if(newVersionId != null){
+                workVersionService.createBatchWorkVersion(substring);
+            }
+            workItemService.updateBatchWorkItemVersion(versionId, newVersionId);
+        }
         projectVersionDao.updateVersion(projectVersionEntity);
+
     }
 
     @Override
@@ -154,6 +179,14 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
         joinTemplate.joinQuery(projectVersionList);
 
+        return projectVersionList;
+    }
+
+    @Override
+    public List<ProjectVersion> findSelectVersionList(ProjectVersionQuery projectVersionQuery) {
+        List<ProjectVersionEntity> selectVersionList = projectVersionDao.findSelectVersionList(projectVersionQuery);
+        List<ProjectVersion> projectVersionList = BeanMapper.mapList(selectVersionList, ProjectVersion.class);
+        joinTemplate.joinQuery(projectVersionList);
         return projectVersionList;
     }
 }

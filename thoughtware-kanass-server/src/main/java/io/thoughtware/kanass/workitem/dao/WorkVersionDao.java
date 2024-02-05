@@ -78,6 +78,7 @@ public class WorkVersionDao {
     public List<WorkVersionEntity> findWorkVersionList(WorkVersionQuery workVersionQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkVersionEntity.class)
                 .eq("versionId", workVersionQuery.getVersionId())
+                .eq("workItemId", workVersionQuery.getWorkItemId())
                 .orders(workVersionQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkVersionEntity.class);
@@ -95,6 +96,11 @@ public class WorkVersionDao {
                 .pagination(workVersionQuery.getPageParam())
                 .get();
         return jpaTemplate.findPage(queryCondition, WorkVersionEntity.class);
+    }
+
+    public void createBatchWorkVersion(String valueStrings){
+        String sql = "INSERT INTO pmc_work_version (id, work_item_id, version_id) VALUES " + valueStrings + ";";
+        jpaTemplate.getJdbcTemplate().execute(sql);
     }
 
 }

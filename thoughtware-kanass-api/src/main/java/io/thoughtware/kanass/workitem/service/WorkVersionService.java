@@ -25,6 +25,7 @@ public interface WorkVersionService {
     */
     String createWorkVersion(@NotNull @Valid WorkVersion workVersion);
 
+    void createBatchWorkVersion(@NotNull String valueStrings);
     /**
     * 更新事项状态
     * @param workVersion

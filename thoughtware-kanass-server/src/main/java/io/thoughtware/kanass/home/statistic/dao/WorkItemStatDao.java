@@ -460,9 +460,9 @@ public class WorkItemStatDao {
 
         }
 
-        if(workItemQuery.getSprintId() != null){
+        if(workItemQuery.getCurrentSprintId() != null){
             sql = sql.concat( " and t.sprint_id= ?");
-            objects.add(workItemQuery.getSprintIds());
+            objects.add(workItemQuery.getCurrentSprintIds());
 
         }
         int size = objects.size();

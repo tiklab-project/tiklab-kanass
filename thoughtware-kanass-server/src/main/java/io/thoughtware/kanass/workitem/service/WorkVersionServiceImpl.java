@@ -31,6 +31,11 @@ public class WorkVersionServiceImpl implements WorkVersionService {
     }
 
     @Override
+    public void createBatchWorkVersion(String valueStrings) {
+        workVersionDao.createBatchWorkVersion(valueStrings);
+    }
+
+    @Override
     public void updateWorkVersion(@NotNull @Valid WorkVersion workVersion) {
         WorkVersionEntity workVersionEntity = BeanMapper.map(workVersion, WorkVersionEntity.class);
 

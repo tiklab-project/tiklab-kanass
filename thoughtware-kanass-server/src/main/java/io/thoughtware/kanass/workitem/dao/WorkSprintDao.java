@@ -98,5 +98,15 @@ public class WorkSprintDao {
                 .get();
         return jpaTemplate.findPage(queryCondition, WorkSprintEntity.class);
     }
+    public void createBatchWorkSprint(String valueStrings){
+        String sql = "INSERT INTO pmc_work_sprint (id, work_item_id, sprint_id) VALUES " + valueStrings + ";";
+        jpaTemplate.getJdbcTemplate().execute(sql);
+    }
+
+    public List<String> findSprintWorkItemIds(String sprintId){
+        String sql = "SELECT work_item_id from pmc_work_sprint WHERE sprint_id = '" + sprintId + "'";
+        List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return workItemIds;
+    }
 
 }

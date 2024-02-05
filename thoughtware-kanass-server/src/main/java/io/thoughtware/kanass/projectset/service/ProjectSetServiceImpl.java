@@ -1,7 +1,6 @@
 package io.thoughtware.kanass.projectset.service;
 
 import io.thoughtware.eam.common.context.LoginContext;
-import io.thoughtware.kanass.project.project.entity.ProjectEntity;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
 import io.thoughtware.privilege.role.model.PatchUser;
 import io.thoughtware.kanass.project.project.model.Project;
@@ -287,7 +286,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
             workItemQuery.setProjectId(id);
         }
        if (type==1){
-           workItemQuery.setSprintId(id);
+           workItemQuery.setCurrentSprintId(id);
        }
         List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
         joinTemplate.joinQuery(workItemList);

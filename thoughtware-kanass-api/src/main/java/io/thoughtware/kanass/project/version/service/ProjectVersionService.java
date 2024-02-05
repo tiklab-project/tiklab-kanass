@@ -2,6 +2,8 @@ package io.thoughtware.kanass.project.version.service;
 
 import io.thoughtware.core.page.Pagination;
 
+import io.thoughtware.kanass.sprint.model.Sprint;
+import io.thoughtware.kanass.sprint.model.SprintQuery;
 import io.thoughtware.toolkit.join.annotation.FindList;
 import io.thoughtware.toolkit.join.annotation.JoinProvider;
 import io.thoughtware.toolkit.join.annotation.FindAll;
@@ -73,5 +75,5 @@ public interface ProjectVersionService {
     Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery ProjectVersionQuery);
 
     List<ProjectVersion> findVersionFocusList(ProjectVersionQuery ProjectVersionQuery);
-
+    List<ProjectVersion> findSelectVersionList(ProjectVersionQuery projectVersionQuery);
 }

@@ -109,4 +109,13 @@ public class ProjectVersionController {
         return Result.ok(versionFocusList);
     }
 
+    @RequestMapping(path = "/findSelectVersionList",method = RequestMethod.POST)
+    @ApiMethod(name = "findSelectVersionList",desc = "根据条件查找迭代列表")
+    @ApiParam(name = "versionQuery",desc = "迭代查询对象",required = true)
+    public Result<List<ProjectVersion>> findSelectVersionList(@RequestBody @Valid @NotNull ProjectVersionQuery projectVersionQuery){
+        List<ProjectVersion> versionList = projectVersionService.findSelectVersionList(projectVersionQuery);
+
+        return Result.ok(versionList);
+    }
+
 }

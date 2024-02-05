@@ -11,6 +11,7 @@ import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
 import io.thoughtware.flow.transition.service.TransitionService;
+import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
@@ -581,6 +582,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "sprint":
                 updateWorkItemSprint(workItem);
                 break;
+            case "projectVersion":
+                updateWorkItemVersion(workItem);
+                break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                 workItemDao.updateWorkItem(workItemEntity);
@@ -596,7 +600,6 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     public void updateWorkItemSprint(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-
         // 更新事项的迭代
         WorkItem oldWorkItem = findWorkItem(workItem.getId());
         WorkSprintQuery workSprintQuery = new WorkSprintQuery();
@@ -627,6 +630,43 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workSprint.setSprintId(newSprint.getId());
                 workSprint.setWorkItemId(workItem.getId());
                 workSprintService.createWorkSprint(workSprint);
+            }
+        }
+        workItemDao.updateWorkItem(workItemEntity);
+    }
+
+    public void updateWorkItemVersion(WorkItem workItem){
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        // 更新事项的版本
+        WorkItem oldWorkItem = findWorkItem(workItem.getId());
+        WorkVersionQuery workVersionQuery = new WorkVersionQuery();
+        workVersionQuery.setWorkItemId(workItem.getId());
+        ProjectVersion oldVersion = oldWorkItem.getProjectVersion();
+        if(oldVersion != null){
+            workVersionQuery.setVersionId(oldVersion.getId());
+        }
+        List<WorkVersion> workVersionList = workVersionService.findWorkVersionList(workVersionQuery);
+        ProjectVersion newVersion = workItem.getProjectVersion();
+        if(workVersionList.size() > 0){
+            String workVersionId = workVersionList.get(0).getId();
+            if(newVersion != null && !newVersion.getId().equals("nullstring")){
+                // 如果已经有关联，更新事项与迭代关联
+                WorkVersion workVersion = new WorkVersion();
+                workVersion.setId(workVersionId);
+                workVersion.setVersionId(newVersion.getId());
+                workVersion.setWorkItemId(workItem.getId());
+                workVersionService.updateWorkVersion(workVersion);
+            }else {
+                // 如果已经有关联更新到没有关联迭代，更新事项与迭代关联
+                workVersionService.deleteWorkVersion(workVersionId);
+            }
+        }else {
+            // 如果之前没有关联过事项，现在关联了
+            if(newVersion != null && newVersion.getId() != "nullstring"){
+                WorkVersion workVersion = new WorkVersion();
+                workVersion.setVersionId(newVersion.getId());
+                workVersion.setWorkItemId(workItem.getId());
+                workVersionService.createWorkVersion(workVersion);
             }
         }
         workItemDao.updateWorkItem(workItemEntity);
@@ -1328,8 +1368,8 @@ public class WorkItemServiceImpl implements WorkItemService {
         // 全部事项数量
         WorkItemQuery workItemQuery1 = new WorkItemQuery();
         workItemQuery1.setProjectIds(workItemQuery.getProjectIds());
-        workItemQuery1.setSprintIds(workItemQuery.getSprintIds());
-        workItemQuery1.setVersionId(workItemQuery.getVersionId());
+        workItemQuery1.setCurrentSprintIds(workItemQuery.getCurrentSprintIds());
+        workItemQuery1.setCurrentVersionId(workItemQuery.getCurrentVersionId());
         Integer allWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("all", allWorkItemNum);
 
@@ -1420,6 +1460,22 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateBatchWorkItemSprint(oldSprintId, newSprintId);
     }
 
+    @Override
+    public void updateBatchWorkItemVersion(String oldVersionId, String newVersionId) {
+        workItemDao.updateBatchWorkItemVersion(oldVersionId, newVersionId);
+    }
+
+    @Override
+    public List<String> findSprintWorkItemIds(String sprintId) {
+        List<String> sprintWorkItemIds = workItemDao.findSprintWorkItemIds(sprintId);
+        return sprintWorkItemIds;
+    }
+
+    @Override
+    public List<String> findVersionWorkItemIds(String versionId) {
+        List<String> versionWorkItemIds = workItemDao.findVersionWorkItemIds(versionId);
+        return versionWorkItemIds;
+    }
 
 
 }

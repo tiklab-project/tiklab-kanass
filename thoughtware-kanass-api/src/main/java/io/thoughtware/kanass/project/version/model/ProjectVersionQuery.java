@@ -17,6 +17,8 @@ public class ProjectVersionQuery {
     @ApiProperty(name ="projectId",desc = "所属项目ID，精确匹配")
     private String projectId;
 
+    @ApiProperty(name ="currentVersionId",desc = "所属项目ID，精确匹配")
+    private String currentVersionId;
     @ApiProperty(name ="name",desc = "版本名称，模糊匹配")
     private String name;
 
@@ -78,5 +80,13 @@ public class ProjectVersionQuery {
 
     public void setMasterId(String masterId) {
         this.masterId = masterId;
+    }
+
+    public String getCurrentVersionId() {
+        return currentVersionId;
+    }
+
+    public void setCurrentVersionId(String currentVersionId) {
+        this.currentVersionId = currentVersionId;
     }
 }

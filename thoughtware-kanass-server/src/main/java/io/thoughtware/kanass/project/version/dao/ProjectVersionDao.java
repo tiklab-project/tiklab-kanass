@@ -10,6 +10,7 @@ import io.thoughtware.dal.jpa.JpaTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -116,4 +117,15 @@ public class ProjectVersionDao {
                 .get();
         return jpaTemplate.findList(queryCondition, ProjectVersionEntity.class);
     }
+
+    public List<ProjectVersionEntity> findSelectVersionList(ProjectVersionQuery projectVersionQuery) {
+        String currentVersionId = projectVersionQuery.getCurrentVersionId();
+        String projectId = projectVersionQuery.getProjectId();
+        String sql = "SELECT * FROM pmc_version WHERE id != '" + currentVersionId + "' and " +
+                "version_state != '222222' and project_id = '" + projectId + "'";
+        List<ProjectVersionEntity> versionEntityList = this.jpaTemplate.getJdbcTemplate().
+                query(sql, new BeanPropertyRowMapper(ProjectVersionEntity.class));
+        return versionEntityList;
+    }
+
 }

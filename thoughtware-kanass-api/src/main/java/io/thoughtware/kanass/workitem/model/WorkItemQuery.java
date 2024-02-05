@@ -79,11 +79,14 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="projectIds",desc = "所属项目ID，in")
     private List<String> projectIds;
 
-    @ApiProperty(name ="sprintId",desc = "所属迭代ID，精确匹配")
-    private String sprintId;
+    @ApiProperty(name ="currentSprintId",desc = "所属当前迭代ID，精确匹配")
+        private String currentSprintId;
 
-    @ApiProperty(name ="sprintIds",desc = "迭代ID，范围匹配")
-    private List<String> sprintIds;
+    @ApiProperty(name ="currentSprintIds",desc = "所属当前迭代IDs，范围匹配")
+    private List<String> currentSprintIds;
+
+    @ApiProperty(name = "sprintId",desc = "迭代ID，范围匹配")
+    private String sprintId;
 
     @ApiProperty(name ="builderId",desc = "创建者ID，精确匹配")
     private String builderId;
@@ -106,11 +109,14 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="sprintIdIsNull",desc = "迭代是否为空,true:为空")
     private Boolean sprintIdIsNull;
 
+    @ApiProperty(name ="currentVersionId",desc = "解决版本ID，精确匹配")
+    private String currentVersionId;
+
+    @ApiProperty(name ="currentVersionIds",desc = "解决版本IDs，精确匹配")
+    private List<String> currentVersionIds;
+
     @ApiProperty(name ="versionId",desc = "解决版本ID，精确匹配")
     private String versionId;
-
-    @ApiProperty(name ="versionIs",desc = "解决版本IDs，精确匹配")
-    private List<String> versionIds;
     @ApiProperty(name ="versionIdIsNull",desc = "versionId是否为空,true:为空")
     private Boolean versionIdIsNull;
 
@@ -310,12 +316,12 @@ public class WorkItemQuery implements Serializable {
         this.title = title;
     }
 
-    public String getSprintId() {
-        return sprintId;
+    public String getCurrentSprintId() {
+        return currentSprintId;
     }
 
-    public void setSprintId(String sprintId) {
-        this.sprintId = sprintId;
+    public void setCurrentSprintId(String currentSprintId) {
+        this.currentSprintId = currentSprintId;
     }
 
     public String getParentId() {
@@ -326,12 +332,12 @@ public class WorkItemQuery implements Serializable {
         this.parentId = parentId;
     }
 
-    public String getVersionId() {
-        return versionId;
+    public String getCurrentVersionId() {
+        return currentVersionId;
     }
 
-    public void setVersionId(String versionId) {
-        this.versionId = versionId;
+    public void setCurrentVersionId(String currentVersionId) {
+        this.currentVersionId = currentVersionId;
     }
 
     public Boolean getVersionIdIsNull() {
@@ -423,12 +429,12 @@ public class WorkItemQuery implements Serializable {
         this.workStatusIds = workStatusIds;
     }
 
-    public List<String> getSprintIds() {
-        return sprintIds;
+    public List<String> getCurrentSprintIds() {
+        return currentSprintIds;
     }
 
-    public void setSprintIds(List<String> sprintIds) {
-        this.sprintIds = sprintIds;
+    public void setCurrentSprintIds(List<String> currentSprintIds) {
+        this.currentSprintIds = currentSprintIds;
     }
 
     public List<String> getProjectIds() {
@@ -657,11 +663,27 @@ public class WorkItemQuery implements Serializable {
         this.statisticsNum = statisticsNum;
     }
 
-    public List<String> getVersionIds() {
-        return versionIds;
+    public List<String> getCurrentVersionIds() {
+        return currentVersionIds;
     }
 
-    public void setVersionIds(List<String> versionIds) {
-        this.versionIds = versionIds;
+    public void setCurrentVersionIds(List<String> currentVersionIds) {
+        this.currentVersionIds = currentVersionIds;
+    }
+
+    public String getSprintId() {
+        return sprintId;
+    }
+
+    public void setSprintId(String sprintId) {
+        this.sprintId = sprintId;
+    }
+
+    public String getVersionId() {
+        return versionId;
+    }
+
+    public void setVersionId(String versionId) {
+        this.versionId = versionId;
     }
 }

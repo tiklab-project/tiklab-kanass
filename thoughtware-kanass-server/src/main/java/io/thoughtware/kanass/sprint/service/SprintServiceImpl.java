@@ -1,14 +1,14 @@
 package io.thoughtware.kanass.sprint.service;
 
 import com.alibaba.fastjson.JSONObject;
+import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.eam.common.context.LoginContext;
-import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.service.ProjectService;
-import io.thoughtware.kanass.project.project.support.MessageTemplateProject;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.model.SprintQuery;
 import io.thoughtware.kanass.sprint.model.SprintState;
 import io.thoughtware.kanass.sprint.model.SprintStateQuery;
+import io.thoughtware.kanass.workitem.service.WorkSprintService;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -21,12 +21,9 @@ import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
 import io.thoughtware.message.message.model.Message;
-import io.thoughtware.message.message.model.MessageReceiver;
 import io.thoughtware.message.message.model.SendMessageNotice;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.message.setting.model.MessageType;
-import io.thoughtware.user.dmUser.model.DmUser;
-import io.thoughtware.user.dmUser.model.DmUserQuery;
 import io.thoughtware.user.user.model.User;
 import io.thoughtware.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +57,8 @@ public class SprintServiceImpl implements SprintService {
     @Autowired
     WorkItemService workItemService;
 
+    @Autowired
+    WorkSprintService workSprintService;
     @Autowired
     UserService userService;
 
@@ -127,7 +126,23 @@ public class SprintServiceImpl implements SprintService {
         SprintState sprintState = sprint.getSprintState();
         // 如果状态更新为完成
         if(sprintState.getId().equals("222222")){
-            workItemService.updateBatchWorkItemSprint(sprint.getId(), sprint.getNewSprintId());
+            // 创建新的迭代与事项的记录
+            String sprintId = sprint.getId();
+            String newSprintId = sprint.getNewSprintId();
+            List<String> sprintWorkItemIds = workItemService.findSprintWorkItemIds(sprintId);
+            String valueString = "";
+            for (String workItemId : sprintWorkItemIds) {
+                String id = UuidGenerator.getRandomIdByUUID(12);
+                String sql = "('" + id + "', '" + workItemId + "', '" + newSprintId + "'),";
+                valueString = valueString.concat(sql);
+            }
+            int length = valueString.length() - 1;
+            String substring = valueString.substring(0, length);
+            if(newSprintId != null){
+                workSprintService.createBatchWorkSprint(substring);
+            }
+            // 更新事项的迭代
+            workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
         }
         sprintDao.updateSprint(sprintEntity);
 
@@ -164,7 +179,7 @@ public class SprintServiceImpl implements SprintService {
         Sprint sprint = findOne(id);
 
         WorkItemQuery workItemQuery = new WorkItemQuery();
-        workItemQuery.setSprintId(id);
+        workItemQuery.setCurrentSprintId(id);
         List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
 
 

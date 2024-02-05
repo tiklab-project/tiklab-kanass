@@ -195,4 +195,9 @@ public interface WorkItemService {
 
     //批量更新事项的迭代
     void updateBatchWorkItemSprint(@NotNull String oldSprintId, String newSprintId);
+
+    void updateBatchWorkItemVersion(@NotNull String oldVersionId, String newVersionId);
+    List<String> findSprintWorkItemIds(@NotNull String sprintId);
+
+    List<String> findVersionWorkItemIds(@NotNull String versionId);
 }

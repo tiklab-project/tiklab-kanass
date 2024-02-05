@@ -24,7 +24,7 @@ public interface WorkSprintService {
     * @return
     */
     String createWorkSprint(@NotNull @Valid WorkSprint workSprint);
-
+    void createBatchWorkSprint(@NotNull String valueStrings);
     /**
     * 更新事项状态
     * @param workSprint
@@ -71,5 +71,5 @@ public interface WorkSprintService {
     * @return
     */
     Pagination<WorkSprint> findWorkSprintPage(WorkSprintQuery workSprintQuery);
-
+    List<String> findSprintWorkItemIds(@NotNull String sprintId);
 }

@@ -17,6 +17,9 @@ public class WorkVersionQuery {
     @ApiProperty(name ="versionId",desc = "状态名称，模糊匹配")
     private String versionId;
 
+    @ApiProperty(name ="workItemId",desc = "事项id")
+    private String workItemId;
+
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
 
@@ -45,5 +48,13 @@ public class WorkVersionQuery {
 
     public void setVersionId(String versionId) {
         this.versionId = versionId;
+    }
+
+    public String getWorkItemId() {
+        return workItemId;
+    }
+
+    public void setWorkItemId(String workItemId) {
+        this.workItemId = workItemId;
     }
 }

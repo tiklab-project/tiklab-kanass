@@ -175,13 +175,13 @@ public class WorkItemDao{
                 .eq("wi.projectId",workItemQuery.getProjectId())
                 .in("wi.parentId", workItemQuery.getParentIdIn())
                 .eq("wi.parentId", workItemQuery.getParentId())
-                .eq("wi.versionId", workItemQuery.getVersionId())
+                .eq("wi.versionId", workItemQuery.getCurrentVersionId())
                 .eq("wi.workTypeId", workItemQuery.getWorkTypeId())
                 .eq("wi.workTypeSysId", workItemQuery.getWorkTypeSysId())
                 .eq("wi.workStatusId", workItemQuery.getWorkStatusId())
                 .eq("wi.workStatusCode", workItemQuery.getWorkStatusCode())
                 .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
-                .eq("wi.sprintId", workItemQuery.getSprintId())
+                .eq("wi.sprintId", workItemQuery.getCurrentSprintId())
                 .in("wi.id", workItemQuery.getIds())
                 .notIn("wi.id", workItemQuery.getIdNotIn())
                 .orders(workItemQuery.getOrderParams());
@@ -276,12 +276,12 @@ public class WorkItemDao{
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkItemEntity.class,"wi")
                 .eq("wi.id", workItemQuery.getId())
                 .eq("wi.parentId", workItemQuery.getParentId())
-                .eq("wi.versionId", workItemQuery.getVersionId())
+                .eq("wi.versionId", workItemQuery.getCurrentVersionId())
                 .eq("wi.workTypeId", workItemQuery.getWorkTypeId())
                 .eq("wi.workTypeSysId", workItemQuery.getWorkTypeSysId())
                 .eq("wi.projectId", workItemQuery.getProjectId())
                 .eq("wi.assignerId", workItemQuery.getAssignerId())
-                .eq("wi.sprintId", workItemQuery.getSprintId())
+                .eq("wi.sprintId", workItemQuery.getCurrentSprintId())
                 .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
                 .notIn("wi.id", workItemQuery.getIdNotIn());
 
@@ -477,7 +477,7 @@ public class WorkItemDao{
         Map<String, String> sqlMap = new HashMap<String, String>();
         Object[] objects = {};
 
-        // 如果存在安装优先级查询，就链表查
+        // 如果存在按照优先级查询，就链表查
         List<Order> orderParams = workItemQuery.getOrderParams();
         boolean priorityOrder = orderParams.stream().anyMatch(order -> order.getName().equals("work_priority_id"));
         if(priorityOrder){
@@ -488,11 +488,11 @@ public class WorkItemDao{
             sql = "Select count(1) as count from pmc_work_item p where";
         }
 
-        if(workItemQuery.getVersionId() != null && workItemQuery.getVersionId().length()>0){
+        if(workItemQuery.getCurrentVersionId() != null && workItemQuery.getCurrentVersionId().length()>0){
             if(paramMap.isEmpty()){
-                sql = sql.concat(" p.version_id = '" + workItemQuery.getVersionId() + "'");
+                sql = sql.concat(" p.version_id = '" + workItemQuery.getCurrentVersionId() + "'");
             }
-            paramMap.put("versionId", workItemQuery.getVersionId());
+            paramMap.put("versionId", workItemQuery.getCurrentVersionId());
         }
 
         if(workItemQuery.getWorkTypeId() != null && workItemQuery.getWorkTypeId().length()>0){
@@ -549,6 +549,7 @@ public class WorkItemDao{
             }
             paramMap.put("workTypeCode", workItemQuery.getWorkTypeCode());
         }
+
         if(workItemQuery.getWorkTypeCodes() != null && workItemQuery.getWorkTypeCodes().size()>0){
             List<String> workTypeCodes = workItemQuery.getWorkTypeCodes();
             String s = new String();
@@ -586,17 +587,17 @@ public class WorkItemDao{
             paramMap.put("projectIds", workItemQuery.getProjectIds());
         }
 
-        if(workItemQuery.getSprintId() != null && workItemQuery.getSprintId().length()>0){
+        if(workItemQuery.getCurrentSprintId() != null && workItemQuery.getCurrentSprintId().length()>0){
             if(paramMap.isEmpty()){
-                sql = sql.concat(" p.sprint_id = '" + workItemQuery.getSprintId() + "'");
+                sql = sql.concat(" p.sprint_id = '" + workItemQuery.getCurrentSprintId() + "'");
             }else {
-                sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getSprintId() + "'");
+                sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getCurrentSprintId() + "'");
             }
-            paramMap.put("sprintId", workItemQuery.getSprintIds());
+            paramMap.put("currentSprintId", workItemQuery.getCurrentSprintIds());
         }
 
-        if(workItemQuery.getSprintIds() != null && workItemQuery.getSprintIds().size()>0){
-            List<String> sprintIds = workItemQuery.getSprintIds();
+        if(workItemQuery.getCurrentSprintIds() != null && workItemQuery.getCurrentSprintIds().size()>0){
+            List<String> sprintIds = workItemQuery.getCurrentSprintIds();
             String s = new String();
             s =  "(";
             for(String sprintId:sprintIds){
@@ -610,8 +611,29 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.sprint_id in " + s);
             }
-            paramMap.put("sprintIds", workItemQuery.getSprintIds());
+            paramMap.put("currentSprintIds", workItemQuery.getCurrentSprintIds());
         }
+        if(workItemQuery.getSprintId() != null && workItemQuery.getSprintId().length()>0){
+            String sprintId = workItemQuery.getSprintId();
+            List<String> workItemIdsBySprint = findWorkItemIdsBySprint(sprintId);
+            if(workItemIdsBySprint.size() > 0){
+                String workItemIds = "(" +  workItemIdsBySprint.stream().map(id -> "'" + id + "'").
+                        collect(Collectors.joining(", ")) + ")";
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id in " + workItemIds);
+                }else {
+                    sql = sql.concat(" and p.id in " + workItemIds);
+                }
+            }else {
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id in ('')");
+                }else {
+                    sql = sql.concat(" and p.id in ('')");
+                }
+            }
+            paramMap.put("sprintId", workItemQuery.getSprintId());
+        }
+
 
         if(workItemQuery.getWorkStatusId() != null && workItemQuery.getWorkStatusId().length()>0){
 
@@ -836,16 +858,16 @@ public class WorkItemDao{
             }
         }
 
-        if(workItemQuery.getVersionId() != null) {
+        if(workItemQuery.getCurrentVersionId() != null) {
             if(paramMap.isEmpty()){
-                sql = sql.concat(" p.version_id = '" + workItemQuery.getVersionId() + "'");
+                sql = sql.concat(" p.version_id = '" + workItemQuery.getCurrentVersionId() + "'");
             }else {
-                sql = sql.concat(" and p.version_id = '" + workItemQuery.getVersionId() + "'");
+                sql = sql.concat(" and p.version_id = '" + workItemQuery.getCurrentVersionId() + "'");
             }
         }
 
-        if(workItemQuery.getVersionIds() != null && workItemQuery.getVersionIds().size()>0){
-            List<String> versionIds = workItemQuery.getVersionIds();
+        if(workItemQuery.getCurrentVersionIds() != null && workItemQuery.getCurrentVersionIds().size()>0){
+            List<String> versionIds = workItemQuery.getCurrentVersionIds();
             String s = new String();
             s =  "(";
             for(String versionId:versionIds){
@@ -859,7 +881,28 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.version_id in " + s);
             }
-            paramMap.put("versionIds", workItemQuery.getVersionIds());
+            paramMap.put("versionIds", workItemQuery.getCurrentVersionIds());
+        }
+
+        if(workItemQuery.getVersionId() != null && workItemQuery.getVersionId().length()>0){
+            String versionId = workItemQuery.getVersionId();
+            List<String> workItemIdsByVersion = findWorkItemIdsByVersion(versionId);
+            if(workItemIdsByVersion.size() > 0){
+                String workItemIds = "(" +  workItemIdsByVersion.stream().map(id -> "'" + id + "'").
+                        collect(Collectors.joining(", ")) + ")";
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id in " + workItemIds);
+                }else {
+                    sql = sql.concat(" and p.id in " + workItemIds);
+                }
+            }else {
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id in ('')");
+                }else {
+                    sql = sql.concat(" and p.id in ('')");
+                }
+            }
+            paramMap.put("versionId", workItemQuery.getVersionId());
         }
 
         if(workItemQuery.getSprintIdIsNull() != null && workItemQuery.getSprintIdIsNull() == true) {
@@ -967,15 +1010,8 @@ public class WorkItemDao{
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         String sql = new String();
         Object o1 = stringObjectMap.get("sql");
-        Object query = stringObjectMap.get("query");
         sql = sql.concat(String.valueOf(o1));
-//        if(!ObjectUtils.isEmpty(query)){
-//            sql = sql.concat(String.valueOf(o1));
-//            sql = sql.concat(" and p.parent_id is null");
-//        }else {
-//            sql = sql.concat( String.valueOf(o1));
-//            sql = sql.concat(" p.parent_id is null");
-//        }
+
         int index = sql.indexOf("where");
         sql = "Select count(1) as total from pmc_work_item p " + sql.substring(index);
 
@@ -1420,6 +1456,51 @@ public class WorkItemDao{
                 throw new ApplicationException(2000,"批量更新事项迭代失败" + e.getMessage());
             }
         }
+    }
+
+    public void updateBatchWorkItemVersion(String oldVersionId, String newVersionId){
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        if(newVersionId != null){
+            String sql = "update pmc_work_item SET version_id = '" + newVersionId + "' WHERE version_id = '" + oldVersionId + "'";
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e){
+                throw new ApplicationException(2000,"批量更新事项版本失败" + e.getMessage());
+            }
+        }else {
+            String sql = "update pmc_work_item SET version_id = null WHERE version_id = '" + oldVersionId + "'";
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e){
+                throw new ApplicationException(2000,"批量更新事项版本失败" + e.getMessage());
+            }
+        }
+    }
+
+    public List<String> findSprintWorkItemIds(String sprintId){
+        String sql = "select id from pmc_work_item where sprint_id = '" +  sprintId + "'";
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        List<String> workItemIds = jdbcTemplate.queryForList(sql, String.class);
+        return workItemIds;
+    }
+
+    public List<String> findWorkItemIdsBySprint(String sprintId){
+        String sql = "SELECT work_item_id from pmc_work_sprint WHERE sprint_id = '" + sprintId + "'";
+        List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return workItemIds;
+    }
+
+    public List<String> findWorkItemIdsByVersion(String versionId){
+        String sql = "SELECT work_item_id from pmc_work_version WHERE version_id = '" + versionId + "'";
+        List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return workItemIds;
+    }
+
+    public List<String> findVersionWorkItemIds(String versionId){
+        String sql = "select id from pmc_work_item where version_id = '" +  versionId + "'";
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        List<String> workItemIds = jdbcTemplate.queryForList(sql, String.class);
+        return workItemIds;
     }
 
 }

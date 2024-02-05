@@ -24,6 +24,9 @@ public class ProjectVersion extends BaseModel {
     @ApiProperty(name = "id", desc = "唯一ID")
     private String id;
 
+    @ApiProperty(name="newVersionId",desc="新的迭代ID")
+    private String newVersionId;
+
     @ApiProperty(name = "name", desc = "版本名称")
     private String name;
 
@@ -142,5 +145,13 @@ public class ProjectVersion extends BaseModel {
 
     public void setWorkNumber(int workNumber) {
         this.workNumber = workNumber;
+    }
+
+    public String getNewVersionId() {
+        return newVersionId;
+    }
+
+    public void setNewVersionId(String newVersionId) {
+        this.newVersionId = newVersionId;
     }
 }

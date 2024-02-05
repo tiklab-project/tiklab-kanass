@@ -31,6 +31,11 @@ public class WorkSprintServiceImpl implements WorkSprintService {
     }
 
     @Override
+    public void createBatchWorkSprint(@NotNull String valueStrings) {
+        workSprintDao.createBatchWorkSprint(valueStrings);
+
+    }
+    @Override
     public void updateWorkSprint(@NotNull @Valid WorkSprint workSprint) {
         WorkSprintEntity workSprintEntity = BeanMapper.map(workSprint, WorkSprintEntity.class);
 
@@ -86,6 +91,12 @@ public class WorkSprintServiceImpl implements WorkSprintService {
 
         return PaginationBuilder.build(pagination,workSprintList);
 
+    }
+
+    @Override
+    public List<String> findSprintWorkItemIds(String sprintId) {
+        List<String> workItemIds = workSprintDao.findSprintWorkItemIds(sprintId);
+        return workItemIds;
     }
 
 }
