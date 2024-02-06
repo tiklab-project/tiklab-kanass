@@ -33,7 +33,7 @@ public class WorkSprintVersionInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-//        initWorkSprintVersionInit();
+        initWorkSprintVersionInit();
     }
 
     public void initWorkSprintVersionInit(){
