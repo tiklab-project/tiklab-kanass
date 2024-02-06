@@ -78,6 +78,7 @@ public class WorkSprintDao {
     public List<WorkSprintEntity> findWorkSprintList(WorkSprintQuery workSprintQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkSprintEntity.class)
                 .eq("sprintId", workSprintQuery.getSprintId())
+                .eq("workItemId", workSprintQuery.getWorkItemId())
                 .orders(workSprintQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkSprintEntity.class);

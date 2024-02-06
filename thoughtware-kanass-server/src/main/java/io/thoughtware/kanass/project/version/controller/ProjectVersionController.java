@@ -118,4 +118,12 @@ public class ProjectVersionController {
         return Result.ok(versionList);
     }
 
+    @RequestMapping(path = "/findWorkVersionList",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkVersionList",desc = "查询事项关联的所有版本")
+    @ApiParam(name = "workId",desc = "迭代查询对象",required = true)
+    public Result<List<ProjectVersion>> findWorkVersionList(@NotNull String workId){
+        List<ProjectVersion> versionList = projectVersionService.findWorkVersionList(workId);
+        return Result.ok(versionList);
+    }
+
 }

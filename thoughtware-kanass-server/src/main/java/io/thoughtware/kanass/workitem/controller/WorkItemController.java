@@ -100,6 +100,15 @@ public class WorkItemController {
         return Result.ok(workItem);
     }
 
+    @RequestMapping(path="/findWorkItemAndSprintVersion",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemAndSprintVersion",desc = "根据事项ID查找事项")
+    @ApiParam(name = "id",desc = "事项ID",required = true)
+    public Result<WorkItem> findWorkItemAndSprintVersion(@NotNull String id){
+        WorkItem workItem = workItemService.findWorkItemAndSprintVersion(id);
+
+        return Result.ok(workItem);
+    }
+
     /**
      * @pi.name:查找所有事项
      * @pi.path:/workItem/findAllWorkItem

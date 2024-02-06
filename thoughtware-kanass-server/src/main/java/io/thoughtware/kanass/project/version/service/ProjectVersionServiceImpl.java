@@ -189,4 +189,13 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         joinTemplate.joinQuery(projectVersionList);
         return projectVersionList;
     }
+
+    @Override
+    public List<ProjectVersion> findWorkVersionList(@NotNull String workId){
+        List<ProjectVersionEntity> projectVersionEntityList = projectVersionDao.findWorkVersionList(workId);
+        List<ProjectVersion> projectVersionList = BeanMapper.mapList(projectVersionEntityList, ProjectVersion.class);
+        joinTemplate.joinQuery(projectVersionList);
+        return projectVersionList;
+    }
+
 }

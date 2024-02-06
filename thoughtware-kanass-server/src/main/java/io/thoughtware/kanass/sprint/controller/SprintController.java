@@ -118,4 +118,12 @@ public class SprintController {
         return Result.ok(sprintList);
     }
 
+    @RequestMapping(path = "/findWorkSprintList",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkSprintList",desc = "根据条件查找我收藏的迭代")
+    public Result<Pagination<Sprint>> findWorkSprintList(@NotNull String workId){
+        List<Sprint> sprintList = sprintService.findWorkSprintList(workId);
+
+        return Result.ok(sprintList);
+    }
+
 }

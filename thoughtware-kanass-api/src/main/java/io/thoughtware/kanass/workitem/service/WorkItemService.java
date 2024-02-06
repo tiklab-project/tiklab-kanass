@@ -57,6 +57,7 @@ public interface WorkItemService {
     */
     WorkItem findWorkItem(@NotNull String id);
 
+    WorkItem findWorkItemAndSprintVersion(@NotNull String id);
     /**
     * 查找所有事项
     * @return

@@ -96,5 +96,10 @@ public interface SprintService {
      */
     List<Sprint> findProgressSprint();
 
+    /**
+     * 根据事项id查找迭代
+     * @param workId
+     */
+    List<Sprint> findWorkSprintList(@NotNull String workId);
 
 }

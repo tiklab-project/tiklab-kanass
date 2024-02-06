@@ -76,4 +76,6 @@ public interface ProjectVersionService {
 
     List<ProjectVersion> findVersionFocusList(ProjectVersionQuery ProjectVersionQuery);
     List<ProjectVersion> findSelectVersionList(ProjectVersionQuery projectVersionQuery);
+
+    List<ProjectVersion> findWorkVersionList(@NotNull String workId);
 }

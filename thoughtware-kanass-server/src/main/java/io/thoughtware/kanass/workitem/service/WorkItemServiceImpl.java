@@ -12,7 +12,9 @@ import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
 import io.thoughtware.flow.transition.service.TransitionService;
 import io.thoughtware.kanass.project.version.model.ProjectVersion;
+import io.thoughtware.kanass.project.version.service.ProjectVersionService;
 import io.thoughtware.kanass.sprint.model.Sprint;
+import io.thoughtware.kanass.sprint.service.SprintService;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.security.logging.model.LoggingQuery;
@@ -134,6 +136,12 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     LoggingService loggingService;
+
+    @Autowired
+    SprintService sprintService;
+
+    @Autowired
+    ProjectVersionService projectVersionService;
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -521,6 +529,23 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.createWorkItem(workItemEntity);
 
+        // 如果添加的时候有迭代, 创建迭代与事项的关联记录
+        Sprint sprint = workItem.getSprint();
+        if(sprint != null && sprint.getId() != null && !sprint.getId().equals("nullstring")){
+            WorkSprint workSprint = new WorkSprint();
+            workSprint.setWorkItemId(id);
+            workSprint.setSprintId(sprint.getId());
+            workSprintService.createWorkSprint(workSprint);
+        }
+
+        // 如果添加的时候有版本, 创建版本与事项的关联记录
+        ProjectVersion projectVersion = workItem.getProjectVersion();
+        if(projectVersion != null && projectVersion.getId() != null && !projectVersion.getId().equals("nullstring")){
+            WorkVersion workVersion = new WorkVersion();
+            workVersion.setVersionId(projectVersion.getId());
+            workVersion.setWorkItemId(id);
+            workVersionService.createWorkVersion(workVersion);
+        }
 
         //如果父级为空，更新根节点
         if(workItem.getParentWorkItem() == null){
@@ -602,36 +627,44 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的迭代
         WorkItem oldWorkItem = findWorkItem(workItem.getId());
-        WorkSprintQuery workSprintQuery = new WorkSprintQuery();
-        workSprintQuery.setWorkItemId(workItem.getId());
+
         Sprint oldSprint = oldWorkItem.getSprint();
-        if(oldSprint != null){
-            workSprintQuery.setSprintId(oldSprint.getId());
-        }
-        List<WorkSprint> workSprintList = workSprintService.findWorkSprintList(workSprintQuery);
         Sprint newSprint = workItem.getSprint();
-        if(workSprintList.size() > 0){
-            String workSprintId = workSprintList.get(0).getId();
-            if(newSprint != null && !newSprint.getId().equals("nullstring")){
-                // 如果已经有关联，更新事项与迭代关联
-                WorkSprint workSprint = new WorkSprint();
-                workSprint.setId(workSprintId);
-                workSprint.setSprintId(newSprint.getId());
-                workSprint.setWorkItemId(workItem.getId());
-                workSprintService.updateWorkSprint(workSprint);
+        if(oldSprint != null){
+            WorkSprintQuery workSprintQuery = new WorkSprintQuery();
+            workSprintQuery.setWorkItemId(workItem.getId());
+            workSprintQuery.setSprintId(oldSprint.getId());
+            List<WorkSprint> workSprintList = workSprintService.findWorkSprintList(workSprintQuery);
+
+            if(workSprintList.size() > 0){
+                String workSprintId = workSprintList.get(0).getId();
+                if(newSprint != null && !newSprint.getId().equals("nullstring")){
+                    // 如果已经有关联，更新事项与迭代关联
+                    WorkSprint workSprint = new WorkSprint();
+                    workSprint.setId(workSprintId);
+                    workSprint.setSprintId(newSprint.getId());
+                    workSprint.setWorkItemId(workItem.getId());
+                    workSprintService.updateWorkSprint(workSprint);
+                }else {
+                    // 如果已经有关联更新到没有关联迭代，更新事项与迭代关联
+                    workSprintService.deleteWorkSprint(workSprintId);
+                }
             }else {
-                // 如果已经有关联更新到没有关联迭代，更新事项与迭代关联
-                workSprintService.deleteWorkSprint(workSprintId);
+                // 如果之前没有关联过事项，现在关联了
+                if(newSprint != null && newSprint.getId() != "nullstring"){
+                    WorkSprint workSprint = new WorkSprint();
+                    workSprint.setSprintId(newSprint.getId());
+                    workSprint.setWorkItemId(workItem.getId());
+                    workSprintService.createWorkSprint(workSprint);
+                }
             }
         }else {
-            // 如果之前没有关联过事项，现在关联了
-            if(newSprint != null && newSprint.getId() != "nullstring"){
-                WorkSprint workSprint = new WorkSprint();
-                workSprint.setSprintId(newSprint.getId());
-                workSprint.setWorkItemId(workItem.getId());
-                workSprintService.createWorkSprint(workSprint);
-            }
+            WorkSprint workSprint = new WorkSprint();
+            workSprint.setSprintId(newSprint.getId());
+            workSprint.setWorkItemId(workItem.getId());
+            workSprintService.createWorkSprint(workSprint);
         }
+
         workItemDao.updateWorkItem(workItemEntity);
     }
 
@@ -639,36 +672,43 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的版本
         WorkItem oldWorkItem = findWorkItem(workItem.getId());
-        WorkVersionQuery workVersionQuery = new WorkVersionQuery();
-        workVersionQuery.setWorkItemId(workItem.getId());
+        ProjectVersion newVersion = workItem.getProjectVersion();
         ProjectVersion oldVersion = oldWorkItem.getProjectVersion();
         if(oldVersion != null){
+            WorkVersionQuery workVersionQuery = new WorkVersionQuery();
+            workVersionQuery.setWorkItemId(workItem.getId());
             workVersionQuery.setVersionId(oldVersion.getId());
-        }
-        List<WorkVersion> workVersionList = workVersionService.findWorkVersionList(workVersionQuery);
-        ProjectVersion newVersion = workItem.getProjectVersion();
-        if(workVersionList.size() > 0){
-            String workVersionId = workVersionList.get(0).getId();
-            if(newVersion != null && !newVersion.getId().equals("nullstring")){
-                // 如果已经有关联，更新事项与迭代关联
-                WorkVersion workVersion = new WorkVersion();
-                workVersion.setId(workVersionId);
-                workVersion.setVersionId(newVersion.getId());
-                workVersion.setWorkItemId(workItem.getId());
-                workVersionService.updateWorkVersion(workVersion);
+            List<WorkVersion> workVersionList = workVersionService.findWorkVersionList(workVersionQuery);
+
+            if(workVersionList.size() > 0){
+                String workVersionId = workVersionList.get(0).getId();
+                if(newVersion != null && !newVersion.getId().equals("nullstring")){
+                    // 如果已经有关联，更新事项与迭代关联
+                    WorkVersion workVersion = new WorkVersion();
+                    workVersion.setId(workVersionId);
+                    workVersion.setVersionId(newVersion.getId());
+                    workVersion.setWorkItemId(workItem.getId());
+                    workVersionService.updateWorkVersion(workVersion);
+                }else {
+                    // 如果已经有关联更新到没有关联迭代，更新事项与迭代关联
+                    workVersionService.deleteWorkVersion(workVersionId);
+                }
             }else {
-                // 如果已经有关联更新到没有关联迭代，更新事项与迭代关联
-                workVersionService.deleteWorkVersion(workVersionId);
+                // 如果之前没有关联过事项，现在关联了
+                if(newVersion != null && newVersion.getId() != "nullstring"){
+                    WorkVersion workVersion = new WorkVersion();
+                    workVersion.setVersionId(newVersion.getId());
+                    workVersion.setWorkItemId(workItem.getId());
+                    workVersionService.createWorkVersion(workVersion);
+                }
             }
         }else {
-            // 如果之前没有关联过事项，现在关联了
-            if(newVersion != null && newVersion.getId() != "nullstring"){
-                WorkVersion workVersion = new WorkVersion();
-                workVersion.setVersionId(newVersion.getId());
-                workVersion.setWorkItemId(workItem.getId());
-                workVersionService.createWorkVersion(workVersion);
-            }
+            WorkVersion workVersion = new WorkVersion();
+            workVersion.setVersionId(newVersion.getId());
+            workVersion.setWorkItemId(workItem.getId());
+            workVersionService.createWorkVersion(workVersion);
         }
+
         workItemDao.updateWorkItem(workItemEntity);
     }
     // 更新上级事项
@@ -913,6 +953,18 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         joinTemplate.joinQuery(workItem);
 
+        return workItem;
+    }
+
+
+    @Override
+    public WorkItem findWorkItemAndSprintVersion(@NotNull String id) {
+        WorkItem workItem = findWorkItem(id);
+        List<Sprint> workSprintList = sprintService.findWorkSprintList(id);
+        workItem.setSprintList(workSprintList);
+
+        List<ProjectVersion> workVersionList = projectVersionService.findWorkVersionList(id);
+        workItem.setProjectVersionList(workVersionList);
         return workItem;
     }
 

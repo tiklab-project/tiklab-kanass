@@ -132,6 +132,12 @@ public class WorkItem extends BaseModel {
     @JoinQuery(key = "id")
     private Sprint sprint;
 
+    @ApiProperty(name="sprintList",desc="分配过的迭代")
+    private List<Sprint> sprintList;
+
+    @ApiProperty(name="projectVersionList",desc="分配过的版本")
+    private List<ProjectVersion> projectVersionList;
+
     @ApiProperty(name="version",desc="所属版本")
     @Mappings({
             @Mapping(source = "projectVersion.id",target = "versionId")
@@ -537,5 +543,21 @@ public class WorkItem extends BaseModel {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<Sprint> getSprintList() {
+        return sprintList;
+    }
+
+    public void setSprintList(List<Sprint> sprintList) {
+        this.sprintList = sprintList;
+    }
+
+    public List<ProjectVersion> getProjectVersionList() {
+        return projectVersionList;
+    }
+
+    public void setProjectVersionList(List<ProjectVersion> projectVersionList) {
+        this.projectVersionList = projectVersionList;
     }
 }

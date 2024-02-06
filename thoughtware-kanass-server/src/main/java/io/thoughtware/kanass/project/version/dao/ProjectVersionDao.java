@@ -7,6 +7,7 @@ import io.thoughtware.core.page.Pagination;
 import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.thoughtware.dal.jpa.JpaTemplate;
+import io.thoughtware.kanass.sprint.entity.SprintEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,13 @@ public class ProjectVersionDao {
         List<ProjectVersionEntity> versionEntityList = this.jpaTemplate.getJdbcTemplate().
                 query(sql, new BeanPropertyRowMapper(ProjectVersionEntity.class));
         return versionEntityList;
+    }
+
+    public List<ProjectVersionEntity> findWorkVersionList(String workId){
+        String sql = "select ve.* from pmc_version ve LEFT JOIN pmc_work_version wv " +
+                "on ve.id = wv.version_id WHERE wv.work_item_id = '" + workId  + "'";
+        List<ProjectVersionEntity> projectVersionEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectVersionEntity.class));
+        return  projectVersionEntityList;
     }
 
 }

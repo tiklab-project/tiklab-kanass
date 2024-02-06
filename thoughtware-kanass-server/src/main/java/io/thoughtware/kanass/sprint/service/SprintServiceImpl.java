@@ -145,7 +145,6 @@ public class SprintServiceImpl implements SprintService {
             workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
         }
         sprintDao.updateSprint(sprintEntity);
-
     }
 
     @Override
@@ -265,6 +264,15 @@ public class SprintServiceImpl implements SprintService {
     public List<Sprint> findProgressSprint() {
         List<SprintEntity> sprintEntityList = sprintDao.findProgressSprint();
 
+        List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
+
+        joinTemplate.joinQuery(sprintList);
+        return sprintList;
+    }
+
+    @Override
+    public List<Sprint> findWorkSprintList(String workId) {
+        List<SprintEntity> sprintEntityList = sprintDao.findWorkSprintList(workId);
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
         joinTemplate.joinQuery(sprintList);

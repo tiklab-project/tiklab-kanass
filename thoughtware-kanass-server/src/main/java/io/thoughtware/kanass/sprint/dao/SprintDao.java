@@ -1,6 +1,5 @@
 package io.thoughtware.kanass.sprint.dao;
 
-import io.thoughtware.kanass.home.statistic.model.WorkItemStatistic;
 import io.thoughtware.kanass.sprint.entity.SprintEntity;
 import io.thoughtware.kanass.sprint.entity.SprintFocusEntity;
 import io.thoughtware.kanass.sprint.model.SprintQuery;
@@ -178,5 +177,12 @@ public class SprintDao{
         SprintEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(SprintEntity.class));
 
         return SprintEntityList;
+    }
+
+    public List<SprintEntity> findWorkSprintList(String workId){
+        String sql = "select sr.* from pmc_sprint sr LEFT JOIN pmc_work_sprint " +
+                "ws on sr.id = ws.sprint_id WHERE ws.work_item_id = '" + workId  + "'";
+        List SprintEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(SprintEntity.class));
+        return  SprintEntityList;
     }
 }
