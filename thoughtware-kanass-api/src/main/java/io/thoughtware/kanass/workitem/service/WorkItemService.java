@@ -219,4 +219,6 @@ public interface WorkItemService {
      * @return
      */
     HashMap<String, Integer> findSprintWorkItemNum(@NotNull String sprintId);
+
+    HashMap<String, Integer> findVersionWorkItemNum(@NotNull String versionId);
 }

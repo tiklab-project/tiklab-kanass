@@ -1442,14 +1442,14 @@ public class WorkItemDao{
     public void updateBatchWorkItemSprint(String oldSprintId, String newSprintId){
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         if(newSprintId != null){
-            String sql = "update pmc_work_item SET sprint_id = '" + newSprintId + "' WHERE sprint_id = '" + oldSprintId + "'";
+            String sql = "update pmc_work_item SET sprint_id = '" + newSprintId + "' WHERE sprint_id = '" + oldSprintId + "' and work_status_code != 'DONE' ";
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
                 throw new ApplicationException(2000,"批量更新事项迭代失败" + e.getMessage());
             }
         }else {
-            String sql = "update pmc_work_item SET sprint_id = null WHERE sprint_id = '" + oldSprintId + "'";
+            String sql = "update pmc_work_item SET sprint_id = null WHERE sprint_id = '" + oldSprintId + "' and work_status_code != 'DONE' ";
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
@@ -1461,14 +1461,14 @@ public class WorkItemDao{
     public void updateBatchWorkItemVersion(String oldVersionId, String newVersionId){
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         if(newVersionId != null){
-            String sql = "update pmc_work_item SET version_id = '" + newVersionId + "' WHERE version_id = '" + oldVersionId + "'";
+            String sql = "update pmc_work_item SET version_id = '" + newVersionId + "' WHERE version_id = '" + oldVersionId + "' and work_status_code != 'DONE' ";
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
                 throw new ApplicationException(2000,"批量更新事项版本失败" + e.getMessage());
             }
         }else {
-            String sql = "update pmc_work_item SET version_id = null WHERE version_id = '" + oldVersionId + "'";
+            String sql = "update pmc_work_item SET version_id = null WHERE version_id = '" + oldVersionId + "' and work_status_code != 'DONE'";
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
@@ -1478,7 +1478,7 @@ public class WorkItemDao{
     }
 
     public List<String> findSprintWorkItemIds(String sprintId){
-        String sql = "select id from pmc_work_item where sprint_id = '" +  sprintId + "'";
+        String sql = "select id from pmc_work_item where sprint_id = '" +  sprintId + "' and work_status_code != 'DONE'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         List<String> workItemIds = jdbcTemplate.queryForList(sql, String.class);
         return workItemIds;
@@ -1497,7 +1497,7 @@ public class WorkItemDao{
     }
 
     public List<String> findVersionWorkItemIds(String versionId){
-        String sql = "select id from pmc_work_item where version_id = '" +  versionId + "'";
+        String sql = "select id from pmc_work_item where version_id = '" +  versionId + "' and work_status_code != 'DONE'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         List<String> workItemIds = jdbcTemplate.queryForList(sql, String.class);
         return workItemIds;
@@ -1520,5 +1520,21 @@ public class WorkItemDao{
         return sprintWorkItemNum;
     }
 
+    public HashMap<String, Integer> findVersionWorkItemNum(String versionId){
+        HashMap<String, Integer> versionWorkItemNum = new HashMap<>();
+        String sql = "Select count(1) as total from pmc_work_item where version_id = '" + versionId + "'";
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        versionWorkItemNum.put("all", allNum);
+
+        sql = "Select count(1) as total from pmc_work_item where version_id = '" + versionId + "' and work_status_code != 'DONE'";
+        Integer progressNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        versionWorkItemNum.put("progress", progressNum);
+
+        sql = "Select count(1) as total from pmc_work_item where version_id = '" + versionId + "' and work_status_code = 'DONE'";
+        Integer doneNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        versionWorkItemNum.put("done", doneNum);
+
+        return versionWorkItemNum;
+    }
 
 }

@@ -52,6 +52,14 @@ public class ProjectVersion extends BaseModel {
     private int workNumber;
 
 
+    @ApiProperty(name = "workProgressNumber", desc = "事项数量")
+    private int workProgressNumber;
+
+
+    @ApiProperty(name = "workDoneNumber", desc = "事项数量")
+    private int workDoneNumber;
+
+
     @ApiProperty(name="versionState",desc="版本状态")
     @Mappings({
             @Mapping(source = "versionState.id",target = "versionState")
@@ -153,5 +161,21 @@ public class ProjectVersion extends BaseModel {
 
     public void setNewVersionId(String newVersionId) {
         this.newVersionId = newVersionId;
+    }
+
+    public int getWorkProgressNumber() {
+        return workProgressNumber;
+    }
+
+    public void setWorkProgressNumber(int workProgressNumber) {
+        this.workProgressNumber = workProgressNumber;
+    }
+
+    public int getWorkDoneNumber() {
+        return workDoneNumber;
+    }
+
+    public void setWorkDoneNumber(int workDoneNumber) {
+        this.workDoneNumber = workDoneNumber;
     }
 }

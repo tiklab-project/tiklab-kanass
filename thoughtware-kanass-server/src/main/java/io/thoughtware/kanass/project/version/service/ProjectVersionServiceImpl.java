@@ -58,16 +58,18 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             String versionId = projectVersion.getId();
             String newVersionId = projectVersion.getNewVersionId();
             List<String> versionWorkItemIds = workItemService.findVersionWorkItemIds(versionId);
-            String valueString = "";
-            for (String workItemId : versionWorkItemIds) {
-                String id = UuidGenerator.getRandomIdByUUID(12);
-                String sql = "('" + id + "', '" + workItemId + "', '" + newVersionId + "'),";
-                valueString = valueString.concat(sql);
-            }
-            int length = valueString.length() - 1;
-            String substring = valueString.substring(0, length);
-            if(newVersionId != null){
-                workVersionService.createBatchWorkVersion(substring);
+            if(versionWorkItemIds.size() > 0){
+                String valueString = "";
+                for (String workItemId : versionWorkItemIds) {
+                    String id = UuidGenerator.getRandomIdByUUID(12);
+                    String sql = "('" + id + "', '" + workItemId + "', '" + newVersionId + "'),";
+                    valueString = valueString.concat(sql);
+                }
+                int length = valueString.length() - 1;
+                String substring = valueString.substring(0, length);
+                if(newVersionId != null){
+                    workVersionService.createBatchWorkVersion(substring);
+                }
             }
             workItemService.updateBatchWorkItemVersion(versionId, newVersionId);
         }
@@ -99,7 +101,10 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     @Override
     public ProjectVersion findVersion(@NotNull String id) {
         ProjectVersion projectVersion = findOne(id);
-
+        HashMap<String, Integer> versionWorkItemNum = workItemService.findVersionWorkItemNum(id);
+        projectVersion.setWorkNumber(versionWorkItemNum.get("all"));
+        projectVersion.setWorkDoneNumber(versionWorkItemNum.get("done"));
+        projectVersion.setWorkProgressNumber(versionWorkItemNum.get("progress"));
         joinTemplate.joinQuery(projectVersion);
         return projectVersion;
     }

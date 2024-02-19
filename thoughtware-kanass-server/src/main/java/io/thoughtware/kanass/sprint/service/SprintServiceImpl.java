@@ -124,24 +124,28 @@ public class SprintServiceImpl implements SprintService {
     public void updateSprint(@NotNull @Valid Sprint sprint) {
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         SprintState sprintState = sprint.getSprintState();
+        String newSprintId = sprint.getNewSprintId();
         // 如果状态更新为完成
         if(sprintState.getId().equals("222222")){
             // 创建新的迭代与事项的记录
             String sprintId = sprint.getId();
-            String newSprintId = sprint.getNewSprintId();
+            // 只查询迭代中未完成的事项
             List<String> sprintWorkItemIds = workItemService.findSprintWorkItemIds(sprintId);
-            String valueString = "";
-            for (String workItemId : sprintWorkItemIds) {
-                String id = UuidGenerator.getRandomIdByUUID(12);
-                String sql = "('" + id + "', '" + workItemId + "', '" + newSprintId + "'),";
-                valueString = valueString.concat(sql);
+            if(sprintWorkItemIds.size() > 0){
+                String valueString = "";
+                for (String workItemId : sprintWorkItemIds) {
+                    String id = UuidGenerator.getRandomIdByUUID(12);
+                    String sql = "('" + id + "', '" + workItemId + "', '" + newSprintId + "'),";
+                    valueString = valueString.concat(sql);
+                }
+                int length = valueString.length() - 1;
+                String substring = valueString.substring(0, length);
+                if(newSprintId != null){
+                    workSprintService.createBatchWorkSprint(substring);
+                }
             }
-            int length = valueString.length() - 1;
-            String substring = valueString.substring(0, length);
-            if(newSprintId != null){
-                workSprintService.createBatchWorkSprint(substring);
-            }
-            // 更新事项的迭代
+
+            // 更新事项的迭代, 没有完成的更新到选择的新的迭代或者待办列表
             workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
         }
         sprintDao.updateSprint(sprintEntity);
