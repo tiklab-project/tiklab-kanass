@@ -194,11 +194,29 @@ public interface WorkItemService {
 
     List<Map<String, Object>> findWorkItemNum(String colunm, String ids);
 
-    //批量更新事项的迭代
+    /**
+     * 批量更新事项的迭代
+     * @param oldSprintId
+     * @param newSprintId
+     */
     void updateBatchWorkItemSprint(@NotNull String oldSprintId, String newSprintId);
 
+    /**
+     * 批量更新事项的版本
+     * @param oldVersionId
+     * @param newVersionId
+     */
     void updateBatchWorkItemVersion(@NotNull String oldVersionId, String newVersionId);
+
+
     List<String> findSprintWorkItemIds(@NotNull String sprintId);
 
     List<String> findVersionWorkItemIds(@NotNull String versionId);
+
+    /**
+     * 查找迭代下各个状态的事项
+     * @param sprintId
+     * @return
+     */
+    HashMap<String, Integer> findSprintWorkItemNum(@NotNull String sprintId);
 }

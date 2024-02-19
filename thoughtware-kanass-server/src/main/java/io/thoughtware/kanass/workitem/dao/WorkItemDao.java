@@ -1503,4 +1503,22 @@ public class WorkItemDao{
         return workItemIds;
     }
 
+    public HashMap<String, Integer> findSprintWorkItemNum(String sprintId){
+        HashMap<String, Integer> sprintWorkItemNum = new HashMap<>();
+        String sql = "Select count(1) as total from pmc_work_item where sprint_id = '" + sprintId + "'";
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        sprintWorkItemNum.put("all", allNum);
+
+        sql = "Select count(1) as total from pmc_work_item where sprint_id = '" + sprintId + "' and work_status_code != 'DONE'";
+        Integer progressNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        sprintWorkItemNum.put("progress", progressNum);
+
+        sql = "Select count(1) as total from pmc_work_item where sprint_id = '" + sprintId + "' and work_status_code = 'DONE'";
+        Integer doneNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        sprintWorkItemNum.put("done", doneNum);
+
+        return sprintWorkItemNum;
+    }
+
+
 }

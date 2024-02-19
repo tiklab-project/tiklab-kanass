@@ -280,18 +280,18 @@ public class ProjectSetServiceImpl implements ProjectSetService {
      * 查询事项
      * @param id,type
      */
-    public List<WorkItem> findWorkItemList(String id,Integer type){
-        WorkItemQuery workItemQuery = new WorkItemQuery();
-        if (type==0){
-            workItemQuery.setProjectId(id);
-        }
-       if (type==1){
-           workItemQuery.setCurrentSprintId(id);
-       }
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-        joinTemplate.joinQuery(workItemList);
-        return workItemList;
-    }
+//    public List<WorkItem> findWorkItemList(String id, Integer type){
+//        WorkItemQuery workItemQuery = new WorkItemQuery();
+//        if (type==0){
+//            workItemQuery.setProjectId(id);
+//        }
+//       if (type==1){
+//           workItemQuery.setCurrentSprintId(id);
+//       }
+//        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+//        joinTemplate.joinQuery(workItemList);
+//        return workItemList;
+//    }
 
     /**
      * 查询迭代

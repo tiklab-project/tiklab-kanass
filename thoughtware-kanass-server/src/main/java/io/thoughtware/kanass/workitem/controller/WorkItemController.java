@@ -476,4 +476,13 @@ public class WorkItemController {
         return Result.ok();
     }
 
+    @RequestMapping(path = "/findSprintWorkItemNum",method = RequestMethod.POST)
+    @ApiMethod(name = "findSprintWorkItemNum",desc = "查找迭代下不同状态的事项个数")
+    public Result<Void> findSprintWorkItemNum(@NotNull String sprintId){
+        HashMap<String, Integer> sprintWorkItemNum = workItemService.findSprintWorkItemNum(sprintId);
+
+        return Result.ok(sprintWorkItemNum);
+    }
+
+
 }

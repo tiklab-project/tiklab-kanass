@@ -1529,5 +1529,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return versionWorkItemIds;
     }
 
+    @Override
+    public HashMap<String, Integer> findSprintWorkItemNum(String sprintId) {
+        HashMap<String, Integer> sprintWorkItemNum = workItemDao.findSprintWorkItemNum(sprintId);
+        return sprintWorkItemNum;
+    }
+
 
 }

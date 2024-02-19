@@ -61,8 +61,14 @@ public class Sprint extends BaseModel {
     @ApiProperty(name="endTime",desc="结束时间")
     private Date endTime;
 
-    @ApiProperty(name="work_number",desc="项目数量")
+    @ApiProperty(name="work_number",desc="迭代的事项数量")
     private Integer workNumber;
+
+    @ApiProperty(name="work_done_number",desc="迭代的已完成事项数量")
+    private Integer workDoneNumber;
+
+    @ApiProperty(name="work_progress_number",desc="迭代的未完成事项数量")
+    private Integer workProgressNumber;
 
     @ApiProperty(name="quantityNumber",desc="完成数量")
     private Integer quantityNumber;
@@ -166,5 +172,21 @@ public class Sprint extends BaseModel {
 
     public void setNewSprintId(String newSprintId) {
         this.newSprintId = newSprintId;
+    }
+
+    public Integer getWorkDoneNumber() {
+        return workDoneNumber;
+    }
+
+    public void setWorkDoneNumber(Integer workDoneNumber) {
+        this.workDoneNumber = workDoneNumber;
+    }
+
+    public Integer getWorkProgressNumber() {
+        return workProgressNumber;
+    }
+
+    public void setWorkProgressNumber(Integer workProgressNumber) {
+        this.workProgressNumber = workProgressNumber;
     }
 }
