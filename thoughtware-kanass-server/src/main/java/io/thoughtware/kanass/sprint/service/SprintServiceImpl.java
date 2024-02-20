@@ -122,11 +122,11 @@ public class SprintServiceImpl implements SprintService {
 
     @Override
     public void updateSprint(@NotNull @Valid Sprint sprint) {
-        SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
+
         SprintState sprintState = sprint.getSprintState();
         String newSprintId = sprint.getNewSprintId();
         // 如果状态更新为完成
-        if(sprintState.getId().equals("222222")){
+        if(sprintState != null && sprintState.getId().equals("222222")){
             // 创建新的迭代与事项的记录
             String sprintId = sprint.getId();
             // 只查询迭代中未完成的事项
@@ -147,7 +147,19 @@ public class SprintServiceImpl implements SprintService {
 
             // 更新事项的迭代, 没有完成的更新到选择的新的迭代或者待办列表
             workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
+
+            //设置创建时间
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formater.format(new Date());
+            sprint.setRelaEndTime(format);
         }
+
+        if(sprintState != null && sprintState.getId().equals("111111")){
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formater.format(new Date());
+            sprint.setRelaStartTime(format);
+        }
+        SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         sprintDao.updateSprint(sprintEntity);
     }
 

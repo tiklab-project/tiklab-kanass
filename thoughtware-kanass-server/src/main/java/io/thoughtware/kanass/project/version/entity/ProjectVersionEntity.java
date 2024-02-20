@@ -29,14 +29,17 @@ public class ProjectVersionEntity implements Serializable {
     private String master;
     // 开始时间
     @Column(name = "start_time")
-    private Date startTime;
+    private String startTime;
 
     // 发布时间
-    @Column(name = "publish_date")
-    private Date publishDate;
+    @Column(name = "publish_time")
+    private String publishTime;
 
-    @Column(name = "rela_publish_date")
-    private Date relaPublishDate;
+    @Column(name = "rela_start_time")
+    private String relaStartTime;
+
+    @Column(name = "rela_publish_time")
+    private String relaPublishTime;
 
     // 项目id
     @Column(name = "project_id", notNull = true)
@@ -80,28 +83,28 @@ public class ProjectVersionEntity implements Serializable {
         this.versionState = versionState;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getPublishDate() {
-        return publishDate;
+    public String getPublishTime() {
+        return publishTime;
     }
 
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
     }
 
-    public Date getRelaPublishDate() {
-        return relaPublishDate;
+    public String getRelaPublishTime() {
+        return relaPublishTime;
     }
 
-    public void setRelaPublishDate(Date relaPublishDate) {
-        this.relaPublishDate = relaPublishDate;
+    public void setRelaPublishTime(String relaPublishTime) {
+        this.relaPublishTime = relaPublishTime;
     }
 
     public String getMaster() {
@@ -110,5 +113,13 @@ public class ProjectVersionEntity implements Serializable {
 
     public void setMaster(String master) {
         this.master = master;
+    }
+
+    public String getRelaStartTime() {
+        return relaStartTime;
+    }
+
+    public void setRelaStartTime(String relaStartTime) {
+        this.relaStartTime = relaStartTime;
     }
 }

@@ -80,13 +80,16 @@ public class WorkItemQuery implements Serializable {
     private List<String> projectIds;
 
     @ApiProperty(name ="currentSprintId",desc = "所属当前迭代ID，精确匹配")
-        private String currentSprintId;
+    private String currentSprintId;
 
     @ApiProperty(name ="currentSprintIds",desc = "所属当前迭代IDs，范围匹配")
     private List<String> currentSprintIds;
 
     @ApiProperty(name = "sprintId",desc = "迭代ID，范围匹配")
     private String sprintId;
+
+    @ApiProperty(name ="neqSprintId",desc = "不在当前迭代")
+    private String neqSprintId;
 
     @ApiProperty(name ="builderId",desc = "创建者ID，精确匹配")
     private String builderId;
@@ -103,11 +106,12 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="userId",desc = "创建人ID，精确匹配")
     private String userId;
 
-    @ApiProperty(name ="builderId",desc = "报告人ID，精确匹配")
+    @ApiProperty(name ="reporterId",desc = "报告人ID，精确匹配")
     private String reporterId;
 
     @ApiProperty(name ="sprintIdIsNull",desc = "迭代是否为空,true:为空")
     private Boolean sprintIdIsNull;
+
 
     @ApiProperty(name ="currentVersionId",desc = "解决版本ID，精确匹配")
     private String currentVersionId;
@@ -117,6 +121,10 @@ public class WorkItemQuery implements Serializable {
 
     @ApiProperty(name ="versionId",desc = "解决版本ID，精确匹配")
     private String versionId;
+
+    @ApiProperty(name ="neqVersionId",desc = "不在当前版本")
+    private String neqVersionId;
+
     @ApiProperty(name ="versionIdIsNull",desc = "versionId是否为空,true:为空")
     private Boolean versionIdIsNull;
 
@@ -196,6 +204,9 @@ public class WorkItemQuery implements Serializable {
 
     @ApiProperty(name ="workStatusCode",desc = "事项状态ID，精确匹配")
     private String workStatusCode;
+
+    @ApiProperty(name ="workStatusCodes",desc = "事项状态编码ids，精确匹配")
+    private List<String> workStatusCodes;
 
     @ApiProperty(name ="workStatusIds",desc = "事项类型ID，精确匹配")
     private List<String> workStatusIds;
@@ -685,5 +696,29 @@ public class WorkItemQuery implements Serializable {
 
     public void setVersionId(String versionId) {
         this.versionId = versionId;
+    }
+
+    public List<String> getWorkStatusCodes() {
+        return workStatusCodes;
+    }
+
+    public void setWorkStatusCodes(List<String> workStatusCodes) {
+        this.workStatusCodes = workStatusCodes;
+    }
+
+    public String getNeqVersionId() {
+        return neqVersionId;
+    }
+
+    public void setNeqVersionId(String neqVersionId) {
+        this.neqVersionId = neqVersionId;
+    }
+
+    public String getNeqSprintId() {
+        return neqSprintId;
+    }
+
+    public void setNeqSprintId(String neqSprintId) {
+        this.neqSprintId = neqSprintId;
     }
 }

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +53,9 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Override
     public void updateVersion(@NotNull @Valid ProjectVersion projectVersion) {
-        ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
+
         VersionState versionState = projectVersion.getVersionState();
-        if(versionState.getId().equals("222222")){
+        if(versionState != null && versionState.getId().equals("222222")){
             // 创建新的迭代与事项的记录
             String versionId = projectVersion.getId();
             String newVersionId = projectVersion.getNewVersionId();
@@ -70,9 +72,23 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                 if(newVersionId != null){
                     workVersionService.createBatchWorkVersion(substring);
                 }
+
+                //设置创建时间
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String format = formater.format(new Date());
+                projectVersion.setRelaPublishTime(format);
             }
+
+
             workItemService.updateBatchWorkItemVersion(versionId, newVersionId);
         }
+        if(versionState != null && versionState.getId().equals("111111")){
+            //设置创建时间
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formater.format(new Date());
+            projectVersion.setRelaStartTime(format);
+        }
+        ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
         projectVersionDao.updateVersion(projectVersionEntity);
 
     }

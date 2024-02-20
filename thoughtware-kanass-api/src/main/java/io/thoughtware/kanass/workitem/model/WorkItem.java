@@ -53,7 +53,7 @@ public class WorkItem extends BaseModel {
     private WorkItem parentWorkItem;
 
     @ApiProperty(name="parentId",desc="上级事项id")
-    private java.lang.String parentId;
+    private String parentId;
 
     @ApiProperty(name="preDependWorkItem",desc="前置依赖事项")
     @Mappings({

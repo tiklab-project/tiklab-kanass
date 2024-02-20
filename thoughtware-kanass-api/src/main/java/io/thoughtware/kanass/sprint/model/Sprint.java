@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.sprint.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
@@ -56,10 +58,24 @@ public class Sprint extends BaseModel {
     private SprintState sprintState;
 
     @ApiProperty(name="startTime",desc="开始时间")
-    private Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String startTime;
 
     @ApiProperty(name="endTime",desc="结束时间")
-    private Date endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String endTime;
+
+    @ApiProperty(name="relaStartTime",desc="实际开始时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String relaStartTime;
+
+    @ApiProperty(name="relaEndTime",desc="实际结束时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String relaEndTime;
 
     @ApiProperty(name="work_number",desc="迭代的事项数量")
     private Integer workNumber;
@@ -119,22 +135,37 @@ public class Sprint extends BaseModel {
         this.sprintState = sprintState;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
+    public String getRelaStartTime() {
+        return relaStartTime;
+    }
+
+    public void setRelaStartTime(String relaStartTime) {
+        this.relaStartTime = relaStartTime;
+    }
+
+    public String getRelaEndTime() {
+        return relaEndTime;
+    }
+
+    public void setRelaEndTime(String relaEndTime) {
+        this.relaEndTime = relaEndTime;
+    }
 
     public Integer getQuantityNumber() {
         return quantityNumber;
@@ -144,19 +175,6 @@ public class Sprint extends BaseModel {
         this.quantityNumber = quantityNumber;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Sprint{" +
-//                "id='" + id + '\'' +
-//                ", sprintName='" + sprintName + '\'' +
-//                ", desc='" + desc + '\'' +
-//                ", master=" + master +
-//                ", project=" + project +
-//                ", sprintState=" + sprintState +
-//                ", startTime=" + startTime +
-//                ", endTime=" + endTime +
-//                '}';
-//    }
 
     public Integer getWorkNumber() {
         return workNumber;

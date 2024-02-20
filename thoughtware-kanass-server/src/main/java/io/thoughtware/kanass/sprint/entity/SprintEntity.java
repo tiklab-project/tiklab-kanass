@@ -42,13 +42,20 @@ public class SprintEntity implements Serializable {
     @Column(name = "sprint_state_id",length = 12)
     private String sprintStateId;
 
-    // 迭代开始日期
+    // 迭代计划开始日期
     @Column(name = "start_time")
-    private Date startTime;
+    private String startTime;
 
-    // 迭代结束日期
+    // 迭代计划结束日期
     @Column(name = "end_time")
-    private Date endTime;
+    private String endTime;
+
+    @Column(name = "rela_start_time")
+    private String relaStartTime;
+
+    @Column(name = "rela_end_time")
+    private String relaEndTime;
+
 
     public String getId() {
         return id;
@@ -98,19 +105,35 @@ public class SprintEntity implements Serializable {
         this.sprintStateId = sprintStateId;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getRelaStartTime() {
+        return relaStartTime;
+    }
+
+    public void setRelaStartTime(String relaStartTime) {
+        this.relaStartTime = relaStartTime;
+    }
+
+    public String getRelaEndTime() {
+        return relaEndTime;
+    }
+
+    public void setRelaEndTime(String relaEndTime) {
+        this.relaEndTime = relaEndTime;
     }
 }

@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /**
  * 事项数据访问
  */
@@ -488,12 +489,12 @@ public class WorkItemDao{
             sql = "Select count(1) as count from pmc_work_item p where";
         }
 
-        if(workItemQuery.getCurrentVersionId() != null && workItemQuery.getCurrentVersionId().length()>0){
-            if(paramMap.isEmpty()){
-                sql = sql.concat(" p.version_id = '" + workItemQuery.getCurrentVersionId() + "'");
-            }
-            paramMap.put("versionId", workItemQuery.getCurrentVersionId());
-        }
+//        if(workItemQuery.getCurrentVersionId() != null && workItemQuery.getCurrentVersionId().length()>0){
+//            if(paramMap.isEmpty()){
+//                sql = sql.concat(" p.version_id = '" + workItemQuery.getCurrentVersionId() + "'");
+//            }
+//            paramMap.put("versionId", workItemQuery.getCurrentVersionId());
+//        }
 
         if(workItemQuery.getWorkTypeId() != null && workItemQuery.getWorkTypeId().length()>0){
 
@@ -660,6 +661,18 @@ public class WorkItemDao{
                 sql = sql.concat(" and p.work_status_node_id in " + s);
             }
             paramMap.put("workStatusIds", workItemQuery.getWorkStatusIds());
+        }
+
+        if(workItemQuery.getWorkStatusCodes() != null && workItemQuery.getWorkStatusCodes().size()>0){
+            List<String> workStatusCodes = workItemQuery.getWorkStatusCodes();
+
+            String s = "(" + workStatusCodes.stream().map(code -> "'" + code + "'").collect(Collectors.joining(", ")) + ")";
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_status_code in " + s);
+            }else {
+                sql = sql.concat(" and p.work_status_code in " + s);
+            }
+            paramMap.put("workStatusCodes", workItemQuery.getWorkTypeCodes());
         }
 
         if(workItemQuery.getTitle() != null && workItemQuery.getTitle().length()>0 ){
@@ -856,6 +869,7 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.version_id is null");
             }
+            paramMap.put("versionIdIsNull", workItemQuery.getVersionIdIsNull());
         }
 
         if(workItemQuery.getCurrentVersionId() != null) {
@@ -864,6 +878,16 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.version_id = '" + workItemQuery.getCurrentVersionId() + "'");
             }
+            paramMap.put("versionId", workItemQuery.getCurrentVersionId());
+        }
+
+        if(workItemQuery.getNeqVersionId() != null) {
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" ( p.version_id != '" + workItemQuery.getNeqVersionId() + "'  or p.version_id IS null )");
+            }else {
+                sql = sql.concat(" and  ( p.version_id != '" + workItemQuery.getNeqVersionId() + "' or p.version_id IS null )");
+            }
+            paramMap.put("neqVersionId", workItemQuery.getNeqVersionId());
         }
 
         if(workItemQuery.getCurrentVersionIds() != null && workItemQuery.getCurrentVersionIds().size()>0){
@@ -911,6 +935,16 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.sprint_id is null");
             }
+            paramMap.put("sprintIdIsNull", workItemQuery.getSprintIdIsNull());
+        }
+
+        if(workItemQuery.getNeqSprintId() != null) {
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" ( p.sprint_id != '" + workItemQuery.getNeqSprintId() + "' or p.sprint_id IS null)");
+            }else {
+                sql = sql.concat(" and ( p.sprint_id != '" + workItemQuery.getNeqSprintId() + "'  or p.sprint_id IS null )");
+            }
+            paramMap.put("neqSprintId", workItemQuery.getNeqSprintId());
         }
 
         objectObjectHashMap.put("query", paramMap);
@@ -1055,7 +1089,7 @@ public class WorkItemDao{
                 sql0 = "Select count(1) as total from pmc_work_item p";
             }
         }
-        Integer num = jpaTemplate.getJdbcTemplate().queryForObject(sql0, new Object[]{}, Integer.class);
+            Integer num = jpaTemplate.getJdbcTemplate().queryForObject(sql0, new Object[]{}, Integer.class);
 
         return num;
     }

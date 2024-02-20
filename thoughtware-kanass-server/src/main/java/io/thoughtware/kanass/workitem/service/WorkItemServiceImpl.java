@@ -1420,7 +1420,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         // 全部事项数量
         WorkItemQuery workItemQuery1 = new WorkItemQuery();
         workItemQuery1.setProjectIds(workItemQuery.getProjectIds());
-        workItemQuery1.setCurrentSprintIds(workItemQuery.getCurrentSprintIds());
+        workItemQuery1.setCurrentSprintId(workItemQuery.getCurrentSprintId());
         workItemQuery1.setCurrentVersionId(workItemQuery.getCurrentVersionId());
         Integer allWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
         WorkItemCount.put("all", allWorkItemNum);

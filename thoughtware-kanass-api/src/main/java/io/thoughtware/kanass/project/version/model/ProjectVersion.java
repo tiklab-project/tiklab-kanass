@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.project.version.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
 import io.thoughtware.toolkit.beans.annotation.Mapper;
@@ -36,17 +38,30 @@ public class ProjectVersion extends BaseModel {
     })
     @JoinQuery(key = "id")
     private User master;
-    @ApiProperty(name = "startTime", desc = "开始日期")
-    private Date startTime;
+
 
     @ApiProperty(name = "focusIs", desc = "当前用户是否关注")
     private boolean focusIs;
 
-    @ApiProperty(name = "publishDate", desc = "发布日期")
-    private Date publishDate;
+    @ApiProperty(name = "startTime", desc = "开始日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String startTime;
 
-    @ApiProperty(name = "relaPublishDate", desc = "实际发布日期")
-    private Date relaPublishDate;
+    @ApiProperty(name = "publishTime", desc = "发布日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String publishTime;
+
+    @ApiProperty(name = "relaStartTime", desc = "实际开始 日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String relaStartTime;
+
+    @ApiProperty(name = "relaPublishTime", desc = "实际发布日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String relaPublishTime;
 
     @ApiProperty(name = "workNumber", desc = "事项数量")
     private int workNumber;
@@ -107,28 +122,36 @@ public class ProjectVersion extends BaseModel {
         this.versionState = versionState;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getPublishDate() {
-        return publishDate;
+    public String getPublishTime() {
+        return publishTime;
     }
 
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
     }
 
-    public Date getRelaPublishDate() {
-        return relaPublishDate;
+    public String getRelaStartTime() {
+        return relaStartTime;
     }
 
-    public void setRelaPublishDate(Date relaPublishDate) {
-        this.relaPublishDate = relaPublishDate;
+    public void setRelaStartTime(String relaStartTime) {
+        this.relaStartTime = relaStartTime;
+    }
+
+    public String getRelaPublishTime() {
+        return relaPublishTime;
+    }
+
+    public void setRelaPublishTime(String relaPublishTime) {
+        this.relaPublishTime = relaPublishTime;
     }
 
     public User getMaster() {
