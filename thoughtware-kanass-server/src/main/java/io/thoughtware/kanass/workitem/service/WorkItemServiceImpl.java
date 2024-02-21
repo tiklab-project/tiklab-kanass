@@ -11,6 +11,7 @@ import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
 import io.thoughtware.flow.transition.service.TransitionService;
+import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.project.version.service.ProjectVersionService;
 import io.thoughtware.kanass.sprint.model.Sprint;
@@ -111,8 +112,6 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Autowired
     BusinessRoleService businessRoleService;
 
-    @Autowired
-    ProjectService projectService;
 
     @Autowired
     UserService userService;
@@ -142,6 +141,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     ProjectVersionService projectVersionService;
+
+    @Autowired
+    ProjectService projectService;
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -960,6 +962,11 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Override
     public WorkItem findWorkItemAndSprintVersion(@NotNull String id) {
         WorkItem workItem = findWorkItem(id);
+
+        String projectId = workItem.getProject().getId();
+        Project project = projectService.findProject(projectId);
+        workItem.setProject(project);
+
         List<Sprint> workSprintList = sprintService.findWorkSprintList(id);
         workItem.setSprintList(workSprintList);
 

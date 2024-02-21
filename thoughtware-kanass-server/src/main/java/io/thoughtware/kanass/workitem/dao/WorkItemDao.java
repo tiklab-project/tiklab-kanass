@@ -783,8 +783,12 @@ public class WorkItemDao{
             }
             s= s.substring(0, s.length() - 1);
             s= s.concat(")");
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_priority_id in " + s);
+            }else {
+                sql = sql.concat(" and p.work_priority_id in " + s);
+            }
 
-            sql = sql.concat(" and p.work_priority_id in " + s);
             paramMap.put("workPriorityId", workPriorityIds);
         }
 
@@ -1042,29 +1046,46 @@ public class WorkItemDao{
         HashMap<String, Integer> WorkItemCount = new HashMap<>();
         workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+
         String sql = new String();
         Object o1 = stringObjectMap.get("sql");
+        Object query = stringObjectMap.get("query");
         sql = sql.concat(String.valueOf(o1));
 
-        int index = sql.indexOf("where");
-        sql = "Select count(1) as total from pmc_work_item p " + sql.substring(index);
+        if(!ObjectUtils.isEmpty(query)){
+            // where 之后的条件
+            int index = sql.indexOf("where");
+            String substring = sql.substring(index);
 
-        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
-        WorkItemCount.put("all", allNum);
+            sql = "Select count(1) as total from pmc_work_item p " + substring;
+            Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            WorkItemCount.put("all", allNum);
 
-        String sql1 =  sql.concat(" and p.work_type_code = 'demand'");
+            // 用于查找各个类型的事项个数的sql
+            sql = "Select count(1) as total from pmc_work_item p " + substring + "and";
+
+        }else {
+            sql = "Select count(1) as total from pmc_work_item p";
+            Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            WorkItemCount.put("all", allNum);
+
+            // 用于查找各个类型的事项个数的sql
+            sql = "Select count(1) as total from pmc_work_item p where";
+        }
+
+        String sql1 =  sql.concat(" p.work_type_code = 'demand'");
         Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         WorkItemCount.put("demand", demandNum);
 
-        String sql2 =  sql.concat(" and p.work_type_code = 'task'");
+        String sql2 =  sql.concat(" p.work_type_code = 'task'");
         Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
         WorkItemCount.put("task", taskNum);
 
-        String sql3 =  sql.concat(" and p.work_type_code = 'defect'");
+        String sql3 =  sql.concat(" p.work_type_code = 'defect'");
         Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
         WorkItemCount.put("defect", defectNum);
 
-        String sql4 =  sql.concat(" and p.work_type_code = 'epic'");
+        String sql4 =  sql.concat(" p.work_type_code = 'epic'");
         Integer epicNum = jpaTemplate.getJdbcTemplate().queryForObject(sql4, new Object[]{}, Integer.class);
         WorkItemCount.put("epic", epicNum);
 
@@ -1166,8 +1187,9 @@ public class WorkItemDao{
         if(!ObjectUtils.isEmpty(query)){
             sql = sql.concat(String.valueOf(o1));
         }else {
-            return null;
+            sql = "Select * from pmc_work_item p";
         }
+
         if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
             sql= sql.concat(" order by");
         }
