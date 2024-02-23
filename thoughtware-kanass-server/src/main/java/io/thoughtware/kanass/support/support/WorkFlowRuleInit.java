@@ -44,7 +44,7 @@ public class WorkFlowRuleInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        initWorkFlowRule();
+//        initWorkFlowRule();
     }
 
     public void initWorkFlowRule(){
