@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+//@Component
 public class WorkFlowRuleInit implements ApplicationRunner {
     @Autowired
     FlowService flowService;
@@ -44,7 +44,7 @@ public class WorkFlowRuleInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        initWorkFlowRule();
+//        initWorkFlowRule();
     }
 
     public void initWorkFlowRule(){
