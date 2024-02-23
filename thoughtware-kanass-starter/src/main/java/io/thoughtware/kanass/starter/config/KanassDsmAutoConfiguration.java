@@ -59,6 +59,7 @@ public class KanassDsmAutoConfiguration {
                 "oplog_1.0.2",
                 "flow_1.0.2",
                 "pmc_1.0.2",
+                "todotask_1.0.2"
         });
         dsmConfig.newVersion("1.0.3", new String[]{
                 "pmc_1.0.3",
@@ -66,10 +67,15 @@ public class KanassDsmAutoConfiguration {
                 "flow_1.0.3"
         });
         dsmConfig.newVersion("1.0.4", new String[]{
-                "message_1.0.4"
+                "oplog_1.0.4",
+                "message_1.0.4",
+                "flow_1.0.4"
         });
         dsmConfig.newVersion("1.0.5", new String[]{
                 "message_1.0.5"
+        });
+        dsmConfig.newVersion("1.0.6", new String[]{
+                "message_1.0.6"
         });
         dsmConfig.newVersion("1.1.5", new String[]{
                 "pmc_1.1.5"
@@ -80,7 +86,6 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.1.8", new String[]{
                 "pmc_1.1.8"
         });
-
         dsmConfig.newVersion("1.1.9", new String[]{
                 "pmc_1.1.9"
         });

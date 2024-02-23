@@ -22,7 +22,7 @@ public class WorkTypeEpicInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        initWorkTypeEpicForProject();
+//        initWorkTypeEpicForProject();
     }
 
     public void initWorkTypeEpicForProject(){

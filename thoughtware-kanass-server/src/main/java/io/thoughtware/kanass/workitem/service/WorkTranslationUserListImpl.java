@@ -96,7 +96,7 @@ public class WorkTranslationUserListImpl implements TransitionRuleUserService {
         childWorkItemQuery.setParentId(domainId);
         List<WorkItem> childWorkItemList = workItemService.findWorkItemList(childWorkItemQuery);
         if(childWorkItemList.size() > 0){
-            List<WorkItem> noDoneWorkItemList = childWorkItemList.stream().filter(work -> !work.getWorkStatusNode().equals("DONE")).
+            List<WorkItem> noDoneWorkItemList = childWorkItemList.stream().filter(work -> !work.getWorkStatusCode().equals("DONE")).
                     collect(Collectors.toList());
             if(noDoneWorkItemList.size() > 0){
                 isShowTransition = false;
