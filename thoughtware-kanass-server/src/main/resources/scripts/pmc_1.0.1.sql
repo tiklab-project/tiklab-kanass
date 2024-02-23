@@ -743,15 +743,6 @@ INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, fro
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('e15c8797', '开始', '024227ab', 'todo', '7db3a0d1', 'right1', 'left1');
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('fef23ab8', '完成', '22751ea5', '7db3a0d1', 'done', 'right1', 'left1');
 
-INSERT INTO pcs_flc_transition_rule (id, name, flow_id, transition_id, rule_type, create_user_id, allocation_user_id, user_type) VALUES ('bb901d200ba3', '根据关联事项的状态限制', '024227ab', 'aa7bc2e6', 'limitWorkStatus', '111111', NULL, NULL);
-INSERT INTO pcs_flc_transition_rule (id, name, flow_id, transition_id, rule_type, create_user_id, allocation_user_id, user_type) VALUES ('effc487ac9f7', '根据关联事项的状态限制', '024227ab', 'e15c8797', 'limitWorkStatus', '111111', NULL, NULL);
-INSERT INTO pcs_flc_transition_rule (id, name, flow_id, transition_id, rule_type, create_user_id, allocation_user_id, user_type) VALUES ('a972d5c23da5', '根据关联事项的状态限制', '22751ea5', '19dc5e5e', 'limitWorkStatus', '111111', NULL, NULL);
-INSERT INTO pcs_flc_transition_rule (id, name, flow_id, transition_id, rule_type, create_user_id, allocation_user_id, user_type) VALUES ('f4da4b2f211b', '根据关联事项的状态限制', '22751ea5', 'fef23ab8', 'limitWorkStatus', '111111', NULL, NULL);
-
-INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type, config_value, determine) VALUES ('5e414bd0ea60', 'bb901d200ba3', 'limitWorkStatus', 'user', '{"childWorkStatus":"done"}', NULL);
-INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type, config_value, determine) VALUES ('3c246fd9d0cb', 'a972d5c23da5', 'limitWorkStatus', 'user', '{"preDependWorkStatus":"done"}', NULL);
-INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type, config_value, determine) VALUES ('b8a6b861333c', 'effc487ac9f7', 'limitWorkStatus', 'user', '{"preDependWorkStatus":"done"}', NULL);
-INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type, config_value, determine) VALUES ('c0bccf659830', 'f4da4b2f211b', 'limitWorkStatus', 'user', '{"childWorkStatus":"done"}', NULL);
 
 INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('9bcc1be0', '4cf6d4dec7d0', '22751ea5', '4d040c6d');
 INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('b422fc1b', 'f3fdc893ff25', '024227ab', '4d040c6d');
