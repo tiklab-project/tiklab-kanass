@@ -56,6 +56,8 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +66,7 @@ import java.util.stream.Collectors;
 @Exporter
 @Service
 public class ProjectServiceImpl implements ProjectService {
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     JpaTemplate jpaTemplate;
 
@@ -242,8 +244,10 @@ public class ProjectServiceImpl implements ProjectService {
         if(projectType.getType().equals("nomal")){
             content.put("projectType", "projectNomalDetail");
         }
-        creatDynamic(content);
 
+        executorService.submit(() -> {
+            creatDynamic(content);
+        });
         //初始事项类型
         initWorkType(id);
         // 复制项目通知方案

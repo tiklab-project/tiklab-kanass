@@ -62,6 +62,8 @@ import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.collectingAndThen;
@@ -73,7 +75,7 @@ import static java.util.stream.Collectors.toCollection;
 @Exporter
 @Service
 public class WorkItemServiceImpl implements WorkItemService {
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     private static Logger logger = LoggerFactory.getLogger(WorkItemServiceImpl.class);
 
     @Autowired
@@ -569,10 +571,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
         WorkItem workItem1 = findWorkItem(id);
 
+        executorService.submit(() -> {
+            sendMessageForCreate(workItem1);
+            creatTodoTask(workItem1, workItem1.getBuilder());
+            creatWorkItemDynamic(workItem1);
+        });
 
-        sendMessageForCreate(workItem1);
-        creatWorkItemDynamic(workItem1);
-        creatTodoTask(workItem1, workItem1.getBuilder());
 
 
         return id;
