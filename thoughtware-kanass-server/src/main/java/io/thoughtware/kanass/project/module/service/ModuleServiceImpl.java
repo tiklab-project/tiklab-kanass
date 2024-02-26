@@ -124,7 +124,8 @@ public class ModuleServiceImpl implements ModuleService {
     public List<Module> findModuleListTree(ModuleQuery moduleQuery) {
         List<ModuleEntity> moduleEntityList = moduleDao.findModuleList(moduleQuery);
         List<Module> moduleList = BeanMapper.mapList(moduleEntityList,Module.class);
-        List<Module> rootModuleList = moduleList.stream().filter(item -> item.getParent() == null).collect(Collectors.toList());
+        List<String> moduleIds = moduleList.stream().map(item -> item.getId()).collect(Collectors.toList());
+        List<Module> rootModuleList = moduleList.stream().filter(item -> (item.getParent() == null || !moduleIds.contains(item.getParent().getId())  )).collect(Collectors.toList());
         moduleList.remove(rootModuleList);
         setChildrenModuleList(rootModuleList, moduleList);
         for(Module module:moduleList){

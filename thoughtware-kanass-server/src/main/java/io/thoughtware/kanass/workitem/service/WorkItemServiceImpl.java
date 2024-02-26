@@ -23,8 +23,10 @@ import io.thoughtware.security.logging.service.LoggingService;
 import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.todotask.model.Task;
+import io.thoughtware.todotask.model.TaskQuery;
 import io.thoughtware.todotask.model.TaskType;
 import io.thoughtware.todotask.service.TaskByTempService;
+import io.thoughtware.todotask.service.TaskService;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.page.Pagination;
@@ -60,6 +62,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -131,6 +134,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     TaskByTempService taskByTempService;
+
+    @Autowired
+    TaskService taskService;
 
     @Autowired
     FlowService flowService;
@@ -368,6 +374,20 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         task.setData(JSON.toJSONString(content));
         task.setBaseUrl(baseUrl);
+
+        //设置任务结束事件
+        String planEndTime = workItem.getPlanEndTime();
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        Date date = null;
+        try {
+            date = dateFormat.parse(planEndTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Timestamp timestamp = new Timestamp(date.getTime());
+        task.setEndTime(timestamp);
+
         task.setAction(workItem.getTitle());
         task.setLink("/projectDetail/${projectId}/work/${workItemId}");
         taskByTempService.createTask(task);
@@ -570,12 +590,14 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
         WorkItem workItem1 = findWorkItem(id);
-
-        executorService.submit(() -> {
-            sendMessageForCreate(workItem1);
-            creatTodoTask(workItem1, workItem1.getBuilder());
-            creatWorkItemDynamic(workItem1);
-        });
+        sendMessageForCreate(workItem1);
+        creatTodoTask(workItem1, workItem1.getBuilder());
+        creatWorkItemDynamic(workItem1);
+//        executorService.submit(() -> {
+//            sendMessageForCreate(workItem1);
+//            creatTodoTask(workItem1, workItem1.getBuilder());
+//            creatWorkItemDynamic(workItem1);
+//        });
 
 
 
@@ -615,6 +637,9 @@ public class WorkItemServiceImpl implements WorkItemService {
                 break;
             case "projectVersion":
                 updateWorkItemVersion(workItem);
+                break;
+            case "planBeginTime":
+                updateWorkItemPlanTime(workItem);
                 break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
@@ -717,6 +742,42 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         workItemDao.updateWorkItem(workItemEntity);
     }
+
+
+    public void updateWorkItemPlanTime(WorkItem workItem){
+        String id = workItem.getId();
+        TaskQuery taskQuery = new TaskQuery();
+        LinkedHashMap data = new LinkedHashMap();
+        data.put("workItemId", id);
+        taskQuery.setData(data);
+        taskQuery.setBgroup("kanass");
+        try {
+            Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+            for (Task task : taskPage.getDataList()) {
+                //设置任务结束事件
+                String planEndTime = workItem.getPlanEndTime();
+                String pattern = "yyyy-MM-dd HH:mm:ss";
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                Date date = null;
+                try {
+                    date = dateFormat.parse(planEndTime);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Timestamp timestamp = new Timestamp(date.getTime());
+                task.setEndTime(timestamp);
+                taskService.updateTask(task);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+
+        workItemDao.updateWorkItem(workItemEntity);
+    }
+
+
     // 更新上级事项
     public void updateParentWorkItem(WorkItem workItem){
         //设置treePath,rootId
@@ -782,30 +843,30 @@ public class WorkItemServiceImpl implements WorkItemService {
         // 1. 判断子事项是否全部解决完成
         String status = workItem.getWorkStatusNode().getStatus();
         String id = workItem.getId();
-        if(status.equals("DONE")){
-            WorkItemQuery childWorkItemQuery = new WorkItemQuery();
-            childWorkItemQuery.setParentId(id);
-            List<WorkItemEntity> workItemList = workItemDao.findWorkItemList(childWorkItemQuery);
-            List<WorkItemEntity> collect = workItemList.stream().filter(work -> !work.getWorkStatusNodeId().equals("done")).collect(Collectors.toList());
-            if(collect.size() > 0){
-                throw new ApplicationException("还有下级事项没有关闭");
-            }else {
-                // 若更新到完成，设置事项实际完成时间
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String format = formater.format(new Date());
-                workItem.setActualEndTime(format);
-            }
-        }
-        if(!status.equals("DONE")){
-            WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
-            String preDependId = workItem1.getPreDependId();
-            if(preDependId != null && preDependId.length() > 1){
-                WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
-                if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
-                    throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
-                }
-            }
-        }
+//        if(status.equals("DONE")){
+//            WorkItemQuery childWorkItemQuery = new WorkItemQuery();
+//            childWorkItemQuery.setParentId(id);
+//            List<WorkItemEntity> workItemList = workItemDao.findWorkItemList(childWorkItemQuery);
+//            List<WorkItemEntity> collect = workItemList.stream().filter(work -> !work.getWorkStatusNodeId().equals("done")).collect(Collectors.toList());
+//            if(collect.size() > 0){
+//                throw new ApplicationException("还有下级事项没有关闭");
+//            }else {
+//                // 若更新到完成，设置事项实际完成时间
+//                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                String format = formater.format(new Date());
+//                workItem.setActualEndTime(format);
+//            }
+//        }
+//        if(!status.equals("DONE")){
+//            WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
+//            String preDependId = workItem1.getPreDependId();
+//            if(preDependId != null && preDependId.length() > 1){
+//                WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
+//                if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
+//                    throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
+//                }
+//            }
+//        }
         // 记录更新动态
         HashMap<String, Object> logContent = new HashMap<>();
         logContent.put("oldValue", oldWorkItem.getWorkStatusNode());

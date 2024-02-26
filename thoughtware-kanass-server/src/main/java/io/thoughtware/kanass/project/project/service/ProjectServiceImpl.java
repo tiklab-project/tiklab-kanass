@@ -245,9 +245,10 @@ public class ProjectServiceImpl implements ProjectService {
             content.put("projectType", "projectNomalDetail");
         }
 
-        executorService.submit(() -> {
-            creatDynamic(content);
-        });
+//        executorService.submit(() -> {
+//            creatDynamic(content);
+//        });
+        creatDynamic(content);
         //初始事项类型
         initWorkType(id);
         // 复制项目通知方案
