@@ -377,16 +377,18 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         //设置任务结束事件
         String planEndTime = workItem.getPlanEndTime();
-        String pattern = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        Date date = null;
-        try {
-            date = dateFormat.parse(planEndTime);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(planEndTime != null){
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+            Date date = null;
+            try {
+                date = dateFormat.parse(planEndTime);
+            } catch (Exception e) {
+                throw new ApplicationException();
+            }
+            Timestamp timestamp = new Timestamp(date.getTime());
+            task.setEndTime(timestamp);
         }
-        Timestamp timestamp = new Timestamp(date.getTime());
-        task.setEndTime(timestamp);
 
         task.setAction(workItem.getTitle());
         task.setLink("/projectDetail/${projectId}/work/${workItemId}");
@@ -762,7 +764,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 try {
                     date = dateFormat.parse(planEndTime);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new ApplicationException();
                 }
                 Timestamp timestamp = new Timestamp(date.getTime());
                 task.setEndTime(timestamp);
@@ -843,30 +845,31 @@ public class WorkItemServiceImpl implements WorkItemService {
         // 1. 判断子事项是否全部解决完成
         String status = workItem.getWorkStatusNode().getStatus();
         String id = workItem.getId();
-//        if(status.equals("DONE")){
-//            WorkItemQuery childWorkItemQuery = new WorkItemQuery();
-//            childWorkItemQuery.setParentId(id);
-//            List<WorkItemEntity> workItemList = workItemDao.findWorkItemList(childWorkItemQuery);
-//            List<WorkItemEntity> collect = workItemList.stream().filter(work -> !work.getWorkStatusNodeId().equals("done")).collect(Collectors.toList());
-//            if(collect.size() > 0){
-//                throw new ApplicationException("还有下级事项没有关闭");
-//            }else {
-//                // 若更新到完成，设置事项实际完成时间
-//                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                String format = formater.format(new Date());
-//                workItem.setActualEndTime(format);
-//            }
-//        }
-//        if(!status.equals("DONE")){
-//            WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
-//            String preDependId = workItem1.getPreDependId();
-//            if(preDependId != null && preDependId.length() > 1){
-//                WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
-//                if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
-//                    throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
-//                }
-//            }
-//        }
+        if(status.equals("DONE")){
+            // 若更新到完成，设置事项实际完成时间
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formater.format(new Date());
+            workItem.setActualEndTime(format);
+        }
+        if(status.equals("PROGRESS")){
+            // 更新todotask状态
+            TaskQuery taskQuery = new TaskQuery();
+            LinkedHashMap data = new LinkedHashMap();
+            data.put("workItemId", id);
+            taskQuery.setData(data);
+            taskQuery.setBgroup("kanass");
+            try {
+                Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+                for (Task task : taskPage.getDataList()) {
+                    task.setStatus(2);
+                    taskService.updateTask(task);
+                }
+
+            } catch (Exception e){
+                throw new ApplicationException();
+            }
+
+        }
         // 记录更新动态
         HashMap<String, Object> logContent = new HashMap<>();
         logContent.put("oldValue", oldWorkItem.getWorkStatusNode());
@@ -994,6 +997,21 @@ public class WorkItemServiceImpl implements WorkItemService {
         dmFlowService.deleteWorkItemFlow(workItemAndChildren);
         //删除事项
         workItemDao.deleteWorkItem(id);
+
+        // 删除事项产生的待办
+        TaskQuery taskQuery = new TaskQuery();
+        LinkedHashMap data = new LinkedHashMap();
+        data.put("workItemId", id);
+        taskQuery.setData(data);
+        try {
+            Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+            for (Task task : taskPage.getDataList()) {
+                String taskId = task.getId();
+                taskService.deleteTask(taskId);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         //删除索引
 //        dssClient.delete(WorkItem.class,id);
