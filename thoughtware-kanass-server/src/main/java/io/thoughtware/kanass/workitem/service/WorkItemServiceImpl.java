@@ -62,7 +62,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -1099,8 +1098,8 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     @Override
-    public Pagination<WorkItem> findSelectWorkItemList(WorkItemQuery workItemQuery) {
-        Pagination<WorkItemEntity> pagination = workItemDao.findSelectWorkItemList(workItemQuery);
+    public Pagination<WorkItem> findSelectChildrenWorkItemList(WorkItemQuery workItemQuery) {
+        Pagination<WorkItemEntity> pagination = workItemDao.findSelectChildrenWorkItemList(workItemQuery);
 
         List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
 
@@ -1629,6 +1628,12 @@ public class WorkItemServiceImpl implements WorkItemService {
     public HashMap<String, Integer> findVersionWorkItemNum(String versionId) {
         HashMap<String, Integer> versionWorkItemNum = workItemDao.findVersionWorkItemNum(versionId);
         return versionWorkItemNum;
+    }
+
+    @Override
+    public Integer findChildrenLevel(String id) {
+        Integer childrenLevel = workItemDao.findChildrenLevel(id);
+        return childrenLevel;
     }
 
 }

@@ -162,13 +162,14 @@ public class WorkItemController {
      * @pi.request-type:json
      * @pi.param: model=WorkItemQuery
      */
-    @RequestMapping(path = "/findSelectWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSelectWorkItemList",desc = "根据查询对象查找可被其他类型  添加的子事项列表")
+    @RequestMapping(path = "/findSelectChildrenWorkItemList",method = RequestMethod.POST)
+    @ApiMethod(name = "findSelectChildrenWorkItemList",desc = "根据查询对象查找可被其他类型  添加的子事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
-    public Result<Pagination<WorkItem>> findSelectWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
-        Pagination<WorkItem> workItemList = workItemService.findSelectWorkItemList(workItemQuery);
+    public Result<Pagination<WorkItem>> findSelectChildrenWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
+        Pagination<WorkItem> workItemList = workItemService.findSelectChildrenWorkItemList(workItemQuery);
 
         return Result.ok(workItemList);
+
     }
 
 
@@ -482,6 +483,14 @@ public class WorkItemController {
         HashMap<String, Integer> sprintWorkItemNum = workItemService.findSprintWorkItemNum(sprintId);
 
         return Result.ok(sprintWorkItemNum);
+    }
+
+    @RequestMapping(path = "/findChildrenLevel",method = RequestMethod.POST)
+    @ApiMethod(name = "findChildrenLevel",desc = "查看事项有几级下级事项")
+    public Result<Void> findChildrenLevel(@NotNull String id){
+        Integer childrenLevel = workItemService.findChildrenLevel(id);
+
+        return Result.ok(childrenLevel);
     }
 
 

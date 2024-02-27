@@ -87,7 +87,7 @@ public interface WorkItemService {
      * @param workItemQuery
      * @return
      */
-    Pagination<WorkItem> findSelectWorkItemList(WorkItemQuery workItemQuery);
+    Pagination<WorkItem> findSelectChildrenWorkItemList(WorkItemQuery workItemQuery);
 
     /**
     * 根据条件按分页查询事项列表
@@ -221,4 +221,9 @@ public interface WorkItemService {
     HashMap<String, Integer> findSprintWorkItemNum(@NotNull String sprintId);
 
     HashMap<String, Integer> findVersionWorkItemNum(@NotNull String versionId);
+
+    /**
+     * 查看事项有几级下级事项
+     */
+    Integer findChildrenLevel(@NotNull String id);
 }

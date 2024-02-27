@@ -404,7 +404,7 @@ public class WorkItemDao{
      * @param workItemQuery
      * @return
      */
-    public Pagination<WorkItemEntity> findSelectWorkItemList(WorkItemQuery workItemQuery) {
+    public Pagination<WorkItemEntity> findSelectChildrenWorkItemList(WorkItemQuery workItemQuery) {
         String treePath = workItemQuery.getTreePath();
         ArrayList<String> objects = new ArrayList<>();
         objects.add(workItemQuery.getId());
@@ -1593,4 +1593,19 @@ public class WorkItemDao{
         return versionWorkItemNum;
     }
 
+    public Integer findChildrenLevel(String id){
+        Integer level = new Integer(0);
+        String sql = "Select id from pmc_work_item where parent_id = '" + id + "'";
+        List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(workItemIdList.size() > 0){
+            level = 1;
+            String workItemIds = workItemIdList.stream().map(workItemId -> "'" + workItemId + "'").collect(Collectors.joining(", "));
+            sql = "Select count(1) as total from pmc_work_item where parent_id in (" + workItemIds + ")";
+            Integer num = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            if(num > 0){
+                level = 2;
+            }
+        }
+        return  level;
+    }
 }
