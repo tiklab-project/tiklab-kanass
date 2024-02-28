@@ -137,8 +137,6 @@ public class WorkLogDao{
             paramMap.put("projectId", workLogQuery.getProjectId());
         }
 
-
-
         if(workLogQuery.getWorker() != null && workLogQuery.getWorker().length()>0){
 
             if(paramMap.isEmpty()){

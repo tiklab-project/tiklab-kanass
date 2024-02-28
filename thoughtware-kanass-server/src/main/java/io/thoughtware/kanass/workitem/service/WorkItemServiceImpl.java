@@ -785,7 +785,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         String id = workItem.getId();
         if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
                 !workItem.getParentWorkItem().getId().equals("nullstring")){
-
+            // 如果上级事项不为空
             String treePath = workItem.getParentWorkItem().getId() + ";";
             WorkItem parentWorkItem = findWorkItem(workItem.getParentWorkItem().getId());
             if(parentWorkItem.getTreePath() != null){
@@ -793,11 +793,20 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
             workItem.setRootId(parentWorkItem.getRootId());
             workItem.setTreePath(treePath);
+
+            //修改当前事项下级的treepath
+            String childrenTreePath = id + ";" + treePath ;
+            workItemDao.updateChildrenTreePath(id, childrenTreePath);
+
         }else if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
                 workItem.getParentWorkItem().getId().equals("nullstring")){
-
+            // 如果上级事项设置为空
             workItem.setRootId(id);
             workItem.setTreePath("nullstring");
+
+            //修改当前事项下级的treepath
+            String childrenTreePath = id + ";";
+            workItemDao.updateChildrenTreePath(id, childrenTreePath);
         }
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);

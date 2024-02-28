@@ -136,7 +136,6 @@ public class WorkItemDao{
         }else {
             logger.info("删除事项的下级事项");
         }
-
     }
 
     /**
@@ -594,7 +593,7 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.sprint_id = '" + workItemQuery.getCurrentSprintId() + "'");
             }
-            paramMap.put("currentSprintId", workItemQuery.getCurrentSprintIds());
+            paramMap.put("currentSprintId", workItemQuery.getCurrentSprintId());
         }
 
         if(workItemQuery.getCurrentSprintIds() != null && workItemQuery.getCurrentSprintIds().size()>0){
@@ -1607,5 +1606,11 @@ public class WorkItemDao{
             }
         }
         return  level;
+    }
+
+    public void updateChildrenTreePath(String workItemId, String treePath){
+        String sql = "UPDATE pmc_work_item SET tree_path = '" + treePath + "' WHERE parent_id = '"+ workItemId + "'";
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        jdbcTemplate.update(sql);
     }
 }

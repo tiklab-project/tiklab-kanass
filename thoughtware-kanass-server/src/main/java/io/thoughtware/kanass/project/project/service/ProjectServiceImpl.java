@@ -391,8 +391,6 @@ public class ProjectServiceImpl implements ProjectService {
         Map<String, String> content = new HashMap<>();
         content.put("projectId", id);
         content.put("projectName", project.getProjectName());
-
-
     }
 
     /**
@@ -422,6 +420,8 @@ public class ProjectServiceImpl implements ProjectService {
         dmFormService.deleteProjectForm(id);
         //删除项目
         projectDao.deleteProject(id);
+
+        // 删除todotask
 
     }
 
