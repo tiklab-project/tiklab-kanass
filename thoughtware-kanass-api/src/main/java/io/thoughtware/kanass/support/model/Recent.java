@@ -40,7 +40,7 @@ public class Recent extends BaseModel {
     @ApiProperty(name="masterId",desc="masterId")
     private java.lang.String masterId;
 
-    @ApiProperty(name="project",desc="xiangmid")
+    @ApiProperty(name="project",desc="项目id")
     @Mappings({
             @Mapping(source = "project.id",target = "projectId")
     })
