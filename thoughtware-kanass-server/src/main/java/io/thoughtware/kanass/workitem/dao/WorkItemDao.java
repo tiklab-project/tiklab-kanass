@@ -1608,8 +1608,8 @@ public class WorkItemDao{
         return  level;
     }
 
-    public void updateChildrenTreePath(String workItemId, String treePath){
-        String sql = "UPDATE pmc_work_item SET tree_path = '" + treePath + "' WHERE parent_id = '"+ workItemId + "'";
+    public void updateChildrenTreePath(String workItemId, String treePath, String rootId){
+        String sql = "UPDATE pmc_work_item SET tree_path = '" + treePath + "', root_id = '" + rootId + "'WHERE parent_id = '"+ workItemId + "'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         jdbcTemplate.update(sql);
     }

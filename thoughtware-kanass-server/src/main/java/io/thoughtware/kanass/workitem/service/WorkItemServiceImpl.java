@@ -796,7 +796,8 @@ public class WorkItemServiceImpl implements WorkItemService {
 
             //修改当前事项下级的treepath
             String childrenTreePath = id + ";" + treePath ;
-            workItemDao.updateChildrenTreePath(id, childrenTreePath);
+            String rootId = parentWorkItem.getRootId();
+            workItemDao.updateChildrenTreePath(id, childrenTreePath, rootId);
 
         }else if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
                 workItem.getParentWorkItem().getId().equals("nullstring")){
@@ -806,7 +807,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
             //修改当前事项下级的treepath
             String childrenTreePath = id + ";";
-            workItemDao.updateChildrenTreePath(id, childrenTreePath);
+            workItemDao.updateChildrenTreePath(id, childrenTreePath, id);
         }
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
