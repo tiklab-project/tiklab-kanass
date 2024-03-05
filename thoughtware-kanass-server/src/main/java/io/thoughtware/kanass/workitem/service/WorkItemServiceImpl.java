@@ -358,10 +358,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         HashMap<String, Object> content = new HashMap<>();
         content.put("workItemTitle", workItem.getTitle());
         content.put("workItemId", workItem.getId());
-        content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
         content.put("projectId", workItem.getProject().getId());
-        content.put("receiverIcon",receiver.getNickname().substring(0, 1));
-        content.put("receiver", receiver);
         if(workItem.getSprint() != null) {
             content.put("sprintId", workItem.getSprint().getId());
         }
@@ -392,6 +389,54 @@ public class WorkItemServiceImpl implements WorkItemService {
         task.setAction(workItem.getTitle());
         task.setLink("/projectDetail/${projectId}/work/${workItemId}");
         taskByTempService.createTask(task);
+    }
+
+    void updateTodoTask(WorkItem workItem, String taskId){
+        Task task = new Task();
+        String createUserId = LoginContext.getLoginId();
+        User user = userService.findOne(createUserId);
+        String updateField = workItem.getUpdateField();
+
+        if(updateField == "assigner"){
+            task.setAssignUser(workItem.getAssigner());
+        }
+
+        if(updateField == "title" || updateField == "sprint" || updateField == "version"){
+            HashMap<String, Object> content = new HashMap<>();
+            content.put("workItemTitle", workItem.getTitle());
+            content.put("workItemId", workItem.getId());
+            content.put("projectId", workItem.getProject().getId());
+            if(workItem.getSprint() != null) {
+                content.put("sprintId", workItem.getSprint().getId());
+            }
+            if(workItem.getProjectVersion() != null) {
+                content.put("versionId", workItem.getProjectVersion().getId());
+            }
+            content.put("createUser", user);
+            content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+            content.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            task.setData(JSON.toJSONString(content));
+            task.setAction(workItem.getTitle());
+        }
+
+        if(updateField == "planBeginTime"){
+            String planEndTime = workItem.getPlanEndTime();
+            if(planEndTime != null){
+                String pattern = "yyyy-MM-dd HH:mm:ss";
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                Date date = null;
+                try {
+                    date = dateFormat.parse(planEndTime);
+                } catch (Exception e) {
+                    throw new ApplicationException();
+                }
+                Timestamp timestamp = new Timestamp(date.getTime());
+                task.setEndTime(timestamp);
+            }
+        }
+
+        task.setId(taskId);
+        taskService.updateTask(task);
     }
 
     /**
@@ -652,7 +697,30 @@ public class WorkItemServiceImpl implements WorkItemService {
     public void updateTitle(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
+        WorkItem workItem1 = findWorkItem(workItem.getId());
         updateFlowRelation(workItem);
+        workItem1.setUpdateField(workItem.getUpdateField());
+        updateTodoTaskData(workItem1);
+    }
+
+    private void updateTodoTaskData(WorkItem workItem) {
+        String id = workItem.getId();
+        TaskQuery taskQuery = new TaskQuery();
+        LinkedHashMap data = new LinkedHashMap();
+        data.put("workItemId", id);
+        taskQuery.setData(data);
+        taskQuery.setBgroup("kanass");
+        try {
+            Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+            for (Task task : taskPage.getDataList()) {
+                updateTodoTask(workItem,task.getId());
+            }
+
+
+        } catch (Exception e){
+            throw new ApplicationException();
+        }
+
     }
 
     public void updateWorkItemSprint(WorkItem workItem){
@@ -698,6 +766,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         workItemDao.updateWorkItem(workItemEntity);
+        // 更新待办
+        WorkItem workItem1 = findWorkItem(workItem.getId());
+        workItem1.setUpdateField(workItem.getUpdateField());
+        updateTodoTaskData(workItem1);
     }
 
     public void updateWorkItemVersion(WorkItem workItem){
@@ -742,6 +814,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         workItemDao.updateWorkItem(workItemEntity);
+        // 更新待办
+        WorkItem workItem1 = findWorkItem(workItem.getId());
+        workItem1.setUpdateField(workItem.getUpdateField());
+        updateTodoTaskData(workItem1);
     }
 
 
@@ -836,7 +912,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateWorkItem(workItemEntity);
 
         WorkItem newWorkItem = findWorkItem(id);
-        creatTodoTask(newWorkItem, assigner);
+//        creatTodoTask(newWorkItem, assigner);
+        // 更新待办的被分配人
+        newWorkItem.setUpdateField("assigner");
+        updateTodoTaskData(newWorkItem);
+
         sendMessageForUpdateAssigner(newWorkItem, assigner);
         HashMap<String, Object> logContent = new HashMap<>();
         if(ObjectUtils.isEmpty(oldWorkItem.getAssigner())){
@@ -859,6 +939,24 @@ public class WorkItemServiceImpl implements WorkItemService {
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = formater.format(new Date());
             workItem.setActualEndTime(format);
+
+            // 更新todoTask到完成
+            TaskQuery taskQuery = new TaskQuery();
+            LinkedHashMap data = new LinkedHashMap();
+            data.put("workItemId", id);
+            taskQuery.setData(data);
+            taskQuery.setBgroup("kanass");
+            try {
+                Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+                for (Task task : taskPage.getDataList()) {
+                    task.setStatus(3);
+                    taskService.updateTask(task);
+                }
+
+            } catch (Exception e){
+                throw new ApplicationException();
+            }
+
         }
         if(status.equals("PROGRESS")){
             // 更新todotask状态
@@ -1012,18 +1110,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         LinkedHashMap data = new LinkedHashMap();
         data.put("workItemId", id);
         taskQuery.setData(data);
+        taskQuery.setBgroup("kanass");
         try {
-            Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
-            for (Task task : taskPage.getDataList()) {
-                String taskId = task.getId();
-                taskService.deleteTask(taskId);
-            }
+            taskService.deleteAllTask(taskQuery);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        //删除索引
-//        dssClient.delete(WorkItem.class,id);
     }
 
     @Override

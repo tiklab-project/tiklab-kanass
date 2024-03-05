@@ -16,6 +16,8 @@ import io.thoughtware.kanass.sprint.service.SprintService;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.kanass.workitem.service.WorkTypeDmService;
 import io.thoughtware.kanass.workitem.service.WorkTypeService;
+import io.thoughtware.todotask.model.TaskQuery;
+import io.thoughtware.todotask.service.TaskService;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.page.Pagination;
@@ -72,7 +74,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     ProjectDao projectDao;
-
 
     @Autowired
     JoinTemplate joinTemplate;
@@ -140,6 +141,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     ProjectTypeService projectTypeService;
+
+    @Autowired
+    TaskService taskService;
 
     @Autowired
     MessageDmNoticeService messageDmNoticeService;
@@ -245,14 +249,15 @@ public class ProjectServiceImpl implements ProjectService {
             content.put("projectType", "projectNomalDetail");
         }
 
-//        executorService.submit(() -> {
-//            creatDynamic(content);
-//        });
-        creatDynamic(content);
+        executorService.submit(() -> {
+            creatDynamic(content);
+            messageDmNoticeService.initMessageDmNotice(id);
+        });
+        //creatDynamic(content);
         //初始事项类型
         initWorkType(id);
         // 复制项目通知方案
-        messageDmNoticeService.initMessageDmNotice(id);
+
         return id;
     }
 
@@ -422,7 +427,17 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.deleteProject(id);
 
         // 删除todotask
-
+        // 删除事项产生的待办
+        TaskQuery taskQuery = new TaskQuery();
+        LinkedHashMap data = new LinkedHashMap();
+        data.put("projectId", id);
+        taskQuery.setData(data);
+        taskQuery.setBgroup("kanass");
+        try {
+            taskService.deleteAllTask(taskQuery);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
