@@ -130,7 +130,7 @@ public class SprintDao{
         String currentSprintId = sprintQuery.getCurrentSprintId();
         String projectId = sprintQuery.getProjectId();
         String sql = "SELECT * FROM pmc_sprint WHERE id != '" + currentSprintId + "' and " +
-                "sprint_state_id != '222222' and project_id = '" + projectId + "'";
+                "sprint_state_id != '222222' and project_id = '" + projectId + "' order by start_time desc";
         List<SprintEntity> sprintEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(SprintEntity.class));
         return sprintEntityList;
     }

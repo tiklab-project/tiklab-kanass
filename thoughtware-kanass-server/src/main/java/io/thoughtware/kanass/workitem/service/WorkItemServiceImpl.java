@@ -1289,7 +1289,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         Pagination<WorkItemEntity> topWorkItemPageEntity = workItemDao.findTopWorkItemIds(workItemQuery);
         long bTime1 = System.currentTimeMillis();
 
-        logger.info("joinQuery cost time:{}",bTime1-aTime1);
+        logger.info("joinQuery cost time1:{}",bTime1-aTime1);
 
         List<WorkItem> topWorkItemList = BeanMapper.mapList(topWorkItemPageEntity.getDataList(), WorkItem.class);
         long aTime = System.currentTimeMillis();
@@ -1297,7 +1297,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         joinTemplate.joinQuery(topWorkItemList,  new String[]{"project","assigner", "workPriority", "workStatusNode", "workTypeSys", "builder"});
         long bTime = System.currentTimeMillis();
 
-        logger.info("joinQuery cost time:{}",bTime-aTime);
+        logger.info("joinQuery cost time2:{}",bTime-aTime);
         Pagination<WorkItem> topWorkItemPageList = PaginationBuilder.build(topWorkItemPageEntity, topWorkItemList);
 
 
@@ -1321,7 +1321,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         List<WorkItemEntity> topChildWorkItemEntity = workItemDao.findTopChildWorkItem(workItemQuery);
         long bTime3 = System.currentTimeMillis();
 
-        logger.info("joinQuery cost time:{}",bTime3-aTime3);
+        logger.info("joinQuery cost time3:{}",bTime3-aTime3);
 
         if(topChildWorkItemEntity == null || topChildWorkItemEntity.size() == 0){
             return topWorkItemPageList;
@@ -1329,8 +1329,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             List<WorkItem> workItemList = BeanMapper.mapList(topChildWorkItemEntity,WorkItem.class);
             long cTime = System.currentTimeMillis();
             joinTemplate.joinQuery(workItemList, new String[]{"project", "assigner", "workPriority", "workStatusNode", "workTypeSys", "builder"});
+//            joinTemplate.joinQuery(workItemList);
             long eTime = System.currentTimeMillis();
-            logger.info("joinQuery cost time:{}",eTime-cTime);
+            logger.info("joinQuery cost time4:{}",eTime-aTime1);
 
 
             // 去重

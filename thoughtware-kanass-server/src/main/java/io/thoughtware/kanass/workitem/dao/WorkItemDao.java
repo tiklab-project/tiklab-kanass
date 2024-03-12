@@ -136,6 +136,20 @@ public class WorkItemDao{
         }else {
             logger.info("删除事项的下级事项");
         }
+
+        // 设置当前事项作为前置事项的事项的前置事项为空
+        // 删除迭代与事项的关系
+        sql = "UPDATE pmc_work_item SET pre_depend_id = NULL WHERE pre_depend_id = '" + workItemId + "'";
+        jpaTemplate.getJdbcTemplate().execute(sql);
+
+        // 删除与事项关联的迭代的关联关系
+        sql = "DELETE FROM pmc_work_sprint WHERE work_item_id in (" + workItemIds + ")";
+        jpaTemplate.getJdbcTemplate().update(sql);
+
+        // 删除事项与版本关联的关系关系
+        sql = "DELETE FROM pmc_work_version WHERE work_item_id in (" + workItemIds + ")";
+        jpaTemplate.getJdbcTemplate().update(sql);
+
     }
 
     /**
@@ -1352,7 +1366,7 @@ public class WorkItemDao{
         String sql = "select * from pmc_work_item where id != '" + id
                 + "' and (tree_path not like '%" + id + ";%' or tree_path is null) and project_id = ? and work_type_id = ?";
 
-        //查找当前事项的上级，不能设置为前置事项, 暂时去掉
+        //查找当前事项的上级，不能设置为前置事项, 暂时去掉???? 为什么已经作为前置的事项，不能作为另一个事项的前置
         String sql1 = "select tree_path from pmc_work_item where id = '" + id + "'";
         String treePathString = this.jpaTemplate.getJdbcTemplate().queryForObject(sql1, String.class);
 
@@ -1386,14 +1400,7 @@ public class WorkItemDao{
         List<String> preWorkItemIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql2, String.class);
         String preSql = new String("(");
         if(preWorkItemIds.size() > 0){
-            for (String preWorkItemId : preWorkItemIds) {
-                if(preWorkItemId != null){
-                    preSql = preSql.concat("'" + preWorkItemId + "',");
-                }
-
-            }
-            preSql = preSql.substring(0, preSql.length() - 1);
-            preSql = preSql.concat(")");
+            preSql = "(" + preWorkItemIds.stream().map(item -> "'" + item + "'").collect(Collectors.joining(", ")) + ")";
             sql = sql.concat(" and id not in " + preSql);
         }
 

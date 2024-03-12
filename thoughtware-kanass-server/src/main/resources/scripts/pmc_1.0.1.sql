@@ -651,9 +651,10 @@ INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_cont
     </div>', 'index/work/workone/${workItemId}', 'kanass', '${master}添加事项');
 
 
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('04b440ad', '低', NULL, NULL, 'system', 'proivilege2.png');
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('faaecb3d', '中', NULL, NULL, 'system', 'proivilege3.png');
-INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('56035266', '高', NULL, NULL, 'system', 'proivilege4.png');
+INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('04b440ad', '低', NULL, 1, 'system', 'proivilege2.png');
+INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('faaecb3d', '中', NULL, 2, 'system', 'proivilege3.png');
+INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) VALUES ('56035266', '高', NULL, 3, 'system', 'proivilege4.png');
+
 
 
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('7055ebc6', '需求', '需求', 'demand', 1, '0c5d4ff9', '4d040c6d', 'workType1.png', 'system', 0);
