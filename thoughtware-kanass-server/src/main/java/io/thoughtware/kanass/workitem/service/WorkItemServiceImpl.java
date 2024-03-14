@@ -2,6 +2,7 @@ package io.thoughtware.kanass.workitem.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.statenode.model.*;
@@ -687,6 +688,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "planBeginTime":
                 updateWorkItemPlanTime(workItem);
                 break;
+            case "preDependWorkItem":
+                updatePreDependWorkItem(workItem);
+                break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                 workItemDao.updateWorkItem(workItemEntity);
@@ -854,16 +858,49 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateWorkItem(workItemEntity);
     }
 
+    public void updatePreDependWorkItem(WorkItem workItem){
+        // 判断所选事项是否能添加为前置
+
+    }
 
     // 更新上级事项
     public void updateParentWorkItem(WorkItem workItem){
         //设置treePath,rootId
         String id = workItem.getId();
+
+
         if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
                 !workItem.getParentWorkItem().getId().equals("nullstring")){
             // 如果上级事项不为空
+
+            // 判断是否能修改选择的事项为父级
+            // 当前事项有个下级
+            Integer childrenLevel = findChildrenLevel(id);
+            String parentId = workItem.getParentWorkItem().getId();
+            WorkItem parentWorkItem = findWorkItem(parentId);
+            if(childrenLevel.equals(2)){
+                throw new SystemException(3001, "事项限制为三级，当前事项不能添加父级");
+            }
+            String parentTreePath = parentWorkItem.getTreePath();
+            int length =0;
+            if(parentTreePath != null){
+                String[] split = parentTreePath.split(";");
+                length = split.length;
+            }
+            if(childrenLevel.equals(1)){
+               if(length > 0){
+                   throw new SystemException(3001, "事项限制为三级，不能添加当前事项为父级");
+               }
+            }
+
+            if(childrenLevel.equals(0)){
+                if(length > 1){
+                    throw new SystemException(3001, "事项限制为三级，不能添加当前事项为父级");
+                }
+            }
+
+            // 获取选择的事项的treePath
             String treePath = workItem.getParentWorkItem().getId() + ";";
-            WorkItem parentWorkItem = findWorkItem(workItem.getParentWorkItem().getId());
             if(parentWorkItem.getTreePath() != null){
                 treePath = treePath.concat(parentWorkItem.getTreePath());
             }
@@ -930,6 +967,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         logContent.put("newValue", newWorkItem.getAssigner());
         creatUpdateOplog(newWorkItem, logContent, "KANASS_LOGTYPE_WORKUPDATEMASTER");
     }
+
     void updateWorkItemStatus(WorkItem workItem, WorkItem oldWorkItem) {
         // 1. 判断子事项是否全部解决完成
         String status = workItem.getWorkStatusNode().getStatus();
