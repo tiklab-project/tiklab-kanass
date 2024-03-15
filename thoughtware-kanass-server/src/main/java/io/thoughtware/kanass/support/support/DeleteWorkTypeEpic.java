@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+//@Component
 public class DeleteWorkTypeEpic implements ApplicationRunner {
 
     @Autowired
