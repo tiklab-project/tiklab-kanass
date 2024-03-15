@@ -37,6 +37,7 @@ public interface WorkTypeDmService {
     */
     void deleteWorkTypeDm(@NotNull String id);
 
+    void deleteWorkTypeDmCondition(@NotNull String workTypeId);
 
     @FindOne
     WorkTypeDm findOne(@NotNull String id);

@@ -127,6 +127,15 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         }
     }
 
+    public String deleteWorkTypeById(@NotNull String id) {
+        // 查找当前事项类型有项目内事项类型关联
+        workTypeDao.deleteWorkType(id);
+        // 删除关联关系
+        formModelRelationService.deleteFormModelRelationByModalId(id);
+        flowModelRelationService.deleteFlowModelRelationByModelId(id);
+        return "SUCCESS";
+    }
+
 
 
     @Override

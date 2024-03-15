@@ -1,8 +1,10 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
-import io.thoughtware.form.form.model.FormModelRelation;
+import io.thoughtware.form.form.model.*;
 import io.thoughtware.form.form.service.FormModelRelationService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
@@ -12,9 +14,6 @@ import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.flow.flow.service.DmFlowService;
 import io.thoughtware.flow.flow.service.FlowService;
-import io.thoughtware.form.form.model.DmForm;
-import io.thoughtware.form.form.model.DmFormQuery;
-import io.thoughtware.form.form.model.Form;
 import io.thoughtware.form.form.service.DmFormService;
 import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.workitem.dao.WorkTypeDmDao;
@@ -131,6 +130,25 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
     @Override
     public void updateWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm) {
+        String id = workTypeDm.getId();
+        FormModelRelationQuery formModelRelationQuery = new FormModelRelationQuery();
+        formModelRelationQuery.setModelId(id);
+        List<FormModelRelation> formModelRelationList = formModelRelationService.findFormModelRelationList(formModelRelationQuery);
+        for (FormModelRelation formModelRelation : formModelRelationList) {
+            String formId = workTypeDm.getForm().getId();
+            formModelRelation.setFormId(formId);
+            formModelRelationService.updateFormModelRelation(formModelRelation);
+        }
+
+        FlowModelRelationQuery flowModelRelationQuery = new FlowModelRelationQuery();
+        flowModelRelationQuery.setModelId(id);
+        List<FlowModelRelation> flowModelRelationList = flowModelRelationService.findFlowModelRelationList(flowModelRelationQuery);
+        for (FlowModelRelation flowModelRelation : flowModelRelationList) {
+            String flowId = workTypeDm.getFlow().getId();
+            flowModelRelation.setFlowId(flowId);
+            flowModelRelationService.updateFlowModelRelation(flowModelRelation);
+        }
+
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
 
         workTypeDmDao.updateWorkTypeDm(workTypeDmEntity);
@@ -148,6 +166,16 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             workTypeDmDao.deleteWorkTypeDm(id);
         }
     }
+
+    @Override
+    public void deleteWorkTypeDmCondition(@NotNull String workTypeId) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkTypeDmEntity.class)
+                .eq("workTypeId", workTypeId)
+                .get();
+
+        workTypeDmDao.deleteWorkTypeDm(deleteCondition);
+    }
+
 
 
     @Override

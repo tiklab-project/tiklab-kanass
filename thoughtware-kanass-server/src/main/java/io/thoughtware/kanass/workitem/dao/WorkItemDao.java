@@ -1,6 +1,7 @@
 package io.thoughtware.kanass.workitem.dao;
 
 import io.thoughtware.core.exception.ApplicationException;
+import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.order.Order;
 import io.thoughtware.core.order.OrderTypeEnum;
 import io.thoughtware.kanass.project.epic.entity.EpicWorkItemEntity;
@@ -73,7 +74,7 @@ public class WorkItemDao{
         String workItemIds = findWorkItemAndChildren(workItemId);
 
         // 删除关联事项
-        String sql = "DELETE FROM pmc_work_relate where work_item_id in (" + workItemIds + ")";
+        String sql = "DELETE FROM pmc_work_relate where work_item_id = (" + workItemIds + ")";
         int update = jpaTemplate.getJdbcTemplate().update(sql);
         if(update >= 0){
             logger.info("删除事项的关联事项成功");
@@ -1186,6 +1187,42 @@ public class WorkItemDao{
         return query;
     }
 
+//    public List<WorkItemEntity> findConditionWorkItemList(WorkItemQuery workItemQuery) {
+//        String sql = new String();
+//        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+//        Object o1 = stringObjectMap.get("sql");
+//        Object query = stringObjectMap.get("query");
+//        if(!ObjectUtils.isEmpty(query)){
+//            sql = sql.concat(String.valueOf(o1));
+//        }else {
+//            sql = "Select * from pmc_work_item p";
+//        }
+//
+//        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+//            sql= sql.concat(" order by");
+//        }
+//        for (Order orderParam : workItemQuery.getOrderParams()) {
+//            OrderTypeEnum orderType = orderParam.getOrderType();
+//            String name = orderParam.getName();
+//            System.out.println(orderType);
+//            System.out.println(name);
+//            if(name.equals("id")){
+//                sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
+//            } else if(name.equals("work_priority_id")){
+//                sql = sql.concat(" priority.sort " + orderType + "," );
+//            } else {
+//                sql = sql.concat(" " + name + " " + orderType + "," );
+//            }
+//        }
+//        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+//            sql= sql.substring(0, sql.length() - 1);
+//        }
+//
+//        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+//        List<WorkItemEntity> WorkItemList  = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(WorkItemEntity.class));
+//        return WorkItemList;
+//    }
+
 
     /**
      * 按照分页查找符合条件的事项
@@ -1233,18 +1270,39 @@ public class WorkItemDao{
      * @param workItemQuery
      * @return
      */
-    public Pagination<WorkItemEntity> findConditionWorkItemList(WorkItemQuery workItemQuery) {
+    public List<WorkItemEntity> findConditionWorkItemList(WorkItemQuery workItemQuery) {
         String sql = new String();
-//        sql = "Select * from pmc_work_item p ";
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         Object o1 = stringObjectMap.get("sql");
-        if(String.valueOf(o1).length()>0){
+        Object query = stringObjectMap.get("query");
+        if(!ObjectUtils.isEmpty(query)){
             sql = sql.concat(String.valueOf(o1));
+        }else {
+            sql = "Select * from pmc_work_item p";
         }
-//       List<WorkItemEntity> WorkItemList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(WorkItemEntity.class));
-        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
-        Pagination WorkItemList = jdbcTemplate.findPage(sql, new Object[]{}, workItemQuery.getPageParam(), new BeanPropertyRowMapper(WorkItemEntity.class));
 
+        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+            sql= sql.concat(" order by");
+        }
+        for (Order orderParam : workItemQuery.getOrderParams()) {
+            OrderTypeEnum orderType = orderParam.getOrderType();
+            String name = orderParam.getName();
+            System.out.println(orderType);
+            System.out.println(name);
+            if(name.equals("id")){
+                sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
+            } else if(name.equals("work_priority_id")){
+                sql = sql.concat(" priority.sort " + orderType + "," );
+            } else {
+                sql = sql.concat(" " + name + " " + orderType + "," );
+            }
+        }
+        if(!ObjectUtils.isEmpty(workItemQuery.getOrderParams())){
+            sql= sql.substring(0, sql.length() - 1);
+        }
+
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        List<WorkItemEntity> WorkItemList = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(WorkItemEntity.class));
         return WorkItemList;
     }
 
@@ -1619,5 +1677,20 @@ public class WorkItemDao{
         String sql = "UPDATE pmc_work_item SET tree_path = '" + treePath + "', root_id = '" + rootId + "'WHERE parent_id = '"+ workItemId + "'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         jdbcTemplate.update(sql);
+    }
+
+    public void  updateEpicWork(String projectId, String workTypeId, String dmWorkTypeId){
+
+        String sql = null;
+        try {
+            sql = "UPDATE pmc_work_item SET work_type_code = 'demand', work_type_id = '" +
+                    dmWorkTypeId + "', work_type_sys_id = '" + workTypeId + "' WHERE project_id = '" +
+                    projectId + "' and work_type_code = 'epic'";
+            JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+            jdbcTemplate.update(sql);
+        } catch (Exception e) {
+            throw new SystemException(e);
+        }
+
     }
 }

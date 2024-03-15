@@ -1248,13 +1248,14 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
-    Pagination<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery) {
-        Pagination<WorkItemEntity> pagination = workItemDao.findConditionWorkItemList(workItemQuery);
+    @Override
+    public List<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery) {
+        List<WorkItemEntity> workItemEntityList = workItemDao.findConditionWorkItemList(workItemQuery);
 
-        List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
+        List<WorkItem> workItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
 
         joinTemplate.joinQuery(workItemList);
-        return PaginationBuilder.build(pagination,workItemList);
+        return workItemList;
     }
 
     @Override
@@ -1560,7 +1561,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                     workBoard.setState(stateNode);
 
                     workItemQuery.setWorkStatusId(stateFlowNode.getNode().getId());
-                    Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemList(workItemQuery);
+                    Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemPage(workItemQuery);
                     workBoard.setWorkItemList(conditionWorkItemList);
                     if(workBoard != null){
                         workBoardList.add(workBoard);
@@ -1578,7 +1579,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         StateNode stateNode = stateNodeService.findStateNode(workItemQuery.getWorkStatusId());
         workBoard.setState(stateNode);
         workItemQuery.setWorkStatusId(workItemQuery.getWorkStatusId());
-        Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemList(workItemQuery);
+        Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemPage(workItemQuery);
         workBoard.setWorkItemList(conditionWorkItemList);
 
         return workBoard;
@@ -1777,4 +1778,27 @@ public class WorkItemServiceImpl implements WorkItemService {
         return childrenLevel;
     }
 
+    @Override
+    public void updateEpicWork(String projectId, String workTypeId, String dmWorkTypeId){
+       workItemDao.updateEpicWork(projectId, workTypeId, dmWorkTypeId);
+    }
+
+    public WorkItem findWorkItemAndChidren(String id){
+        WorkItem workItem = findWorkItem(id);
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        workItemQuery.setParentId(id);
+        List<WorkItem> workItemList = findWorkItemList(workItemQuery);
+        if(workItemList.size() > 0){
+            workItem.setChildren(workItemList);
+            for (WorkItem workItem1 : workItemList) {
+                String id1 = workItem1.getId();
+                workItemQuery.setParentId(id1);
+                List<WorkItem> workItemList1 = findWorkItemList(workItemQuery);
+                if(workItemList1.size() > 0){
+                    workItem1.setChildren(workItemList1);
+                }
+            }
+        }
+        return  workItem;
+    }
 }

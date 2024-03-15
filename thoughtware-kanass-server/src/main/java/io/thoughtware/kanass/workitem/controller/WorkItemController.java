@@ -492,6 +492,12 @@ public class WorkItemController {
 
         return Result.ok(childrenLevel);
     }
+    @RequestMapping(path = "/findWorkItemAndChidren",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemAndChidren",desc = "查看事项有几级下级事项")
+    public Result<WorkItem> findWorkItemAndChidren(@NotNull String id){
+        WorkItem workItemAndChidren = workItemService.findWorkItemAndChidren(id);
 
+        return Result.ok(workItemAndChidren);
+    }
 
 }

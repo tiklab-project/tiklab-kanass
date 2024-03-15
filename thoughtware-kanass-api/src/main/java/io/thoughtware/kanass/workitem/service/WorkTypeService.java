@@ -38,7 +38,7 @@ public interface WorkTypeService {
     * @param id
     */
     String deleteWorkType(@NotNull String id);
-
+    String deleteWorkTypeById(@NotNull String id);
     @FindOne
     WorkType findOne(@NotNull String id);
 

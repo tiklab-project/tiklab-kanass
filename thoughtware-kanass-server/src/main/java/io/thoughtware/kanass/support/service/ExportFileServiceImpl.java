@@ -41,7 +41,7 @@ public class ExportFileServiceImpl implements ExportFileService {
     @Override
     public byte[] exportWorkItemXml(WorkItemQuery workItemQuery) {
 
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+        List<WorkItem> workItemList = workItemService.findConditionWorkItemList(workItemQuery);
         Workbook sheets = new HSSFWorkbook();
         Sheet sheet = sheets.createSheet();
         Row row = sheet.createRow(0);

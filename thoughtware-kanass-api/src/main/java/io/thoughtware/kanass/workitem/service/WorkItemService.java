@@ -226,4 +226,9 @@ public interface WorkItemService {
      * 查看事项有几级下级事项
      */
     Integer findChildrenLevel(@NotNull String id);
+
+    void updateEpicWork(String projectId, String workTypeId, String dmWorkTypeId);
+    List<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery);
+
+    WorkItem findWorkItemAndChidren(String id);
 }
