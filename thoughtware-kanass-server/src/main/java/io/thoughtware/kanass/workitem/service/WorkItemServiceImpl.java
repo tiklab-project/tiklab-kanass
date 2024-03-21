@@ -222,14 +222,8 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setSendId(user.getId());
         message.setData(content);
 
-
         sendMessageNoticeService.sendMessage(message);
-//        message.setMessageSendTypeId("email");
-//        singleSendMessageService.sendMessage(message);
-//        message.setMessageSendTypeId("qywechat");
-//        singleSendMessageService.sendMessage(message);
-//        message.setMessageSendTypeId("dingding");
-//        singleSendMessageService.sendMessage(message);
+
     }
 
     /**
@@ -279,12 +273,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         // 发送者
         message.setSendId(user.getId());
         sendMessageNoticeService.sendMessage(message);
-//        message.setMessageSendTypeId("email");
-//        singleSendMessageService.sendMessage(message);
-//        message.setMessageSendTypeId("qywechat");
-//        singleSendMessageService.sendMessage(message);
-//        message.setMessageSendTypeId("dingding");
-//        singleSendMessageService.sendMessage(message);
     }
 
     void sendMessageForUpdateStatus(WorkItem OldWorkItem, WorkItem workItem, User receiver){
@@ -329,10 +317,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setSendId(user.getId());
         message.setMessageSendTypeId("site");
         sendMessageNoticeService.sendMessage(message);
-//        message.setMessageSendTypeId("email");
-//        singleSendMessageService.sendMessage(message);
-//        message.setMessageSendTypeId("qywechat");
-//        singleSendMessageService.sendMessage(message);
     }
 
 
@@ -489,7 +473,6 @@ public class WorkItemServiceImpl implements WorkItemService {
      * @param workItem
      */
     void creatUpdateOplog(WorkItem workItem, HashMap<String, Object> logContent, String actionType){
-//        HashMap<String, Object> logContent = new HashMap<>();
         Logging log = new Logging();
         log.setBgroup("kanass");
         log.setModule("workItem");
