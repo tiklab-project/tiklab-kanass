@@ -22,6 +22,3 @@ INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type,
 INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type, config_value, determine) VALUES ('daca9fb880b1', '03af033bf8b9', 'limitWorkStatus', 'user', '{"preDependWorkStatus":"done"}', NULL);
 INSERT INTO pcs_flc_transition_rule_config (id, rule_id, rule_type, config_type, config_value, determine) VALUES ('d5a88b8f9506', '5fda67c7b127', 'limitWorkStatus', 'user', '{"childWorkStatus":"done"}', NULL);
 
-UPDATE pmc_work_priority sort = 1 WHERE id = "04b440ad";
-UPDATE pmc_work_priority sort = 2 WHERE id = "faaecb3d";
-UPDATE pmc_work_priority sort = 3 WHERE id = "56035266";
