@@ -16,6 +16,9 @@ public class WorkItemDocumentQuery {
         @ApiProperty(name ="workItemId",desc = "事项id，精确匹配")
         private String workItemId;
 
+        @ApiProperty(name ="workItemIdx",desc = "事项id，精确匹配")
+        private String[] workItemIds;
+
         @ApiProperty(name ="documentId",desc = "文档id，精确匹配")
         private String documentId;
 
@@ -104,5 +107,13 @@ public class WorkItemDocumentQuery {
 
     public void setDocumentIds(String[] documentIds) {
         this.documentIds = documentIds;
+    }
+
+    public String[] getWorkItemIds() {
+        return workItemIds;
+    }
+
+    public void setWorkItemIds(String[] workItemIds) {
+        this.workItemIds = workItemIds;
     }
 }

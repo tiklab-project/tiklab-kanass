@@ -43,7 +43,7 @@ public interface WorkItemService {
     * @param id
     */
     void deleteWorkItem(@NotNull String id);
-
+    void deleteWorkItemAndChildren(@NotNull String id);
     @FindOne
     WorkItem findOne(@NotNull String id);
 

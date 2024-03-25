@@ -96,18 +96,14 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
     }
 
     @Override
-    public void delete(@NotNull String documentId) {
+    public void deleteWorkTestCaseList(WorkTestCaseQuery workTestCaseQuery) {
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkTestCaseEntity.class)
-                .eq("documentId", documentId)
+                .eq("documentId", workTestCaseQuery.getTestCaseId())
+                .in("documentId", workTestCaseQuery.getTestCaseIds())
+                .eq("workItemId", workTestCaseQuery.getWorkItemId())
+                .in("workItemId", workTestCaseQuery.getWorkItemIds())
                 .get();
         workTestCaseDao.deleteWorkTestCase(deleteCondition);
-    }
-
-    @Override
-    public void deleteWorkTestCaseRele(WorkTestCaseQuery workTestCaseQuery) {
-        //通过事项id和文档id查询
-        List<WorkTestCaseEntity> workTestCaseList = workTestCaseDao.findWorkTestCaseList(workTestCaseQuery);
-        workTestCaseDao.deleteWorkTestCase(workTestCaseList.get(0).getId());
     }
 
 

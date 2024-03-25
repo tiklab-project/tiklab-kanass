@@ -16,11 +16,14 @@ public class WorkTestCaseQuery {
         @ApiProperty(name ="workItemId",desc = "事项id，精确匹配")
         private String workItemId;
 
+        @ApiProperty(name ="workItemIds",desc = "事项id，精确匹配")
+        private String[] workItemIds;
+
         @ApiProperty(name ="testCaseId",desc = "文档id，精确匹配")
         private String testCaseId;
 
         @ApiProperty(name ="testCaseIds",desc = "文档id，精确匹配")
-        private String testCaseIds;
+        private String[] testCaseIds;
 
         @ApiProperty(name ="creatUserId",desc = "创建者")
         private String creatUserId;
@@ -101,13 +104,7 @@ public class WorkTestCaseQuery {
             this.repositoryIds = repositoryIds;
         }
 
-    public String getTestCaseIds() {
-        return testCaseIds;
-    }
 
-    public void setTestCaseIds(String testCaseIds) {
-        this.testCaseIds = testCaseIds;
-    }
 
     public String getCreatUserId() {
         return creatUserId;
@@ -115,5 +112,21 @@ public class WorkTestCaseQuery {
 
     public void setCreatUserId(String creatUserId) {
         this.creatUserId = creatUserId;
+    }
+
+    public String[] getWorkItemIds() {
+        return workItemIds;
+    }
+
+    public void setWorkItemIds(String[] workItemIds) {
+        this.workItemIds = workItemIds;
+    }
+
+    public String[] getTestCaseIds() {
+        return testCaseIds;
+    }
+
+    public void setTestCaseIds(String[] testCaseIds) {
+        this.testCaseIds = testCaseIds;
     }
 }

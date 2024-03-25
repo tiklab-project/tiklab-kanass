@@ -83,6 +83,6 @@ public class DeleteWorkTypeEpic implements ApplicationRunner {
             formModelRelationService.deleteFormModelRelation(formModelRelation.getId());
         }
 
-        workTypeService.deleteWorkTypeById("13240f85");
+//        workTypeService.deleteWorkTypeById("13240f85");
     }
 }

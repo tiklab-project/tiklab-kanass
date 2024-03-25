@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.workitem.model.WorkVersion;
 import io.thoughtware.kanass.workitem.model.WorkVersionQuery;
 import io.thoughtware.toolkit.beans.BeanMapper;
@@ -45,6 +47,15 @@ public class WorkVersionServiceImpl implements WorkVersionService {
     @Override
     public void deleteWorkVersion(@NotNull String id) {
         workVersionDao.deleteWorkVersion(id);
+    }
+
+    public void deleteWorkVersionList(WorkVersionQuery workVersionQuery) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkVersionEntity.class)
+                .eq("workItemId", workVersionQuery.getWorkItemId())
+                .in("workItemId", workVersionQuery.getWorkItemIds())
+                .get();
+
+        workVersionDao.deleteWorkVersionList(deleteCondition);
     }
 
     @Override

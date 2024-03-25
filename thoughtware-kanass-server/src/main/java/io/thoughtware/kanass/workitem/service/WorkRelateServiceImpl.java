@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkRelate;
 import io.thoughtware.kanass.workitem.model.WorkRelateQuery;
@@ -52,6 +54,15 @@ public class WorkRelateServiceImpl implements WorkRelateService {
     @Override
     public void deleteWorkRelate(@NotNull String id) {
         workRelateDao.deleteWorkRelate(id);
+    }
+
+    @Override
+    public void deleteWorkRelateCondition(@NotNull @Valid WorkRelateQuery workRelateQuery) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkRelateEntity.class)
+                .in("workItemId", workRelateQuery.getWorkItemIds())
+                .eq("workItemId", workRelateQuery.getWorkItemId())
+                .get();
+        workRelateDao.deleteWorkRelateCondition(deleteCondition);
     }
 
     @Override

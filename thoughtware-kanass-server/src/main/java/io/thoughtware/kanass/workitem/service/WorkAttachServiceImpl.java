@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.workitem.model.WorkAttach;
 import io.thoughtware.kanass.workitem.model.WorkAttachQuery;
 import io.thoughtware.toolkit.beans.BeanMapper;
@@ -50,6 +52,15 @@ public class WorkAttachServiceImpl implements WorkAttachService {
     @Override
     public void deleteWorkAttach(@NotNull String id) {
         workAttachDao.deleteWorkAttach(id);
+    }
+
+    @Override
+    public void deleteWorkAttachList(WorkAttachQuery workAttachQuery){
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkAttachEntity.class)
+                .eq("workItemId", workAttachQuery.getWorkItemId())
+                .in("workItemId", workAttachQuery.getWorkItemIds())
+                .get();
+        workAttachDao.deleteWorkAttach (deleteCondition);
     }
 
     @Override

@@ -37,6 +37,7 @@ public interface WorkSprintService {
     */
     void deleteWorkSprint(@NotNull String id);
 
+    void deleteWorkSprint(WorkSprintQuery workSprintQuery);
     @FindOne
     WorkSprint findOne(@NotNull String id);
 

@@ -24,11 +24,13 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="id",desc = "事项ID，精确匹配")
     private String id;
 
+    @ApiProperty(name ="ids",desc = "事项ID，精确匹配")
+    private String[] ids;
+
     @ApiProperty(name ="statisticsNum",desc = "统计数量")
     private Boolean statisticsNum;
 
-    @ApiProperty(name ="ids",desc = "事项ID，精确匹配")
-    private String[] ids;
+
     @ApiProperty(name ="likeId",desc = "事项ID，精确匹配")
     private String likeId;
 

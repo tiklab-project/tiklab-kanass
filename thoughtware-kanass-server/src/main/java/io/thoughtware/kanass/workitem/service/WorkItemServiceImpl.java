@@ -3,6 +3,8 @@ package io.thoughtware.kanass.workitem.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.exception.SystemException;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.statenode.model.*;
@@ -15,6 +17,8 @@ import io.thoughtware.flow.transition.service.TransitionService;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.project.version.service.ProjectVersionService;
+import io.thoughtware.kanass.project.worklog.model.WorkLogQuery;
+import io.thoughtware.kanass.project.worklog.service.WorkLogService;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.service.SprintService;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
@@ -86,6 +90,24 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     WorkItemDao workItemDao;
+
+    @Autowired
+    WorkRelateService workRelateService;
+
+    @Autowired
+    WorkLogService workLogService;
+
+    @Autowired
+    WorkItemDocumentService workItemDocumentService;
+
+    @Autowired
+    WorkCommentService workCommentService;
+
+    @Autowired
+    WorkTestCaseService workTestCaseService;
+
+    @Autowired
+    WorkAttachService workAttachService;
 
     @Autowired
     StateNodeRelationService stateNodeRelationService;
@@ -620,14 +642,14 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
         WorkItem workItem1 = findWorkItem(id);
-        sendMessageForCreate(workItem1);
-        creatTodoTask(workItem1, workItem1.getBuilder());
-        creatWorkItemDynamic(workItem1);
-//        executorService.submit(() -> {
-//            sendMessageForCreate(workItem1);
-//            creatTodoTask(workItem1, workItem1.getBuilder());
-//            creatWorkItemDynamic(workItem1);
-//        });
+//        sendMessageForCreate(workItem1);
+//        creatTodoTask(workItem1, workItem1.getBuilder());
+//        creatWorkItemDynamic(workItem1);
+        executorService.submit(() -> {
+            sendMessageForCreate(workItem1);
+            creatTodoTask(workItem1, workItem1.getBuilder());
+            creatWorkItemDynamic(workItem1);
+        });
 
 
 
@@ -1119,26 +1141,163 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
 
+    /**
+     * 删除事项及其子事项的关联数据
+     * @param id
+     */
+    @Override
+    public void deleteWorkItemAndChildren(@NotNull String id) {
+        List<String> workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
+        String[] workItemIds = workItemAndChildren.toArray(new String[workItemAndChildren.size()]);
+
+        // 删除事项与流程的关联关系
+        DmFlowQuery dmFlowQuery = new DmFlowQuery();
+        dmFlowQuery.setDomainIds(workItemIds);
+        dmFlowService.deleteDmFlowCondition(dmFlowQuery);
+
+        // 删除关联事项
+        WorkRelateQuery workRelateQuery = new WorkRelateQuery();
+        workRelateQuery.setWorkItemIds(workItemIds);
+        workRelateService.deleteWorkRelateCondition(workRelateQuery);
+
+        // 删除日志
+        WorkLogQuery workLogQuery = new WorkLogQuery();
+        workLogQuery.setWorkItemIds(workItemIds);
+        workLogService.deleteWorkLogList(workLogQuery);
+
+        // 删除事项关联的文档
+        WorkItemDocumentQuery workItemDocumentQuery = new WorkItemDocumentQuery();
+        workItemDocumentQuery.setWorkItemIds(workItemIds);
+        workItemDocumentService.deleteWorkItemDocumentList(workItemDocumentQuery);
+
+        // 删除评论
+        WorkCommentQuery workCommentQuery = new WorkCommentQuery();
+        workCommentQuery.setWorkItemIds(workItemIds);
+        workCommentService.deleteWorkCommentList(workCommentQuery);
+
+        // 删除用例
+        WorkTestCaseQuery workTestCaseQuery = new WorkTestCaseQuery();
+        workTestCaseQuery.setWorkItemIds(workItemIds);
+        workTestCaseService.deleteWorkTestCaseList(workTestCaseQuery);
+
+        // 删除附件
+        WorkAttachQuery workAttachQuery = new WorkAttachQuery();
+        workAttachQuery.setWorkItemIds(workItemIds);
+        workAttachService.deleteWorkAttachList(workAttachQuery);
+
+        // 删除下级
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        workItemQuery.setIds(workItemIds);
+        deleteWorkItemCondition(workItemQuery);
+
+
+        // 更新以当前事项以及下级事项为前置事项的事项
+        workItemDao.updatePredepandWorkItemList(workItemAndChildren);
+
+        // 删除与事项关联的迭代的关联关系
+        WorkSprintQuery workSprintQuery = new WorkSprintQuery();
+        workSprintQuery.setWorkItemIds(workItemIds);
+        workSprintService.deleteWorkSprint(workSprintQuery);
+
+        // 删除事项与版本关联的关系关系
+        WorkVersionQuery workVersionQuery = new WorkVersionQuery();
+        workVersionQuery.setWorkItemIds(workItemIds);
+        workVersionService.deleteWorkVersionList(workVersionQuery);
+
+        try {
+            // 删除事项产生的待办
+            for (String workItemAndChild : workItemAndChildren) {
+                TaskQuery taskQuery = new TaskQuery();
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("workItemId", workItemAndChild);
+                taskQuery.setData(data);
+                taskQuery.setBgroup("kanass");
+                taskService.deleteAllTask(taskQuery);
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * 只删除事项及关联数据
+     * @param id
+     */
     @Override
     public void deleteWorkItem(@NotNull String id) {
-        String workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
-        dmFlowService.deleteWorkItemFlow(workItemAndChildren);
-        //删除事项
-        workItemDao.deleteWorkItem(id);
+        // 删除事项与流程的关联关系
+        DmFlowQuery dmFlowQuery = new DmFlowQuery();
+        dmFlowQuery.setDomainId(id);
+        dmFlowService.deleteDmFlowCondition(dmFlowQuery);
 
-        // 删除事项产生的待办
+        // 删除关联事项
+        WorkRelateQuery workRelateQuery = new WorkRelateQuery();
+        workRelateQuery.setWorkItemId(id);
+        workRelateService.deleteWorkRelateCondition(workRelateQuery);
+
+        // 删除日志
+        WorkLogQuery workLogQuery = new WorkLogQuery();
+        workLogQuery.setWorkItemId(id);
+        workLogService.deleteWorkLogList(workLogQuery);
+
+        // 删除事项关联的文档
+        WorkItemDocumentQuery workItemDocumentQuery = new WorkItemDocumentQuery();
+        workItemDocumentQuery.setWorkItemId(id);
+        workItemDocumentService.deleteWorkItemDocumentList(workItemDocumentQuery);
+
+        // 删除评论
+        WorkCommentQuery workCommentQuery = new WorkCommentQuery();
+        workCommentQuery.setWorkItemId(id);
+        workCommentService.deleteWorkCommentList(workCommentQuery);
+
+        // 删除用例
+        WorkTestCaseQuery workTestCaseQuery = new WorkTestCaseQuery();
+        workTestCaseQuery.setWorkItemId(id);
+        workTestCaseService.deleteWorkTestCaseList(workTestCaseQuery);
+
+        // 删除附件
+        WorkAttachQuery workAttachQuery = new WorkAttachQuery();
+        workAttachQuery.setWorkItemId(id);
+        workAttachService.deleteWorkAttachList(workAttachQuery);
+
+        // 删除下级
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        workItemQuery.setId(id);
+        deleteWorkItemCondition(workItemQuery);
+
+
+        // 更新以当前事项以及下级事项为前置事项的事项
+        workItemDao.updatePredepandWorkItem(id);
+
+        // 删除与事项关联的迭代的关联关系
+        WorkSprintQuery workSprintQuery = new WorkSprintQuery();
+        workSprintQuery.setWorkItemId(id);
+        workSprintService.deleteWorkSprint(workSprintQuery);
+
+        // 删除事项与版本关联的关系关系
+        WorkVersionQuery workVersionQuery = new WorkVersionQuery();
+        workVersionQuery.setWorkItemId(id);
+        workVersionService.deleteWorkVersionList(workVersionQuery);
+
+        // 删除产生的待办
         TaskQuery taskQuery = new TaskQuery();
         LinkedHashMap data = new LinkedHashMap();
         data.put("workItemId", id);
         taskQuery.setData(data);
         taskQuery.setBgroup("kanass");
-        try {
-            taskService.deleteAllTask(taskQuery);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        taskService.deleteAllTask(taskQuery);
     }
 
+
+    public void deleteWorkItemCondition(WorkItemQuery workItemQuery) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemEntity.class)
+                .eq("id", workItemQuery.getId())
+                .in("id", workItemQuery.getIds())
+                .get();
+        workItemDao.deleteWorkItemList(deleteCondition);
+    }
     @Override
     public WorkItem findOne(String id) {
         WorkItemEntity workItemEntity = workItemDao.findWorkItem(id);

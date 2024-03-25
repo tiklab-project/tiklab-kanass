@@ -33,6 +33,7 @@ public interface WorkCommentService {
     */
     void deleteWorkComment(@NotNull String id);
 
+    void deleteWorkCommentList(WorkCommentQuery workCommentQuery);
     WorkComment findOne(@NotNull String id);
 
     /**

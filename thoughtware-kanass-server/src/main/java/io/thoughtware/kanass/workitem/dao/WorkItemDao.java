@@ -4,6 +4,7 @@ import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.core.order.Order;
 import io.thoughtware.core.order.OrderTypeEnum;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.kanass.project.epic.entity.EpicWorkItemEntity;
 import io.thoughtware.kanass.project.plan.entity.PlanWorkItemEntity;
 import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
@@ -15,6 +16,7 @@ import io.thoughtware.dal.jpa.criterial.condition.OrQueryCondition;
 import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
+import io.thoughtware.kanass.workitem.model.WorkRelateQuery;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,100 +59,36 @@ public class WorkItemDao{
         jpaTemplate.update(workItemEntity);
     }
 
-    public String findWorkItemAndChildren(String workItemId) {
-        String sql = "SELECT id FROM pmc_work_item where tree_path like '%" + workItemId + "%'";
+    public List<String> findWorkItemAndChildren(String workItemId) {
+        String sql = "SELECT id FROM pmc_work_item where tree_path like '%;" +
+                workItemId + ";%' and tree_path like '%" + workItemId + ";' ;";
         List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         workItemIdList.add(workItemId);
-        String workItemIds = workItemIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
+//        String workItemIds = workItemIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
 
-        return workItemIds;
+        return workItemIdList;
     }
 
     /**
      * 删除事项
      * @param workItemId
      */
-    public void deleteWorkItem(String workItemId){
-        String workItemIds = findWorkItemAndChildren(workItemId);
 
-        // 删除关联事项
-        String sql = "DELETE FROM pmc_work_relate where work_item_id = (" + workItemIds + ")";
-        int update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的关联事项成功");
-        }else {
-            logger.info("删除事项的关联事项失败");
-        }
 
-        // 删除日志
-        sql = "DELETE FROM pmc_work_log where work_item_id in (" + workItemIds + ")";
-        update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的工时成功");
-        }else {
-            logger.info("删除事项的工时失败");
-        }
-
-        // 删除文档
-        sql = "DELETE FROM pmc_work_item_document where work_item_id in (" + workItemIds + ")";
-        update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的文档成功");
-        }else {
-            logger.info("删除事项的文档失败");
-        }
-
-        // 删除动态
-
-        // 删除评论
-        sql = "DELETE FROM pmc_work_comment where work_item_id in (" + workItemIds + ")";
-        update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的评论成功");
-        }else {
-            logger.info("删除事项的评论失败");
-        }
-
-        // 删除测试用例
-        sql = "DELETE FROM pmc_work_test_case where work_item_id in (" + workItemIds + ")";
-        update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的测试用例成功");
-        }else {
-            logger.info("删除事项的评论失败");
-        }
-
-        // 删除附件
-        sql = "DELETE FROM pmc_work_attach where work_item_id in (" + workItemIds + ")";
-        update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的附件成功");
-        }else {
-            logger.info("删除事项的附件失败");
-        }
-
-        // 删除下级
-        sql = "DELETE FROM pmc_work_item where id in (" + workItemIds + ")";
-        update = jpaTemplate.getJdbcTemplate().update(sql);
-        if(update >= 0){
-            logger.info("删除事项的下级事项");
-        }else {
-            logger.info("删除事项的下级事项");
-        }
-
-        // 设置当前事项作为前置事项的事项的前置事项为空
-        // 删除迭代与事项的关系
-        sql = "UPDATE pmc_work_item SET pre_depend_id = NULL WHERE pre_depend_id = '" + workItemId + "'";
+    public void updatePredepandWorkItemList(List<String> workItemIdList){
+        String workItemIds = "(" +  workItemIdList.stream().map(item -> "'" + item + "'").collect(Collectors.joining(", ")) + ")";
+        String sql = "UPDATE pmc_work_item SET pre_depend_id = NULL WHERE pre_depend_id in " + workItemIds ;
         jpaTemplate.getJdbcTemplate().execute(sql);
+    }
 
-        // 删除与事项关联的迭代的关联关系
-        sql = "DELETE FROM pmc_work_sprint WHERE work_item_id in (" + workItemIds + ")";
-        jpaTemplate.getJdbcTemplate().update(sql);
+    public void updatePredepandWorkItem(String id){
+       String sql = "UPDATE pmc_work_item SET pre_depend_id = NULL WHERE pre_depend_id = '"
+               + id + "'" ;
+        jpaTemplate.getJdbcTemplate().execute(sql);
+    }
 
-        // 删除事项与版本关联的关系关系
-        sql = "DELETE FROM pmc_work_version WHERE work_item_id in (" + workItemIds + ")";
-        jpaTemplate.getJdbcTemplate().update(sql);
-
+    public void deleteWorkItemList(DeleteCondition deleteCondition){
+        jpaTemplate.delete(deleteCondition);
     }
 
     /**

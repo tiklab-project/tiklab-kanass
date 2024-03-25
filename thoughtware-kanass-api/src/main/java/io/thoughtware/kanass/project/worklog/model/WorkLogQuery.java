@@ -18,6 +18,9 @@ public class WorkLogQuery {
     @ApiProperty(name ="workItemId",desc = "事项ID，精确匹配")
     private String workItemId;
 
+    @ApiProperty(name ="workItemIds",desc = "事项ID，精确匹配")
+    private String[] workItemIds;
+
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("workItemId").get();
 
@@ -133,5 +136,13 @@ public class WorkLogQuery {
 
     public void setProjectSetId(String projectSetId) {
         this.projectSetId = projectSetId;
+    }
+
+    public String[] getWorkItemIds() {
+        return workItemIds;
+    }
+
+    public void setWorkItemIds(String[] workItemIds) {
+        this.workItemIds = workItemIds;
     }
 }

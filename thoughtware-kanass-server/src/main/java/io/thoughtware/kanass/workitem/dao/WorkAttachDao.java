@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.workitem.dao;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.kanass.workitem.entity.WorkAttachEntity;
 import io.thoughtware.kanass.workitem.model.WorkAttachQuery;
 import io.thoughtware.core.page.Pagination;
@@ -49,6 +50,9 @@ public class WorkAttachDao{
         jpaTemplate.delete(WorkAttachEntity.class,id);
     }
 
+    public void deleteWorkAttach(DeleteCondition deleteCondition){
+        jpaTemplate.delete(deleteCondition);
+    }
     /**
      * 根据id查找事项附件
      * @param id

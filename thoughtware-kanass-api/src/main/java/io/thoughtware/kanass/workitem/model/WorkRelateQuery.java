@@ -20,6 +20,9 @@ public class WorkRelateQuery {
     @ApiProperty(name ="workItemId",desc = "事项ID，精确匹配")
     private String workItemId;
 
+    @ApiProperty(name ="workItemIds",desc = "事项ID，精确匹配")
+    private String[] workItemIds;
+
 
     @ApiProperty(name ="title",desc = "标题，模糊匹配")
     private String title;
@@ -68,5 +71,13 @@ public class WorkRelateQuery {
 
     public void setLeftJoinWorkItemEntity(String leftJoinWorkItemEntity) {
         this.leftJoinWorkItemEntity = leftJoinWorkItemEntity;
+    }
+
+    public String[] getWorkItemIds() {
+        return workItemIds;
+    }
+
+    public void setWorkItemIds(String[] workItemIds) {
+        this.workItemIds = workItemIds;
     }
 }

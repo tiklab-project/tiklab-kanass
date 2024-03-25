@@ -2,6 +2,8 @@ package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.workitem.dao.WorkSprintDao;
 import io.thoughtware.kanass.workitem.entity.WorkSprintEntity;
 import io.thoughtware.kanass.workitem.model.WorkSprint;
@@ -45,6 +47,15 @@ public class WorkSprintServiceImpl implements WorkSprintService {
     @Override
     public void deleteWorkSprint(@NotNull String id) {
         workSprintDao.deleteWorkSprint(id);
+    }
+
+    @Override
+    public void deleteWorkSprint(WorkSprintQuery workSprintQuery) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkSprintEntity.class)
+                .eq("workItemId", workSprintQuery.getWorkItemId())
+                .in("workItemId", workSprintQuery.getWorkItemIds())
+                .get();
+        workSprintDao.deleteWorkSprintList(deleteCondition);
     }
 
     @Override

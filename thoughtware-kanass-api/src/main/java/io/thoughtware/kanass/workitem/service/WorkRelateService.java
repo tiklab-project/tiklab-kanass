@@ -34,6 +34,7 @@ public interface WorkRelateService {
     */
     void deleteWorkRelate(@NotNull String id);
 
+    void deleteWorkRelateCondition(@NotNull @Valid WorkRelateQuery workRelateQuery);
     /**
     * 根据id查找关联事项
     * @param id

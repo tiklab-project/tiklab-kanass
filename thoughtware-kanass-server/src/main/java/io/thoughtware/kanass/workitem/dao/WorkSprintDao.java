@@ -2,6 +2,7 @@ package io.thoughtware.kanass.workitem.dao;
 
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.dal.jpa.JpaTemplate;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.thoughtware.kanass.workitem.entity.WorkSprintEntity;
@@ -48,7 +49,9 @@ public class WorkSprintDao {
     public void deleteWorkSprint(String id){
         jpaTemplate.delete(WorkSprintEntity.class,id);
     }
-
+    public void deleteWorkSprintList(DeleteCondition deleteCondition){
+        jpaTemplate.delete(deleteCondition);
+    }
     /**
      * 根据id查找事项类型
      * @param id
@@ -109,5 +112,6 @@ public class WorkSprintDao {
         List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         return workItemIds;
     }
+
 
 }

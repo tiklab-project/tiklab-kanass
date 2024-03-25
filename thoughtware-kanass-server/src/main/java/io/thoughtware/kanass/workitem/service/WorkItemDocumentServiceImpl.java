@@ -84,9 +84,11 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
     }
 
     @Override
-    public void delete(@NotNull String documentId) {
+    public void deleteWorkItemDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery) {
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemDocumentEntity.class)
-                .eq("documentId", documentId)
+                .eq("documentId", workItemDocumentQuery.getDocumentId())
+                .eq("workItemId", workItemDocumentQuery.getWorkItemId())
+                .in("workItemId", workItemDocumentQuery.getWorkItemIds())
                 .get();
         workItemDocumentDao.deleteWorkItemDocument(deleteCondition);
     }

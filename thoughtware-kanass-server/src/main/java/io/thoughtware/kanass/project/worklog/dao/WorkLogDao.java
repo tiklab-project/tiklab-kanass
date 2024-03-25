@@ -2,6 +2,8 @@ package io.thoughtware.kanass.project.worklog.dao;
 
 import io.thoughtware.core.order.Order;
 import io.thoughtware.core.order.OrderTypeEnum;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.model.ProjectQuery;
 import io.thoughtware.kanass.project.project.service.ProjectService;
@@ -85,6 +87,9 @@ public class WorkLogDao{
         jpaTemplate.delete(WorkLogEntity.class,id);
     }
 
+    public void deleteWorkLogList(DeleteCondition deleteCondition){
+        jpaTemplate.delete(deleteCondition);
+    }
     /**
      * 根据id查找工作日志
      * @param id

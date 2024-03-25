@@ -37,7 +37,7 @@ public interface WorkVersionService {
     * @param id
     */
     void deleteWorkVersion(@NotNull String id);
-
+    void deleteWorkVersionList(@NotNull @Valid WorkVersionQuery workVersionQuery);
     @FindOne
     WorkVersion findOne(@NotNull String id);
 

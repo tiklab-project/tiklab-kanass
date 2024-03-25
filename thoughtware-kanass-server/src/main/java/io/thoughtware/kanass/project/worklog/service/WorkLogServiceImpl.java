@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.project.worklog.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.worklog.dao.WorkLogDao;
 import io.thoughtware.kanass.project.worklog.model.CalendarHeader;
@@ -65,6 +67,15 @@ public class WorkLogServiceImpl implements WorkLogService {
     @Override
     public void deleteWorkLog(@NotNull String id) {
         workLogDao.deleteWorkLog(id);
+    }
+
+    @Override
+    public void deleteWorkLogList(@NotNull @Valid WorkLogQuery workLogQuery){
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkLogEntity.class)
+                .eq("workItemId", workLogQuery.getWorkItemId())
+                .in("workItemId", workLogQuery.getWorkItemIds())
+                .get();
+        workLogDao.deleteWorkLogList(deleteCondition);
     }
 
     @Override

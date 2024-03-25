@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.workitem.dao;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
 import io.thoughtware.kanass.workitem.entity.WorkRelateEntity;
 import io.thoughtware.kanass.workitem.model.WorkRelateQuery;
@@ -50,6 +52,11 @@ public class WorkRelateDao{
      */
     public void deleteWorkRelate(String id){
         jpaTemplate.delete(WorkRelateEntity.class,id);
+    }
+
+    public void deleteWorkRelateCondition(DeleteCondition deleteCondition){
+
+        jpaTemplate.delete(deleteCondition);
     }
 
     /**

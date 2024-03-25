@@ -33,6 +33,7 @@ public interface WorkAttachService {
     */
     void deleteWorkAttach(@NotNull String id);
 
+    void deleteWorkAttachList(@NotNull @Valid WorkAttachQuery workAttachQuery);
     /**
     * 根据id查找事项附件
     * @param id

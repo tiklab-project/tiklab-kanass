@@ -34,11 +34,8 @@ public interface WorkItemDocumentService {
     */
     void deleteWorkItemDocument(@NotNull String id);
 
-    /**
-     * 通过文档id删除事项文档
-     * @param documentId
-     */
-     void delete(@NotNull String documentId);
+    void deleteWorkItemDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
+
 
     /**
      * 通过文档id删除  和 事项id删除

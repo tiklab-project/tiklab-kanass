@@ -84,6 +84,16 @@ public class WorkItemController {
         return Result.ok();
     }
 
+    @RequestMapping(path="/deleteWorkItemAndChildren",method = RequestMethod.POST)
+    @ApiMethod(name = "deleteWorkItemAndChildren",desc = "根据事项ID删除事项")
+    @ApiParam(name = "id",desc = "事项ID",required = true)
+    public Result<Void> deleteWorkItemAndChildren(@NotNull String id){
+        workItemService.deleteWorkItemAndChildren(id);
+
+        return Result.ok();
+    }
+
+
     /**
      * @pi.name:根据事项ID查找事项
      * @pi.path:/workItem/findWorkItem

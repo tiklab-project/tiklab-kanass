@@ -34,17 +34,12 @@ public interface WorkTestCaseService {
     */
     void deleteWorkTestCase(@NotNull String id);
 
-    /**
-     * 通过文档id删除事项文档
-     * @param documentId
-     */
-     void delete(@NotNull String documentId);
 
     /**
      * 通过文档id删除  和 事项id删除
      * @param workTestCaseQuery
      */
-    void deleteWorkTestCaseRele(@NotNull @Valid WorkTestCaseQuery workTestCaseQuery);
+    void deleteWorkTestCaseList(@NotNull @Valid WorkTestCaseQuery workTestCaseQuery);
 
     WorkTestCase findOne(@NotNull String id);
 

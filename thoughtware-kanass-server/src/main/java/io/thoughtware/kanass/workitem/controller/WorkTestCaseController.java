@@ -109,11 +109,11 @@ public class WorkTestCaseController {
     }
 
 
-    @RequestMapping(path="/deleteWorkTestCaseRele",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkTestCaseRele",desc = "通过文档id 和事项id 删除")
+    @RequestMapping(path="/deleteWorkTestCaseList",method = RequestMethod.POST)
+    @ApiMethod(name = "deleteWorkTestCaseList",desc = "通过文档id 和事项id 删除")
     @ApiParam(name = "workTestCaseQuery",desc = "传参数文档id 和事项id",required = true)
     public Result<Void> deleteWorkTestCaseRele(@RequestBody @NotNull @Valid WorkTestCaseQuery workTestCaseQuery){
-        workTestCaseService.deleteWorkTestCaseRele(workTestCaseQuery);
+        workTestCaseService.deleteWorkTestCaseList(workTestCaseQuery);
 
         return Result.ok();
     }

@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.workitem.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.workitem.model.WorkComment;
 import io.thoughtware.kanass.workitem.model.WorkCommentQuery;
 import io.thoughtware.kanass.workitem.dao.WorkCommentDao;
@@ -45,6 +47,14 @@ public class WorkCommentServiceImpl implements WorkCommentService {
     @Override
     public void deleteWorkComment(@NotNull String id) {
         workCommentDao.deleteWorkComment(id);
+    }
+
+    public void deleteWorkCommentList(WorkCommentQuery workCommentQuery) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkCommentEntity.class)
+                .eq("workItemId", workCommentQuery.getWorkItemId())
+                .in("workItemId", workCommentQuery.getWorkItemIds())
+                .get();
+        workCommentDao.deleteWorkComment(deleteCondition);
     }
 
     @Override

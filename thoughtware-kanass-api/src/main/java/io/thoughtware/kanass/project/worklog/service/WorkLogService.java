@@ -35,6 +35,7 @@ public interface WorkLogService {
     */
     void deleteWorkLog(@NotNull String id);
 
+    void deleteWorkLogList(@NotNull @Valid WorkLogQuery workLogQuery);
     /**
     * 根据id查找工作日志
     * @param id
