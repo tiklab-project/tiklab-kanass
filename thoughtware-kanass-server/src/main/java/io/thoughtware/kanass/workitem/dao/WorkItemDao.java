@@ -16,7 +16,6 @@ import io.thoughtware.dal.jpa.criterial.condition.OrQueryCondition;
 import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
-import io.thoughtware.kanass.workitem.model.WorkRelateQuery;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,22 +58,39 @@ public class WorkItemDao{
         jpaTemplate.update(workItemEntity);
     }
 
-    public List<String> findWorkItemAndChildren(String workItemId) {
+    /**
+     * 获取所有下级事项id，包括下级的下级，包括当前事项
+     * @param workItemId
+     * @return
+     */
+    public List<String> findWorkItemAndChildrenIds(String workItemId) {
         String sql = "SELECT id FROM pmc_work_item where tree_path like '%;" +
                 workItemId + ";%' and tree_path like '%" + workItemId + ";' ;";
         List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         workItemIdList.add(workItemId);
-//        String workItemIds = workItemIdList.stream().map(id -> "'" + id + "'").collect(Collectors.joining(", "));
 
         return workItemIdList;
     }
 
     /**
-     * 删除事项
+     * 获取所有下级事项，包括下级的下级，包括当前事项
      * @param workItemId
+     * @return
      */
+    public List<WorkItemEntity> findWorkItemAndChildren(String workItemId) {
+        String sql = "SELECT * FROM pmc_work_item where tree_path like '%;" +
+                workItemId + ";%' and tree_path like '%" + workItemId + ";' ;";
+        List<WorkItemEntity> workItemEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(WorkItemEntity.class));
 
 
+        return workItemEntityList;
+    }
+
+
+    /**
+     * 删除事项
+     * @param workItemIdList
+     */
     public void updatePredepandWorkItemList(List<String> workItemIdList){
         String workItemIds = "(" +  workItemIdList.stream().map(item -> "'" + item + "'").collect(Collectors.joining(", ")) + ")";
         String sql = "UPDATE pmc_work_item SET pre_depend_id = NULL WHERE pre_depend_id in " + workItemIds ;
@@ -1618,7 +1634,6 @@ public class WorkItemDao{
     }
 
     public void  updateEpicWork(String projectId, String workTypeId, String dmWorkTypeId){
-
         String sql = null;
         try {
             sql = "UPDATE pmc_work_item SET work_type_code = 'demand', work_type_id = '" +
@@ -1629,6 +1644,16 @@ public class WorkItemDao{
         } catch (Exception e) {
             throw new SystemException(e);
         }
-
     }
+
+    public boolean haveChildren(String id){
+        boolean children = false;
+        String sql = "select id from pmc_work_item WHERE parent_id = '" + id + "'";
+        List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(workItemIdList.size() > 0) {
+            children = true;
+        }
+        return children;
+    }
+
 }

@@ -510,4 +510,12 @@ public class WorkItemController {
         return Result.ok(workItemAndChidren);
     }
 
+    @RequestMapping(path = "/haveChildren",method = RequestMethod.POST)
+    @ApiMethod(name = "haveChildren",desc = "查看事项有几级下级事项")
+    public Result<Boolean> haveChildren(@NotNull String id){
+        boolean isHave = workItemService.haveChildren(id);
+
+        return Result.ok(isHave);
+    }
+
 }

@@ -1147,7 +1147,8 @@ public class WorkItemServiceImpl implements WorkItemService {
      */
     @Override
     public void deleteWorkItemAndChildren(@NotNull String id) {
-        List<String> workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
+        List<String> workItemAndChildren = workItemDao.findWorkItemAndChildrenIds(id);
+        workItemAndChildren.add(id);
         String[] workItemIds = workItemAndChildren.toArray(new String[workItemAndChildren.size()]);
 
         // 删除事项与流程的关联关系
@@ -1280,6 +1281,24 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkVersionQuery workVersionQuery = new WorkVersionQuery();
         workVersionQuery.setWorkItemId(id);
         workVersionService.deleteWorkVersionList(workVersionQuery);
+
+        // 处理下级的treepath
+        List<WorkItemEntity> workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
+        for (WorkItemEntity workItemAndChild : workItemAndChildren) {
+            if(workItemAndChild.getParentId().equals(id)){
+                workItemAndChild.setParentId("nullstring");
+                workItemAndChild.setTreePath("nullstring");
+            }else {
+                String treePath = workItemAndChild.getTreePath();
+                if(treePath != null){
+                    int index = treePath.indexOf(id);
+                    treePath = treePath.substring(index);
+                    workItemAndChild.setTreePath(treePath);
+                }
+            }
+            workItemDao.updateWorkItem(workItemAndChild);
+        }
+
 
         // 删除产生的待办
         TaskQuery taskQuery = new TaskQuery();
@@ -1942,5 +1961,15 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
         return  workItem;
+    }
+
+    /**
+     * 是否有下级
+     * @param id
+     * @return
+     */
+    public boolean haveChildren(String id){
+        boolean isHave = workItemDao.haveChildren(id);
+        return isHave;
     }
 }

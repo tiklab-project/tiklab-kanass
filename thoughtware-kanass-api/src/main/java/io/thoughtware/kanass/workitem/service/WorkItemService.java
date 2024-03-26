@@ -231,4 +231,6 @@ public interface WorkItemService {
     List<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery);
 
     WorkItem findWorkItemAndChidren(String id);
+
+    boolean haveChildren(@NotNull String id);
 }
