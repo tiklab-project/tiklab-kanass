@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.project.service.ProjectService;
+import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.model.SprintQuery;
 import io.thoughtware.kanass.sprint.model.SprintState;
@@ -53,6 +54,9 @@ public class SprintServiceImpl implements SprintService {
 
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    SprintFocusService sprintFocusService;
 
     @Autowired
     WorkItemService workItemService;
@@ -111,6 +115,11 @@ public class SprintServiceImpl implements SprintService {
         SprintState sprintState = new SprintState();
         sprintState.setId("000000");
         sprint.setSprintState(sprintState);
+
+        String createUserId = LoginContext.getLoginId();
+        User user = new User();
+        user.setId(createUserId);
+        sprint.setBuilder(user);
 
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
@@ -230,7 +239,6 @@ public class SprintServiceImpl implements SprintService {
             }
         }
         // 查找迭代的事项数量
-
         joinTemplate.joinQuery(sprintList);
         return sprintList;
     }
@@ -250,8 +258,22 @@ public class SprintServiceImpl implements SprintService {
 
         List<Sprint> sprintList = BeanMapper.mapList(pagination.getDataList(), Sprint.class);
 
-        joinTemplate.joinQuery(sprintList);
+        if(sprintList.size() > 0){
+            List<String> focusVersionIds = sprintFocusService.findFocusSprintIds();
+            String versionIds = "(" + sprintList.stream().map(item -> "'" + item.getId() + "'").
+                    collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("sprint_id", versionIds);
 
+            for (Sprint sprint : sprintList) {
+                String id = sprint.getId();
+                if(focusVersionIds.contains(id)){
+                    sprint.setFocusIs(true);
+                }
+                List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("sprint_id").equals(id)).collect(Collectors.toList());
+                sprint.setWorkNumber(countList.size());
+            }
+        }
+        joinTemplate.joinQuery(sprintList);
         return PaginationBuilder.build(pagination,sprintList);
     }
 

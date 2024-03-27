@@ -25,8 +25,11 @@ public class ProjectVersionEntity implements Serializable {
     @Column(name = "name",length = 64,notNull = true)
     private String name;
 
-    @Column(name = "master",length = 32)
+    @Column(name = "master",length = 12)
     private String master;
+
+    @Column(name = "builder",length = 12)
+    private String builder;
     // 开始时间
     @Column(name = "start_time")
     private String startTime;
@@ -121,5 +124,13 @@ public class ProjectVersionEntity implements Serializable {
 
     public void setRelaStartTime(String relaStartTime) {
         this.relaStartTime = relaStartTime;
+    }
+
+    public String getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(String builder) {
+        this.builder = builder;
     }
 }

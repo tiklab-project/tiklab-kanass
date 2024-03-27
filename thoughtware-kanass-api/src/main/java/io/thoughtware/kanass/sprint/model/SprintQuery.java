@@ -20,11 +20,20 @@ public class SprintQuery {
     @ApiProperty(name ="master",desc = "所属负责人，精确匹配")
     private String master;
 
+    @ApiProperty(name ="builderId",desc = "所属负责人，精确匹配")
+    private String builderId;
+
     @ApiProperty(name ="sprintName",desc = "迭代名称，模糊匹配")
     private String sprintName;
 
+    @ApiProperty(name ="followersId",desc = "迭代关注者id")
+    private String followersId;
+
     @ApiProperty(name ="sprintStateId",desc = "迭代状态id，模糊匹配")
     private String sprintStateId;
+
+    @ApiProperty(name ="sprintStateIds",desc = "迭代状态id，模糊匹配")
+    private String[] sprintStateIds;
 
     @ApiProperty(name ="currentSprintId",desc = "迭代状态id，模糊匹配")
     private String currentSprintId;
@@ -100,5 +109,29 @@ public class SprintQuery {
 
     public void setNotSprintStateId(String notSprintStateId) {
         this.notSprintStateId = notSprintStateId;
+    }
+
+    public String[] getSprintStateIds() {
+        return sprintStateIds;
+    }
+
+    public void setSprintStateIds(String[] sprintStateIds) {
+        this.sprintStateIds = sprintStateIds;
+    }
+
+    public String getBuilderId() {
+        return builderId;
+    }
+
+    public void setBuilderId(String builderId) {
+        this.builderId = builderId;
+    }
+
+    public String getFollowersId() {
+        return followersId;
+    }
+
+    public void setFollowersId(String followersId) {
+        this.followersId = followersId;
     }
 }

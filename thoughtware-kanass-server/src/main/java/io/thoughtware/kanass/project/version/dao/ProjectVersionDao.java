@@ -7,6 +7,7 @@ import io.thoughtware.core.page.Pagination;
 import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.thoughtware.dal.jpa.JpaTemplate;
+import io.thoughtware.kanass.project.version.model.VersionFocus;
 import io.thoughtware.kanass.sprint.entity.SprintEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,9 +85,11 @@ public class ProjectVersionDao {
      * @return
      */
     public List<ProjectVersionEntity> findVersionList(ProjectVersionQuery ProjectVersionQuery) {
-        QueryCondition queryCondition = QueryBuilders.createQuery(ProjectVersionEntity.class)
-                .eq("projectId", ProjectVersionQuery.getProjectId())
-                .like("name", ProjectVersionQuery.getName())
+        QueryCondition queryCondition = QueryBuilders.createQuery(ProjectVersionEntity.class, "pv")
+                .leftJoin(VersionFocusEntity.class, "vf", "vf.versionId=pv.id")
+                .eq("pv.projectId", ProjectVersionQuery.getProjectId())
+                .eq("pv.versionState", ProjectVersionQuery.getVersionState())
+                .like("pv.name", ProjectVersionQuery.getName())
                 .orders(ProjectVersionQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, ProjectVersionEntity.class);
@@ -94,18 +97,25 @@ public class ProjectVersionDao {
 
     /**
      * 根据条件按照分页查找项目版本列表
-     * @param ProjectVersionQuery
+     * @param projectVersionQuery
      * @return
      */
-    public Pagination<ProjectVersionEntity> findVersionPage(ProjectVersionQuery ProjectVersionQuery) {
-        QueryCondition queryCondition = QueryBuilders.createQuery(ProjectVersionEntity.class)
-                .eq("projectId", ProjectVersionQuery.getProjectId())
-                .like("name", ProjectVersionQuery.getName())
-                .eq("versionState", ProjectVersionQuery.getVersionState())
-                .eq("masterId", ProjectVersionQuery.getMasterId())
-                .orders(ProjectVersionQuery.getOrderParams())
-                .pagination(ProjectVersionQuery.getPageParam())
-                .get();
+    public Pagination<ProjectVersionEntity> findVersionPage(ProjectVersionQuery projectVersionQuery) {
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectVersionEntity.class, "pv")
+                .eq("pv.projectId", projectVersionQuery.getProjectId())
+                .like("pv.name", projectVersionQuery.getName())
+                .eq("pv.versionState", projectVersionQuery.getVersionState())
+                .eq("pv.master", projectVersionQuery.getMasterId())
+                .eq("pv.builder", projectVersionQuery.getBuilderId())
+                .in("pv.versionState", projectVersionQuery.getVersionStates())
+                .orders(projectVersionQuery.getOrderParams())
+                .pagination(projectVersionQuery.getPageParam());
+        if(projectVersionQuery.getFollowersId() != null){
+            queryBuilders = queryBuilders.leftJoin(VersionFocusEntity.class, "vf", "vf.versionId=pv.id")
+                    .eq("vf.masterId", projectVersionQuery.getFollowersId());
+
+        }
+        QueryCondition queryCondition = queryBuilders.get();
         return jpaTemplate.findPage(queryCondition, ProjectVersionEntity.class);
     }
 
@@ -123,7 +133,7 @@ public class ProjectVersionDao {
         String currentVersionId = projectVersionQuery.getCurrentVersionId();
         String projectId = projectVersionQuery.getProjectId();
         String sql = "SELECT * FROM pmc_version WHERE id != '" + currentVersionId + "' and " +
-                "version_state != '222222' and project_id = '" + projectId + "'";
+                "version_state != '222222' and project_id = '" + projectId + "' order by start_time desc";
         List<ProjectVersionEntity> versionEntityList = this.jpaTemplate.getJdbcTemplate().
                 query(sql, new BeanPropertyRowMapper(ProjectVersionEntity.class));
         return versionEntityList;

@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.sprint.service;
 
+import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.sprint.model.SprintFocus;
 import io.thoughtware.kanass.sprint.model.SprintFocusQuery;
 import io.thoughtware.core.page.Pagination;
@@ -111,5 +112,12 @@ public class SprintFocusServiceImpl implements SprintFocusService {
         joinTemplate.joinQuery(sprintFocusList);
 
         return PaginationBuilder.build(pagination,sprintFocusList);
+    }
+
+    @Override
+    public List<String> findFocusSprintIds(){
+        String loginId = LoginContext.getLoginId();
+        List<String> focusSprintIds = sprintFocusDao.findFocusSprintIds(loginId);
+        return  focusSprintIds;
     }
 }

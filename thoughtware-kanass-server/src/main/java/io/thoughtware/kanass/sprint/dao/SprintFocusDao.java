@@ -114,5 +114,9 @@ public class SprintFocusDao{
         return jpaTemplate.findPage(queryCondition,SprintFocusEntity.class);
     }
 
-
+    public List<String> findFocusSprintIds(String masterId) {
+        String sql = "select sprint_id from pmc_sprint_focus sf where sf.master_id = '"+ masterId + "'";
+        List<String> versionIds = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return versionIds;
+    }
 }

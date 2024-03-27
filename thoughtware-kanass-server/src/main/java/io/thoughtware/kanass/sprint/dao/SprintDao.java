@@ -116,13 +116,21 @@ public class SprintDao{
      * @return
      */
     public List<SprintEntity> findSprintList(SprintQuery sprintQuery) {
-        QueryCondition queryCondition = QueryBuilders.createQuery(SprintEntity.class)
-                .eq("projectId", sprintQuery.getProjectId())
-                .eq("master", sprintQuery.getMaster())
-                .like("sprintName", sprintQuery.getSprintName())
-                .eq("sprintStateId", sprintQuery.getSprintStateId())
-                .orders(sprintQuery.getOrderParams())
-                .get();
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(SprintEntity.class, "sp")
+                .eq("sp.projectId", sprintQuery.getProjectId())
+                .eq("sp.master", sprintQuery.getMaster())
+                .like("sp.sprintName", sprintQuery.getSprintName())
+                .eq("sp.sprintStateId", sprintQuery.getSprintStateId())
+                .in("sp.sprintStateId", sprintQuery.getSprintStateIds())
+                .eq("sp.builder", sprintQuery.getBuilderId())
+                .orders(sprintQuery.getOrderParams());
+
+        if(sprintQuery.getFollowersId() != null){
+            queryBuilders = queryBuilders.leftJoin(SprintFocusEntity.class, "sf", "sf.sprintId=sp.id")
+                    .eq("sf.masterId", sprintQuery.getFollowersId());
+
+        }
+        QueryCondition queryCondition = queryBuilders.get();
         return jpaTemplate.findList(queryCondition, SprintEntity.class);
     }
 
@@ -141,14 +149,21 @@ public class SprintDao{
      * @return
      */
     public Pagination<SprintEntity> findSprintPage(SprintQuery sprintQuery) {
-        QueryCondition queryCondition = QueryBuilders.createQuery(SprintEntity.class)
-                .eq("projectId", sprintQuery.getProjectId())
-                .eq("master", sprintQuery.getMaster())
-                .like("sprintName", sprintQuery.getSprintName())
-                .eq("sprintStateId", sprintQuery.getSprintStateId())
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(SprintEntity.class, "sp")
+                .eq("sp.projectId", sprintQuery.getProjectId())
+                .eq("sp.master", sprintQuery.getMaster())
+                .like("sp.sprintName", sprintQuery.getSprintName())
+                .eq("sp.sprintStateId", sprintQuery.getSprintStateId())
+                .in("sp.sprintStateId", sprintQuery.getSprintStateIds())
+                .eq("sp.builder", sprintQuery.getBuilderId())
                 .orders(sprintQuery.getOrderParams())
-                .pagination(sprintQuery.getPageParam())
-                .get();
+                .pagination(sprintQuery.getPageParam());
+
+        if(sprintQuery.getFollowersId() != null){
+            queryBuilders = queryBuilders.leftJoin(SprintFocusEntity.class, "sf", "sf.sprintId=sp.id")
+                    .eq("sf.masterId", sprintQuery.getFollowersId());
+        }
+        QueryCondition queryCondition = queryBuilders.get();
         return jpaTemplate.findPage(queryCondition, SprintEntity.class);
     }
 

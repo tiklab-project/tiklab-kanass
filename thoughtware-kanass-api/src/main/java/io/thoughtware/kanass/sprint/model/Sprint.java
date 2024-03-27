@@ -33,6 +33,9 @@ public class Sprint extends BaseModel {
     @ApiProperty(name="sprintName",desc="迭代名称",eg="@text32")
     private String sprintName;
 
+    @ApiProperty(name = "focusIs", desc = "当前用户是否关注")
+    private boolean focusIs;
+
     @ApiProperty(name="desc",desc="迭代描述",eg="@text32")
     private String desc;
 
@@ -42,6 +45,13 @@ public class Sprint extends BaseModel {
     })
     @JoinQuery(key = "id")
     private User master;
+
+    @ApiProperty(name="builder",desc="创建人")
+    @Mappings({
+            @Mapping(source = "builder.id",target = "builder")
+    })
+    @JoinQuery(key = "id")
+    private User builder;
 
     @ApiProperty(name="project",desc="所属项目",eg="@selectOne")
     @Mappings({
@@ -206,5 +216,21 @@ public class Sprint extends BaseModel {
 
     public void setWorkProgressNumber(Integer workProgressNumber) {
         this.workProgressNumber = workProgressNumber;
+    }
+
+    public User getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(User builder) {
+        this.builder = builder;
+    }
+
+    public boolean isFocusIs() {
+        return focusIs;
+    }
+
+    public void setFocusIs(boolean focusIs) {
+        this.focusIs = focusIs;
     }
 }

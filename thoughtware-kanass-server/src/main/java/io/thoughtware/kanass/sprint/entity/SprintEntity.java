@@ -27,8 +27,12 @@ public class SprintEntity implements Serializable {
     private String sprintName;
 
     // 迭代负责人
-    @Column(name = "master",length = 32)
+    @Column(name = "master",length = 12)
     private String master;
+
+    // 创建人
+    @Column(name = "builder",length = 12)
+    private String builder;
 
     // 迭代描述
     @Column(name = "description",length = 64)
@@ -135,5 +139,13 @@ public class SprintEntity implements Serializable {
 
     public void setRelaEndTime(String relaEndTime) {
         this.relaEndTime = relaEndTime;
+    }
+
+    public String getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(String builder) {
+        this.builder = builder;
     }
 }

@@ -11,6 +11,7 @@ import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.kanass.project.version.dao.ProjectVersionDao;
 import io.thoughtware.kanass.project.version.entity.ProjectVersionEntity;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
+import io.thoughtware.user.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Override
     public String createVersion(@NotNull @Valid ProjectVersion projectVersion) {
+        String createId = LoginContext.getLoginId();
+        User user = new User();
+        user.setId(createId);
+        projectVersion.setBuilder(user);
+
         ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
 
         return projectVersionDao.createVersion(projectVersionEntity);
@@ -160,7 +166,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Override
     public Pagination<ProjectVersion> findVersionPage(ProjectVersionQuery projectVersionQuery) {
-        Pagination<ProjectVersionEntity>  pagination = projectVersionDao.findVersionPage(projectVersionQuery);
+        Pagination<ProjectVersionEntity> pagination = projectVersionDao.findVersionPage(projectVersionQuery);
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(pagination.getDataList(), ProjectVersion.class);
 
         if(projectVersionList.size() > 0){
@@ -175,11 +181,9 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                 if(focusVersionIds.contains(id)){
                     projectVersion.setFocusIs(true);
                 }
-
                 List<Map<String, Object>> countList = versionCount.stream().filter(item -> item.get("version_id").equals(id)).collect(Collectors.toList());
                 projectVersion.setWorkNumber(countList.size());
             }
-
         }
         // 查找版本的事项数量
 

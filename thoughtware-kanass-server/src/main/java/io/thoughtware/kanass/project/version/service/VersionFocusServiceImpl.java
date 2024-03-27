@@ -127,7 +127,6 @@ public class VersionFocusServiceImpl implements VersionFocusService {
         String loginId = LoginContext.getLoginId();
         List<String> focusVersionIds = versionFocusDao.findFocusVersionIds(loginId);
 
-
         return focusVersionIds;
     }
 }

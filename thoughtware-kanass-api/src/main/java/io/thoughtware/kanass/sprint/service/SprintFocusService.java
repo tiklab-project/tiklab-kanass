@@ -79,4 +79,5 @@ public interface SprintFocusService {
     */
     Pagination<SprintFocus> findSprintFocusPage(SprintFocusQuery sprintFocusQuery);
 
+    List<String> findFocusSprintIds();
 }

@@ -39,6 +39,13 @@ public class ProjectVersion extends BaseModel {
     @JoinQuery(key = "id")
     private User master;
 
+    @ApiProperty(name="builder",desc="创建人")
+    @Mappings({
+            @Mapping(source = "builder.id",target = "builder")
+    })
+    @JoinQuery(key = "id")
+    private User builder;
+
 
     @ApiProperty(name = "focusIs", desc = "当前用户是否关注")
     private boolean focusIs;
@@ -200,5 +207,13 @@ public class ProjectVersion extends BaseModel {
 
     public void setWorkDoneNumber(int workDoneNumber) {
         this.workDoneNumber = workDoneNumber;
+    }
+
+    public User getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(User builder) {
+        this.builder = builder;
     }
 }

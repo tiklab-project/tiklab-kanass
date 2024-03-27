@@ -22,11 +22,21 @@ public class ProjectVersionQuery {
     @ApiProperty(name ="name",desc = "版本名称，模糊匹配")
     private String name;
 
-    @ApiProperty(name ="versionState",desc = "版本名称，模糊匹配")
+    @ApiProperty(name ="versionState",desc = "版本状态")
     private String versionState;
 
-    @ApiProperty(name ="masterId",desc = "版本名称，模糊匹配")
+    @ApiProperty(name ="versionStates",desc = "版本状态")
+    private String[] versionStates;
+
+
+    @ApiProperty(name ="masterId",desc = "版本负责人")
     private String masterId;
+
+    @ApiProperty(name ="builderId",desc = "版本创建人")
+    private String builderId;
+
+    @ApiProperty(name ="followersId",desc = "关注者id")
+    private String followersId;
 
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
@@ -88,5 +98,29 @@ public class ProjectVersionQuery {
 
     public void setCurrentVersionId(String currentVersionId) {
         this.currentVersionId = currentVersionId;
+    }
+
+    public String getFollowersId() {
+        return followersId;
+    }
+
+    public void setFollowersId(String followersId) {
+        this.followersId = followersId;
+    }
+
+    public String getBuilderId() {
+        return builderId;
+    }
+
+    public void setBuilderId(String builderId) {
+        this.builderId = builderId;
+    }
+
+    public String[] getVersionStates() {
+        return versionStates;
+    }
+
+    public void setVersionStates(String[] versionStates) {
+        this.versionStates = versionStates;
     }
 }
