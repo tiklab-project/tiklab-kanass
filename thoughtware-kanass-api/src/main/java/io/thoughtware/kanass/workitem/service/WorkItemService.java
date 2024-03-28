@@ -37,7 +37,7 @@ public interface WorkItemService {
     * @param workItem
     */
     void updateWorkItem(@NotNull @Valid WorkItem workItem);
-
+    void updateTodoTaskData(WorkItem workItem);
     /**
     * 删除事项
     * @param id
@@ -209,9 +209,9 @@ public interface WorkItemService {
     void updateBatchWorkItemVersion(@NotNull String oldVersionId, String newVersionId);
 
 
-    List<String> findSprintWorkItemIds(@NotNull String sprintId);
+    List<WorkItem> findSprintWorkItemList(@NotNull String sprintId);
 
-    List<String> findVersionWorkItemIds(@NotNull String versionId);
+    List<WorkItem> findVersionWorkItemList(@NotNull String versionId);
 
     /**
      * 查找迭代下各个状态的事项

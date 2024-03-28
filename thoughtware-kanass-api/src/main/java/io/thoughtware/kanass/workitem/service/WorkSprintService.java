@@ -73,4 +73,6 @@ public interface WorkSprintService {
     */
     Pagination<WorkSprint> findWorkSprintPage(WorkSprintQuery workSprintQuery);
     List<String> findSprintWorkItemIds(@NotNull String sprintId);
+    List<String> findSprintWorkItemNum(String sprintIds);
+
 }

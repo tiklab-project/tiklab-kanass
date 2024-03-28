@@ -1059,28 +1059,53 @@ public class WorkItemDao{
 
         return WorkItemCount;
     }
-    public Integer findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery){
+    public HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery){
         HashMap<String, Integer> WorkItemCount = new HashMap<>();
         workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+
         String sql = new String();
         Object o1 = stringObjectMap.get("sql");
+        Object query = stringObjectMap.get("query");
+        sql = sql.concat(String.valueOf(o1));
 
-        String sql0 = "";
-        if(!ObjectUtils.isEmpty(o1)) {
+        if(!ObjectUtils.isEmpty(query)){
+            // where 之后的条件
+            int index = sql.indexOf("where");
+            String substring = sql.substring(index);
 
-            String s = String.valueOf(o1);
-            String where = StringUtils.substringAfter(s, "where");
-            if(!StringUtils.isEmpty(where)){
-                sql0 = "Select count(1) as total from pmc_work_item p where ";
-                sql0 = sql0.concat(sql + where);
-            }else {
-                sql0 = "Select count(1) as total from pmc_work_item p";
-            }
+            sql = "Select count(1) as total from pmc_work_item p " + substring;
+            Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            WorkItemCount.put("all", allNum);
+
+            // 用于查找各个类型的事项个数的sql
+            sql = "Select count(1) as total from pmc_work_item p " + substring + "and";
+
+        }else {
+            sql = "Select count(1) as total from pmc_work_item p";
+            Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            WorkItemCount.put("all", allNum);
+
+            // 用于查找各个类型的事项个数的sql
+            sql = "Select count(1) as total from pmc_work_item p where";
         }
-            Integer num = jpaTemplate.getJdbcTemplate().queryForObject(sql0, new Object[]{}, Integer.class);
 
-        return num;
+        String sql1 =  sql.concat(" p.work_status_code = 'TODO'");
+        Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        WorkItemCount.put("pending", demandNum);
+
+        String sql2 =  sql.concat(" p.work_status_code = 'DONE'");
+        Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        WorkItemCount.put("ending", taskNum);
+
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = simpleDateFormat.format(date);
+        String sql3 =  sql.concat(" p.work_type_code != 'DONE' and p.plan_end_time < '" + currentTime + "'");
+        Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        WorkItemCount.put("overdue", defectNum);
+
+        return WorkItemCount;
     }
 
     public HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery){
@@ -1551,11 +1576,18 @@ public class WorkItemDao{
         }
     }
 
-    public List<String> findSprintWorkItemIds(String sprintId){
-        String sql = "select id from pmc_work_item where sprint_id = '" +  sprintId + "' and work_status_code != 'DONE'";
+    public List<WorkItemEntity> findSprintWorkItemList(String sprintId){
+        String sql = "select * from pmc_work_item where sprint_id = '" +  sprintId + "' and work_status_code != 'DONE'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
-        List<String> workItemIds = jdbcTemplate.queryForList(sql, String.class);
-        return workItemIds;
+        List<WorkItemEntity> workItemEntityList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WorkItemEntity.class));
+        return workItemEntityList;
+    }
+
+    public List<WorkItemEntity> findVersionWorkItemList(String versionId){
+        String sql = "select * from pmc_work_item where version_id = '" +  versionId + "' and work_status_code != 'DONE'";
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        List<WorkItemEntity> workItemEntityList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WorkItemEntity.class));
+        return workItemEntityList;
     }
 
     public List<String> findWorkItemIdsBySprint(String sprintId){
@@ -1570,12 +1602,7 @@ public class WorkItemDao{
         return workItemIds;
     }
 
-    public List<String> findVersionWorkItemIds(String versionId){
-        String sql = "select id from pmc_work_item where version_id = '" +  versionId + "' and work_status_code != 'DONE'";
-        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
-        List<String> workItemIds = jdbcTemplate.queryForList(sql, String.class);
-        return workItemIds;
-    }
+
 
     public HashMap<String, Integer> findSprintWorkItemNum(String sprintId){
         HashMap<String, Integer> sprintWorkItemNum = new HashMap<>();
@@ -1596,16 +1623,16 @@ public class WorkItemDao{
 
     public HashMap<String, Integer> findVersionWorkItemNum(String versionId){
         HashMap<String, Integer> versionWorkItemNum = new HashMap<>();
-        String sql = "Select count(1) as total from pmc_work_item where version_id = '" + versionId + "'";
+        String sql = "Select count(1) as total from pmc_work_item wk LEFT JOIN pmc_work_version ws on wk.id = ws.work_item_id  where ws.version_id = '" + versionId + "'";
         Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
         versionWorkItemNum.put("all", allNum);
 
-        sql = "Select count(1) as total from pmc_work_item where version_id = '" + versionId + "' and work_status_code != 'DONE'";
-        Integer progressNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        String sql1 = sql + " and wk.work_status_code != 'DONE'";
+        Integer progressNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         versionWorkItemNum.put("progress", progressNum);
 
-        sql = "Select count(1) as total from pmc_work_item where version_id = '" + versionId + "' and work_status_code = 'DONE'";
-        Integer doneNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        sql1 = sql + " and wk.work_status_code = 'DONE'";
+        Integer doneNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         versionWorkItemNum.put("done", doneNum);
 
         return versionWorkItemNum;

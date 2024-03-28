@@ -72,4 +72,5 @@ public interface WorkVersionService {
     */
     Pagination<WorkVersion> findWorkVersionPage(WorkVersionQuery workVersionQuery);
 
+    List<String> findVersionWorkItemNum(String sprintIds);
 }

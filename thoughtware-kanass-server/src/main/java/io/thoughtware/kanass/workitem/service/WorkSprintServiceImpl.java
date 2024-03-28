@@ -110,4 +110,11 @@ public class WorkSprintServiceImpl implements WorkSprintService {
         return workItemIds;
     }
 
+
+    @Override
+    public List<String> findSprintWorkItemNum(String sprintIds) {
+        List<String> workItemIds = workSprintDao.findSprintWorkItemNum(sprintIds);
+        return workItemIds;
+    }
+
 }

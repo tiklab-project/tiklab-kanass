@@ -139,17 +139,31 @@ public class SprintServiceImpl implements SprintService {
             // 创建新的迭代与事项的记录
             String sprintId = sprint.getId();
             // 只查询迭代中未完成的事项
-            List<String> sprintWorkItemIds = workItemService.findSprintWorkItemIds(sprintId);
-            if(sprintWorkItemIds.size() > 0){
+            List<WorkItem> sprintWorkItemList = workItemService.findSprintWorkItemList(sprintId);
+            if(sprintWorkItemList.size() > 0){
                 String valueString = "";
-                for (String workItemId : sprintWorkItemIds) {
+                for (WorkItem workItem : sprintWorkItemList) {
+                    // 更新迭代之后更新待办
+                    if(newSprintId != null) {
+                        Sprint sprint1 = new Sprint();
+                        sprint1.setId(newSprintId);
+                        workItem.setSprint(sprint1);
+                        workItem.setUpdateField("sprint");
+                        workItemService.updateTodoTaskData(workItem);
+                    }else {
+                        workItem.setUpdateField("sprint");
+                        workItem.setSprint(null);
+                        workItemService.updateTodoTaskData(workItem);
+                    }
+
                     String id = UuidGenerator.getRandomIdByUUID(12);
-                    String sql = "('" + id + "', '" + workItemId + "', '" + newSprintId + "'),";
+                    String sql = "('" + id + "', '" + workItem.getId() + "', '" + newSprintId + "'),";
                     valueString = valueString.concat(sql);
                 }
                 int length = valueString.length() - 1;
                 String substring = valueString.substring(0, length);
                 if(newSprintId != null){
+                    // 更新事项与迭代的关联
                     workSprintService.createBatchWorkSprint(substring);
                 }
             }
@@ -231,10 +245,11 @@ public class SprintServiceImpl implements SprintService {
         if(sprintList.size() > 0){
             String sprintIds = "(" + sprintEntityList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
-            List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("sprint_id", sprintIds);
+            List<String> sprintWorkItemNum = workSprintService.findSprintWorkItemNum(sprintIds);
             for (Sprint sprint : sprintList) {
                 String id = sprint.getId();
-                List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("sprint_id").equals(id)).collect(Collectors.toList());
+                List<String> countList = sprintWorkItemNum.stream().filter(item -> item.equals(id))
+                        .collect(Collectors.toList());
                 sprint.setWorkNumber(countList.size());
             }
         }
@@ -259,17 +274,13 @@ public class SprintServiceImpl implements SprintService {
         List<Sprint> sprintList = BeanMapper.mapList(pagination.getDataList(), Sprint.class);
 
         if(sprintList.size() > 0){
-            List<String> focusVersionIds = sprintFocusService.findFocusSprintIds();
-            String versionIds = "(" + sprintList.stream().map(item -> "'" + item.getId() + "'").
+            String sprintIds = "(" + sprintList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
-            List<Map<String, Object>> sprintCount = workItemService.findWorkItemNum("sprint_id", versionIds);
-
+            List<String> sprintWorkItemNum = workSprintService.findSprintWorkItemNum(sprintIds);
             for (Sprint sprint : sprintList) {
                 String id = sprint.getId();
-                if(focusVersionIds.contains(id)){
-                    sprint.setFocusIs(true);
-                }
-                List<Map<String, Object>> countList = sprintCount.stream().filter(item -> item.get("sprint_id").equals(id)).collect(Collectors.toList());
+                List<String> countList = sprintWorkItemNum.stream().filter(item -> item.equals(id))
+                        .collect(Collectors.toList());
                 sprint.setWorkNumber(countList.size());
             }
         }

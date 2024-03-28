@@ -104,4 +104,9 @@ public class WorkVersionServiceImpl implements WorkVersionService {
 
     }
 
+    @Override
+    public List<String> findVersionWorkItemNum(String sprintIds) {
+        List<String> versionIdList = workVersionDao.findVersionWorkItemNum(sprintIds);
+        return versionIdList;
+    }
 }

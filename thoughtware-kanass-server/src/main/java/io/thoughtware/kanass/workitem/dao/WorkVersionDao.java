@@ -106,4 +106,9 @@ public class WorkVersionDao {
         jpaTemplate.getJdbcTemplate().execute(sql);
     }
 
+    public List<String> findVersionWorkItemNum(String ids) {
+        String sql = "select version_id  from pmc_work_version where version_id in "+ ids;
+        List<String> versionIdList = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return versionIdList;
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户数据操作
@@ -113,5 +114,10 @@ public class WorkSprintDao {
         return workItemIds;
     }
 
+    public List<String> findSprintWorkItemNum(String ids) {
+        String sql = "select sprint_id  from pmc_work_sprint where sprint_id in "+ ids;
+        List<String> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return workItemList;
+    }
 
 }

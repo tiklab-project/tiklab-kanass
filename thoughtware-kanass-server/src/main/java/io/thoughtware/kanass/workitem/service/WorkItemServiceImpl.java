@@ -404,11 +404,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         User user = userService.findOne(createUserId);
         String updateField = workItem.getUpdateField();
 
-        if(updateField == "assigner"){
+        if(updateField.equals("assigner")){
             task.setAssignUser(workItem.getAssigner());
         }
 
-        if(updateField == "title" || updateField == "sprint" || updateField == "version"){
+        if(updateField.equals("title") || updateField .equals("sprint") || updateField.equals("projectVersion")){
             HashMap<String, Object> content = new HashMap<>();
             content.put("workItemTitle", workItem.getTitle());
             content.put("workItemId", workItem.getId());
@@ -426,7 +426,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             task.setAction(workItem.getTitle());
         }
 
-        if(updateField == "planBeginTime"){
+        if(updateField.equals("planBeginTime")){
             String planEndTime = workItem.getPlanEndTime();
             if(planEndTime != null){
                 String pattern = "yyyy-MM-dd HH:mm:ss";
@@ -712,7 +712,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateTodoTaskData(workItem1);
     }
 
-    private void updateTodoTaskData(WorkItem workItem) {
+    public void updateTodoTaskData(WorkItem workItem) {
         String id = workItem.getId();
         TaskQuery taskQuery = new TaskQuery();
         LinkedHashMap data = new LinkedHashMap();
@@ -724,8 +724,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             for (Task task : taskPage.getDataList()) {
                 updateTodoTask(workItem,task.getId());
             }
-
-
         } catch (Exception e){
             throw new ApplicationException();
         }
@@ -1808,54 +1806,9 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     public HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery) {
-        HashMap<String, Integer> WorkItemCount = new HashMap<>();
-        // 全部事项数量
-        WorkItemQuery workItemQuery1 = new WorkItemQuery();
-        workItemQuery1.setProjectIds(workItemQuery.getProjectIds());
-        workItemQuery1.setCurrentSprintId(workItemQuery.getCurrentSprintId());
-        workItemQuery1.setCurrentVersionId(workItemQuery.getCurrentVersionId());
-        Integer allWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
-        WorkItemCount.put("all", allWorkItemNum);
+        HashMap<String, Integer> workItemNumByQuickSearch = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
 
-        //待办
-        StateNodeQuery stateNodeQuery = new StateNodeQuery();
-        stateNodeQuery.setQuickName("pending");
-        List<StateNode> pendingStateNodeList = stateNodeService.findQuickFilterStateNodeList(stateNodeQuery);
-        List<String> pendingStateNodeIds = new ArrayList<>();
-        for (StateNode stateNode : pendingStateNodeList) {
-            String id = stateNode.getId();
-            pendingStateNodeIds.add(id);
-        }
-        workItemQuery1.setWorkStatusIds(pendingStateNodeIds);
-        Integer pendingWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
-        WorkItemCount.put("pending", pendingWorkItemNum);
-
-        // 完成
-        stateNodeQuery.setQuickName("done");
-        List<StateNode> doneFilterStateNodeList = stateNodeService.findQuickFilterStateNodeList(stateNodeQuery);
-        List<String> doneStateNodeIds = new ArrayList<>();
-        for (StateNode stateNode : doneFilterStateNodeList) {
-            String id = stateNode.getId();
-            doneStateNodeIds.add(id);
-        }
-        workItemQuery1.setWorkStatusIds(doneStateNodeIds);
-        Integer doneWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
-        WorkItemCount.put("ending", doneWorkItemNum);
-
-        //我创建的
-        workItemQuery1.setWorkStatusIds(null);
-        String loginId = LoginContext.getLoginId();
-        workItemQuery1.setBuilderId(loginId);
-        Integer buildWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
-        WorkItemCount.put("creat", buildWorkItemNum);
-
-        // 逾期
-        workItemQuery1.setBuilderId(null);
-        workItemQuery1.setOverdue(true);
-        Integer overdueWorkItemNum = workItemDao.findWorkItemNumByQuickSearch(workItemQuery1);
-        WorkItemCount.put("overdue", overdueWorkItemNum);
-
-        return  WorkItemCount;
+        return  workItemNumByQuickSearch;
     }
 
     @Override
@@ -1910,15 +1863,20 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     @Override
-    public List<String> findSprintWorkItemIds(String sprintId) {
-        List<String> sprintWorkItemIds = workItemDao.findSprintWorkItemIds(sprintId);
-        return sprintWorkItemIds;
+    public List<WorkItem> findSprintWorkItemList(String sprintId) {
+        List<WorkItemEntity> sprintWorkItemList = workItemDao.findSprintWorkItemList(sprintId);
+
+        List<WorkItem> workItemList = BeanMapper.mapList(sprintWorkItemList,WorkItem.class);
+        joinTemplate.joinQuery(workItemList);
+        return workItemList;
     }
 
     @Override
-    public List<String> findVersionWorkItemIds(String versionId) {
-        List<String> versionWorkItemIds = workItemDao.findVersionWorkItemIds(versionId);
-        return versionWorkItemIds;
+    public List<WorkItem> findVersionWorkItemList(String versionId) {
+        List<WorkItemEntity> versionWorkItemList = workItemDao.findVersionWorkItemList(versionId);
+        List<WorkItem> workItemList = BeanMapper.mapList(versionWorkItemList,WorkItem.class);
+        joinTemplate.joinQuery(workItemList);
+        return workItemList;
     }
 
     @Override
