@@ -1,0 +1,2 @@
+ALTER TABLE pmc_version ADD COLUMN builder VARCHAR(12);
+ALTER TABLE pmc_sprint ADD COLUMN builder VARCHAR(12);
