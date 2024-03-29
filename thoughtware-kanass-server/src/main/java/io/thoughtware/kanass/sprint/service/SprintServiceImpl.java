@@ -276,9 +276,14 @@ public class SprintServiceImpl implements SprintService {
         if(sprintList.size() > 0){
             String sprintIds = "(" + sprintList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
+            List<String> focusSprintIds = sprintFocusService.findFocusSprintIds();
             List<String> sprintWorkItemNum = workSprintService.findSprintWorkItemNum(sprintIds);
+
             for (Sprint sprint : sprintList) {
                 String id = sprint.getId();
+                if(focusSprintIds.contains(id)){
+                    sprint.setFocusIs(true);
+                }
                 List<String> countList = sprintWorkItemNum.stream().filter(item -> item.equals(id))
                         .collect(Collectors.toList());
                 sprint.setWorkNumber(countList.size());
