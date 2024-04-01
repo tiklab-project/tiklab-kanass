@@ -101,4 +101,10 @@ public class WorkPriorityDao{
                 .get();
         return jpaTemplate.findPage(queryCondition, WorkPriorityEntity.class);
     }
+
+    public Integer findAllWorkPriorityNumber() {
+        String sql = "select count(1) as total from pmc_work_priority";
+        Integer total = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,Integer.class);
+        return total;
+    }
 }

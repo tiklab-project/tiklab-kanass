@@ -85,4 +85,10 @@ public class WorkPriorityServiceImpl implements WorkPriorityService {
 
         return PaginationBuilder.build(pagination,workPriorityList);
     }
+
+    @Override
+    public Integer findAllWorkPriorityNumber() {
+        Integer workPriorityNumber = workPriorityDao.findAllWorkPriorityNumber();
+        return workPriorityNumber;
+    }
 }

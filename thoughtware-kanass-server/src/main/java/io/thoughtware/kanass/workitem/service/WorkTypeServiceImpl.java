@@ -218,4 +218,10 @@ public class WorkTypeServiceImpl implements WorkTypeService {
 
         return id;
     }
+
+    @Override
+    public Integer findAllWorkTypeNum() {
+        Integer allWorkTypeNum = workTypeDao.findAllWorkTypeNum();
+        return allWorkTypeNum;
+    }
 }

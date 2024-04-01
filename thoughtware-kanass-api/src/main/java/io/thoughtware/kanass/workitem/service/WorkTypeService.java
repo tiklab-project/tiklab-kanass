@@ -88,4 +88,6 @@ public interface WorkTypeService {
      */
     String findWorkTypeByCode(@NotNull String code);
 
+    Integer findAllWorkTypeNum();
+
 }

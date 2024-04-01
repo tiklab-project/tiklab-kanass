@@ -115,4 +115,10 @@ public class WorkTypeDao{
         return jpaTemplate.findPage(queryCondition, WorkTypeEntity.class);
     }
 
+    public Integer findAllWorkTypeNum(){
+        String sql = "select count(1) as total from pmc_work_type t";
+        Integer total = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,Integer.class);
+        return total;
+    }
+
 }

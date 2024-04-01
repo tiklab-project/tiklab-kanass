@@ -77,4 +77,6 @@ public interface WorkPriorityService {
     */
     Pagination<WorkPriority> findWorkPriorityPage(WorkPriorityQuery workPriorityQuery);
 
+    Integer findAllWorkPriorityNumber();
+
 }
