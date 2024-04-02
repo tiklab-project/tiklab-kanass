@@ -50,7 +50,13 @@ public class StageDao{
         jpaTemplate.delete(StageEntity.class,id);
     }
 
-    public void deleteStage(DeleteCondition deleteCondition){
+    public void deleteStageChildren(String id){
+
+
+        jpaTemplate.delete(StageEntity.class,id);
+    }
+
+    public void deleteStageCondition(DeleteCondition deleteCondition){
         jpaTemplate.delete(deleteCondition);
     }
 

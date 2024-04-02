@@ -64,10 +64,11 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
     }
 
     @Override
-    public void deleteStageWorkItem(@NotNull @Valid StageWorkItem stageWorkItem) {
+    public void deleteStageWorkItem(@NotNull @Valid StageWorkItemQuery stageWorkItemQuery) {
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(StageWorkItemEntity.class)
-                .eq("stageId", stageWorkItem.getStageId())
-                .eq("workItemId", stageWorkItem.getWorkItem().getId())
+                .eq("stageId", stageWorkItemQuery.getStageId())
+                .eq("workItemId", stageWorkItemQuery.getWorkItemId())
+                .in("stageId", stageWorkItemQuery.getStageIds())
                 .get();
 
         stageWorkItemDao.deleteStageWorkItem(deleteCondition);

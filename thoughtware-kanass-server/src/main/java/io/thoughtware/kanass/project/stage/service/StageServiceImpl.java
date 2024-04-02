@@ -1,5 +1,10 @@
 package io.thoughtware.kanass.project.stage.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
+import io.thoughtware.flow.flow.entity.DmFlowEntity;
+import io.thoughtware.kanass.project.stage.entity.StageWorkItemEntity;
+import io.thoughtware.kanass.project.stage.model.StageWorkItemQuery;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * 项目阶段服务
@@ -24,6 +30,9 @@ public class StageServiceImpl implements StageService {
 
     @Autowired
     StageDao stageDao;
+
+    @Autowired
+    StageWorkItemService stageWorkItemService;
 
     @Autowired
     JoinTemplate joinTemplate;
@@ -45,7 +54,23 @@ public class StageServiceImpl implements StageService {
     @Override
     public void deleteStage(@NotNull String id) {
         stageDao.deleteStage(id);
+        // 删除子阶段和关联表的数据
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(StageEntity.class)
+                .eq("parentId", id)
+                .get();
+        stageDao.deleteStageCondition(deleteCondition);
+
+        StageQuery stageQuery = new StageQuery();
+        stageQuery.setParentId(id);
+        List<Stage> stageList = findStageList(stageQuery);
+        List<String> stageIdList = stageList.stream().map(stage -> stage.getId()).collect(Collectors.toList());
+        stageIdList.add(id);
+        String[] stageIds = stageIdList.toArray(new String[stageIdList.size()]);
+        StageWorkItemQuery stageWorkItemQuery = new StageWorkItemQuery();
+        stageWorkItemQuery.setStageIds(stageIds);
+        stageWorkItemService.deleteStageWorkItem(stageWorkItemQuery);
     }
+
 
     @Override
     public Stage findOne(String id) {

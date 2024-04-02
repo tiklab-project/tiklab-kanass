@@ -41,9 +41,9 @@ public interface StageWorkItemService {
 
     /**
      * 根据条件删除阶段事项关联关系
-     * @param stageWorkItem
+     * @param stageWorkItemQuery
      */
-    void deleteStageWorkItem(StageWorkItem stageWorkItem);
+    void deleteStageWorkItem(StageWorkItemQuery stageWorkItemQuery);
 
     /**
      * 根据id 精确查找关联关系

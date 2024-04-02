@@ -3,6 +3,7 @@ package io.thoughtware.kanass.project.stage.model;
 import io.thoughtware.core.order.Order;
 import io.thoughtware.core.order.OrderBuilders;
 import io.thoughtware.core.page.Page;
+import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
 
@@ -14,33 +15,38 @@ import java.util.List;
 @ApiModel
 public class StageWorkItemQuery {
 
-        @ApiProperty(name ="stageId",desc = "所属阶段ID，精确匹配")
-        private String stageId;
+    @ApiProperty(name ="stageId",desc = "所属阶段ID，精确匹配")
+    private String stageId;
 
-        @ApiProperty(name ="workItemName",desc = "所属阶段ID，精确匹配")
-        private String workItemName;
+    @ApiProperty(name ="stageIds",desc = "所属阶段ID，精确匹配")
+    private String[] stageIds;
+    @ApiProperty(name ="workItemId",desc = "所属阶段ID，精确匹配")
+    private String workItemId;
 
-        @ApiProperty(name ="orderParams",desc = "排序参数")
-        private List<Order> orderParams = OrderBuilders.instance().asc("stageId").get();
+    @ApiProperty(name ="workItemName",desc = "所属阶段ID，精确匹配")
+    private String workItemName;
 
-        @ApiProperty(name ="pageParam",desc = "分页参数")
-        private Page pageParam = new Page();
+    @ApiProperty(name ="orderParams",desc = "排序参数")
+    private List<Order> orderParams = OrderBuilders.instance().asc("stageId").get();
 
-        public List<Order> getOrderParams() {
-            return orderParams;
-        }
+    @ApiProperty(name ="pageParam",desc = "分页参数")
+    private Page pageParam = new Page();
 
-        public void setOrderParams(List<Order> orderParams) {
-            this.orderParams = orderParams;
-        }
+    public List<Order> getOrderParams() {
+        return orderParams;
+    }
 
-        public Page getPageParam() {
-            return pageParam;
-        }
+    public void setOrderParams(List<Order> orderParams) {
+        this.orderParams = orderParams;
+    }
 
-        public void setPageParam(Page pageParam) {
-            this.pageParam = pageParam;
-        }
+    public Page getPageParam() {
+        return pageParam;
+    }
+
+    public void setPageParam(Page pageParam) {
+        this.pageParam = pageParam;
+    }
 
     public String getStageId() {
         return stageId;
@@ -56,5 +62,21 @@ public class StageWorkItemQuery {
 
     public void setWorkItemName(String workItemName) {
         this.workItemName = workItemName;
+    }
+
+    public String[] getStageIds() {
+        return stageIds;
+    }
+
+    public void setStageIds(String[] stageIds) {
+        this.stageIds = stageIds;
+    }
+
+    public String getWorkItemId() {
+        return workItemId;
+    }
+
+    public void setWorkItemId(String workItemId) {
+        this.workItemId = workItemId;
     }
 }

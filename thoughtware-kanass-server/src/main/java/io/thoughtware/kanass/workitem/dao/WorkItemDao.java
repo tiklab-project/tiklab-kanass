@@ -603,6 +603,27 @@ public class WorkItemDao{
             paramMap.put("sprintId", workItemQuery.getSprintId());
         }
 
+        if(workItemQuery.getStageId() != null && workItemQuery.getStageId().length()>0){
+            String stageId = workItemQuery.getStageId();
+            List<String> workItemIdsByStage = findWorkItemIdsByStage(stageId);
+            if(workItemIdsByStage.size() > 0){
+                String workItemIds = "(" +  workItemIdsByStage.stream().map(id -> "'" + id + "'").
+                        collect(Collectors.joining(", ")) + ")";
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id in " + workItemIds);
+                }else {
+                    sql = sql.concat(" and p.id in " + workItemIds);
+                }
+            }else {
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id in ('')");
+                }else {
+                    sql = sql.concat(" and p.id in ('')");
+                }
+            }
+            paramMap.put("stageId", workItemQuery.getSprintId());
+        }
+
 
         if(workItemQuery.getWorkStatusId() != null && workItemQuery.getWorkStatusId().length()>0){
 
@@ -919,6 +940,26 @@ public class WorkItemDao{
             paramMap.put("neqSprintId", workItemQuery.getNeqSprintId());
         }
 
+        if(workItemQuery.getNeqStageId() != null && workItemQuery.getNeqStageId().length()>0){
+            String stageId = workItemQuery.getNeqStageId();
+            List<String> workItemIdsByStage = findWorkItemIdsByStage(stageId);
+            if(workItemIdsByStage.size() > 0){
+                String workItemIds = "(" +  workItemIdsByStage.stream().map(id -> "'" + id + "'").
+                        collect(Collectors.joining(", ")) + ")";
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id not in " + workItemIds);
+                }else {
+                    sql = sql.concat(" and p.id not in " + workItemIds);
+                }
+            }else {
+                if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.id not in ('')");
+                }else {
+                    sql = sql.concat(" and p.id not in ('')");
+                }
+            }
+            paramMap.put("neqStageId", workItemQuery.getNeqStageId());
+        }
         objectObjectHashMap.put("query", paramMap);
         objectObjectHashMap.put("sql", sql);
 
@@ -1602,7 +1643,11 @@ public class WorkItemDao{
         return workItemIds;
     }
 
-
+    public List<String> findWorkItemIdsByStage(String stageId){
+        String sql = "SELECT work_item_id from pmc_stage_work_item WHERE stage_id = '" + stageId + "'";
+        List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return workItemIds;
+    }
 
     public HashMap<String, Integer> findSprintWorkItemNum(String sprintId){
         HashMap<String, Integer> sprintWorkItemNum = new HashMap<>();

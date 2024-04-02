@@ -109,8 +109,8 @@ public class StageWorkItemController {
     @RequestMapping(path="/deleteStageWorkItemCondition",method = RequestMethod.POST)
     @ApiMethod(name = "deleteStageWorkItemCondition",desc = "根据条件删除阶段事项关联关系")
     @ApiParam(name = "stageWorkItem",desc = "删除条件",required = true)
-    public Result<Void> deleteStageWorkItemCondition(@RequestBody @NotNull StageWorkItem stageWorkItem){
-        stageWorkItemService.deleteStageWorkItem(stageWorkItem);
+    public Result<Void> deleteStageWorkItemCondition(@RequestBody @NotNull StageWorkItemQuery stageWorkItemQuery){
+        stageWorkItemService.deleteStageWorkItem(stageWorkItemQuery);
 
         return Result.ok();
     }

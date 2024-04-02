@@ -46,11 +46,11 @@ public class StageEntity implements Serializable {
 
     // 开始时间
     @Column(name = "start_time")
-    private Date startTime;
+    private String startTime;
 
     // 结束时间
     @Column(name = "end_time")
-    private Date endTime;
+    private String endTime;
 
     public String getId() {
         return id;
@@ -92,13 +92,7 @@ public class StageEntity implements Serializable {
         this.projectId = projectId;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
 
     public String getParentId() {
         return parentId;
@@ -124,11 +118,19 @@ public class StageEntity implements Serializable {
         this.progress = progress;
     }
 
-    public Date getEndTime() {
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 }

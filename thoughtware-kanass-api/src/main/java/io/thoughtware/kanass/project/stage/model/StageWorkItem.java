@@ -33,6 +33,7 @@ public class StageWorkItem extends BaseModel {
     @ApiProperty(name="stageId",desc="关联阶段id",required = true)
     private java.lang.String stageId;
 
+
     public java.lang.String getId() {
         return id;
     }

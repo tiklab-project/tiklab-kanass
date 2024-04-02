@@ -1,5 +1,7 @@
 package io.thoughtware.kanass.project.stage.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.toolkit.beans.annotation.Mapper;
@@ -66,10 +68,14 @@ public class Stage extends BaseModel {
     private Project project;
 
     @ApiProperty(name="startTime",desc="startTime")
-    private java.util.Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String startTime;
 
     @ApiProperty(name="endTime",desc="endTime")
-    private java.util.Date endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private String endTime;
 
     public java.lang.String getId() {
         return id;
@@ -132,18 +138,19 @@ public class Stage extends BaseModel {
         this.project = project;
     }
 
-    public java.util.Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(java.util.Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-    public java.util.Date getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(java.util.Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

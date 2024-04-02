@@ -93,6 +93,12 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="neqSprintId",desc = "不在当前迭代")
     private String neqSprintId;
 
+    @ApiProperty(name = "stageId",desc = "计划ID，范围匹配")
+    private String stageId;
+
+    @ApiProperty(name ="neqStageId",desc = "不在当前计划")
+    private String neqStageId;
+
     @ApiProperty(name ="builderId",desc = "创建者ID，精确匹配")
     private String builderId;
 
@@ -722,5 +728,21 @@ public class WorkItemQuery implements Serializable {
 
     public void setNeqSprintId(String neqSprintId) {
         this.neqSprintId = neqSprintId;
+    }
+
+    public String getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(String stageId) {
+        this.stageId = stageId;
+    }
+
+    public String getNeqStageId() {
+        return neqStageId;
+    }
+
+    public void setNeqStageId(String neqStageId) {
+        this.neqStageId = neqStageId;
     }
 }
