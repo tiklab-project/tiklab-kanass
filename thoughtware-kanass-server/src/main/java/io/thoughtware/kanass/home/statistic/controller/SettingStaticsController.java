@@ -30,8 +30,8 @@ public class SettingStaticsController {
 
     @RequestMapping(path="/findOrgaNum",method = RequestMethod.POST)
     @ApiMethod(name = "findOrgaNum",desc = "创建迭代下事项数据动态记录")
-    public Result<HashMap<String, Integer>> findOrgaNum(){
-        HashMap<String, Integer> orgaNum = settingStaticsService.findOrgaNum();
+    public Result<HashMap<String, Object>> findOrgaNum(){
+        HashMap<String, Object> orgaNum = settingStaticsService.findOrgaNum();
 
         return Result.ok(orgaNum);
     }

@@ -63,8 +63,8 @@ eas:
   embbed:
     enable: true
   web:
-    address: http://192.168.10.25:3010
-  address: http://192.168.10.6:8080
+    address: http://192.168.10.13:3010
+  address: http://192.168.10.10:8080
 
 # homes 地址
 #homes:

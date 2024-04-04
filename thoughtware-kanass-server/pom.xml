@@ -164,6 +164,10 @@
             <version>${thoughtware-privilege.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.thoughtware</groupId>
+            <artifactId>thoughtware-licence-api</artifactId>
+        </dependency>
 
     </dependencies>
 <!--    <build>-->
