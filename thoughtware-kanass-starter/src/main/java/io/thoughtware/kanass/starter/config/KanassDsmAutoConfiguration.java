@@ -59,7 +59,8 @@ public class KanassDsmAutoConfiguration {
                 "oplog_1.0.2",
                 "flow_1.0.2",
                 "pmc_1.0.2",
-                "todotask_1.0.2"
+                "todotask_1.0.2",
+                "apply-auth_1.0.2"
         });
         dsmConfig.newVersion("1.0.3", new String[]{
                 "pmc_1.0.3",
