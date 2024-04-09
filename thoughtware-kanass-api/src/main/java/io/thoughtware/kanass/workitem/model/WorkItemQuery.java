@@ -96,6 +96,9 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name = "stageId",desc = "计划ID，范围匹配")
     private String stageId;
 
+    @ApiProperty(name = "stageIds",desc = "计划ID，范围匹配")
+    private String[] stageIds;
+
     @ApiProperty(name ="neqStageId",desc = "不在当前计划")
     private String neqStageId;
 
@@ -744,5 +747,13 @@ public class WorkItemQuery implements Serializable {
 
     public void setNeqStageId(String neqStageId) {
         this.neqStageId = neqStageId;
+    }
+
+    public String[] getStageIds() {
+        return stageIds;
+    }
+
+    public void setStageIds(String[] stageIds) {
+        this.stageIds = stageIds;
     }
 }

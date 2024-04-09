@@ -1,6 +1,7 @@
 package io.thoughtware.kanass.project.stage.entity;
 
 import io.thoughtware.dal.jpa.annotation.*;
+import io.thoughtware.postin.annotation.ApiProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +20,10 @@ public class StageEntity implements Serializable {
     //阶段名称
     @Column(name = "stage_name",length = 64,notNull = true)
     private String stageName;
+
+
+    @Column(name = "tree_path")
+    private String treePath;
 
     // 父级id
     @Column(name = "parent_id",length = 64)
@@ -41,8 +46,11 @@ public class StageEntity implements Serializable {
     private String desc;
 
     // 所属项目id
-    @Column(name = "project_id",length = 32,notNull = true)
+    @Column(name = "project_id",length = 12,notNull = true)
     private String projectId;
+
+    @Column(name = "root_id",length = 12,notNull = true)
+    private String rootId;
 
     // 开始时间
     @Column(name = "start_time")
@@ -51,6 +59,9 @@ public class StageEntity implements Serializable {
     // 结束时间
     @Column(name = "end_time")
     private String endTime;
+
+    @Column(name ="deep")
+    private Integer deep;
 
     public String getId() {
         return id;
@@ -132,5 +143,29 @@ public class StageEntity implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getTreePath() {
+        return treePath;
+    }
+
+    public void setTreePath(String treePath) {
+        this.treePath = treePath;
+    }
+
+    public String getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
+    public Integer getDeep() {
+        return deep;
+    }
+
+    public void setDeep(Integer deep) {
+        this.deep = deep;
     }
 }

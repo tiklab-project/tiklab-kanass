@@ -1464,7 +1464,6 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         //查询子事项列表
         List<WorkItem> childWorkItemList = findChildWorkItemList(workItemList);
-
         //设置子事项
         if(childWorkItemList != null && childWorkItemList.size() > 0){
             for(WorkItem topWorkItem:workItemList){
@@ -1497,8 +1496,6 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         logger.info("joinQuery cost time2:{}",bTime-aTime);
         Pagination<WorkItem> topWorkItemPageList = PaginationBuilder.build(topWorkItemPageEntity, topWorkItemList);
-
-
 
         if(topWorkItemPageEntity.getDataList() == null || topWorkItemPageEntity.getDataList().size() == 0){
             //去重,查找出所有符合条件和构建树需要的事项

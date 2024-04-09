@@ -37,6 +37,18 @@ public class Stage extends BaseModel {
     @JoinQuery(key = "id")
     private Stage parentStage;
 
+    @ApiProperty(name="treePath",desc="所有上级事项按层级排序")
+    private String treePath;
+
+    @ApiProperty(name="rootId",desc="所有根节点")
+    private String rootId;
+
+    @ApiProperty(name="deep",desc="深度")
+    private Integer deep;
+
+    @ApiProperty(name="isChangeParent",desc="是否修改上级")
+    private boolean isChangeParent;
+
     @ApiProperty(name="status",desc="状态")
     private java.lang.String status = "0";
 
@@ -168,5 +180,37 @@ public class Stage extends BaseModel {
 
     public void setChildrenWorkItem(List<WorkItem> childrenWorkItem) {
         this.childrenWorkItem = childrenWorkItem;
+    }
+
+    public String getTreePath() {
+        return treePath;
+    }
+
+    public void setTreePath(String treePath) {
+        this.treePath = treePath;
+    }
+
+    public String getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
+    public Integer getDeep() {
+        return deep;
+    }
+
+    public void setDeep(Integer deep) {
+        this.deep = deep;
+    }
+
+    public boolean getIsChangeParent() {
+        return isChangeParent;
+    }
+
+    public void setChangeParent(boolean changeParent) {
+        isChangeParent = changeParent;
     }
 }

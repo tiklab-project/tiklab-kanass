@@ -95,6 +95,16 @@ public class StageController {
         return Result.ok(pagination);
     }
 
+    @RequestMapping(path = "/findStageListTreePage",method = RequestMethod.POST)
+    @ApiMethod(name = "findStageListTreePage",desc = "根据条件查找阶段树形列表")
+    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    public Result<Pagination<Stage>> findStageListTreePage(@RequestBody @Valid @NotNull StageQuery stageQuery){
+        Pagination<Stage> stageListTreePage = stageService.findStageListTreePage(stageQuery);
+
+        return Result.ok(stageListTreePage);
+    }
+
+
     @RequestMapping(path = "/findStageListTree",method = RequestMethod.POST)
     @ApiMethod(name = "findStageListTree",desc = "根据条件查找阶段树形列表")
     @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
@@ -104,5 +114,12 @@ public class StageController {
         return Result.ok(stageList);
     }
 
+    @RequestMapping(path = "/findParentStageList",method = RequestMethod.POST)
+    @ApiMethod(name = "findParentStageList",desc = "根据条件查找阶段树形列表")
+    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    public Result<Pagination<Stage>> findParentStageList(@RequestBody @Valid @NotNull StageQuery stageQuery){
+        Pagination<Stage> stageList = stageService.findParentStageList(stageQuery);
 
+        return Result.ok(stageList);
+    }
 }

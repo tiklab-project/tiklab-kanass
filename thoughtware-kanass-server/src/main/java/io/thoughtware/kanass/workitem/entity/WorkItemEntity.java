@@ -75,6 +75,9 @@ public class WorkItemEntity implements Serializable {
     @Column(name = "work_status_node_id",length = 32,notNull = true)
     private String workStatusNodeId;
 
+    @Column(name = "stage_id",length = 32,notNull = true)
+    private String stageId;
+
     // 需求，任务，缺陷的类型id
     @Column(name = "each_type",length = 64)
     private String eachType;
@@ -407,5 +410,13 @@ public class WorkItemEntity implements Serializable {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(String stageId) {
+        this.stageId = stageId;
     }
 }

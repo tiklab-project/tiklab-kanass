@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 项目阶段数据访问
@@ -92,17 +93,24 @@ public class StageDao{
      * @return
      */
     public List<StageEntity> findStageList(StageQuery stageQuery) {
-
         QueryBuilders queryBuilders = QueryBuilders.createQuery(StageEntity.class)
                 .eq("projectId", stageQuery.getProjectId())
                 .eq("parentId", stageQuery.getParentId())
+                .in("rootId", stageQuery.getRootIds())
+                .eq("rootId", stageQuery.getRootId())
                 .like("stageName", stageQuery.getStageName())
+                .like("treePath", stageQuery.getTreePath())
+                .eq("deep", stageQuery.getDeep())
+                .in("deep", stageQuery.getDeeps())
                 .orders(stageQuery.getOrderParams());
 
-        if(stageQuery.getStageParentNull() != null && stageQuery.getStageParentNull()){
-            queryBuilders = queryBuilders.isNull("parentId");
+        if(stageQuery.getStageParentNull() != null){
+            if(stageQuery.getStageParentNull()){
+                queryBuilders = queryBuilders.isNull("parentId");
+            }else {
+                queryBuilders = queryBuilders.isNotNull("parentId");
+            }
         }
-
         QueryCondition queryCondition = queryBuilders.get();
         return jpaTemplate.findList(queryCondition,StageEntity.class);
     }
@@ -113,6 +121,58 @@ public class StageDao{
      * @return
      */
     public Pagination<StageEntity> findStagePage(StageQuery stageQuery) {
-        return jpaTemplate.findPage(stageQuery,StageEntity.class);
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(StageEntity.class)
+                .eq("projectId", stageQuery.getProjectId())
+                .eq("parentId", stageQuery.getParentId())
+                .in("rootId", stageQuery.getRootIds())
+                .like("stageName", stageQuery.getStageName())
+                .eq("rootId", stageQuery.getRootId())
+                .eq("deep", stageQuery.getDeep())
+                .like("treePath", stageQuery.getTreePath())
+                .in("deep", stageQuery.getDeeps())
+                .orders(stageQuery.getOrderParams());
+
+        if(stageQuery.getStageParentNull() != null){
+            if(stageQuery.getStageParentNull()){
+                queryBuilders = queryBuilders.isNull("parentId");
+            }else {
+                queryBuilders = queryBuilders.isNotNull("parentId");
+            }
+
+        }
+
+        QueryCondition queryCondition = queryBuilders.pagination(stageQuery.getPageParam()).get();
+        return jpaTemplate.findPage(queryCondition,StageEntity.class);
+    }
+
+    public Pagination<StageEntity> findStageChildren(StageQuery stageQuery) {
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(StageEntity.class)
+                .eq("projectId", stageQuery.getProjectId())
+                .eq("parentId", stageQuery.getParentId())
+                .like("stageName", stageQuery.getStageName())
+                .orders(stageQuery.getOrderParams());
+
+        if(stageQuery.getStageParentNull() != null && stageQuery.getStageParentNull()){
+            queryBuilders = queryBuilders.isNull("parentId");
+        }
+        QueryCondition queryCondition = queryBuilders.get();
+        return jpaTemplate.findPage(queryCondition,StageEntity.class);
+    }
+
+    // 获取当前阶段是第几层，没有子级的事0层，有子集的是一层层
+    public Integer findStageLevel(String id){
+        Integer level = new Integer(0);
+        String sql = "Select id from pmc_stage where parent_id = '" + id + "'";
+        List<String> stageIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        if(stageIdList.size() > 0){
+            level = 1;
+            String stageIds = stageIdList.stream().map(stageId -> "'" + stageId + "'").collect(Collectors.joining(", "));
+            sql = "Select count(1) as total from pmc_stage where parent_id in (" + stageIds + ")";
+            Integer num = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+            if(num > 0){
+                level = 2;
+            }
+        }
+        return  level;
     }
 }

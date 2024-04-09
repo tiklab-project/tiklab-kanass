@@ -2,6 +2,7 @@ package io.thoughtware.kanass.workitem.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.thoughtware.kanass.project.stage.model.Stage;
 import io.thoughtware.toolkit.beans.annotation.Mapper;
 import io.thoughtware.toolkit.beans.annotation.Mapping;
 import io.thoughtware.toolkit.beans.annotation.Mappings;
@@ -63,7 +64,7 @@ public class WorkItem extends BaseModel {
     private WorkItem preDependWorkItem;
 
     @ApiProperty(name="treePath",desc="所有上级事项按层级排序")
-    private java.lang.String treePath;
+    private String treePath;
 
     @NotNull
     @ApiProperty(name="project",desc="所属项目",required = true)
@@ -131,6 +132,13 @@ public class WorkItem extends BaseModel {
     })
     @JoinQuery(key = "id")
     private Sprint sprint;
+
+    @ApiProperty(name="stage",desc="所属计划")
+    @Mappings({
+            @Mapping(source = "stage.id",target = "stageId")
+    })
+    @JoinQuery(key = "id")
+    private Stage stage;
 
     @ApiProperty(name="sprintList",desc="分配过的迭代")
     private List<Sprint> sprintList;
@@ -559,5 +567,13 @@ public class WorkItem extends BaseModel {
 
     public void setProjectVersionList(List<ProjectVersion> projectVersionList) {
         this.projectVersionList = projectVersionList;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

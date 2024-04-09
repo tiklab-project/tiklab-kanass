@@ -75,7 +75,7 @@ public interface StageService {
     * @return
     */
     Pagination<Stage> findStagePage(StageQuery stageQuery);
-
+    Pagination<Stage> findStageListTreePage(StageQuery stageQuery);
     /**
      * 根据条件查找阶段树形列表
      * @param stageQuery
@@ -83,4 +83,6 @@ public interface StageService {
      */
     List<Stage> findStageListTree(StageQuery stageQuery);
 
+    Pagination<Stage> findParentStageList(StageQuery stageQuery);
+    Integer findStageLevel(String id);
 }

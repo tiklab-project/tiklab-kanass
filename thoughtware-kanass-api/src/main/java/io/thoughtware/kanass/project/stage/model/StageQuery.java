@@ -13,39 +13,57 @@ import java.util.List;
  */
 @ApiModel
 public class StageQuery {
-        @ApiProperty(name ="projectId",desc = "阶段名称，模糊匹配")
-        private String projectId;
-    
-        @ApiProperty(name ="stageName",desc = "阶段名称，模糊匹配")
-        private String stageName;
-    
-        @ApiProperty(name ="parentId",desc = "阶段父级，模糊匹配")
-        private String parentId;
 
-        @ApiProperty(name ="stageParentNull",desc = "是否有父级")
-        private Boolean stageParentNull;
+    @ApiProperty(name ="id",desc = "阶段id")
+    private String id;
+    @ApiProperty(name ="projectId",desc = "阶段名称，模糊匹配")
+    private String projectId;
 
-        @ApiProperty(name ="orderParams",desc = "排序参数")
-        private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
+    @ApiProperty(name ="stageName",desc = "阶段名称，模糊匹配")
+    private String stageName;
 
-        @ApiProperty(name ="pageParam",desc = "分页参数")
-        private Page pageParam = new Page();
+    @ApiProperty(name ="parentId",desc = "阶段父级，模糊匹配")
+    private String parentId;
 
-        public List<Order> getOrderParams() {
-            return orderParams;
-        }
+    @ApiProperty(name ="stageParentNull",desc = "是否有父级")
+    private Boolean stageParentNull;
 
-        public void setOrderParams(List<Order> orderParams) {
-            this.orderParams = orderParams;
-        }
+    @ApiProperty(name ="rootId",desc = "是否有父级")
+    private String rootId;
 
-        public Page getPageParam() {
-            return pageParam;
-        }
+    @ApiProperty(name ="rootIds",desc = "是否有父级")
+    private String[] rootIds;
 
-        public void setPageParam(Page pageParam) {
-            this.pageParam = pageParam;
-        }
+    @ApiProperty(name ="deep",desc = "深度")
+    private Integer deep;
+
+    @ApiProperty(name ="deeps",desc = "深度s")
+    private Integer[] deeps;
+
+    @ApiProperty(name ="tree_path",desc = "是否有父级")
+    private String treePath;
+
+    @ApiProperty(name ="orderParams",desc = "排序参数")
+    private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
+
+    @ApiProperty(name ="pageParam",desc = "分页参数")
+    private Page pageParam = new Page();
+
+    public List<Order> getOrderParams() {
+        return orderParams;
+    }
+
+    public void setOrderParams(List<Order> orderParams) {
+        this.orderParams = orderParams;
+    }
+
+    public Page getPageParam() {
+        return pageParam;
+    }
+
+    public void setPageParam(Page pageParam) {
+        this.pageParam = pageParam;
+    }
 
     public String getProjectId() {
         return projectId;
@@ -77,5 +95,53 @@ public class StageQuery {
 
     public void setStageParentNull(Boolean stageParentNull) {
         this.stageParentNull = stageParentNull;
+    }
+
+    public String getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
+    public String[] getRootIds() {
+        return rootIds;
+    }
+
+    public void setRootIds(String[] rootIds) {
+        this.rootIds = rootIds;
+    }
+
+    public Integer getDeep() {
+        return deep;
+    }
+
+    public void setDeep(Integer deep) {
+        this.deep = deep;
+    }
+
+    public Integer[] getDeeps() {
+        return deeps;
+    }
+
+    public void setDeeps(Integer[] deeps) {
+        this.deeps = deeps;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTreePath() {
+        return treePath;
+    }
+
+    public void setTreePath(String treePath) {
+        this.treePath = treePath;
     }
 }

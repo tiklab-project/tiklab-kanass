@@ -151,6 +151,7 @@ public class WorkItemDao{
                 .eq("wi.workStatusCode", workItemQuery.getWorkStatusCode())
                 .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
                 .eq("wi.sprintId", workItemQuery.getCurrentSprintId())
+                .in("wi.stageId", workItemQuery.getStageIds())
                 .in("wi.id", workItemQuery.getIds())
                 .notIn("wi.id", workItemQuery.getIdNotIn())
                 .orders(workItemQuery.getOrderParams());
