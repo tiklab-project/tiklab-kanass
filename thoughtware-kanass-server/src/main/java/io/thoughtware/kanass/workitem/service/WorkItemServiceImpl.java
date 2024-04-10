@@ -1312,6 +1312,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemEntity.class)
                 .eq("id", workItemQuery.getId())
                 .in("id", workItemQuery.getIds())
+                .in("stageId", workItemQuery.getStageIds())
                 .get();
         workItemDao.deleteWorkItemList(deleteCondition);
     }

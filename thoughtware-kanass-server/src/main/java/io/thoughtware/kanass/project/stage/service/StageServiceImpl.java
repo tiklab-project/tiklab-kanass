@@ -1,10 +1,13 @@
 package io.thoughtware.kanass.project.stage.service;
 
+import io.thoughtware.core.exception.SystemException;
 import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.flow.flow.entity.DmFlowEntity;
+import io.thoughtware.flow.statenode.model.StateNode;
 import io.thoughtware.kanass.project.stage.entity.StageWorkItemEntity;
 import io.thoughtware.kanass.project.stage.model.StageWorkItemQuery;
+import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
 import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
@@ -142,22 +145,33 @@ public class StageServiceImpl implements StageService {
 
     @Override
     public void deleteStage(@NotNull String id) {
+        // 有下级事项下级阶段的， 用户只能选择删除全部下级的事项和阶段，或者选择不删除
         StageQuery stageQuery = new StageQuery();
         stageQuery.setTreePath(id);
         List<Stage> stageList = findStageList(stageQuery);
-        List<String> stageIdList = stageList.stream().map(stage -> stage.getId()).collect(Collectors.toList());
-        stageIdList.add(id);
-        String[] stageIds = stageIdList.toArray(new String[stageIdList.size()]);
+        List<String> stageListId = stageList.stream().map(stage -> stage.getId()).collect(Collectors.toList());
+        stageListId.add(id);
+        String[] stageIds = stageListId.toArray(new String[stageListId.size()]);
+        stageQuery.setTreePath(null);
+        stageQuery.setIds(stageIds);
+        // 删除所有计划
+        deleteStageCondition(stageQuery);
 
+        // 删除所有下级事项
         WorkItemQuery workItemQuery = new WorkItemQuery();
+
         workItemQuery.setStageIds(stageIds);
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-        if(workItemList.size() > 0){
+        workItemService.deleteWorkItemCondition(workItemQuery);
 
-        }
-//        stageWorkItemService.deleteStageWorkItem(stageWorkItemQuery);
+
     }
-
+    public void deleteStageCondition(StageQuery stageQuery){
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(StageEntity.class)
+                .eq("id", stageQuery.getId())
+                .in("id", stageQuery.getIds())
+                .get();
+        stageDao.deleteStageCondition(deleteCondition);
+    }
 
     @Override
     public Stage findOne(String id) {

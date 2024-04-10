@@ -58,6 +58,7 @@ public class KanassDsmAutoConfiguration {
                 "message_1.0.2",
                 "oplog_1.0.2",
                 "flow_1.0.2",
+                "form_1.0.2",
                 "pmc_1.0.2",
                 "todotask_1.0.2",
                 "apply-auth_1.0.2"

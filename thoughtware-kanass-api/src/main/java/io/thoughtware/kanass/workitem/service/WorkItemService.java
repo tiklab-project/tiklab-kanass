@@ -44,6 +44,7 @@ public interface WorkItemService {
     */
     void deleteWorkItem(@NotNull String id);
     void deleteWorkItemAndChildren(@NotNull String id);
+    void deleteWorkItemCondition(WorkItemQuery workItemQuery);
     @FindOne
     WorkItem findOne(@NotNull String id);
 

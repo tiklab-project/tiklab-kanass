@@ -16,6 +16,9 @@ public class StageQuery {
 
     @ApiProperty(name ="id",desc = "阶段id")
     private String id;
+
+    @ApiProperty(name ="ids",desc = "阶段id")
+    private String[] ids;
     @ApiProperty(name ="projectId",desc = "阶段名称，模糊匹配")
     private String projectId;
 
@@ -143,5 +146,13 @@ public class StageQuery {
 
     public void setTreePath(String treePath) {
         this.treePath = treePath;
+    }
+
+    public String[] getIds() {
+        return ids;
+    }
+
+    public void setIds(String[] ids) {
+        this.ids = ids;
     }
 }

@@ -151,6 +151,7 @@ public class WorkItemDao{
                 .eq("wi.workStatusCode", workItemQuery.getWorkStatusCode())
                 .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
                 .eq("wi.sprintId", workItemQuery.getCurrentSprintId())
+                .eq("wi,stageId", workItemQuery.getStageId())
                 .in("wi.stageId", workItemQuery.getStageIds())
                 .in("wi.id", workItemQuery.getIds())
                 .notIn("wi.id", workItemQuery.getIdNotIn())
@@ -451,7 +452,7 @@ public class WorkItemDao{
         List<Order> orderParams = workItemQuery.getOrderParams();
         boolean priorityOrder = orderParams.stream().anyMatch(order -> order.getName().equals("work_priority_id"));
         if(priorityOrder){
-            sql = "Select p.*, priority.sort from pmc_work_item p LEFT JOIN pmc_work_priority priority on priority.id = p.work_priority_id where";
+            sql = "Select p.*, priority.sort from pmc_work_item p LEFT JOIN pcs_foc_select_item priority on priority.id = p.work_priority_id where";
         }
         Boolean statisticsNum = workItemQuery.getStatisticsNum();
         if(statisticsNum != null && statisticsNum == true){
