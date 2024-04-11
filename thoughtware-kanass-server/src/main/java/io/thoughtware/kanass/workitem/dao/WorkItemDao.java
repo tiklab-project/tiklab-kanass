@@ -65,7 +65,7 @@ public class WorkItemDao{
      */
     public List<String> findWorkItemAndChildrenIds(String workItemId) {
         String sql = "SELECT id FROM pmc_work_item where tree_path like '%;" +
-                workItemId + ";%' and tree_path like '%" + workItemId + ";' ;";
+                workItemId + ";%' or tree_path like '" + workItemId + ";%' ;";
         List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         workItemIdList.add(workItemId);
 
@@ -79,7 +79,7 @@ public class WorkItemDao{
      */
     public List<WorkItemEntity> findWorkItemAndChildren(String workItemId) {
         String sql = "SELECT * FROM pmc_work_item where tree_path like '%;" +
-                workItemId + ";%' and tree_path like '%" + workItemId + ";' ;";
+                workItemId + ";%' or tree_path like '" + workItemId + ";%' ;";
         List<WorkItemEntity> workItemEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<>(WorkItemEntity.class));
 
 

@@ -518,4 +518,12 @@ public class WorkItemController {
         return Result.ok(isHave);
     }
 
+    @RequestMapping(path = "/findWorkItemAndChildrenIds",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemAndChildrenIds",desc = "查看事项所有下级的id, 包括下级的下级，当前事项")
+    public Result<List<String>> findWorkItemAndChildrenIds(@NotNull String id){
+        List<String> workItemAndChildrenIds = workItemService.findWorkItemAndChildrenIds(id);
+
+        return Result.ok(workItemAndChildrenIds);
+    }
+
 }

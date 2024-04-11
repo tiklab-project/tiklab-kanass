@@ -687,6 +687,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "sprint":
                 updateWorkItemSprint(workItem);
                 break;
+            case "sprints":
+                updateWorkItemListSprint(workItem);
+                break;
             case "projectVersion":
                 updateWorkItemVersion(workItem);
                 break;
@@ -730,6 +733,23 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     }
 
+    public void updateWorkItemListSprint(WorkItem workItem){
+        String id = workItem.getId();
+        Sprint sprint = workItem.getSprint();
+        List<WorkItemEntity> workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
+        List<WorkItem> workItemList =  BeanMapper.mapList(workItemAndChildren,WorkItem.class);
+        workItemList.add(workItem);
+        if(workItemList.size() > 0){
+            for (WorkItem workItem1 : workItemList) {
+                workItem1.setUpdateField("sprint");
+                workItem1.setSprint(sprint);
+                updateWorkItemSprint(workItem1);
+            }
+        }
+
+
+
+    }
     public void updateWorkItemSprint(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的迭代
@@ -1146,7 +1166,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Override
     public void deleteWorkItemAndChildren(@NotNull String id) {
         List<String> workItemAndChildren = workItemDao.findWorkItemAndChildrenIds(id);
-        workItemAndChildren.add(id);
+
         String[] workItemIds = workItemAndChildren.toArray(new String[workItemAndChildren.size()]);
 
         // 删除事项与流程的关联关系
@@ -1217,7 +1237,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -1226,6 +1245,15 @@ public class WorkItemServiceImpl implements WorkItemService {
      */
     @Override
     public void deleteWorkItem(@NotNull String id) {
+        boolean haveChildren = haveChildren(id);
+        if(haveChildren){
+            deleteWorkItemAndChildren(id);
+        }else {
+            deleteCurrentWorkItem(id);
+        }
+    }
+
+    public void deleteCurrentWorkItem(@NotNull String id) {
         // 删除事项与流程的关联关系
         DmFlowQuery dmFlowQuery = new DmFlowQuery();
         dmFlowQuery.setDomainId(id);
@@ -1306,7 +1334,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         taskQuery.setBgroup("kanass");
         taskService.deleteAllTask(taskQuery);
     }
-
 
     public void deleteWorkItemCondition(WorkItemQuery workItemQuery) {
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemEntity.class)
@@ -1928,4 +1955,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         boolean isHave = workItemDao.haveChildren(id);
         return isHave;
     }
+
+    @Override
+   public List<String> findWorkItemAndChildrenIds(String workItemId){
+       List<String> workItemAndChildrenIds = workItemDao.findWorkItemAndChildrenIds(workItemId);
+       return  workItemAndChildrenIds;
+   }
 }

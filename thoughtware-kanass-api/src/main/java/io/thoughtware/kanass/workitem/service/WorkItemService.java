@@ -234,4 +234,6 @@ public interface WorkItemService {
     WorkItem findWorkItemAndChidren(String id);
 
     boolean haveChildren(@NotNull String id);
+
+    List<String> findWorkItemAndChildrenIds(String workItemId);
 }
