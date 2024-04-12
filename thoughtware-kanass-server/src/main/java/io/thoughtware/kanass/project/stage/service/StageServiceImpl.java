@@ -64,7 +64,7 @@ public class StageServiceImpl implements StageService {
             }
             stageEntity.setTreePath(treeId);
             stageEntity.setRootId(stageParent.getRootId());
-            stageEntity.setDeep(stage.getDeep() + 1);
+            stageEntity.setDeep(stageParent.getDeep() + 1);
         }else {
             stageEntity.setRootId(stageId);
             stageEntity.setDeep(0);
