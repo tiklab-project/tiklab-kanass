@@ -4,7 +4,7 @@ ALTER TABLE pmc_stage ADD COLUMN deep int;
 ALTER TABLE pmc_work_item ADD COLUMN stage_id VARCHAR(12);
 
 UPDATE pcs_foc_field SET grouper = 'syscustom' WHERE id = '187d7a58';
-UPDATE pcs_foc_field SET grouper = 'syscustom' WHERE code = ('bugType', 'taskType' , 'demandType');
+UPDATE pcs_foc_field SET grouper = 'syscustom' WHERE code in ('bugType', 'taskType' , 'demandType');
 
 INSERT INTO pcs_foc_select_item (id, name, field_id, value, sort) VALUES ('56035266', '高', '187d7a58', 'high', 3);
 INSERT INTO pcs_foc_select_item (id, name, field_id, value, sort) VALUES ('04b440ad', '低', '187d7a58', 'low', 1);
