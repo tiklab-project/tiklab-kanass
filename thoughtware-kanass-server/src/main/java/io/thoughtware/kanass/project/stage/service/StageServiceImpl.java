@@ -244,6 +244,7 @@ public class StageServiceImpl implements StageService {
             stageQuery.setRootIds(stageIds);
             stageQuery.setStageParentNull(false);
             List<Stage> stageListChildren = findStageList(stageQuery);
+
             if(stageListChildren.size() > 0){
                 List<String> stageListChildrenIdList = stageListChildren.stream().map(stage -> stage.getId()).collect(Collectors.toList());
                 stageIdList.addAll(stageListChildrenIdList);
@@ -252,8 +253,15 @@ public class StageServiceImpl implements StageService {
                 String[] allStageIds = stageIdList.toArray(new String[stageIdList.size()]);
                 workItemQuery.setStageIds(allStageIds);
                 List<WorkItem> workItemList = workItemService.findWorkItemListTree(workItemQuery);
-
                 //
+                for (Stage stage : stageList) {
+                    setStageTree(stage, stageListChildren, workItemList);
+                }
+            }else {
+                WorkItemQuery workItemQuery = new WorkItemQuery();
+                String[] allStageIds = stageIdList.toArray(new String[stageIdList.size()]);
+                workItemQuery.setStageIds(allStageIds);
+                List<WorkItem> workItemList = workItemService.findWorkItemListTree(workItemQuery);
                 for (Stage stage : stageList) {
                     setStageTree(stage, stageListChildren, workItemList);
                 }
