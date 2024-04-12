@@ -14,6 +14,10 @@ import io.thoughtware.flow.transition.model.TransitionRuleQuery;
 import io.thoughtware.flow.transition.service.BusinessRoleService;
 import io.thoughtware.flow.transition.service.TransitionRuleService;
 import io.thoughtware.flow.transition.service.TransitionService;
+import io.thoughtware.form.field.model.SelectItem;
+import io.thoughtware.form.field.model.SelectItemRelation;
+import io.thoughtware.form.field.model.SelectItemRelationQuery;
+import io.thoughtware.form.field.service.SelectItemRelationService;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.project.version.service.ProjectVersionService;
@@ -23,15 +27,18 @@ import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.service.SprintService;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.rpc.annotation.Exporter;
-import io.thoughtware.security.logging.model.LoggingQuery;
-import io.thoughtware.security.logging.service.LoggingService;
+import io.thoughtware.security.logging.logging.model.Logging;
+import io.thoughtware.security.logging.logging.model.LoggingQuery;
+import io.thoughtware.security.logging.logging.model.LoggingType;
+import io.thoughtware.security.logging.logging.service.LoggingByTempService;
 import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.workitem.model.*;
-import io.thoughtware.todotask.model.Task;
-import io.thoughtware.todotask.model.TaskQuery;
-import io.thoughtware.todotask.model.TaskType;
-import io.thoughtware.todotask.service.TaskByTempService;
-import io.thoughtware.todotask.service.TaskService;
+import io.thoughtware.security.logging.logging.service.LoggingService;
+import io.thoughtware.todotask.todo.model.Task;
+import io.thoughtware.todotask.todo.model.TaskQuery;
+import io.thoughtware.todotask.todo.model.TaskType;
+import io.thoughtware.todotask.todo.service.TaskByTempService;
+import io.thoughtware.todotask.todo.service.TaskService;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.page.Pagination;
@@ -45,9 +52,6 @@ import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.message.message.model.Message;
 import io.thoughtware.message.message.model.MessageReceiver;
 import io.thoughtware.message.setting.model.MessageType;
-import io.thoughtware.security.logging.model.Logging;
-import io.thoughtware.security.logging.model.LoggingType;
-import io.thoughtware.security.logging.service.LoggingByTempService;
 import io.thoughtware.kanass.workitem.dao.WorkItemDao;
 import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
 import io.thoughtware.user.dmUser.model.DmUser;
@@ -162,6 +166,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     FlowService flowService;
+
+    @Autowired
+    SelectItemRelationService selectItemRelationService;
 
     @Autowired
     LoggingService loggingService;
@@ -574,6 +581,9 @@ public class WorkItemServiceImpl implements WorkItemService {
         String id = setWorkItemId(workItem);
         WorkTypeDm workType = workItem.getWorkType();
         String workTypeId = workType.getId();
+
+
+
         // 设置初始状态
         findStartState(workItem, workTypeId, id);
         //设置创建时间
@@ -584,7 +594,8 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         //设置事项类型code,关联的系统事项类型
         WorkTypeDm workTypeDm = workTypeDmService.findWorkTypeDm(workTypeId);
-        workItem.setWorkTypeCode(workTypeDm.getWorkType().getCode());
+        String code = workTypeDm.getWorkType().getCode();
+        workItem.setWorkTypeCode(code);
         workItem.setWorkTypeSys(workTypeDm.getWorkType());
 
         //设置treePath,
@@ -604,6 +615,28 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.createWorkItem(workItemEntity);
+
+        // 创建事项【类别】与选项的关联关系
+        String eachType = workItem.getEachType();
+        if(eachType != null){
+            SelectItemRelation selectItemRelation = new SelectItemRelation();
+            selectItemRelation.setSelectItemId(eachType);
+            selectItemRelation.setRelationId(id);
+            selectItemRelation.setFieldId(workItem.getFieldId());
+            selectItemRelationService.createSelectItemRelation(selectItemRelation);
+        }
+
+        if(workItem.getWorkPriority() != null && workItem.getWorkPriority().getId() != null
+                && workItem.getWorkPriority().getId() != "nullstring" ){
+            SelectItemRelation selectItemRelation = new SelectItemRelation();
+            String workPriorityId = workItem.getWorkPriority().getId();
+            selectItemRelation.setSelectItemId(workPriorityId);
+            selectItemRelation.setFieldId("187d7a58");
+            selectItemRelation.setRelationId(id);
+            selectItemRelationService.createSelectItemRelation(selectItemRelation);
+        }
+
+
 
         // 如果添加的时候有迭代, 创建迭代与事项的关联记录
         Sprint sprint = workItem.getSprint();
@@ -642,9 +675,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
         WorkItem workItem1 = findWorkItem(id);
-//        sendMessageForCreate(workItem1);
-//        creatTodoTask(workItem1, workItem1.getBuilder());
-//        creatWorkItemDynamic(workItem1);
         executorService.submit(() -> {
             sendMessageForCreate(workItem1);
             creatTodoTask(workItem1, workItem1.getBuilder());
@@ -690,6 +720,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "sprints":
                 updateWorkItemListSprint(workItem);
                 break;
+            case "projectVersions":
+                updateWorkItemListVersion(workItem);
+                break;
             case "projectVersion":
                 updateWorkItemVersion(workItem);
                 break;
@@ -698,6 +731,13 @@ public class WorkItemServiceImpl implements WorkItemService {
                 break;
             case "preDependWorkItem":
                 updatePreDependWorkItem(workItem);
+                break;
+            case "eachType":
+                updateEachType(workItem);
+                break;
+
+            case "workPriority":
+                updateWorkPriority(workItem);
                 break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
@@ -778,7 +818,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
             }else {
                 // 如果之前没有关联过事项，现在关联了
-                if(newSprint != null && newSprint.getId() != "nullstring"){
+                if(newSprint != null && !newSprint.getId().equals("nullstring")){
                     WorkSprint workSprint = new WorkSprint();
                     workSprint.setSprintId(newSprint.getId());
                     workSprint.setWorkItemId(workItem.getId());
@@ -786,10 +826,13 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
             }
         }else {
-            WorkSprint workSprint = new WorkSprint();
-            workSprint.setSprintId(newSprint.getId());
-            workSprint.setWorkItemId(workItem.getId());
-            workSprintService.createWorkSprint(workSprint);
+            if(newSprint != null && !newSprint.getId().equals("nullstring")){
+                WorkSprint workSprint = new WorkSprint();
+                workSprint.setSprintId(newSprint.getId());
+                workSprint.setWorkItemId(workItem.getId());
+                workSprintService.createWorkSprint(workSprint);
+            }
+
         }
 
         workItemDao.updateWorkItem(workItemEntity);
@@ -799,6 +842,23 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateTodoTaskData(workItem1);
     }
 
+    public void updateWorkItemListVersion(WorkItem workItem){
+        String id = workItem.getId();
+        ProjectVersion projectVersion = workItem.getProjectVersion();
+        List<WorkItemEntity> workItemAndChildren = workItemDao.findWorkItemAndChildren(id);
+        List<WorkItem> workItemList =  BeanMapper.mapList(workItemAndChildren,WorkItem.class);
+        workItemList.add(workItem);
+        if(workItemList.size() > 0){
+            for (WorkItem workItem1 : workItemList) {
+                workItem1.setUpdateField("version");
+                workItem1.setProjectVersion(projectVersion);
+                updateWorkItemVersion(workItem1);
+            }
+        }
+
+
+
+    }
     public void updateWorkItemVersion(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的版本
@@ -826,7 +886,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
             }else {
                 // 如果之前没有关联过事项，现在关联了
-                if(newVersion != null && newVersion.getId() != "nullstring"){
+                if(newVersion != null && !newVersion.getId().equals("nullstring")){
                     WorkVersion workVersion = new WorkVersion();
                     workVersion.setVersionId(newVersion.getId());
                     workVersion.setWorkItemId(workItem.getId());
@@ -834,10 +894,13 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
             }
         }else {
-            WorkVersion workVersion = new WorkVersion();
-            workVersion.setVersionId(newVersion.getId());
-            workVersion.setWorkItemId(workItem.getId());
-            workVersionService.createWorkVersion(workVersion);
+            if(newVersion != null && !newVersion.getId().equals("nullstring")){
+                WorkVersion workVersion = new WorkVersion();
+                workVersion.setVersionId(newVersion.getId());
+                workVersion.setWorkItemId(workItem.getId());
+                workVersionService.createWorkVersion(workVersion);
+            }
+
         }
 
         workItemDao.updateWorkItem(workItemEntity);
@@ -884,6 +947,45 @@ public class WorkItemServiceImpl implements WorkItemService {
     public void updatePreDependWorkItem(WorkItem workItem){
         // 判断所选事项是否能添加为前置
 
+    }
+
+    public void updateEachType(WorkItem workItem){
+        // 添加选项与事项的关联关系
+        String eachType = workItem.getEachType();
+        if(!eachType.equals("nullstring")){
+            SelectItemRelation selectItemRelation = new SelectItemRelation();
+            selectItemRelation.setSelectItemId(eachType);
+            selectItemRelation.setRelationId(workItem.getId());
+            selectItemRelation.setFieldId(workItem.getFieldId());
+            selectItemRelationService.createSelectItemRelation(selectItemRelation);
+        }else {
+            SelectItemRelationQuery selectItemRelationQuery = new SelectItemRelationQuery();
+            selectItemRelationQuery.setRelationId(workItem.getId());
+            selectItemRelationQuery.setFieldId(workItem.getFieldId());
+            selectItemRelationService.deleteSelectItemRelationCondition(selectItemRelationQuery);
+        }
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        workItemDao.updateWorkItem(workItemEntity);
+    }
+
+    public void updateWorkPriority(WorkItem workItem){
+        // 添加选项与事项的关联关系
+        SelectItem workPriority = workItem.getWorkPriority();
+        if(workPriority != null && workPriority.getId() != null && !workPriority.getId().equals("nullstring")){
+            String workPriorityId = workPriority.getId();
+            SelectItemRelation selectItemRelation = new SelectItemRelation();
+            selectItemRelation.setSelectItemId(workPriorityId);
+            selectItemRelation.setRelationId(workItem.getId());
+            selectItemRelation.setFieldId("187d7a58");
+            selectItemRelationService.createSelectItemRelation(selectItemRelation);
+        }else {
+            SelectItemRelationQuery selectItemRelationQuery = new SelectItemRelationQuery();
+            selectItemRelationQuery.setRelationId(workItem.getId());
+            selectItemRelationQuery.setFieldId("187d7a58");
+            selectItemRelationService.deleteSelectItemRelationCondition(selectItemRelationQuery);
+        }
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        workItemDao.updateWorkItem(workItemEntity);
     }
 
     // 更新上级事项

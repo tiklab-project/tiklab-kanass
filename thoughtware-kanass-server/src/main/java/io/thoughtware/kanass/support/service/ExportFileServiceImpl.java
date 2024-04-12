@@ -2,6 +2,7 @@ package io.thoughtware.kanass.support.service;
 
 import io.thoughtware.flow.statenode.model.StateNode;
 import io.thoughtware.flow.statenode.service.StateNodeService;
+import io.thoughtware.form.field.model.SelectItem;
 import io.thoughtware.kanass.project.module.model.Module;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.workitem.model.WorkItem;
@@ -130,7 +131,7 @@ public class ExportFileServiceImpl implements ExportFileService {
                 value = stateNode.getName();
                 break;
             case 4:
-                WorkPriority workPriority = workItem.getWorkPriority();
+                SelectItem workPriority = workItem.getWorkPriority();
                 if(!ObjectUtils.isEmpty(workPriority)){
                     value = workPriority.getName();
                 }else {

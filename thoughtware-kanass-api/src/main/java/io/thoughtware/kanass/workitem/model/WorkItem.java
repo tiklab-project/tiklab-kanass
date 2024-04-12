@@ -2,6 +2,7 @@ package io.thoughtware.kanass.workitem.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.thoughtware.form.field.model.SelectItem;
 import io.thoughtware.kanass.project.stage.model.Stage;
 import io.thoughtware.toolkit.beans.annotation.Mapper;
 import io.thoughtware.toolkit.beans.annotation.Mapping;
@@ -93,13 +94,13 @@ public class WorkItem extends BaseModel {
     @ApiProperty(name="workTypeCode",desc="事项状态code, DONE, START, PROGRESS")
     private String workTypeCode;
 
-    @NotNull
+
     @ApiProperty(name="workPriority",desc="优先级")
     @Mappings({
             @Mapping(source = "workPriority.id",target = "workPriorityId")
     })
     @JoinQuery(key = "id")
-    private WorkPriority workPriority;
+    private SelectItem workPriority;
 
     @ApiProperty(name="workStatus",desc="事项所属项目的状态id")
     @Mappings({
@@ -219,6 +220,9 @@ public class WorkItem extends BaseModel {
     @ApiProperty(name="eachType",desc="eg: 需求类型、任务类型、缺陷类型")
     private String eachType;
 
+    @ApiProperty(name="fieldId",desc="eg: 类型的字段id")
+    private String fieldId;
+
     @ApiProperty(name="extData",desc="扩展数据")
     private String extData;
 
@@ -287,13 +291,7 @@ public class WorkItem extends BaseModel {
         this.workType = workType;
     }
 
-    public WorkPriority getWorkPriority() {
-        return workPriority;
-    }
 
-    public void setWorkPriority(WorkPriority workPriority) {
-        this.workPriority = workPriority;
-    }
 
     public StateNodeFlow getWorkStatus() {
         return workStatus;
@@ -575,5 +573,21 @@ public class WorkItem extends BaseModel {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public String getFieldId() {
+        return fieldId;
+    }
+
+    public void setFieldId(String fieldId) {
+        this.fieldId = fieldId;
+    }
+
+    public SelectItem getWorkPriority() {
+        return workPriority;
+    }
+
+    public void setWorkPriority(SelectItem workPriority) {
+        this.workPriority = workPriority;
     }
 }

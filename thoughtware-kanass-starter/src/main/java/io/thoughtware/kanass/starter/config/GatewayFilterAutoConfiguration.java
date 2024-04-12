@@ -98,8 +98,9 @@ public class GatewayFilterAutoConfiguration{
                         "/workTypeDm/findWorkTypeDmList",
                         "/workItem/findWorkItemList",
                         "/workItem/findWorkItemPage",
-                        "/workItem/findWorkItem"
-
+                        "/workItem/findWorkItem",
+                        "/message/messageItem/syncUpdateMessage",
+                        "/message/messageItem/syncDeleteMessage",
 
 
                 })

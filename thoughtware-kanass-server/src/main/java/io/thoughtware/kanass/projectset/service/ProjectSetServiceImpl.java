@@ -99,8 +99,8 @@ public class ProjectSetServiceImpl implements ProjectSetService {
             User user = new User();
             user.setId(masterId);
             dmUser.setUser(user);
-            patchUser.setId(masterId);
-            patchUser.setAdminRole(true);
+            patchUser.setUserId(masterId);
+            patchUser.setRoleType(2);
             patchUsers.add(patchUser);
 
             // 初始化"111111"
@@ -111,8 +111,8 @@ public class ProjectSetServiceImpl implements ProjectSetService {
             user1.setId("111111");
             dmUser1.setUser(user1);
 
-            patchUser1.setId("111111");
-            patchUser1.setAdminRole(true);
+            patchUser1.setUserId("111111");
+            patchUser1.setRoleType(2);
             patchUsers.add(patchUser1);
 
         }else {
@@ -122,11 +122,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
             User user = new User();
             user.setId(masterId);
             dmUser.setUser(user);
-            patchUser.setId(masterId);
-            patchUser.setAdminRole(true);
+            patchUser.setUserId(masterId);
+            patchUser.setRoleType(2);
             patchUsers.add(patchUser);
         }
-        dmRoleService.initPatchDmRole(projectSetId,patchUsers, "kanass");
+        dmRoleService.initPatchDmRole(projectSetId,patchUsers);
     }
 
     @Override

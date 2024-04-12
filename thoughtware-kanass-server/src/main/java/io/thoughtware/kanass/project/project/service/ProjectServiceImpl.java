@@ -16,8 +16,11 @@ import io.thoughtware.kanass.sprint.service.SprintService;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.kanass.workitem.service.WorkTypeDmService;
 import io.thoughtware.kanass.workitem.service.WorkTypeService;
-import io.thoughtware.todotask.model.TaskQuery;
-import io.thoughtware.todotask.service.TaskService;
+import io.thoughtware.security.logging.logging.model.Logging;
+import io.thoughtware.security.logging.logging.model.LoggingType;
+import io.thoughtware.security.logging.logging.service.LoggingByTempService;
+import io.thoughtware.todotask.todo.model.TaskQuery;
+import io.thoughtware.todotask.todo.service.TaskService;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.page.Pagination;
@@ -34,13 +37,9 @@ import io.thoughtware.toolkit.join.JoinTemplate;
 import io.thoughtware.message.message.model.SendMessageNotice;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
-import io.thoughtware.security.logging.model.Logging;
-import io.thoughtware.security.logging.model.LoggingType;
-import io.thoughtware.security.logging.service.LoggingByTempService;
 import io.thoughtware.kanass.project.project.dao.ProjectDao;
 import io.thoughtware.kanass.project.project.entity.ProjectEntity;
 import io.thoughtware.kanass.project.project.support.MessageTemplateProject;
-import io.thoughtware.kanass.project.project.support.OpLogTemplateProject;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.user.dmUser.model.DmUser;
@@ -271,8 +270,8 @@ public class ProjectServiceImpl implements ProjectService {
             User user = new User();
             user.setId(masterId);
             dmUser.setUser(user);
-            patchUser.setId(masterId);
-            patchUser.setAdminRole(true);
+            patchUser.setUserId(masterId);
+            patchUser.setRoleType(2);
             patchUsers.add(patchUser);
 
             // 初始化"111111"
@@ -283,8 +282,8 @@ public class ProjectServiceImpl implements ProjectService {
             user1.setId("111111");
             dmUser1.setUser(user1);
 
-            patchUser1.setId("111111");
-            patchUser1.setAdminRole(true);
+            patchUser1.setUserId("111111");
+            patchUser1.setRoleType(2);
             patchUsers.add(patchUser1);
 
         }else {
@@ -294,11 +293,11 @@ public class ProjectServiceImpl implements ProjectService {
             User user = new User();
             user.setId(masterId);
             dmUser.setUser(user);
-            patchUser.setId(masterId);
-            patchUser.setAdminRole(true);
+            patchUser.setUserId(masterId);
+            patchUser.setRoleType(2);
             patchUsers.add(patchUser);
         }
-        dmRoleService.initPatchDmRole(projectId,patchUsers, "kanass");
+        dmRoleService.initPatchDmRole(projectId,patchUsers);
     }
     @Override
     public String createJiraProject(@NotNull @Valid Project project) {

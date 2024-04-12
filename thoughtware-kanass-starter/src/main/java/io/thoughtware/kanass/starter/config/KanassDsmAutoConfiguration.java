@@ -61,17 +61,21 @@ public class KanassDsmAutoConfiguration {
                 "form_1.0.2",
                 "pmc_1.0.2",
                 "todotask_1.0.2",
-                "apply-auth_1.0.2"
+                "apply-auth_1.0.2",
+                "privilege_1.0.2",
+                "form_1.0.2"
         });
         dsmConfig.newVersion("1.0.3", new String[]{
                 "pmc_1.0.3",
                 "message_1.0.3",
-                "flow_1.0.3"
+                "flow_1.0.3",
+                "apply-auth_1.0.3"
         });
         dsmConfig.newVersion("1.0.4", new String[]{
                 "oplog_1.0.4",
                 "message_1.0.4",
-                "flow_1.0.4"
+                "flow_1.0.4",
+                "apply-auth_1.0.4"
         });
         dsmConfig.newVersion("1.0.5", new String[]{
                 "message_1.0.5"
@@ -103,6 +107,9 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.2.2", new String[]{
                 "pmc_1.2.2"
+        });
+        dsmConfig.newVersion("1.2.3", new String[]{
+                "pmc_1.2.3"
         });
         return dsmConfig;
     }

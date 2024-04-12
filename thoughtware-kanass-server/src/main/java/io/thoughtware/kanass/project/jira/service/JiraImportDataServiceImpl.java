@@ -5,6 +5,7 @@ import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.flow.flow.service.DmFlowService;
 import io.thoughtware.flow.statenode.model.StateNodeFlow;
 import io.thoughtware.flow.statenode.service.StateNodeFlowService;
+import io.thoughtware.form.field.model.SelectItem;
 import io.thoughtware.privilege.dmRole.model.DmRole;
 import io.thoughtware.privilege.dmRole.model.DmRoleUser;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
@@ -374,10 +375,11 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
                     workItem.setWorkTypeCode("task");
                     workItem.setWorkTypeSys(workType);
 
-                    WorkPriority priority = new WorkPriority();
+
                     String priorityId = element.getAttribute("priority");
-                    priority.setId(priorityId);
-                    workItem.setWorkPriority(priority);
+                    SelectItem selectItem = new SelectItem();
+                    selectItem.setId(priorityId);
+                    workItem.setWorkPriority(selectItem);
 
                     // 设置父事项
                     if(this.SubWorkItemIds.get().contains(id)){
@@ -538,7 +540,7 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
         Map<String, String> roleIds = new HashMap<>();
         RoleQuery roleQuery = new RoleQuery();
         roleQuery.setType("2");
-        List<Role> roleList = roleService.findAllProjectRoleList(roleQuery);
+        List<Role> roleList = roleService.findProjectRoleList(roleQuery);
         if(roleList == null || roleList.size()==0){
             return roleIds;
         }
@@ -549,7 +551,7 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
 
                 RoleUserQuery roleUserQuery = new RoleUserQuery();
                 roleUserQuery.setRoleId(role.getId());
-                String newRoleId = roleService.cloneRole(role.getId(), "kanass");
+                String newRoleId = roleService.cloneRole(role.getId());
 
                 //建立域->项目角色关系
                 DmRole dmRole = new DmRole();
