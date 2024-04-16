@@ -217,6 +217,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("workItemTitle", workItem.getTitle());
         content.put("workItemId", workItem.getId());
         content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
+        content.put("workType", workItem.getWorkTypeSys().getName());
         content.put("projectId", workItem.getProject().getId());
         if(workItem.getSprint() != null) {
             content.put("sprintId", workItem.getSprint().getId());
@@ -228,7 +229,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         MessageType messageType = new MessageType();
         messageType.setId("KANASS_MESSAGETYPE_TASKTODO");
         message.setMessageType(messageType);
-        message.setData(content);
 
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
@@ -247,10 +247,14 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setBaseUrl(baseUrl);
         message.setLink("/projectDetail/${projectId}/work/${workItemId}");
         message.setAction(workItem.getTitle());
-        message.setMessageSendTypeId("site");
         message.setSendId(user.getId());
         message.setData(content);
 
+        message.setMessageSendTypeId("site");
+        sendMessageNoticeService.sendMessage(message);
+
+        message.setId(null);
+        message.setMessageSendTypeId("qywechat");
         sendMessageNoticeService.sendMessage(message);
 
     }
@@ -265,6 +269,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("workItemTitle", workItem.getTitle());
         content.put("workItemId", workItem.getId());
         content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
+        content.put("workType", workItem.getWorkTypeSys().getName());
         content.put("projectId", workItem.getProject().getId());
         content.put("receiverIcon",receiver.getNickname().substring(0, 1));
         content.put("receiver", receiver);
@@ -302,16 +307,18 @@ public class WorkItemServiceImpl implements WorkItemService {
         // 发送者
         message.setSendId(user.getId());
         sendMessageNoticeService.sendMessage(message);
+
+        message.setId(null);
+        message.setMessageSendTypeId("qywechat");
+        sendMessageNoticeService.sendMessage(message);
     }
 
-    void sendMessageForUpdateStatus(WorkItem OldWorkItem, WorkItem workItem, User receiver){
+    void sendMessageForUpdateStatus(WorkItem OldWorkItem, WorkItem workItem, List<User> receivers){
         HashMap<String, Object> content = new HashMap<>();
         content.put("workItemTitle", workItem.getTitle());
         content.put("workItemId", workItem.getId());
         content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
         content.put("projectId", workItem.getProject().getId());
-        content.put("receiverIcon",receiver.getNickname().substring(0, 1));
-        content.put("receiver", receiver);
         content.put("oldValue", OldWorkItem.getWorkStatusNode().getName());
         content.put("newValue", workItem.getWorkStatusNode().getName());
         if(workItem.getSprint() != null) {
@@ -334,9 +341,13 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         // 接收者
         List<MessageReceiver> objects = new ArrayList<>();
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.setUserId(receiver.getId());
-        objects.add(messageReceiver);
+
+        for (User receiver : receivers) {
+            MessageReceiver messageReceiver = new MessageReceiver();
+            messageReceiver.setUserId(receiver.getId());
+            objects.add(messageReceiver);
+        }
+
 
 
         message.setMessageReceiverList(objects);
@@ -345,6 +356,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setAction(workItem.getTitle());
         message.setSendId(user.getId());
         message.setMessageSendTypeId("site");
+        sendMessageNoticeService.sendMessage(message);
+
+        message.setId(null);
+        message.setMessageSendTypeId("qywechat");
         sendMessageNoticeService.sendMessage(message);
     }
 
@@ -394,7 +409,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             try {
                 date = dateFormat.parse(planEndTime);
             } catch (Exception e) {
-                throw new ApplicationException();
+                throw new ApplicationException(e.getMessage());
             }
             Timestamp timestamp = new Timestamp(date.getTime());
             task.setEndTime(timestamp);
@@ -406,7 +421,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     void updateTodoTask(WorkItem workItem, String taskId){
-        Task task = new Task();
+        Task task = taskService.findOne(taskId);
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         String updateField = workItem.getUpdateField();
@@ -415,7 +430,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             task.setAssignUser(workItem.getAssigner());
         }
 
-        if(updateField.equals("title") || updateField .equals("sprint") || updateField.equals("projectVersion")){
+        if(updateField.equals("title") || updateField.equals("sprint") || updateField.equals("projectVersion")){
             HashMap<String, Object> content = new HashMap<>();
             content.put("workItemTitle", workItem.getTitle());
             content.put("workItemId", workItem.getId());
@@ -442,7 +457,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 try {
                     date = dateFormat.parse(planEndTime);
                 } catch (Exception e) {
-                    throw new ApplicationException();
+                    throw new ApplicationException(e.getMessage());
                 }
                 Timestamp timestamp = new Timestamp(date.getTime());
                 task.setEndTime(timestamp);
@@ -674,10 +689,10 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workItemDao.updateWorkItem(workItemEntity1);
             }
         }
-        WorkItem workItem1 = findWorkItem(id);
         executorService.submit(() -> {
-            sendMessageForCreate(workItem1);
+            WorkItem workItem1 = findWorkItem(id);
             creatTodoTask(workItem1, workItem1.getBuilder());
+            sendMessageForCreate(workItem1);
             creatWorkItemDynamic(workItem1);
         });
 
@@ -768,7 +783,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 updateTodoTask(workItem,task.getId());
             }
         } catch (Exception e){
-            throw new ApplicationException();
+            throw new ApplicationException(e.getMessage());
         }
 
     }
@@ -929,7 +944,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 try {
                     date = dateFormat.parse(planEndTime);
                 } catch (Exception e) {
-                    throw new ApplicationException();
+                    throw new ApplicationException(e.getMessage());
                 }
                 Timestamp timestamp = new Timestamp(date.getTime());
                 task.setEndTime(timestamp);
@@ -1117,7 +1132,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
 
             } catch (Exception e){
-                throw new ApplicationException();
+                throw new ApplicationException(e.getMessage());
             }
 
         }
@@ -1136,7 +1151,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
 
             } catch (Exception e){
-                throw new ApplicationException();
+                throw new ApplicationException(e.getMessage());
             }
 
         }
@@ -1185,19 +1200,33 @@ public class WorkItemServiceImpl implements WorkItemService {
                     collect(Collectors.toList());
             if(distributionWork.size() > 0){
                 TransitionRule transitionRule = distributionWork.get(0);
-                User transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
-                if(transitionRuleUser != null && transitionRuleUser.getId() != null){
-                    workItem.setAssigner(transitionRuleUser);
+                List<User> transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
+                if(transitionRuleUser.size() > 0){
+                    User user = transitionRuleUser.get(0);
+                    workItem.setAssigner(user);
                     WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                     workItemDao.updateWorkItem(workItemEntity);
                     // 发送消息和待办事项
                     WorkItem newWorkItem = findWorkItem(id);
-                    creatTodoTask(oldWorkItem, transitionRuleUser);
-                    sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
-                    sendMessageForUpdateAssigner(oldWorkItem, transitionRuleUser);
+//                    creatTodoTask(oldWorkItem, user);
+                    newWorkItem.setUpdateField("assigner");
+                    updateTodoTaskData(newWorkItem);
+                    sendMessageForUpdateAssigner(oldWorkItem, user);
                 }
             }
 
+            // 更新状态发送消息
+            List<TransitionRule> sendMessage = transitionRuleList.stream().filter(item -> item.getRuleType().equals("sendMessage")).
+                    collect(Collectors.toList());
+            if(sendMessage.size() > 0){
+                TransitionRule transitionRule = sendMessage.get(0);
+                List<User> transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
+                if(transitionRuleUser.size() > 0){
+                    // 发送消息和待办事项
+                    WorkItem newWorkItem = findWorkItem(id);
+                    sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
+                }
+            }
         }
 
     }

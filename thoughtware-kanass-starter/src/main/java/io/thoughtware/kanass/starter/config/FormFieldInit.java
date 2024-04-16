@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+//@Component
 public class FormFieldInit implements ApplicationRunner {
 
     @Autowired

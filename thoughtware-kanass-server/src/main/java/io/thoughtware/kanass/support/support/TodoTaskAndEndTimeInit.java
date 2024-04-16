@@ -56,7 +56,7 @@ public class TodoTaskAndEndTimeInit implements ApplicationRunner {
                         try {
                             date = dateFormat.parse(planEndTime);
                         } catch (Exception e) {
-                            throw new ApplicationException();
+                            throw new ApplicationException(e.getMessage());
                         }
                         Timestamp timestamp = new Timestamp(date.getTime());
                         task.setEndTime(timestamp);
