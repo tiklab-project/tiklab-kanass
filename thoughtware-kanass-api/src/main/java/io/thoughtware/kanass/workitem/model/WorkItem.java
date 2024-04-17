@@ -211,11 +211,15 @@ public class WorkItem extends BaseModel {
     @ApiProperty(name="percent",desc="完成率")
     private Integer percent;
 
-    @ApiProperty(name="planTakeupTime",desc="计划用时")
-    private Integer planTakeupTime;
+    @ApiProperty(name="estimateTime",desc="计划用时")
+    private Integer estimateTime;
 
     @ApiProperty(name="surplusTime",desc="剩余用时")
     private Integer surplusTime;
+
+    @ApiProperty(name="usedTime",desc="已用时")
+    private Integer usedTime;
+
 
     @ApiProperty(name="eachType",desc="eg: 需求类型、任务类型、缺陷类型")
     private String eachType;
@@ -415,12 +419,12 @@ public class WorkItem extends BaseModel {
         this.percent = percent;
     }
 
-    public Integer getPlanTakeupTime() {
-        return planTakeupTime;
+    public Integer getEstimateTime() {
+        return estimateTime;
     }
 
-    public void setPlanTakeupTime(Integer planTakeupTime) {
-        this.planTakeupTime = planTakeupTime;
+    public void setEstimateTime(Integer estimateTime) {
+        this.estimateTime = estimateTime;
     }
 
     public WorkItem getPreDependWorkItem() {
@@ -589,5 +593,13 @@ public class WorkItem extends BaseModel {
 
     public void setWorkPriority(SelectItem workPriority) {
         this.workPriority = workPriority;
+    }
+
+    public Integer getUsedTime() {
+        return usedTime;
+    }
+
+    public void setUsedTime(Integer usedTime) {
+        this.usedTime = usedTime;
     }
 }

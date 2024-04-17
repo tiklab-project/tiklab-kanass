@@ -822,6 +822,10 @@ public class WorkLogDao{
         return jpaTemplate.getJdbcTemplate();
     }
 
-
+    public Integer findWorkItemUsedTime(String workId){
+        String sql = "SELECT SUM(takeup_time) AS usedTime FROM pmc_work_log WHERE work_item_id = '" + workId + "';" ;
+        Integer usedTime = jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
+        return usedTime;
+    }
 
 }

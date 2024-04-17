@@ -6,7 +6,6 @@ import io.thoughtware.dal.jpa.annotation.Id;
 import io.thoughtware.dal.jpa.annotation.Table;import io.thoughtware.dal.jpa.annotation.Entity;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 /**
  * 事项实例
@@ -134,12 +133,13 @@ public class WorkItemEntity implements Serializable {
     private Integer percent;
 
     //计划用时
-    @Column(name = "plan_takeup_time")
-    private Integer planTakeupTime;
+    @Column(name = "estimate_time")
+    private Integer estimateTime;
 
     // 剩余时间
     @Column(name = "surplus_time")
     private Integer surplusTime;
+
 
     //扩展数据
     @Column(name = "ext_data",length = 2048)
@@ -292,14 +292,6 @@ public class WorkItemEntity implements Serializable {
         this.percent = percent;
     }
 
-    public Integer getPlanTakeupTime() {
-        return planTakeupTime;
-    }
-
-    public void setPlanTakeupTime(Integer planTakeupTime) {
-        this.planTakeupTime = planTakeupTime;
-    }
-
     public String getPreDependId() {
         return preDependId;
     }
@@ -418,5 +410,13 @@ public class WorkItemEntity implements Serializable {
 
     public void setStageId(String stageId) {
         this.stageId = stageId;
+    }
+
+    public Integer getEstimateTime() {
+        return estimateTime;
+    }
+
+    public void setEstimateTime(Integer estimateTime) {
+        this.estimateTime = estimateTime;
     }
 }

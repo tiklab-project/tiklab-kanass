@@ -119,6 +119,15 @@ public class WorkItemController {
         return Result.ok(workItem);
     }
 
+    @RequestMapping(path="/findWorkItemAndUsedTime",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkItemAndUsedTime",desc = "根据事项ID查找事项和事项所用时间")
+    @ApiParam(name = "id",desc = "事项ID",required = true)
+    public Result<WorkItem> findWorkItemAndUsedTime(@NotNull String id){
+        WorkItem workItem = workItemService.findWorkItemAndUsedTime(id);
+
+        return Result.ok(workItem);
+    }
+
     /**
      * @pi.name:查找所有事项
      * @pi.path:/workItem/findAllWorkItem

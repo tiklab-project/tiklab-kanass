@@ -269,6 +269,12 @@ public class WorkLogServiceImpl implements WorkLogService {
         return workItemManhour;
     }
 
+    @Override
+    public Integer findWorkItemUsedTime(String workId) {
+        Integer workItemUsedTime = workLogDao.findWorkItemUsedTime(workId);
+        return workItemUsedTime;
+    }
+
     /**
      * 统计项目事项日志，拼接日历，并有日历循环
      * @param eachStartDay

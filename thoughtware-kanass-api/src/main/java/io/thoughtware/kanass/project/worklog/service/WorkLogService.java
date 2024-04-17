@@ -83,4 +83,10 @@ public interface WorkLogService {
      * @return
      */
     Map<String, Object> findProjectWorkItemLog(WorkLogQuery workLogQuery);
+
+    /**
+     * 查找某个事项登记的总用时
+     */
+
+    Integer findWorkItemUsedTime(String workId);
 }

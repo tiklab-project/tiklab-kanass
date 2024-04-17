@@ -1512,6 +1512,29 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         List<ProjectVersion> workVersionList = projectVersionService.findWorkVersionList(id);
         workItem.setProjectVersionList(workVersionList);
+
+        Integer workItemUsedTime = workLogService.findWorkItemUsedTime(id);
+        if(workItemUsedTime != null){
+            workItem.setUsedTime(workItemUsedTime);
+        }else {
+            workItem.setUsedTime(0);
+        }
+
+        return workItem;
+    }
+
+    @Override
+    public WorkItem findWorkItemAndUsedTime(@NotNull String id) {
+        WorkItem workItem = findWorkItem(id);
+
+        Integer workItemUsedTime = workLogService.findWorkItemUsedTime(id);
+        if(workItemUsedTime != null){
+            workItem.setUsedTime(workItemUsedTime);
+        }else {
+            workItem.setUsedTime(0);
+        }
+
+
         return workItem;
     }
 
@@ -1650,7 +1673,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         List<WorkItem> topWorkItemList = BeanMapper.mapList(topWorkItemPageEntity.getDataList(), WorkItem.class);
         long aTime = System.currentTimeMillis();
 
-        joinTemplate.joinQuery(topWorkItemList,  new String[]{"project","assigner", "workPriority", "workStatusNode", "workTypeSys", "builder"});
+        joinTemplate.joinQuery(topWorkItemList,  new String[]{"project","assigner", "workPriority", "workStatusNode", "workTypeSys", "builder", "module"});
         long bTime = System.currentTimeMillis();
 
         logger.info("joinQuery cost time2:{}",bTime-aTime);
@@ -1682,7 +1705,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         }else {
             List<WorkItem> workItemList = BeanMapper.mapList(topChildWorkItemEntity,WorkItem.class);
             long cTime = System.currentTimeMillis();
-            joinTemplate.joinQuery(workItemList, new String[]{"project", "assigner", "workPriority", "workStatusNode", "workTypeSys", "builder"});
+            joinTemplate.joinQuery(workItemList, new String[]{"project", "assigner", "workPriority", "workStatusNode", "workTypeSys", "builder", "module"});
 //            joinTemplate.joinQuery(workItemList);
             long eTime = System.currentTimeMillis();
             logger.info("joinQuery cost time4:{}",eTime-aTime1);
