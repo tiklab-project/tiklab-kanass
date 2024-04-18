@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,10 +48,10 @@ public class ProjectInsightReportController {
     @RequestMapping(path="/statisticsProjectOperateList",method = RequestMethod.POST)
     @ApiMethod(name = "statisticsProjectOperateList",desc = "统计某个项目集下所有项目的数据")
     @ApiParam(name = "projectSetId",desc = "项目集id",required = true)
-    public Result<List<ProjectOperateReport>> statisticsProjectOperateList(@NotNull String projectSetId){
-        List<ProjectOperateReport> projectOperateList = projectInsightReportService.statisticsProjectOperateList(projectSetId);
+    public Result<HashMap<String, Object>> statisticsProjectOperateList(@NotNull String projectSetId){
+        HashMap<String, Object> projectOperateListMap = projectInsightReportService.statisticsProjectOperateList(projectSetId);
 
-        return Result.ok(projectOperateList);
+        return Result.ok(projectOperateListMap);
     }
 
     @RequestMapping(path="/statisticsNewWorkItemCount",method = RequestMethod.POST)

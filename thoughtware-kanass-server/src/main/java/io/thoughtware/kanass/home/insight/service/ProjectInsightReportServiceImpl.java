@@ -64,24 +64,35 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
 
     /**
      * 统计某个项目集下所有项目的数据
+     *
      * @param projectSetId
      * @return
      */
     @Override
-    public List<ProjectOperateReport> statisticsProjectOperateList(String projectSetId) {
-        //查找项目集下所有项目
-        ProjectQuery projectQuery = new ProjectQuery();
-        projectQuery.setProjectSetId(projectSetId);
-        List<Project> projectList = projectService.findProjectList(projectQuery);
-
-        List<ProjectOperateReport> projectOperateReports = new ArrayList<ProjectOperateReport>();
-        for (Project project : projectList) {
-            ProjectOperateReportQuery projectOperateReportQuery = new ProjectOperateReportQuery();
-            projectOperateReportQuery.setProjectId(project.getId());
-            ProjectOperateReport projectOperateReport = statisticsProjectOperate(projectOperateReportQuery);
-            projectOperateReports.add(projectOperateReport);
+    public HashMap<String, Object> statisticsProjectOperateList(String projectSetId) {
+        HashMap<String, Object> projectOperateMap = new HashMap<>();
+        ProjectSet projectSet = projectSetService.findProjectSet(projectSetId);
+        projectOperateMap.put("projectSet", projectSet);
+        if(projectSet != null){
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setProjectSetId(projectSetId);
+            List<Project> projectList = projectService.findProjectList(projectQuery);
+            List<ProjectOperateReport> projectOperateReports = new ArrayList<ProjectOperateReport>();
+            if(projectList.size() > 0){
+                for (Project project : projectList) {
+                    ProjectOperateReportQuery projectOperateReportQuery = new ProjectOperateReportQuery();
+                    projectOperateReportQuery.setProjectId(project.getId());
+                    ProjectOperateReport projectOperateReport = statisticsProjectOperate(projectOperateReportQuery);
+                    projectOperateReports.add(projectOperateReport);
+                }
+                projectOperateMap.put("projectOperateReportList", projectOperateReports);
+            }else {
+                projectOperateMap.put("projectOperateReportList", projectOperateReports);
+            }
+        }else {
+            projectOperateMap.put("projectOperateReportList", null);
         }
-        return projectOperateReports;
+        return projectOperateMap;
 
     }
 
@@ -129,44 +140,53 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      * @return
      */
     public Map<String, Object> statisticsProjectWorkItemCount(String projectSetId) {
-        // 查找项目
-        ProjectQuery projectQuery = new ProjectQuery();
-        projectQuery.setProjectSetId(projectSetId);
-        List<Project> projectList = projectService.findProjectList(projectQuery);
-
+        ProjectSet projectSet = projectSetService.findProjectSet(projectSetId);
         Map<String, Object> workItemTypeCountList = new HashMap<String, Object>();
-        if(projectList.size() <= 0)  return workItemTypeCountList;
+        workItemTypeCountList.put("projectSet", projectSet);
+        if(projectSet != null){
+            // 查找项目
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setProjectSetId(projectSetId);
+            List<Project> projectList = projectService.findProjectList(projectQuery);
 
-        ArrayList<String> types = new ArrayList<>();
-        Map<String, Object> workTypeCount = new HashMap<String, Object>();
-        ArrayList<Object> integers = new ArrayList<>();
 
-        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
-
-
-        List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemType(projectIds);
-        List<WorkType> allWorkType = workTypeService.findAllWorkType();
-        for (WorkType workType : allWorkType) {
-            String workTypeId = workType.getId();
-            String code = workType.getCode();
-            types.add(code);
-
-            List<Project> project1 = new ArrayList<Project>();
-            ArrayList<Integer> integers1 = new ArrayList<>();
-            for (Project project : projectList) {
-                String id = project.getId();
-                List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_type_code").equals(code))).collect(Collectors.toList());
-                integers1.add(doneList.size());
-                project1.add(project);
+            if(projectList.size() <= 0) {
+                workItemTypeCountList.put("project", null);
+                return workItemTypeCountList;
             }
-            integers.add(integers1);
-            workTypeCount.put("project",project1);
 
+            ArrayList<String> types = new ArrayList<>();
+            Map<String, Object> workTypeCount = new HashMap<String, Object>();
+            ArrayList<Object> integers = new ArrayList<>();
+
+            String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+
+
+            List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemType(projectIds);
+            List<WorkType> allWorkType = workTypeService.findAllWorkType();
+            for (WorkType workType : allWorkType) {
+                String workTypeId = workType.getId();
+                String code = workType.getCode();
+                types.add(code);
+
+                List<Project> project1 = new ArrayList<Project>();
+                ArrayList<Integer> integers1 = new ArrayList<>();
+                for (Project project : projectList) {
+                    String id = project.getId();
+                    List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_type_code").equals(code))).collect(Collectors.toList());
+                    integers1.add(doneList.size());
+                    project1.add(project);
+                }
+                integers.add(integers1);
+                workTypeCount.put("project",project1);
+
+            }
+
+            workTypeCount.put("countList", integers);
+            workItemTypeCountList.put("types", types);
+            workItemTypeCountList.put("project", workTypeCount);
         }
 
-        workTypeCount.put("countList", integers);
-        workItemTypeCountList.put("types", types);
-        workItemTypeCountList.put("project", workTypeCount);
 
         return workItemTypeCountList;
     }

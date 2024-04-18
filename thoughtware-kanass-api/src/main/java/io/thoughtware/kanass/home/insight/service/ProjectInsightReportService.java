@@ -5,7 +5,7 @@ import io.thoughtware.kanass.home.insight.model.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,10 +20,11 @@ public interface ProjectInsightReportService {
 
     /**
      * 统计某个项目集下所有项目的数据
+     *
      * @param projectSetId
      * @return
      */
-    List<ProjectOperateReport> statisticsProjectOperateList(String projectSetId);
+    HashMap<String, Object> statisticsProjectOperateList(String projectSetId);
 
     /**
      * 统计某段时间，以天，周，月，季，年为单位新增事项的数据
