@@ -145,8 +145,8 @@ public class ProjectInsightReportController {
     @RequestMapping(path="/statisticsWorkItemStatusCount",method = RequestMethod.POST)
     @ApiMethod(name = "statisticsWorkItemStatusCount",desc = "统计某个项目下，各个状态的事项数量")
     @ApiParam(name = "workItemCountQuery",desc = "事项统计条件模型",required = true)
-    public Result<Map<String,Integer>> statisticsWorkItemStatusCount(@RequestBody @NotNull @Valid WorkItemCountQuery workItemCountQuery){
-        Map<String, Integer> projectWorkItemCountList = projectInsightReportService.statisticsWorkItemStatusCount(workItemCountQuery);
+    public Result<Map<String, Object>> statisticsWorkItemStatusCount(@RequestBody @NotNull @Valid WorkItemCountQuery workItemCountQuery){
+        Map<String, Object> projectWorkItemCountList = projectInsightReportService.statisticsWorkItemStatusCount(workItemCountQuery);
 
         return Result.ok(projectWorkItemCountList);
     }

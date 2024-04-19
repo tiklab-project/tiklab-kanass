@@ -205,22 +205,27 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         String projectId = workItemCountQuery.getProjectId();
         projectQuery.setProjectId(projectId);
         List<Project> projectList = projectService.findProjectList(projectQuery);
-
-        //安照统计单位（日，周，月...）计算时间点
-        List<String> daylist = getDaylist(workItemCountQuery);
-        List<Object> countList = new ArrayList<>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        for (Project project : projectList) {
-            Map<String, Object> projectCount = new HashMap<String, Object>();
-            workItemCountQuery.setProjectId(project.getId());
-            List<Integer> projectCountList = statisticsProjectNewWorkItemCount(workItemCountQuery, daylist);
-            projectCount.put("project", project);
-            projectCount.put("countList", projectCountList);
-            countList.add(projectCount);
-        }
 
-        paramMap.put("dateList", daylist);
-        paramMap.put("projectCountList", countList);
+        if(projectList.size() > 0){
+            //安照统计单位（日，周，月...）计算时间点
+            List<String> daylist = getDaylist(workItemCountQuery);
+            List<Object> countList = new ArrayList<>();
+
+            for (Project project : projectList) {
+                Map<String, Object> projectCount = new HashMap<String, Object>();
+                workItemCountQuery.setProjectId(project.getId());
+                List<Integer> projectCountList = statisticsProjectNewWorkItemCount(workItemCountQuery, daylist);
+                projectCount.put("project", project);
+                projectCount.put("countList", projectCountList);
+                countList.add(projectCount);
+            }
+            paramMap.put("dateList", daylist);
+            paramMap.put("projectCountList", countList);
+        }else {
+            paramMap.put("dateList", null);
+            paramMap.put("projectCountList", null);
+        }
 
         return paramMap;
     }
@@ -239,35 +244,39 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         String projectId = workItemCountQuery.getProjectId();
         projectQuery.setProjectId(projectId);
         List<Project> projectList = projectService.findProjectList(projectQuery);
-        List<String> dayList = getDaylist(workItemCountQuery);
         List<Object> countList = new ArrayList<>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
         if(projectList.size() > 0){
-            List<String> projectIds = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
-            workItemCountQuery.setProjectIds(projectIds);
-            List<Map<String, Object>> endWorkItemList = projectInsightReportDao.statisticsProjectEndWorkItem(workItemCountQuery, dayList);
-            for (Project project : projectList) {
-                Map<String, Object> projectCount = new HashMap<String, Object>();
-                int size = dayList.size();
-                List<Integer> projectCountList = new ArrayList<>();
-                for (int i= 0; i< size-1; i++ ) {
-                    String start= dayList.get(i);
-                    String end = dayList.get(i+1);
-                    List<Map<String, Object>> collect = endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
-                                    toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
-                                    work.get("project_id").equals(project.getId())))
-                            .collect(Collectors.toList());
-                    projectCountList.add(collect.size());
+            List<String> dayList = getDaylist(workItemCountQuery);
+            if(projectList.size() > 0){
+                List<String> projectIds = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
+                workItemCountQuery.setProjectIds(projectIds);
+                List<Map<String, Object>> endWorkItemList = projectInsightReportDao.statisticsProjectEndWorkItem(workItemCountQuery, dayList);
+                for (Project project : projectList) {
+                    Map<String, Object> projectCount = new HashMap<String, Object>();
+                    int size = dayList.size();
+                    List<Integer> projectCountList = new ArrayList<>();
+                    for (int i= 0; i< size-1; i++ ) {
+                        String start= dayList.get(i);
+                        String end = dayList.get(i+1);
+                        List<Map<String, Object>> collect = endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
+                                        toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
+                                        work.get("project_id").equals(project.getId())))
+                                .collect(Collectors.toList());
+                        projectCountList.add(collect.size());
+                    }
+                    projectCount.put("project", project);
+                    projectCount.put("countList", projectCountList);
+                    countList.add(projectCount);
                 }
-                projectCount.put("project", project);
-                projectCount.put("countList", projectCountList);
-                countList.add(projectCount);
             }
+            paramMap.put("dateList", dayList);
+            paramMap.put("projectCountList", countList);
+        }else {
+            paramMap.put("dateList", null);
+            paramMap.put("projectCountList", null);
         }
 
-
-        paramMap.put("dateList", dayList);
-        paramMap.put("projectCountList", countList);
 
         return paramMap;
     }
@@ -781,8 +790,16 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      * @param workItemCountQuery
      * @return
      */
-    public Map<String, Integer> statisticsWorkItemStatusCount(WorkItemCountQuery workItemCountQuery){
-        Map<String, Integer> workItemStatusCount = projectInsightReportDao.statisticsWorkItemStatusCount(workItemCountQuery);
+    public Map<String, Object> statisticsWorkItemStatusCount(WorkItemCountQuery workItemCountQuery){
+        String projectId = workItemCountQuery.getProjectId();
+        Project project = projectService.findProject(projectId);
+        Map<String, Object> workItemStatusCount = new HashMap<>();
+        if(project != null){
+            workItemStatusCount = projectInsightReportDao.statisticsWorkItemStatusCount(workItemCountQuery);
+            workItemStatusCount.put("project", project);
+        }else {
+            workItemStatusCount.put("project", project);
+        }
         return  workItemStatusCount;
     }
 
@@ -794,13 +811,19 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      */
     public Map<String, Object> statisticsDayWorkItemCount(WorkItemCountQuery workItemCountQuery) {
         HashMap<String, Object> dayWorkItem = new HashMap<>();
-        List<String> dayList = getDaylist(workItemCountQuery);
-        int size = dayList.size();
-        List<Map<String, Integer>> countList = projectInsightReportDao.findProjectBurnDowmOnTime(workItemCountQuery, dayList);
-
-        dayWorkItem.put("date", dayList);
-        dayWorkItem.put("conntList", countList);
-
+        String projectId = workItemCountQuery.getProjectId();
+        Project project = projectService.findProject(projectId);
+        if(project != null){
+            List<String> dayList = getDaylist(workItemCountQuery);
+            List<Map<String, Integer>> countList = projectInsightReportDao.findProjectBurnDowmOnTime(workItemCountQuery, dayList);
+            dayWorkItem.put("date", dayList);
+            dayWorkItem.put("conntList", countList);
+            dayWorkItem.put("project", project);
+        }else {
+            dayWorkItem.put("date", null);
+            dayWorkItem.put("conntList", null);
+            dayWorkItem.put("project", project);
+        }
         return dayWorkItem;
     }
 
@@ -811,21 +834,22 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      */
     public  Map<String, Object> statisticsUserWorkItemCount(WorkItemCountQuery workItemCountQuery) {
         String projectId = workItemCountQuery.getProjectId();
-        ArrayList<Map<String, Object>> userCount = new ArrayList<>();
-
-        DmUserQuery dmUserQuery = new DmUserQuery();
-        dmUserQuery.setDomainId(projectId);
-        List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
-        for (DmUser dmUser : dmUserList) {
-            HashMap<String, Object> userWorkItemCount = new HashMap<>();
-            String userId = dmUser.getUser().getId();
-            Map<String, Integer> workItemTypeCount = projectInsightReportDao.statisticsUserWorkItemCount(projectId, userId);
-            userWorkItemCount.put("user", dmUser.getUser());
-            userWorkItemCount.put("workItemTypeCount", workItemTypeCount);
-            userCount.add(userWorkItemCount);
-        }
-        Map<String, Object> projectUserCount = new HashMap<>();
         Project project = projectService.findProject(projectId);
+        Map<String, Object> projectUserCount = new HashMap<>();
+        ArrayList<Map<String, Object>> userCount = new ArrayList<>();
+        if(project != null){
+            DmUserQuery dmUserQuery = new DmUserQuery();
+            dmUserQuery.setDomainId(projectId);
+            List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+            for (DmUser dmUser : dmUserList) {
+                HashMap<String, Object> userWorkItemCount = new HashMap<>();
+                String userId = dmUser.getUser().getId();
+                Map<String, Integer> workItemTypeCount = projectInsightReportDao.statisticsUserWorkItemCount(projectId, userId);
+                userWorkItemCount.put("user", dmUser.getUser());
+                userWorkItemCount.put("workItemTypeCount", workItemTypeCount);
+                userCount.add(userWorkItemCount);
+            }
+        }
         projectUserCount.put("project", project);
         projectUserCount.put("userCount", userCount);
         return projectUserCount;

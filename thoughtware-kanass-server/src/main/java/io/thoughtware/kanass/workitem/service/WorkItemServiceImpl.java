@@ -1533,8 +1533,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         }else {
             workItem.setUsedTime(0);
         }
-
-
         return workItem;
     }
 

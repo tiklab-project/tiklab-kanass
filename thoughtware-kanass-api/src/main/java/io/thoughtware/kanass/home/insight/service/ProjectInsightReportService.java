@@ -101,7 +101,7 @@ public interface ProjectInsightReportService {
      * @param workItemCountQuery
      * @return
      */
-    Map<String, Integer> statisticsWorkItemStatusCount(WorkItemCountQuery workItemCountQuery);
+    Map<String, Object> statisticsWorkItemStatusCount(WorkItemCountQuery workItemCountQuery);
 
     /**
      * 统计某个项目下事项

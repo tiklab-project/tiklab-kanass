@@ -354,7 +354,7 @@ public class ProjectInsightReportDao {
         String projectId = workItemCountQuery.getProjectId();
         List<String> projectIds = new ArrayList<>();
         projectIds.add(projectId);
-        //
+
         workItemCountQuery.setProjectIds(projectIds);
         String workItemTypeCode = workItemCountQuery.getWorkItemTypeCode();
         List<Map<String, Integer>> countList = new ArrayList<Map<String, Integer>>();
@@ -592,8 +592,10 @@ public class ProjectInsightReportDao {
      * @param workItemCountQuery
      * @return
      */
-    public Map<String, Integer> statisticsWorkItemStatusCount(WorkItemCountQuery workItemCountQuery){
-        HashMap<String, Integer> workItemStatusCount = new HashMap<>();
+    public Map<String, Object> statisticsWorkItemStatusCount(WorkItemCountQuery workItemCountQuery){
+
+
+        HashMap<String, Object> workItemStatusCount = new HashMap<>();
 
         Integer newWorkItemCount = findAllCountByType(workItemCountQuery);
         Integer noEndWorkItemCount = findNoEndCountByType(workItemCountQuery);
