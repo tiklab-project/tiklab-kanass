@@ -92,10 +92,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                     workVersionService.createBatchWorkVersion(substring);
                 }
 
-                //设置创建时间
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String format = formater.format(new Date());
-                projectVersion.setRelaPublishTime(format);
+
             }
 
 
@@ -107,6 +104,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             String format = formater.format(new Date());
             projectVersion.setRelaStartTime(format);
         }
+
+        //设置结束时间
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = formater.format(new Date());
+        projectVersion.setRelaPublishTime(format);
         ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
         projectVersionDao.updateVersion(projectVersionEntity);
 

@@ -44,56 +44,10 @@ public class WorkFlowRuleInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-//        initWorkFlowRule();
     }
 
     public void initWorkFlowRule(){
-        FlowQuery flowQuery = new FlowQuery();
-        flowQuery.setScope(2);
-        List<Flow> flowList = flowService.findFlowList(flowQuery);
-        for (Flow flow : flowList) {
-            String id = flow.getId();
-            TransitionQuery transitionQuery = new TransitionQuery();
 
-            //创建前置事项影响事项开始的限制
-            transitionQuery.setFromNodeId("todo");
-            transitionQuery.setFlowId(id);
-            List<Transition> transitionList = transitionService.findTransitionList(transitionQuery);
-            if(transitionList.size() > 0){
-
-                Transition transition = transitionList.get(0);
-                TransitionRule transitionRule = new TransitionRule();
-                transitionRule.setFlow(flow);
-                transitionRule.setName("根据关联事项的状态限制");
-                transitionRule.setRuleType("limitWorkStatus");
-                transitionRule.setTransition(transition);
-
-                User user = new User();
-                user.setId("111111");
-                transitionRule.setCreateUser(user);
-                transitionRule.setConfigValue("{\"preDependWorkStatus\":\"done\"}");
-                transitionRuleService.createTransitionRule(transitionRule);
-            }
-
-            transitionQuery.setToNodeId("done");
-            transitionQuery.setFromNodeId(null);
-            transitionList = transitionService.findTransitionList(transitionQuery);
-            if(transitionList.size() > 0){
-                Transition transition = transitionList.get(0);
-                TransitionRule transitionRule = new TransitionRule();
-                transitionRule.setFlow(flow);
-                transitionRule.setName("根据关联事项的状态限制");
-                transitionRule.setRuleType("limitWorkStatus");
-                transitionRule.setTransition(transition);
-
-                User user = new User();
-                user.setId("111111");
-                transitionRule.setCreateUser(user);
-                transitionRule.setConfigValue("{\"childWorkStatus\":\"done\"}");
-                transitionRuleService.createTransitionRule(transitionRule);
-            }
-
-        }
 
     }
 }

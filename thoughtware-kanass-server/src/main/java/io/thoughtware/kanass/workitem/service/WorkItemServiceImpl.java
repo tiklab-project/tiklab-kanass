@@ -744,13 +744,9 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "planBeginTime":
                 updateWorkItemPlanTime(workItem);
                 break;
-            case "preDependWorkItem":
-                updatePreDependWorkItem(workItem);
-                break;
             case "eachType":
                 updateEachType(workItem);
                 break;
-
             case "workPriority":
                 updateWorkPriority(workItem);
                 break;
@@ -1068,7 +1064,30 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     public void updateStatus(WorkItem workItem){
         // 设置状态之后处理前置事项，后置事项，完成时间
+
+        // 1. 判断子事项是否全部解决完成
+        String statusId = workItem.getWorkStatusNode().getId();
         String id = workItem.getId();
+        if(statusId.equals("done")){
+            WorkItemQuery childWorkItemQuery = new WorkItemQuery();
+            childWorkItemQuery.setParentId(id);
+            List<WorkItemEntity> workItemList = workItemDao.findWorkItemList(childWorkItemQuery);
+            List<WorkItemEntity> collect = workItemList.stream().filter(work -> !work.getWorkStatusNodeId().equals("done")).collect(Collectors.toList());
+            if(collect.size() > 0){
+                throw new ApplicationException("还有下级事项没有关闭");
+            }
+        }
+        if(!statusId.equals("todo")){
+            WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
+            String preDependId = workItem1.getPreDependId();
+            if(preDependId != null && preDependId.length() > 1){
+                WorkItemEntity workItem2 = workItemDao.findWorkItem(preDependId);
+                if(workItem2.getWorkStatusNodeId() != null && !workItem2.getWorkStatusNodeId() .equals("done") ){
+                    throw new ApplicationException("前置事项没有关闭，当前事项不能开启");
+                }
+            }
+        }
+
         WorkItem oldWorkItem = findWorkItem(id);
         updateWorkItemStatus(workItem, oldWorkItem);
         String transitionId = workItem.getTransitionId();

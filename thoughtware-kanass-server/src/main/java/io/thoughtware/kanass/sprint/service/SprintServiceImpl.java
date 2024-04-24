@@ -171,10 +171,7 @@ public class SprintServiceImpl implements SprintService {
             // 更新事项的迭代, 没有完成的更新到选择的新的迭代或者待办列表
             workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
 
-            //设置创建时间
-            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String format = formater.format(new Date());
-            sprint.setRelaEndTime(format);
+
         }
 
         if(sprintState != null && sprintState.getId().equals("111111")){
@@ -182,6 +179,11 @@ public class SprintServiceImpl implements SprintService {
             String format = formater.format(new Date());
             sprint.setRelaStartTime(format);
         }
+
+        //设置结束时间
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = formater.format(new Date());
+        sprint.setRelaEndTime(format);
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         sprintDao.updateSprint(sprintEntity);
     }
