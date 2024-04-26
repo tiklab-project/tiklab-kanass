@@ -83,13 +83,13 @@ public class SprintServiceImpl implements SprintService {
     void sendMessageForCreatSprint(Sprint sprint ){
         String projectId = sprint.getProject().getId();
         HashMap<String, Object> content = new HashMap<>();
-        content.put("spintName", sprint.getSprintName());
+        content.put("sprintName", sprint.getSprintName());
         content.put("sprintId", sprint.getId());
         content.put("projectId", sprint.getProject().getId());
 
         Message message = new Message();
         MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_TASKTODO");
+        messageType.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
         message.setMessageType(messageType);
         message.setData(content);
 
@@ -102,7 +102,7 @@ public class SprintServiceImpl implements SprintService {
         String msg = JSONObject.toJSONString(content);
 
         sendMessageNotice.setBaseUrl(baseUrl);
-        sendMessageNotice.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
+        sendMessageNotice.setId("KANASS_MESSAGE_SPRINTCREATE");
         sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/workTable");
         sendMessageNotice.setAction(sprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
@@ -118,38 +118,46 @@ public class SprintServiceImpl implements SprintService {
 
     /**
      * 发送消息
-     * @param sprint
+     * @param oldSprint
+     * @param newSprint
      */
-    void sendMessageForUpdateSprintState(Sprint sprint ){
-        String projectId = sprint.getProject().getId();
+    void sendMessageForUpdateSprintState(Sprint oldSprint, Sprint newSprint ){
+        String projectId = newSprint.getProject().getId();
         HashMap<String, Object> content = new HashMap<>();
-        content.put("spintName", sprint.getSprintName());
-        content.put("sprintId", sprint.getId());
-        content.put("projectId", sprint.getProject().getId());
-
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_TASKTODO");
-        message.setMessageType(messageType);
-        message.setData(content);
+        content.put("sprintName", newSprint.getSprintName());
+        content.put("sprintId", newSprint.getId());
+        content.put("projectId", projectId);
+        content.put("oldValue", oldSprint.getSprintState().getName());
+        content.put("newValue", newSprint.getSprintState().getName());
 
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+
+        Message message = new Message();
+        MessageType messageType = new MessageType();
+        messageType.setId("KANASS_MESSAGETYPE_SPRINTUPDATE");
+        message.setMessageType(messageType);
+        message.setData(content);
+
         SendMessageNotice sendMessageNotice = new SendMessageNotice();
         String msg = JSONObject.toJSONString(content);
 
         sendMessageNotice.setBaseUrl(baseUrl);
-        sendMessageNotice.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
+        sendMessageNotice.setId("KANASS_MESSAGE_SPRINTUPDATE");
         sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/workTable");
-        sendMessageNotice.setAction(sprint.getSprintName());
+        sendMessageNotice.setAction(newSprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
         sendMessageNotice.setSiteData(msg);
-        sendMessageNotice.setDomainId(sprint.getId());
+        sendMessageNotice.setDomainId(projectId);
+        VRoleDomain vRoleDomain = new VRoleDomain();
+        vRoleDomain.setModelId(newSprint.getId());
+        vRoleDomain.setType("sprint");
+        sendMessageNotice.setvRoleDomain(vRoleDomain);
         sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
-
     }
 
     @Override
@@ -174,14 +182,14 @@ public class SprintServiceImpl implements SprintService {
 
     @Override
     public void updateSprint(@NotNull @Valid Sprint sprint) {
-
+        String sprintId = sprint.getId();
+        Sprint oldSprint = findSprint(sprintId);
         SprintState sprintState = sprint.getSprintState();
         String newSprintId = sprint.getNewSprintId();
         // 如果状态更新为完成
         if(sprintState != null ){
             if(sprintState.getId().equals("222222")){
                 // 创建新的迭代与事项的记录
-                String sprintId = sprint.getId();
                 // 只查询迭代中未完成的事项
                 List<WorkItem> sprintWorkItemList = workItemService.findSprintWorkItemList(sprintId);
                 if(sprintWorkItemList.size() > 0){
@@ -215,7 +223,6 @@ public class SprintServiceImpl implements SprintService {
                 // 更新事项的迭代, 没有完成的更新到选择的新的迭代或者待办列表
                 workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
 
-
             }
 
             if(sprintState.getId().equals("111111")){
@@ -223,6 +230,7 @@ public class SprintServiceImpl implements SprintService {
                 String format = formater.format(new Date());
                 sprint.setRelaStartTime(format);
             }
+
         }
 
         //设置结束时间
@@ -231,6 +239,10 @@ public class SprintServiceImpl implements SprintService {
         sprint.setRelaEndTime(format);
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         sprintDao.updateSprint(sprintEntity);
+        Sprint newSprint = findSprint(sprintId);
+        if(sprintState != null){
+            sendMessageForUpdateSprintState(oldSprint, newSprint);
+        }
     }
 
     @Override

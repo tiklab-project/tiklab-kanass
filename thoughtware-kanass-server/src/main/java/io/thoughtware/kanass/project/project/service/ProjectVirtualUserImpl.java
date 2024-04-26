@@ -22,6 +22,7 @@ public class ProjectVirtualUserImpl extends VRoleUserServiceImpl {
     @Autowired
     WorkItemService workItemService;
 
+
     @Autowired
     ProjectService projectService;
 
@@ -50,6 +51,15 @@ public class ProjectVirtualUserImpl extends VRoleUserServiceImpl {
                     workItem = workItemService.findWorkItem(modelId);
                     if(workItem != null){
                         User assigner = workItem.getAssigner();
+                        if(assigner != null){
+                            userList.add(assigner);
+                        }
+                    }
+                    break;
+                case "SPRINT_MASTER":
+                    Sprint sprint = sprintService.findSprint(modelId);
+                    if(sprint != null){
+                        User assigner = sprint.getMaster();
                         if(assigner != null){
                             userList.add(assigner);
                         }
