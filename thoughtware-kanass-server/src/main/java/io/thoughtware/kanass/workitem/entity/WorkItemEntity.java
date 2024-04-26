@@ -1,9 +1,7 @@
 package io.thoughtware.kanass.workitem.entity;
 
 
-import io.thoughtware.dal.jpa.annotation.Column;
-import io.thoughtware.dal.jpa.annotation.Id;
-import io.thoughtware.dal.jpa.annotation.Table;import io.thoughtware.dal.jpa.annotation.Entity;
+import io.thoughtware.dal.jpa.annotation.*;
 
 import java.io.Serializable;
 
@@ -15,8 +13,12 @@ import java.io.Serializable;
 public class WorkItemEntity implements Serializable {
     //唯一标识
     @Id
+    @GeneratorValue(length = 12)
     @Column(name = "id",length = 12)
     private String id;
+
+    @Column(name = "code",length = 32)
+    private String code;
 
     // id 排序
     @Column(name = "order_num",length = 32)
@@ -418,5 +420,13 @@ public class WorkItemEntity implements Serializable {
 
     public void setEstimateTime(Integer estimateTime) {
         this.estimateTime = estimateTime;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

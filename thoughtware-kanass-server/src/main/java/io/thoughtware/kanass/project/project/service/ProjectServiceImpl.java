@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.dal.jpa.JpaTemplate;
 import io.thoughtware.eam.common.context.LoginContext;
+import io.thoughtware.message.message.model.MessageNoticePatch;
 import io.thoughtware.message.message.service.MessageDmNoticeService;
 import io.thoughtware.privilege.role.model.PatchUser;
 import io.thoughtware.kanass.project.milestone.service.MilestoneService;
@@ -178,32 +179,6 @@ public class ProjectServiceImpl implements ProjectService {
         opLogByTemplService.createLog(log);
     }
 
-    /**
-     * 发送消息
-     * @param content
-     */
-    void sendMessageForCreatUser(Map<String, String> content ){
-        SendMessageNotice messageDispatchNotice = new SendMessageNotice();
-
-        String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
-
-        content.put("createUser", user.getNickname());
-        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
-        content.put("sendTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-
-        String msg = JSONObject.toJSONString(content);
-        messageDispatchNotice.setId(MessageTemplateProject.TEAMWIRE_MESSAGETYPE_PROJECTADD);
-        messageDispatchNotice.setSiteData(msg);
-        messageDispatchNotice.setDingdingData(msg);
-        messageDispatchNotice.setQywechatData(msg);
-        messageDispatchNotice.setEmailData(msg);
-        messageDispatchNotice.setBaseUrl(baseUrl);
-        messageDispatchNotice.setLink("/index/${projectType}/${projectId}/survey");
-        messageDispatchNotice.setAction(content.get("projectName"));
-//        messageDispatchNoticeService.createMessageItem(messageDispatchNotice);
-    }
-
     @Override
     public String createProject(@NotNull @Valid Project project) {
         if (project.getId() == null) {
@@ -250,7 +225,9 @@ public class ProjectServiceImpl implements ProjectService {
 
         executorService.submit(() -> {
             creatDynamic(content);
-            messageDmNoticeService.initMessageDmNotice(id);
+            MessageNoticePatch messageNoticePatch = new MessageNoticePatch();
+            messageNoticePatch.setDomainId(id);
+            messageDmNoticeService.initMessageDmNotice(messageNoticePatch);
         });
         //creatDynamic(content);
         //初始事项类型

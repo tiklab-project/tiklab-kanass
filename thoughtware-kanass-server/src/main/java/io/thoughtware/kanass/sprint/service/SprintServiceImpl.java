@@ -10,6 +10,8 @@ import io.thoughtware.kanass.sprint.model.SprintQuery;
 import io.thoughtware.kanass.sprint.model.SprintState;
 import io.thoughtware.kanass.sprint.model.SprintStateQuery;
 import io.thoughtware.kanass.workitem.service.WorkSprintService;
+import io.thoughtware.message.setting.service.MessageSendTypeService;
+import io.thoughtware.privilege.vRole.model.VRoleDomain;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -101,12 +103,53 @@ public class SprintServiceImpl implements SprintService {
 
         sendMessageNotice.setBaseUrl(baseUrl);
         sendMessageNotice.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
-        sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/survey");
+        sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/workTable");
         sendMessageNotice.setAction(sprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
         sendMessageNotice.setSiteData(msg);
         sendMessageNotice.setDomainId(projectId);
+        VRoleDomain vRoleDomain = new VRoleDomain();
+        vRoleDomain.setModelId(sprint.getId());
+        vRoleDomain.setType("sprint");
+        sendMessageNotice.setvRoleDomain(vRoleDomain);
         sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
+
+    }
+
+    /**
+     * 发送消息
+     * @param sprint
+     */
+    void sendMessageForUpdateSprintState(Sprint sprint ){
+        String projectId = sprint.getProject().getId();
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("spintName", sprint.getSprintName());
+        content.put("sprintId", sprint.getId());
+        content.put("projectId", sprint.getProject().getId());
+
+        Message message = new Message();
+        MessageType messageType = new MessageType();
+        messageType.setId("KANASS_MESSAGETYPE_TASKTODO");
+        message.setMessageType(messageType);
+        message.setData(content);
+
+        String createUserId = LoginContext.getLoginId();
+        User user = userService.findOne(createUserId);
+        content.put("createUser", user);
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+        SendMessageNotice sendMessageNotice = new SendMessageNotice();
+        String msg = JSONObject.toJSONString(content);
+
+        sendMessageNotice.setBaseUrl(baseUrl);
+        sendMessageNotice.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
+        sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/workTable");
+        sendMessageNotice.setAction(sprint.getSprintName());
+        sendMessageNotice.setSendId(user.getId());
+        sendMessageNotice.setSiteData(msg);
+        sendMessageNotice.setDomainId(sprint.getId());
+        sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
+
     }
 
     @Override
@@ -124,7 +167,7 @@ public class SprintServiceImpl implements SprintService {
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
         sprint = findSprint(id);
-//        sendMessageForCreatSprint(sprint);
+        sendMessageForCreatSprint(sprint);
         return id;
     }
 
@@ -135,49 +178,51 @@ public class SprintServiceImpl implements SprintService {
         SprintState sprintState = sprint.getSprintState();
         String newSprintId = sprint.getNewSprintId();
         // 如果状态更新为完成
-        if(sprintState != null && sprintState.getId().equals("222222")){
-            // 创建新的迭代与事项的记录
-            String sprintId = sprint.getId();
-            // 只查询迭代中未完成的事项
-            List<WorkItem> sprintWorkItemList = workItemService.findSprintWorkItemList(sprintId);
-            if(sprintWorkItemList.size() > 0){
-                String valueString = "";
-                for (WorkItem workItem : sprintWorkItemList) {
-                    // 更新迭代之后更新待办
-                    if(newSprintId != null) {
-                        Sprint sprint1 = new Sprint();
-                        sprint1.setId(newSprintId);
-                        workItem.setSprint(sprint1);
-                        workItem.setUpdateField("sprint");
-                        workItemService.updateTodoTaskData(workItem);
-                    }else {
-                        workItem.setUpdateField("sprint");
-                        workItem.setSprint(null);
-                        workItemService.updateTodoTaskData(workItem);
-                    }
+        if(sprintState != null ){
+            if(sprintState.getId().equals("222222")){
+                // 创建新的迭代与事项的记录
+                String sprintId = sprint.getId();
+                // 只查询迭代中未完成的事项
+                List<WorkItem> sprintWorkItemList = workItemService.findSprintWorkItemList(sprintId);
+                if(sprintWorkItemList.size() > 0){
+                    String valueString = "";
+                    for (WorkItem workItem : sprintWorkItemList) {
+                        // 更新迭代之后更新待办
+                        if(newSprintId != null) {
+                            Sprint sprint1 = new Sprint();
+                            sprint1.setId(newSprintId);
+                            workItem.setSprint(sprint1);
+                            workItem.setUpdateField("sprint");
+                            workItemService.updateTodoTaskData(workItem);
+                        }else {
+                            workItem.setUpdateField("sprint");
+                            workItem.setSprint(null);
+                            workItemService.updateTodoTaskData(workItem);
+                        }
 
-                    String id = UuidGenerator.getRandomIdByUUID(12);
-                    String sql = "('" + id + "', '" + workItem.getId() + "', '" + newSprintId + "'),";
-                    valueString = valueString.concat(sql);
+                        String id = UuidGenerator.getRandomIdByUUID(12);
+                        String sql = "('" + id + "', '" + workItem.getId() + "', '" + newSprintId + "'),";
+                        valueString = valueString.concat(sql);
+                    }
+                    int length = valueString.length() - 1;
+                    String substring = valueString.substring(0, length);
+                    if(newSprintId != null){
+                        // 更新事项与迭代的关联
+                        workSprintService.createBatchWorkSprint(substring);
+                    }
                 }
-                int length = valueString.length() - 1;
-                String substring = valueString.substring(0, length);
-                if(newSprintId != null){
-                    // 更新事项与迭代的关联
-                    workSprintService.createBatchWorkSprint(substring);
-                }
+
+                // 更新事项的迭代, 没有完成的更新到选择的新的迭代或者待办列表
+                workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
+
+
             }
 
-            // 更新事项的迭代, 没有完成的更新到选择的新的迭代或者待办列表
-            workItemService.updateBatchWorkItemSprint(sprintId, newSprintId);
-
-
-        }
-
-        if(sprintState != null && sprintState.getId().equals("111111")){
-            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String format = formater.format(new Date());
-            sprint.setRelaStartTime(format);
+            if(sprintState.getId().equals("111111")){
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String format = formater.format(new Date());
+                sprint.setRelaStartTime(format);
+            }
         }
 
         //设置结束时间

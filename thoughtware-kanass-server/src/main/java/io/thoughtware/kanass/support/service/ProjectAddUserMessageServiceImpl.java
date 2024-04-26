@@ -1,10 +1,10 @@
-package io.thoughtware.kanass.project.project.service;
+package io.thoughtware.kanass.support.service;
 
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.project.model.Project;
+import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.projectset.model.ProjectSet;
 import io.thoughtware.kanass.projectset.service.ProjectSetService;
-import io.thoughtware.kanass.workitem.model.WorkItem;
 import io.thoughtware.message.message.model.Message;
 import io.thoughtware.message.message.model.MessageReceiver;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Primary
 @Service
-public class ProjectUserServiceImpl extends DmUserCallbackServiceImpl {
+public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl {
     @Autowired
     ProjectService projectService;
 
@@ -60,8 +60,6 @@ public class ProjectUserServiceImpl extends DmUserCallbackServiceImpl {
         if(projectSet != null){
             creatPojectSetMessage(user, projectSet);
         }
-
-
     }
 
     void creatPojectMessage(User user, Project project){

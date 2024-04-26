@@ -75,6 +75,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.collectingAndThen;
@@ -89,6 +91,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     public final ExecutorService executorService = Executors.newCachedThreadPool();
     private static Logger logger = LoggerFactory.getLogger(WorkItemServiceImpl.class);
 
+    private final Lock lock = new ReentrantLock();
     @Autowired
     JpaTemplate jpaTemplate;
 
@@ -188,11 +191,10 @@ public class WorkItemServiceImpl implements WorkItemService {
     /**
      * 设置事项id
      */
-    public String setWorkItemId(WorkItem workItem){
+    public String setWorkItemCode(WorkItem workItem){
         String projectId = workItem.getProject().getId();
         String projectKey = projectService.findProject(projectId).getProjectKey();
         Integer maxOrderNum = workItemDao.findMaxIdWorkItem(projectId);
-
         //项目key - id
         String newId = new String();
         if(maxOrderNum != null){
@@ -204,7 +206,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             newId = projectKey.concat("-" + String.valueOf(1));
         }
         workItem.setOrderNum(maxOrderNum);
-        workItem.setId(newId);
+        workItem.setCode(newId);
         return newId;
     }
 
@@ -473,7 +475,7 @@ public class WorkItemServiceImpl implements WorkItemService {
      * @param workTypeId
      * @return
      */
-    StateNodeFlow findStartState(WorkItem workItem, String workTypeId, String id){
+    StateNodeFlow findStartState(WorkItem workItem, String workTypeId){
         //设置事项状态
         WorkTypeDm workTypeDm = workTypeDmService.findWorkTypeDm(workTypeId);
         Flow flow = workTypeDm.getFlow();
@@ -492,9 +494,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItem.setWorkStatus(stateNode);
         workItem.setWorkStatusNode(stateNode.getNode());
         workItem.setWorkStatusCode(stateNode.getNodeStatus());
-        
+        return stateNode;
+    }
 
+    void createWorkStateNodeRelation(WorkItem workItem, StateNodeFlow stateNode){
         //设置节点跟事项关联
+        String id = workItem.getId();
         StateNodeRelation stateNodeRelation = new StateNodeRelation();
         stateNodeRelation.setWorkId(id);
         stateNodeRelation.setWorkName(workItem.getTitle());
@@ -507,8 +512,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         }catch (Exception e){
             throw new ApplicationException(e);
         }
-
-        return stateNode;
     }
 
     /**
@@ -592,20 +595,14 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Override
     public String createWorkItem(@NotNull @Valid WorkItem workItem) {
-        // 设置id和序号
-        String id = setWorkItemId(workItem);
+        // 设置初始状态
         WorkTypeDm workType = workItem.getWorkType();
         String workTypeId = workType.getId();
 
-
-
-        // 设置初始状态
-        findStartState(workItem, workTypeId, id);
         //设置创建时间
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = formater.format(new Date());
         workItem.setBuildTime(format);
-
 
         //设置事项类型code,关联的系统事项类型
         WorkTypeDm workTypeDm = workTypeDmService.findWorkTypeDm(workTypeId);
@@ -613,7 +610,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItem.setWorkTypeCode(code);
         workItem.setWorkTypeSys(workTypeDm.getWorkType());
 
-        //设置treePath,
+        //设置treePath,rootId
         if(workItem.getParentWorkItem() != null){
             if(workItem.getParentWorkItem().getId() != null && !workItem.getParentWorkItem().getId().equals("nullstring") ) {
                 String treePath = workItem.getParentWorkItem().getId() + ";";
@@ -627,9 +624,22 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
 
+        lock.lock();
+        // 设置id和序号
+        String id = new String();
+        StateNodeFlow startState = findStartState(workItem, workTypeId);
+        try {
+            setWorkItemCode(workItem);
+            WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+            id = workItemDao.createWorkItem(workItemEntity);
+            workItem.setId(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
 
-        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-        workItemDao.createWorkItem(workItemEntity);
+        createWorkStateNodeRelation(workItem, startState);
 
         // 创建事项【类别】与选项的关联关系
         String eachType = workItem.getEachType();
@@ -650,8 +660,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             selectItemRelation.setRelationId(id);
             selectItemRelationService.createSelectItemRelation(selectItemRelation);
         }
-
-
 
         // 如果添加的时候有迭代, 创建迭代与事项的关联记录
         Sprint sprint = workItem.getSprint();
@@ -689,21 +697,20 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workItemDao.updateWorkItem(workItemEntity1);
             }
         }
+
+        String finalId = id;
         executorService.submit(() -> {
-            WorkItem workItem1 = findWorkItem(id);
+            WorkItem workItem1 = findWorkItem(finalId);
+            creatWorkItemDynamic(workItem1);
             creatTodoTask(workItem1, workItem1.getBuilder());
             sendMessageForCreate(workItem1);
-            creatWorkItemDynamic(workItem1);
         });
-
-
 
         return id;
     }
 
     @Override
     public String createJiraWorkItem(@NotNull @Valid WorkItem workItem) {
-
 
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         String workItemId = workItemDao.createWorkItem(workItemEntity);
@@ -756,6 +763,12 @@ public class WorkItemServiceImpl implements WorkItemService {
                 break;
         };
 
+    }
+
+    @Override
+    public void updateWork(@NotNull WorkItem workItem){
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        workItemDao.updateWorkItem(workItemEntity);
     }
     public void updateTitle(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
@@ -1077,6 +1090,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                 throw new ApplicationException("还有下级事项没有关闭");
             }
         }
+
         if(!statusId.equals("todo")){
             WorkItemEntity workItem1 = workItemDao.findWorkItem(id);
             String preDependId = workItem1.getPreDependId();
@@ -1094,7 +1108,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         if(transitionId != null){
             updateByTransitionRule(workItem, oldWorkItem, transitionId);
         }
-
     }
 
     public void updateAssigner(WorkItem workItem){

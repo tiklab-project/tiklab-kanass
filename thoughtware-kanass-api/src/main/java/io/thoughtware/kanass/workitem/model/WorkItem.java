@@ -32,7 +32,10 @@ import java.util.List;
 public class WorkItem extends BaseModel {
 
     @ApiProperty(name="id",desc="唯一标识")
-    private java.lang.String id;
+    private String id;
+
+    @ApiProperty(name = "code",desc = "编码")
+    private String code;
 
     @ApiProperty(name="orderNum",desc="序号")
     private Integer orderNum;
@@ -601,5 +604,13 @@ public class WorkItem extends BaseModel {
 
     public void setUsedTime(Integer usedTime) {
         this.usedTime = usedTime;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

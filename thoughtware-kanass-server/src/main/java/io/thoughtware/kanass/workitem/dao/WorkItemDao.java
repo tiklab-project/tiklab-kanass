@@ -994,8 +994,8 @@ public class WorkItemDao{
             String name = orderParam.getName();
             System.out.println(orderType);
             System.out.println(name);
-            if(name.equals("id")){
-                sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
+            if(name.equals("code")){
+                sql = sql.concat(" split_part(p.code, '-', 1) " + orderType + ", cast(split_part (p.code, '-', 2) as integer) " + orderType + ",");
             } else if(name.equals("work_priority_id")){
                 sql = sql.concat(" priority.sort " + orderType + "," );
             } else {
@@ -1270,8 +1270,8 @@ public class WorkItemDao{
             String name = orderParam.getName();
             System.out.println(orderType);
             System.out.println(name);
-            if(name.equals("id")){
-                sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
+            if(name.equals("code")){
+                sql = sql.concat(" split_part(p.code, '-', 1) " + orderType + ", cast(split_part (p.code, '-', 2) as integer) " + orderType + ",");
             } else if(name.equals("work_priority_id")){
                 sql = sql.concat(" priority.sort " + orderType + "," );
             } else {

@@ -114,7 +114,8 @@ CREATE TABLE pmc_work_item(
         work_type_sys_id VARCHAR(8) NOT NULL,
         work_status_node_id VARCHAR(8) NOT NULL,
         each_type VARCHAR(64),
-        update_time timestamp
+        update_time timestamp,
+        code VARCHAR(32)
 );
 
 

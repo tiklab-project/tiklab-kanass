@@ -70,7 +70,8 @@ public class KanassDsmAutoConfiguration {
                 "message_1.0.3",
                 "flow_1.0.3",
                 "apply-auth_1.0.3",
-                "form_1.0.3"
+                "form_1.0.3",
+                "privilege_1.0.3",
         });
         dsmConfig.newVersion("1.0.4", new String[]{
                 "oplog_1.0.4",
@@ -86,6 +87,9 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.0.7", new String[]{
                 "message_1.0.7"
+        });
+        dsmConfig.newVersion("1.0.8", new String[]{
+                "message_1.0.8"
         });
         dsmConfig.newVersion("1.1.5", new String[]{
                 "pmc_1.1.5"
@@ -121,6 +125,9 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.2.6", new String[]{
                 "pmc_1.2.6"
         });
+//        dsmConfig.newVersion("1.2.8", new String[]{
+//                "pmc_1.2.8"
+//        });
         return dsmConfig;
     }
 }

@@ -37,6 +37,9 @@ public interface WorkItemService {
     * @param workItem
     */
     void updateWorkItem(@NotNull @Valid WorkItem workItem);
+
+    void updateWork(@NotNull WorkItem workItem);
+
     void updateTodoTaskData(WorkItem workItem);
     /**
     * 删除事项
