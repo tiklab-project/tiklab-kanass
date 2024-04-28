@@ -1246,19 +1246,6 @@ public class WorkItemServiceImpl implements WorkItemService {
                     sendMessageForUpdateAssigner(oldWorkItem, user);
                 }
             }
-
-            // 更新状态发送消息
-//            List<TransitionRule> sendMessage = transitionRuleList.stream().filter(item -> item.getRuleType().equals("sendMessage")).
-//                    collect(Collectors.toList());
-//            if(sendMessage.size() > 0){
-//                TransitionRule transitionRule = sendMessage.get(0);
-//                List<User> transitionRuleUser = businessRoleService.findDistributionUser(transitionRule, id);
-//                if(transitionRuleUser.size() > 0){
-//                    // 发送消息和待办事项
-//                    WorkItem newWorkItem = findWorkItem(id);
-//                    sendMessageForUpdateStatus(oldWorkItem, newWorkItem, transitionRuleUser);
-//                }
-//            }
         }
 
     }
