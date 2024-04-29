@@ -8,4 +8,3 @@ INSERT INTO pcs_mec_message_notice_connect_vrole (id, message_notice_id, vrole_i
 
 UPDATE pcs_mec_message_notice  SET message_send_type_id = 'site,qywechat' WHERE id = 'KANASS_MESSAGE_SPRINTUPDATE';
 UPDATE pcs_mec_message_notice  SET message_send_type_id = 'site,qywechat' WHERE id = 'KANASS_MESSAGE_SPRINTCREATE';
-INSERT INTO pcs_mec_message_notice_connect_vrole (id, message_notice_id, vrole_id) VALUES ('d0e68bbfc991', 'KANASS_MESSAGETYPE_SPRINTCREATE', 'PROJECT_ADMINISTRATORS');
