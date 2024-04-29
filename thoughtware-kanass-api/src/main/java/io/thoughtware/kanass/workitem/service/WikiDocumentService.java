@@ -1,8 +1,8 @@
 package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.kanass.project.wiki.model.DocumentQuery;
 import io.thoughtware.kanass.project.wiki.model.KanassDocument;
+import io.thoughtware.kanass.project.wiki.model.NodeQuery;
 import io.thoughtware.kanass.project.wiki.model.WikiDocument;
 import io.thoughtware.kanass.workitem.model.WorkItemDocumentQuery;
 
@@ -21,6 +21,6 @@ public interface WikiDocumentService {
     * @return
     */
     Pagination<KanassDocument> findUnRelationWorkDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
-    List<WikiDocument> findDocumentList(@NotNull @Valid DocumentQuery documentQuery);
+    List<WikiDocument> findDocumentList(@NotNull @Valid NodeQuery nodeQuery);
 
 }

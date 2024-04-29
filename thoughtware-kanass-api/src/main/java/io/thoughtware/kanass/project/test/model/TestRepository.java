@@ -12,8 +12,8 @@ public class TestRepository {
     @ApiProperty(name="iconUrl",desc="测试仓库名称")
     private String iconUrl;
 
-    @ApiProperty(name="UserName",desc="父级阶段")
-    private String UserName;
+    @ApiProperty(name="user",desc="父级阶段")
+    private String user;
 
     public String getId() {
         return id;
@@ -31,12 +31,13 @@ public class TestRepository {
         TestRepositoryName = testRepositoryName;
     }
 
-    public String getUserName() {
-        return UserName;
+
+    public String getUser() {
+        return user;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getIconUrl() {

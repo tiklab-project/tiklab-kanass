@@ -1,8 +1,8 @@
 package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.core.page.Pagination;
-import io.thoughtware.kanass.project.wiki.model.DocumentQuery;
 import io.thoughtware.kanass.project.wiki.model.KanassDocument;
+import io.thoughtware.kanass.project.wiki.model.NodeQuery;
 import io.thoughtware.kanass.project.wiki.model.WikiDocument;
 import io.thoughtware.kanass.support.model.SystemUrl;
 import io.thoughtware.kanass.support.model.SystemUrlQuery;
@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,25 +42,24 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
     @Override
     public Pagination<KanassDocument> findUnRelationWorkDocumentList(WorkItemDocumentQuery workItemDocumentQuery) {
 
-        DocumentQuery documentQuery = new DocumentQuery();
-        documentQuery.setRepositoryId(workItemDocumentQuery.getRepositoryId());
-        documentQuery.setRepositoryIds(workItemDocumentQuery.getRepositoryIds());
+        NodeQuery nodeQuery = new NodeQuery();
+        nodeQuery.setRepositoryId(workItemDocumentQuery.getRepositoryId());
+        nodeQuery.setRepositoryIds(workItemDocumentQuery.getRepositoryIds());
 
-        documentQuery.setPageParam(workItemDocumentQuery.getPageParam());
-        documentQuery.setName(workItemDocumentQuery.getName());
+        nodeQuery.setPageParam(workItemDocumentQuery.getPageParam());
+        nodeQuery.setName(workItemDocumentQuery.getName());
         List<WorkItemDocument> workItemDocumentList = workItemDocumentService.findWorkItemDocumentList(workItemDocumentQuery);
         List<String> workItemDocumentIds = workItemDocumentList.stream().map(workItemDocument -> workItemDocument.getDocumentId()).collect(Collectors.toList());
 
         int sizeId = workItemDocumentIds.size();
         String[] stringIds = new String[sizeId];
         String[] documentIds = workItemDocumentIds.toArray(stringIds);
-        documentQuery.setIds(documentIds);
+        nodeQuery.setIds(documentIds);
 
-//        Pagination<WikiDocument> documentPage = documentServiceRpc().findDocumentPage(documentQuery);
 
         HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
         String systemUrl = getSystemUrl();
-        Pagination<WikiDocument> documentPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/document/findDocumentPage", documentQuery, WikiDocument.class);
+        Pagination<WikiDocument> documentPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api//node/findNodePage", nodeQuery, WikiDocument.class);
 
         Pagination<KanassDocument> kanassDocumentPage = new Pagination<KanassDocument>();
         kanassDocumentPage.setTotalRecord(documentPage.getTotalRecord());
@@ -82,10 +83,10 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
     }
 
     @Override
-    public List<WikiDocument> findDocumentList(DocumentQuery documentQuery) {
+    public List<WikiDocument> findDocumentList(NodeQuery nodeQuery) {
         HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
         String systemUrl = getSystemUrl();
-        List<WikiDocument> wikiDocumentList = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/document/findDocumentList", documentQuery, WikiDocument.class);
+        List<WikiDocument> wikiDocumentList = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/node/findNodePage", nodeQuery, WikiDocument.class);
         
         return wikiDocumentList;
     }

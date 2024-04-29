@@ -1,7 +1,7 @@
 package io.thoughtware.kanass.workitem.service;
 
-import io.thoughtware.kanass.project.wiki.model.DocumentQuery;
 import io.thoughtware.kanass.project.wiki.model.KanassDocument;
+import io.thoughtware.kanass.project.wiki.model.NodeQuery;
 import io.thoughtware.kanass.project.wiki.model.WikiDocument;
 import io.thoughtware.kanass.support.model.SystemUrl;
 import io.thoughtware.kanass.support.model.SystemUrlQuery;
@@ -156,21 +156,17 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
         List<KanassDocument> list = new ArrayList<KanassDocument>();
         if (!ObjectUtils.isEmpty(workItemDocumentList)){
             for (WorkItemDocument workItemDocument:workItemDocumentList){
-                DocumentQuery documentQuery = new DocumentQuery();
-                documentQuery.setId(workItemDocument.getDocumentId());
 
                 HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
                 String systemUrl = getSystemUrl();
 
                 MultiValueMap param = new LinkedMultiValueMap<>();
                 param.add("id", workItemDocument.getDocumentId());
-                WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/document/findDocument", param, WikiDocument.class);
+                WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
 
 
-//                WikiDocument wikiDocument = documentServiceRpc().findDocument(workItemDocument.getDocumentId());
                 KanassDocument kanassDocument = new KanassDocument();
                 if (!ObjectUtils.isEmpty(wikiDocument)){
-
                     kanassDocument.setId(wikiDocument.getId());
                     kanassDocument.setDocumentName(wikiDocument.getName());
                     kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());

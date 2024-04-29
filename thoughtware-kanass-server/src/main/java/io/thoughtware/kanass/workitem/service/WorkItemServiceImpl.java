@@ -25,7 +25,9 @@ import io.thoughtware.kanass.project.worklog.model.WorkLogQuery;
 import io.thoughtware.kanass.project.worklog.service.WorkLogService;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.service.SprintService;
+import io.thoughtware.message.message.model.SendMessageNotice;
 import io.thoughtware.message.message.service.SendMessageNoticeService;
+import io.thoughtware.privilege.vRole.model.VRoleDomain;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.security.logging.logging.model.Logging;
 import io.thoughtware.security.logging.logging.model.LoggingQuery;
@@ -315,13 +317,15 @@ public class WorkItemServiceImpl implements WorkItemService {
         sendMessageNoticeService.sendMessage(message);
     }
 
-    void sendMessageForUpdateStatus(WorkItem OldWorkItem, WorkItem workItem, List<User> receivers){
+    void sendMessageForUpdateStatus(WorkItem oldWorkItem, WorkItem workItem){
+        String projectId = oldWorkItem.getProject().getId();
+        String workItemId = workItem.getId();
         HashMap<String, Object> content = new HashMap<>();
         content.put("workItemTitle", workItem.getTitle());
-        content.put("workItemId", workItem.getId());
-        content.put("workTypeIcon", workItem.getWorkTypeSys().getIconUrl());
-        content.put("projectId", workItem.getProject().getId());
-        content.put("oldValue", OldWorkItem.getWorkStatusNode().getName());
+        content.put("workItemId", workItemId);
+        content.put("workTypeIcon", oldWorkItem.getWorkTypeSys().getIconUrl());
+        content.put("projectId", projectId);
+        content.put("oldValue", oldWorkItem.getWorkStatusNode().getName());
         content.put("newValue", workItem.getWorkStatusNode().getName());
         if(workItem.getSprint() != null) {
             content.put("sprintId", workItem.getSprint().getId());
@@ -334,35 +338,35 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
-
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_UPDATESTATUS");
-        message.setMessageType(messageType);
-        message.setData(content);
-
-        // 接收者
-        List<MessageReceiver> objects = new ArrayList<>();
-
-        for (User receiver : receivers) {
-            MessageReceiver messageReceiver = new MessageReceiver();
-            messageReceiver.setUserId(receiver.getId());
-            objects.add(messageReceiver);
-        }
+        String msg = JSONObject.toJSONString(content);
+//        Message message = new Message();
+//        MessageType messageType = new MessageType();
+//        messageType.setId("KANASS_MESSAGETYPE_UPDATESTATUS");
 
 
+        SendMessageNotice sendMessageNotice = new SendMessageNotice();
+        sendMessageNotice.setId("KANASS_MESSAGE_UPDATESTATUS");
+        sendMessageNotice.setDomainId(projectId);
+        sendMessageNotice.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        sendMessageNotice.setAction(workItem.getTitle());
+        sendMessageNotice.setBaseUrl(baseUrl);
+        sendMessageNotice.setSiteData(msg);
+        sendMessageNotice.setQywechatData(msg);
+        sendMessageNotice.setSendId(createUserId);
+        sendMessageNotice.setAction(oldWorkItem.getTitle());
+        VRoleDomain vRoleDomain = new VRoleDomain();
+        vRoleDomain.setType("workItem");
+        vRoleDomain.setModelId(workItemId);
+        vRoleDomain.setDomainId(projectId);
+        sendMessageNotice.setvRoleDomain(vRoleDomain);
+        sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
+//        message.setMessageSendTypeId("site");
 
-        message.setMessageReceiverList(objects);
-        message.setBaseUrl(baseUrl);
-        message.setLink("/projectDetail/${projectId}/work/${workItemId}");
-        message.setAction(workItem.getTitle());
-        message.setSendId(user.getId());
-        message.setMessageSendTypeId("site");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("qywechat");
-        sendMessageNoticeService.sendMessage(message);
+//        sendMessageNoticeService.sendMessage(message);
+//
+//        message.setId(null);
+//        message.setMessageSendTypeId("qywechat");
+//        sendMessageNoticeService.sendMessage(message);
     }
 
 
@@ -757,12 +761,14 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "workPriority":
                 updateWorkPriority(workItem);
                 break;
+            case "preDependWorkItem":
+                updatePreDependWorkItem(workItem);
+                break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                 workItemDao.updateWorkItem(workItemEntity);
                 break;
         };
-
     }
 
     @Override
@@ -770,6 +776,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
     }
+
     public void updateTitle(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
@@ -810,10 +817,8 @@ public class WorkItemServiceImpl implements WorkItemService {
                 updateWorkItemSprint(workItem1);
             }
         }
-
-
-
     }
+
     public void updateWorkItemSprint(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的迭代
@@ -858,7 +863,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
 
         }
-
         workItemDao.updateWorkItem(workItemEntity);
         // 更新待办
         WorkItem workItem1 = findWorkItem(workItem.getId());
@@ -879,9 +883,6 @@ public class WorkItemServiceImpl implements WorkItemService {
                 updateWorkItemVersion(workItem1);
             }
         }
-
-
-
     }
     public void updateWorkItemVersion(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
@@ -924,16 +925,13 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workVersion.setWorkItemId(workItem.getId());
                 workVersionService.createWorkVersion(workVersion);
             }
-
         }
-
         workItemDao.updateWorkItem(workItemEntity);
         // 更新待办
         WorkItem workItem1 = findWorkItem(workItem.getId());
         workItem1.setUpdateField(workItem.getUpdateField());
         updateTodoTaskData(workItem1);
     }
-
 
     public void updateWorkItemPlanTime(WorkItem workItem){
         String id = workItem.getId();
@@ -959,18 +957,29 @@ public class WorkItemServiceImpl implements WorkItemService {
                 task.setEndTime(timestamp);
                 taskService.updateTask(task);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
-
         workItemDao.updateWorkItem(workItemEntity);
     }
 
     public void updatePreDependWorkItem(WorkItem workItem){
         // 判断所选事项是否能添加为前置
+        String id = workItem.getId();
 
+        if((workItem.getPreDependWorkItem() != null && workItem.getPreDependWorkItem().getId() != null ) &&
+                !workItem.getPreDependWorkItem().getId().equals("nullstring")){
+            String preDependWorkItemId = workItem.getPreDependWorkItem().getId();
+            WorkItem preDependWorkItem = findWorkItem(preDependWorkItemId);
+            WorkItem workItem1 = findWorkItem(id);
+            if(preDependWorkItem.getWorkStatusCode().equals("TODO") && !workItem1.getWorkStatusCode().equals("TODO")){
+                throw new SystemException(3001, "当前事项已经开始，所选择前置事项未开始，不可添加为前置事项");
+            }
+        }
+
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        workItemDao.updateWorkItem(workItemEntity);
     }
 
     public void updateEachType(WorkItem workItem){
@@ -1017,16 +1026,23 @@ public class WorkItemServiceImpl implements WorkItemService {
         //设置treePath,rootId
         String id = workItem.getId();
 
-
         if((workItem.getParentWorkItem() != null && workItem.getParentWorkItem().getId() != null ) &&
                 !workItem.getParentWorkItem().getId().equals("nullstring")){
             // 如果上级事项不为空
-
-            // 判断是否能修改选择的事项为父级
-            // 当前事项有个下级
-            Integer childrenLevel = findChildrenLevel(id);
             String parentId = workItem.getParentWorkItem().getId();
             WorkItem parentWorkItem = findWorkItem(parentId);
+            WorkItem workItem1 = findWorkItem(id);
+            String workStatusCode = workItem1.getWorkStatusCode();
+            String parentWorkStatusCode = parentWorkItem.getWorkStatusCode();
+            // 判断是否能修改选择的事项为父级
+            // 判断上级的状态
+            if(parentWorkStatusCode.equals("DONE") && !workStatusCode.equals("DONE")){
+                throw new SystemException(3001, "当前事项未完成，所选择父级已完成，不可添加为父级");
+            }
+
+            // 判断是否能修改选择的事项为父级
+            // 判断上级的层级
+            Integer childrenLevel = findChildrenLevel(id);
             if(childrenLevel.equals(2)){
                 throw new SystemException(3001, "事项限制为三级，当前事项不能添加父级");
             }
@@ -1105,6 +1121,8 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItem oldWorkItem = findWorkItem(id);
         updateWorkItemStatus(workItem, oldWorkItem);
         String transitionId = workItem.getTransitionId();
+        WorkItem newWorkItem = findWorkItem(id);
+        sendMessageForUpdateStatus(oldWorkItem, newWorkItem);
         if(transitionId != null){
             updateByTransitionRule(workItem, oldWorkItem, transitionId);
         }

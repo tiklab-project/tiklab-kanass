@@ -47,7 +47,7 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
         for (Repository repository : allRepository) {
             TestRepository testRepository = new TestRepository();
             testRepository.setId(repository.getId());
-            testRepository.setUserName(repository.getUser().getNickname());
+            testRepository.setUser(repository.getUser().getNickname());
             testRepository.setTestRepositoryName(repository.getName());
             testRepository.setIconUrl(repository.getIconUrl());
             testRepositoryList.add(testRepository);
@@ -69,7 +69,7 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
         for (Repository repository : list) {
             TestRepository testRepository = new TestRepository();
             testRepository.setId(repository.getId());
-            testRepository.setUserName(repository.getUser().getNickname());
+            testRepository.setUser(repository.getUser().getNickname());
             testRepository.setTestRepositoryName(repository.getName());
             testRepository.setIconUrl(repository.getIconUrl());
             testRepositoryList.add(testRepository);

@@ -107,13 +107,13 @@ public class SprintServiceImpl implements SprintService {
         sendMessageNotice.setAction(sprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
         sendMessageNotice.setSiteData(msg);
+        sendMessageNotice.setQywechatData(msg);
         sendMessageNotice.setDomainId(projectId);
         VRoleDomain vRoleDomain = new VRoleDomain();
         vRoleDomain.setModelId(sprint.getId());
         vRoleDomain.setType("sprint");
         sendMessageNotice.setvRoleDomain(vRoleDomain);
         sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
-
     }
 
     /**
@@ -152,6 +152,7 @@ public class SprintServiceImpl implements SprintService {
         sendMessageNotice.setAction(newSprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
         sendMessageNotice.setSiteData(msg);
+        sendMessageNotice.setQywechatData(msg);
         sendMessageNotice.setDomainId(projectId);
         VRoleDomain vRoleDomain = new VRoleDomain();
         vRoleDomain.setModelId(newSprint.getId());

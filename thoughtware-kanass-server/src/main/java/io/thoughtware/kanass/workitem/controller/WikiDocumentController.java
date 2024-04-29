@@ -1,11 +1,11 @@
 package io.thoughtware.kanass.workitem.controller;
 
 import io.thoughtware.core.page.Pagination;
+import io.thoughtware.kanass.project.wiki.model.NodeQuery;
 import io.thoughtware.postin.annotation.Api;
 import io.thoughtware.postin.annotation.ApiMethod;
 import io.thoughtware.postin.annotation.ApiParam;
 import io.thoughtware.core.Result;
-import io.thoughtware.kanass.project.wiki.model.DocumentQuery;
 import io.thoughtware.kanass.project.wiki.model.KanassDocument;
 import io.thoughtware.kanass.project.wiki.model.WikiDocument;
 import io.thoughtware.kanass.workitem.model.WorkItemDocumentQuery;
@@ -40,8 +40,8 @@ public class WikiDocumentController {
     @RequestMapping(path = "/findDocumentList",method = RequestMethod.POST)
     @ApiMethod(name = "findDocumentList",desc = "findDocumentList")
     @ApiParam(name = "documentQuery",desc = "documentQuery",required = true)
-    public Result<List<WikiDocument>> findDocumentList(@RequestBody @Valid @NotNull DocumentQuery documentQuery){
-        List<WikiDocument> wikiDocumentList = wikiDocumentService.findDocumentList(documentQuery);
+    public Result<List<WikiDocument>> findDocumentList(@RequestBody @Valid @NotNull NodeQuery nodeQuery){
+        List<WikiDocument> wikiDocumentList = wikiDocumentService.findDocumentList(nodeQuery);
 
         return Result.ok(wikiDocumentList);
     }
