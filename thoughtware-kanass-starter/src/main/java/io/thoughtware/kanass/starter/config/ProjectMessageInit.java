@@ -43,7 +43,6 @@ public class ProjectMessageInit implements ApplicationRunner {
     }
 
     public void updateWorkItemId(){
-        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         MessageNoticeQuery messageNoticeQuery = new MessageNoticeQuery();
         messageNoticeQuery.setScope(1);
         messageNoticeQuery.setType(2);
@@ -58,20 +57,32 @@ public class ProjectMessageInit implements ApplicationRunner {
             List<String> messageDmNoticeIds = messageDmNoticeList.stream().map(item -> item.getSourceNoticeId()).collect(Collectors.toList());
             List<MessageNotice> messageNoticeList2 = messageNoticeList.stream().filter(item -> !messageDmNoticeIds.contains(item.getId())).collect(Collectors.toList());
             for (MessageNotice messageNotice : messageNoticeList2) {
-                String id1 = messageNotice.getId();
-                // 创建消息方案
-                messageNotice.setId(null);
-                messageNotice.setScope(2);
-                String messageNotice1 = messageNoticeService.createMessageNotice(messageNotice);
-
-                // 创建消息dm
+                MessageNotice messageNotice2 = new MessageNotice(messageNotice.getId());
                 MessageDmNotice messageDmNotice = new MessageDmNotice();
-                messageDmNotice.setSourceNoticeId(id1);
-                messageNotice.setId(messageNotice1);
-                messageDmNotice.setMessageNotice(messageNotice);
-                messageDmNotice.setOpen(true);
+                messageDmNotice.setMessageNotice(messageNotice2);
                 messageDmNotice.setDomainId(id);
-                messageDmNoticeService.createMessageDmNotice(messageDmNotice);
+                messageDmNotice.setMessageSendTypeId(messageNotice.getMessageSendTypeId());
+                messageDmNotice.setSourceNoticeId(messageNotice.getId());
+                messageDmNoticeService.addMessageDmNotice(messageDmNotice);
+//                String id1 = messageNotice.getId();
+//                // 创建消息方案
+//                messageNotice2.setId(null);
+//                messageNotice2.setScope(2);
+//                messageNotice2.setMessageType(messageNotice.getMessageType());
+//                messageNotice2.setOpen(messageNotice.getOpen());
+//                messageNotice2.setBgroup(messageNotice.getBgroup());
+//                messageNotice2.setType(messageNotice.getType());
+//                messageNotice2.setMessageSendTypeId(messageNotice.getMessageSendTypeId());
+//                String messageNotice1 = messageNoticeService.createMessageNotice(messageNotice2);
+//
+//                // 创建消息dm
+//                MessageDmNotice messageDmNotice = new MessageDmNotice();
+//                messageDmNotice.setSourceNoticeId(id1);
+//                messageNotice2.setId(messageNotice1);
+//                messageDmNotice.setMessageNotice(messageNotice2);
+//                messageDmNotice.setOpen(true);
+//                messageDmNotice.setDomainId(id);
+//                messageDmNoticeService.createMessageDmNotice(messageDmNotice);
             }
 
 
