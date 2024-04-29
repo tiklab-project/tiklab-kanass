@@ -1122,7 +1122,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateWorkItemStatus(workItem, oldWorkItem);
         String transitionId = workItem.getTransitionId();
         WorkItem newWorkItem = findWorkItem(id);
-        sendMessageForUpdateStatus(oldWorkItem, newWorkItem);
+        executorService.submit(() -> {
+            sendMessageForUpdateStatus(oldWorkItem, newWorkItem);
+        });
+
         if(transitionId != null){
             updateByTransitionRule(workItem, oldWorkItem, transitionId);
         }

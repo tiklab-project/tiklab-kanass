@@ -37,6 +37,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +46,7 @@ import java.util.stream.Collectors;
 */
 @Service
 public class SprintServiceImpl implements SprintService {
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     SprintDao sprintDao;
 
@@ -175,8 +177,11 @@ public class SprintServiceImpl implements SprintService {
 
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
-        sprint = findSprint(id);
-        sendMessageForCreatSprint(sprint);
+        executorService.submit(() -> {
+            Sprint sprint1 = findSprint(id);
+            sendMessageForCreatSprint(sprint1);
+        });
+
         return id;
     }
 
@@ -242,7 +247,9 @@ public class SprintServiceImpl implements SprintService {
         sprintDao.updateSprint(sprintEntity);
         Sprint newSprint = findSprint(sprintId);
         if(sprintState != null){
-            sendMessageForUpdateSprintState(oldSprint, newSprint);
+            executorService.submit(() -> {
+                sendMessageForUpdateSprintState(oldSprint, newSprint);
+            });
         }
     }
 
