@@ -973,7 +973,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             String preDependWorkItemId = workItem.getPreDependWorkItem().getId();
             WorkItem preDependWorkItem = findWorkItem(preDependWorkItemId);
             WorkItem workItem1 = findWorkItem(id);
-            if(preDependWorkItem.getWorkStatusCode().equals("TODO") && !workItem1.getWorkStatusCode().equals("TODO")){
+                if(!preDependWorkItem.getWorkStatusCode().equals("DONE") && !workItem1.getWorkStatusCode().equals("TODO")){
                 throw new SystemException(3001, "当前事项已经开始，所选择前置事项未开始，不可添加为前置事项");
             }
         }
