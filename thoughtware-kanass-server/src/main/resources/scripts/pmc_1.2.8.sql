@@ -1,9 +1,8 @@
-ALTER TABLE pmc_work_item ADD COLUMN code VARCHAR(32) DEFAULT 0;
 UPDATE pmc_work_item SET code = id;
 
 DELETE FROM pcs_mec_message_notice WHERE id = 'KANASS_MESSAGETYPE_SPRINTCREATE';
 INSERT INTO pcs_mec_message_notice (id, message_type_id, type, bgroup, message_send_type_id, scope, is_open) VALUES ('KANASS_MESSAGE_SPRINTCREATE', 'KANASS_MESSAGETYPE_SPRINTCREATE', 2, 'kanass', 'site', 1, 'true');
-
+INSERT INTO pcs_mec_message_type (id, name, description, bgroup) VALUES ('KANASS_MESSAGETYPE_SPRINTCREATE', '添加迭代', '添加迭代', 'kanass');
 
 INSERT INTO pcs_mec_message_type (id, name, description, bgroup) VALUES ('KANASS_MESSAGETYPE_SPRINTUPDATE', '更新迭代状态', '更新迭代状态', 'kanass');
 INSERT INTO pcs_mec_message_notice (id, message_type_id, type, bgroup, message_send_type_id, scope, is_open) VALUES ('KANASS_MESSAGE_SPRINTUPDATE', 'KANASS_MESSAGETYPE_SPRINTUPDATE', 2, 'kanass', 'site', 1, 'true');
