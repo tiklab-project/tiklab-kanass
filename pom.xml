@@ -15,7 +15,6 @@
     <version>1.0.1-SNAPSHOT</version>
     <properties>
         <thoughtware-kanass.version>1.0.1-SNAPSHOT</thoughtware-kanass.version>
-        <thoughtware-mysql.version>1.0.0</thoughtware-mysql.version>
         <thoughtware-jdk.version>1.0.1-SNAPSHOT</thoughtware-jdk.version>
         <thoughtware-toolkit.version>1.0.0</thoughtware-toolkit.version>
         <thoughtware-gateway.version>1.0.1-SNAPSHOT</thoughtware-gateway.version>

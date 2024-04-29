@@ -3,7 +3,8 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 
-	<id>linux</id>
+	<id>windows</id>
+
 	<formats>
 		<format>tar.gz</format>
 	</formats>
@@ -18,7 +19,7 @@
 		<fileSet>
 			<directory>${basedir}/src/main/resources/${yaml-type}</directory>
 			<includes>
-				<include>application.yaml</include>
+				<include>*.yaml</include>
 			</includes>
 			<outputDirectory>/conf</outputDirectory>
 		</fileSet>
@@ -46,10 +47,9 @@
 		<fileSet>
 			<directory>${basedir}/bin</directory>
 			<fileMode>755</fileMode>
-			<excludes>
-				<exclude>*.classpath</exclude>
-				<exclude>*.bat</exclude>
-			</excludes>
+			<includes>
+				<include>*.bat</include>
+			</includes>
 			<outputDirectory>/bin</outputDirectory>
 		</fileSet>
 		<fileSet>
@@ -57,13 +57,11 @@
 			<fileMode>755</fileMode>
 			<outputDirectory>/plugin</outputDirectory>
 		</fileSet>
-
 		<fileSet>
 			<directory>${basedir}/embbed</directory>
 			<fileMode>755</fileMode>
 			<outputDirectory>/embbed</outputDirectory>
 		</fileSet>
-
 	</fileSets>
 
 	<dependencySets>
