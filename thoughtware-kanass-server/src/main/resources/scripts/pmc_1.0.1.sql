@@ -660,7 +660,6 @@ INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) V
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('7055ebc6', '需求', '需求', 'demand', 1, '0c5d4ff9', '4d040c6d', 'workType1.png', 'system', 0);
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('778222e0', '任务', '任务', 'task', 2, '515f17bd', '4d040c6d', 'workType2.png', 'system', 0);
 INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('98121701', '缺陷', '缺陷', 'defect', 3, '607f6be6', '4d040c6d', 'workType3.png', 'system', 0);
-INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('13240f85', '需求集', '需求集', 'epic', 4, '0c5d4ff9', '4d040c6d', '/image/99597455c4ad1412', 'system', 0);
 
 INSERT INTO pmc_project_type (id, type, name, description, icon_url) VALUES ('5a46432a', 'scrum', '敏捷式项目', '敏捷式项目', 'project1.png');
 INSERT INTO pmc_project_type (id, type, name, description, icon_url) VALUES ('ea782c6d', 'nomal', '瀑布研发项目', '瀑布研发项目', 'project2.png');
