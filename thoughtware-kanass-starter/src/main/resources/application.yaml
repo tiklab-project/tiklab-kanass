@@ -12,13 +12,14 @@ spring:
 server:
     port: 8080
 
+DATA_HOME: /opt/kanass/kanass
 
 base:
-    url: http://kanass-ce.kanass.net
+    url: http://kanass-ce.test.kanass.net
 
 jdbc:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:8000/kanass?stringtype=unspecified
+    url: jdbc:postgresql://localhost:5432/kanass?stringtype=unspecified
     username: postgres
     password: darth2020
 
@@ -27,17 +28,17 @@ postgresql:
         enable: true
     database: kanass
     db:
-        port: 8000
+        port: 5432
         username: postgres
         password: darth2020
         address: ${DATA_HOME}/postgresql
+
 
 #eas config
 eas:
     embbed:
         enable: true
-
-DATA_HOME: /Users/yuanjiexuan/thoughtware1/kanass
+    address: http://eas-ce.test.kanass.net
 #dfs config
 #dfs.server.enabled=false
 dfs:
@@ -51,23 +52,29 @@ dfs:
         bucket: kanass
 
 #dcs config
+#dcs.server.enabled=false
 dcs:
     server:
         enabled: true
-        port: 5000
+        port: 6000
         datapath: ${DATA_HOME}/caches
     client:
-        url: 127.0.0.1:5000
+        url: 127.0.0.1:6000
         group: g1
         database: dcs1
         expire: 7200
 
+#license
 licences:
     path: ${APP_HOME}/src/main/resources/licences
-#integration config
 
+#plugin config
 plugin:
-    path: ${APP_HOME}/plugin
+    path: ${DATA_HOME}/plugin
+
+#zip config
+unzip:
+    path: ${DATA_HOME}/unzip/Jire
 
 homes:
     address: http://192.168.10.6:8070
@@ -75,10 +82,6 @@ homes:
 file:
     path: http://file.dev.kanass.io
 
-
-#zip config
-unzip:
-    path: ${DATA_HOME}/unzip/Jire
 
 client: web
 version: ce
