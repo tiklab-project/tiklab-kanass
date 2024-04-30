@@ -19,7 +19,7 @@ base:
 
 jdbc:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/kanass?stringtype=unspecified
+    url: jdbc:postgresql://localhost:8000/kanass?stringtype=unspecified
     username: postgres
     password: darth2020
 
@@ -28,7 +28,7 @@ postgresql:
         enable: true
     database: kanass
     db:
-        port: 5432
+        port: 8000
         username: postgres
         password: darth2020
         address: ${DATA_HOME}/postgresql

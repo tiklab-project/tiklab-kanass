@@ -64,28 +64,7 @@ public class ProjectMessageInit implements ApplicationRunner {
                 messageDmNotice.setMessageSendTypeId(messageNotice.getMessageSendTypeId());
                 messageDmNotice.setSourceNoticeId(messageNotice.getId());
                 messageDmNoticeService.addMessageDmNotice(messageDmNotice);
-//                String id1 = messageNotice.getId();
-//                // 创建消息方案
-//                messageNotice2.setId(null);
-//                messageNotice2.setScope(2);
-//                messageNotice2.setMessageType(messageNotice.getMessageType());
-//                messageNotice2.setOpen(messageNotice.getOpen());
-//                messageNotice2.setBgroup(messageNotice.getBgroup());
-//                messageNotice2.setType(messageNotice.getType());
-//                messageNotice2.setMessageSendTypeId(messageNotice.getMessageSendTypeId());
-//                String messageNotice1 = messageNoticeService.createMessageNotice(messageNotice2);
-//
-//                // 创建消息dm
-//                MessageDmNotice messageDmNotice = new MessageDmNotice();
-//                messageDmNotice.setSourceNoticeId(id1);
-//                messageNotice2.setId(messageNotice1);
-//                messageDmNotice.setMessageNotice(messageNotice2);
-//                messageDmNotice.setOpen(true);
-//                messageDmNotice.setDomainId(id);
-//                messageDmNoticeService.createMessageDmNotice(messageDmNotice);
             }
-
-
         }
 
     }
