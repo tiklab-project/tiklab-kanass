@@ -23,17 +23,19 @@ INSERT INTO pmc_icon (id, icon_name, icon_url, icon_type) VALUES ('184e7527162c'
 
 update pcs_prc_role set default_role ='1' where id = '4559d54bc8b7' or id = '77f512ab7c53';
 
+INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('3d9d7dae', '流水线运行', '41ba6346e99c', 'todo', 'd14debe3', 'f3fdc893ff25', '7aba22a3');
+INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('2f218eaa', '开发流水线项目', '295c16e604c3', 'todo', 'f675f869', 'f3fdc893ff25', 'c228b680');
+INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('94a26a7e', '流水线启动失败', 'e3a468f851a2', 'todo', 'e98e27d3', 'f3fdc893ff25', 'b8fe8b66');
+INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('ef3cbd9f', '接口设计', 'aaf1bdb01f96', 'todo', 'dde8156c', '4cf6d4dec7d0', 'f5e16a3d');
+INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('e9575e64', '接口开发', '511b05fdde15', 'todo', '67133e65', '4cf6d4dec7d0', '0a6ffdf7');
+INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('2a6e99ba', '接受数据失败', '4c2d13dbc873', 'todo', '759cf4d7', '4cf6d4dec7d0', '47c6cfe2');
+
 INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5ad56f59e2ae', '778222e0', '任务', 'workType', '4d040c6d', 'kanass');
-INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5a142fd02abc', '7055ebc6', '需求', 'workType', '4d040c6d', 'kanass');
-INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('84a2f6124d31', '98121701', '缺陷', 'workType', '4d040c6d', 'kanass');
-
-INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('5474178a', '接受数据失败', 'apis-4', 'todo', 'a0f286c2', '4cf6d4dec7d0', '22751ea5');
-INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('b269cf6b', '接口开发', 'apis-3', 'todo', 'a0f286c2', '4cf6d4dec7d0', '22751ea5');
-INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('b78cab90', '接口设计', 'apis-1', 'todo', 'a0f286c2', '4cf6d4dec7d0', '22751ea5');
-INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('fedea0e8', '流水线启动失败', 'matflow-4', 'todo', 'eedd26da', 'f3fdc893ff25', '024227ab');
-INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('38642ad2', '开发流水线项目', 'matflow-3', 'todo', 'eedd26da', 'f3fdc893ff25', '024227ab');
-INSERT INTO pcs_flc_state_node_relation (id, work_name, work_id, node_id, state_node_id, project_id, flow_id) VALUES ('7372e4a6', '流水线运行', 'matflow-1', 'todo', 'eedd26da', 'f3fdc893ff25', '024227ab');
-
-INSERT INTO pcs_foc_form_relation (id, model_id, model_name, model_type, form_id, bgroup) VALUES ('96189ba4fb8c', '778222e0', '任务', 'workType', '515f17bd', 'kanass');
-INSERT INTO pcs_foc_form_relation (id, model_id, model_name, model_type, form_id, bgroup) VALUES ('fe80bae0c210', '7055ebc6', '需求', 'workType', '0c5d4ff9', 'kanass');
-INSERT INTO pcs_foc_form_relation (id, model_id, model_name, model_type, form_id, bgroup) VALUES ('ee3e9055c269', '98121701', '缺陷', 'workType', '607f6be6', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('84a2f6124d31', '98121701', '缺陷', 'workType', '3d879830', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5a142fd02abc', '7055ebc6', '需求', 'workType', 'a96cf9c9', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('63fe726ab0b7', '0c0e5dbc', '任务', 'workTypeDm', '0a6ffdf7', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('068051a591c7', '60139aa0', '缺陷', 'workTypeDm', '47c6cfe2', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('ffaf6114b634', 'fba8088f', '需求', 'workTypeDm', 'f5e16a3d', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('31360e3ff932', 'c329cb17', '任务', 'workTypeDm', 'c228b680', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('7c48ca0605b8', '5070ac6d', '缺陷', 'workTypeDm', 'b8fe8b66', 'kanass');
+INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('50cf808a7dfc', 'c8c90117', '需求', 'workTypeDm', '7aba22a3', 'kanass');

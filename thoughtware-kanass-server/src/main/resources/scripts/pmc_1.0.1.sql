@@ -578,76 +578,76 @@ INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('1bba4e45931f', '事项�
 INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('a1f2cb478fad', '事项添加', 'kanass');
 INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('ff0a79e4fc61', '添加项目', 'kanass');
 
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('31d39e6f981a', '事项状态修改', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
+INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('31d39e6f981a', '事项状态修改', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
+        <div style=display: flex;align-items: center;>
+            <div style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;>${createUserIcon}</div>
+            <div style=display: flex; flex-direction: column; padding: 0 20px;>
                 <div>
-                    <span style="padding-right: 10px;"> ${master.nickname} </span> 更新了
-                    <span style="color: #5d70ea;font-size: 13px; font-weight: 500;"> ${workItemTitle} </span> 状态
+                    <span style=padding-right: 10px;> ${master.nickname} </span> 更新了
+                    <span style=color: #5d70ea;font-size: 13px; font-weight: 500;> ${workItemTitle} </span> 状态
                 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;">
+                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
+                    <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;>
                     ${oldValue. name}
-                    </div> ——— <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;">
+                    </div> ——— <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;>
                      ${newValue. name}
                     </div>
                 </div>
             </div>
         </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
+        <div style=font-size: 13px;> ${receiveTime} </div>
     </div>', 'index/work/workone/${workItemId}', 'kanass', '${master.nickname}更新了状态');
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('c5613dbc2726', '项目添加日志', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
-                <div> <span style="padding-right: 10px;"> ${master} </span> 创建了项目 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;">
-                    <img src=${projectIcon} alt="" width="16px" height="16px"> </div>
-                    <div style="color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;"> ${projectName} </div>
+INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('c5613dbc2726', '项目添加日志', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
+        <div style=display: flex;align-items: center;>
+            <div style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;>${createUserIcon}</div>
+            <div style=display: flex; flex-direction: column; padding: 0 20px;>
+                <div> <span style=padding-right: 10px;> ${master} </span> 创建了项目 </div>
+                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
+                    <div style=font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;>
+                    <img src=${projectIcon} alt= width=16px height=16px> </div>
+                    <div style=color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;> ${projectName} </div>
                 </div>
             </div>
         </div>
-        <div style="font-size: 13px;"> ${creatTime} </div>
+        <div style=font-size: 13px;> ${creatTime} </div>
     </div>', '/index/${projectType}/${projectId}/survey', 'kanass', '${master}添加项目');
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('4c4d9114ddc0', '事项负责人修改', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
-            <div style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;">${createUserIcon}</div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
+INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('4c4d9114ddc0', '事项负责人修改', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
+        <div style=display: flex;align-items: center;>
+            <div style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;>${createUserIcon}</div>
+            <div style=display: flex; flex-direction: column; padding: 0 20px;>
                 <div>
-                    <span style="padding-right: 10px;"> ${master.nickname} </span> 更新了
-                    <span style="color: #5d70ea;font-size: 13px; font-weight: 500;"> ${workItemTitle} </span> 负责人 </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;">
+                    <span style=padding-right: 10px;> ${master.nickname} </span> 更新了
+                    <span style=color: #5d70ea;font-size: 13px; font-weight: 500;> ${workItemTitle} </span> 负责人 </div>
+                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
+                    <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;>
                     ${oldValue.nickname}
                     </div> ———
-                    <div style="padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;"> ${newValue.nickname} </div>
+                    <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;> ${newValue.nickname} </div>
                 </div>
             </div>
         </div>
-        <div style="font-size: 13px;"> ${receiveTime} </div>
+        <div style=font-size: 13px;> ${receiveTime} </div>
     </div>', 'index/work/workone/${workItemId}', 'kanass', '${master.nickname}更换负责人');
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('f621925c6e63', '事项添加', '<div style="display: flex; align-items: center; font-size: 14px; justify-content: space-between;">
-        <div style="display: flex;align-items: center;">
+INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('f621925c6e63', '事项添加', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
+        <div style=display: flex;align-items: center;>
             <div
-                style="width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;">
+                style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;>
                 ${createUserIcon}
             </div>
-            <div style="display: flex; flex-direction: column; padding: 0 20px;">
-                <div> <span style="padding-right: 10px;"> ${master} </span> 创建了${workItemTypeName} </div>
-                <div style="line-height: 40px; display: flex; align-items: center; height: 40px;">
+            <div style=display: flex; flex-direction: column; padding: 0 20px;>
+                <div> <span style=padding-right: 10px;> ${master} </span> 创建了${workItemTypeName} </div>
+                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
                     <div
-                        style="font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right: 10px;">
+                        style=font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right: 10px;>
                         <img src=${workItemIcon} alt=width=16px height=16px>
                     </div>
                     <div
-                        style="color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px;">
+                        style=color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px;>
                         ${workItemTitle} </div>
                 </div>
             </div>
         </div>
-        <div style="font-size: 13px;"> ${createTime} </div>
+        <div style=font-size: 13px;> ${createTime} </div>
     </div>', 'index/work/workone/${workItemId}', 'kanass', '${master}添加事项');
 
 
@@ -657,9 +657,9 @@ INSERT INTO pmc_work_priority (id, name, description, sort, grouper, icon_url) V
 
 
 
-INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('7055ebc6', '需求', '需求', 'demand', 1, '0c5d4ff9', '4d040c6d', 'workType1.png', 'system', 0);
-INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('778222e0', '任务', '任务', 'task', 2, '515f17bd', '4d040c6d', 'workType2.png', 'system', 0);
-INSERT INTO pmc_work_type (id, name, description, code, sort, form_id, flow_id, icon_url, grouper, scope) VALUES ('98121701', '缺陷', '缺陷', 'defect', 3, '607f6be6', '4d040c6d', 'workType3.png', 'system', 0);
+INSERT INTO pmc_work_type (id, name, description, code, form_id, flow_id, icon_url, grouper, sort, scope) VALUES ('778222e0', '任务', '任务', 'task', '515f17bd', '4d040c6d', '/image/fe76d31972a34040', 'system', '2', 0);
+INSERT INTO pmc_work_type (id, name, description, code, form_id, flow_id, icon_url, grouper, sort, scope) VALUES ('98121701', '缺陷', '缺陷', 'defect', '607f6be6', '3d879830', '/image/70b0780504f874c2', 'system', '3', 0);
+INSERT INTO pmc_work_type (id, name, description, code, form_id, flow_id, icon_url, grouper, sort, scope) VALUES ('7055ebc6', '需求', '需求', 'demand', '0c5d4ff9', 'a96cf9c9', '/image/5c2274bfdefae884', 'system', '1', 0);
 
 INSERT INTO pmc_project_type (id, type, name, description, icon_url) VALUES ('5a46432a', 'scrum', '敏捷式项目', '敏捷式项目', 'project1.png');
 INSERT INTO pmc_project_type (id, type, name, description, icon_url) VALUES ('ea782c6d', 'nomal', '瀑布研发项目', '瀑布研发项目', 'project2.png');
@@ -676,13 +676,12 @@ INSERT INTO pmc_project (id, project_key, project_name, project_type_id, project
 INSERT INTO pmc_project (id, project_key, project_name, project_type_id, project_limits, master, creator, description, project_set_id, project_state, start_time, end_time, icon_url) VALUES ('f3fdc893ff25', 'matflow', '流水线项目', 'ea782c6d', '0', '111111', '111111', NULL, NULL, '1', '2022-12-13 00:00:00', '2023-01-31 00:00:00', 'project1.png');
 
 --CREATE INDEX name_index ON pmc_project USING gin (project_name GIN_TRGM_OPS);
-
-INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, plan_takeup_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, code) VALUES ('api-1', 2, '83359af4aeba', '接口设计', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, '4cf6d4dec7d0', 'b81aef3b', NULL, 'a0f286c2', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2022-12-13 00:00:00', '2022-12-13 00:00:00', NULL, NULL, NULL, NULL, '{}', '2022-12-13 08:16:00', 'TODO', 'demand', NULL, '7055ebc6', 'todo', '6c1d0472', 'api-1');
-INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, plan_takeup_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, code) VALUES ('api-2', 3, '1c90052d6bb5', '接口开发', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, '4cf6d4dec7d0', 'd3ef6551', NULL, 'a0f286c2', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2022-12-13 00:00:00', '2022-12-13 00:00:00', NULL, NULL, NULL, NULL, '{}', '2022-12-13 08:16:24', 'TODO', 'task', NULL, '778222e0', 'todo', '03da940d', 'api-2');
-INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, plan_takeup_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, code) VALUES ('api-3', 4, '08a23255c9b0', '接受数据失败', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, '4cf6d4dec7d0', 'a64e8050', NULL, 'a0f286c2', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2022-12-13 00:00:00', '2022-12-13 00:00:00', NULL, NULL, NULL, NULL, '{}', '2022-12-13 08:16:47', 'TODO', 'defect', NULL, '98121701', 'todo', '4922a294', 'api-3');
-INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, plan_takeup_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, code) VALUES ('matflow-1', 2, 'matflow-1', '流水线运行', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, 'f3fdc893ff25', 'ef23b25f', NULL, 'eedd26da', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2022-12-13 00:00:00', '2022-12-13 00:00:00', NULL, NULL, NULL, NULL, '{}', '2022-12-13 08:19:18', 'TODO', 'demand', NULL, '7055ebc6', 'todo', '6c1d0472',  'matflow-1');
-INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, plan_takeup_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, code) VALUES ('matflow-3', 3, 'matflow-3', '开发流水线项目', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, 'f3fdc893ff25', 'c9e59337', NULL, 'eedd26da', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2022-12-13 00:00:00', '2022-12-13 00:00:00', NULL, NULL, NULL, NULL, '{}', '2022-12-13 08:19:33', 'TODO', 'task', NULL, '778222e0', 'todo', '6ee78fbc', 'matflow-2');
-INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, plan_takeup_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, code) VALUES ('matflow-4', 4, 'matflow-4', '流水线启动失败', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, 'f3fdc893ff25', 'dcbf7211', NULL, 'eedd26da', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2022-12-13 00:00:00', '2022-12-13 00:00:00', NULL, NULL, NULL, NULL, '{}', '2022-12-13 08:19:54', 'TODO', 'defect', NULL, '98121701', 'todo', '8da39b77', 'matflow-3');
+INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, estimate_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, update_time, code, stage_id) VALUES ('aaf1bdb01f96', 1, 'aaf1bdb01f96', '接口设计', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, '4cf6d4dec7d0', 'b81aef3b', 'faaecb3d', 'dde8156c', NULL, '0410da30425b', NULL, NULL, '111111', '111111', NULL, '2024-05-14 00:00:00', '2024-05-14 23:59:59', NULL, NULL, NULL, NULL, NULL, '2024-05-14 14:44:42', 'TODO', 'demand', NULL, '7055ebc6', 'todo', '6c1d0472', NULL, 'apis-1', NULL);
+INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, estimate_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, update_time, code, stage_id) VALUES ('511b05fdde15', 2, '511b05fdde15', '接口开发', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, '4cf6d4dec7d0', 'd3ef6551', 'faaecb3d', '67133e65', NULL, '0410da30425b', NULL, NULL, '111111', '111111', NULL, '2024-05-14 00:00:00', '2024-05-14 23:59:59', NULL, NULL, NULL, NULL, NULL, '2024-05-14 14:44:50', 'TODO', 'task', NULL, '778222e0', 'todo', '03da940d', NULL, 'apis-2', NULL);
+INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, estimate_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, update_time, code, stage_id) VALUES ('4c2d13dbc873', 3, '4c2d13dbc873', '接受数据失败', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, '4cf6d4dec7d0', 'a64e8050', 'faaecb3d', '759cf4d7', NULL, '0410da30425b', NULL, NULL, '111111', '111111', NULL, '2024-05-14 00:00:00', '2024-05-14 23:59:59', NULL, NULL, NULL, NULL, NULL, '2024-05-14 14:44:56', 'TODO', 'defect', NULL, '98121701', 'todo', '4922a294', NULL, 'apis-3', NULL);
+INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, estimate_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, update_time, code, stage_id) VALUES ('295c16e604c3', 2, '295c16e604c3', '开发流水线项目', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, 'f3fdc893ff25', 'c9e59337', 'faaecb3d', 'f675f869', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2024-05-14 00:00:00', '2024-05-14 23:59:59', NULL, NULL, NULL, NULL, NULL, '2024-05-14 14:42:46', 'TODO', 'task', NULL, '778222e0', 'todo', '03da940d', NULL, 'matflow-2', '17fd0338dbca');
+INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, estimate_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, update_time, code, stage_id) VALUES ('e3a468f851a2', 3, 'e3a468f851a2', '流水线启动失败', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, 'f3fdc893ff25', 'dcbf7211', 'faaecb3d', 'e98e27d3', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2024-05-14 00:00:00', '2024-05-14 23:59:59', NULL, NULL, NULL, NULL, NULL, '2024-05-14 14:42:55', 'TODO', 'defect', NULL, '98121701', 'todo', '4922a294', NULL, 'matflow-3', '17fd0338dbca');
+INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id, tree_path, project_id, work_type_id, work_priority_id, work_status_id, module_id, sprint_id, version_id, pre_depend_id, builder_id, assigner_id, reporter_id, plan_begin_time, plan_end_time, actual_begin_time, actual_end_time, percent, estimate_time, ext_data, build_time, work_status_code, work_type_code, surplus_time, work_type_sys_id, work_status_node_id, each_type, update_time, code, stage_id) VALUES ('41ba6346e99c', 1, '41ba6346e99c', '流水线运行', '[{"type":"paragraph","children":[{"text":""}]}]', NULL, NULL, 'f3fdc893ff25', 'ef23b25f', 'faaecb3d', 'd14debe3', NULL, NULL, NULL, NULL, '111111', '111111', NULL, '2024-05-14 00:00:00', '2024-05-14 23:59:59', NULL, NULL, NULL, NULL, NULL, '2024-05-14 14:42:24', 'TODO', 'demand', NULL, '7055ebc6', 'todo', '6c1d0472', NULL, 'matflow-1', '17fd0338dbca');
 
 --CREATE INDEX title_index ON pmc_work_item USING gin (title GIN_TRGM_OPS);
 
@@ -690,12 +689,13 @@ INSERT INTO pmc_work_item (id, order_num, root_id, title, description, parent_id
 INSERT INTO pmc_sprint (id, sprint_name, description, project_id, master, sprint_state_id, start_time, end_time) VALUES ('0410da30425b', '迭代1', NULL, '4cf6d4dec7d0', '111111', '000000', '2022-12-13 00:00:00', '2023-01-31 00:00:00');
 INSERT INTO pmc_sprint (id, sprint_name, description, project_id, master, sprint_state_id, start_time, end_time) VALUES ('caa684dfa094', '迭代2', NULL, '4cf6d4dec7d0', '111111', '000000', '2022-12-13 00:00:00', '2023-01-31 00:00:00');
 
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('2f39cc971151', '接口关联软件开发', 'project', '4cf6d4dec7d0', '111111', '4cf6d4dec7d0', '2022-12-13 12:11:23');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('55094b6bd7d6', '接受数据失败', 'workItem', '08a23255c9b0', '111111', '4cf6d4dec7d0', '2022-12-13 12:16:49');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('7d38780e3e67', '流水线项目', 'project', 'f3fdc893ff25', '111111', 'f3fdc893ff25', '2022-12-13 12:18:45');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('8f67fade691e', '接口设计', 'workItem', '83359af4aeba', '111111', '4cf6d4dec7d0', '2022-12-13 12:16:03');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('927c00b24d48', '开发流水线项目', 'workItem', 'matflow-3', '111111', 'f3fdc893ff25', '2022-12-13 12:19:57');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time) VALUES ('e281dc36d76e', '流水线启动失败', 'workItem', 'matflow-4', '111111', 'f3fdc893ff25', '2022-12-13 12:19:56');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('91760ccada62', '流水线运行', 'workItem', '41ba6346e99c', '111111', 'f3fdc893ff25', '2024-05-14 15:16:01.182', '/image/5c2274bfdefae884', 'ea782c6d');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('2ef6e8e5c480', '开发流水线项目', 'workItem', '295c16e604c3', '111111', 'f3fdc893ff25', '2024-05-14 15:16:02.59', '/image/fe76d31972a34040', 'ea782c6d');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('bfe1fd387d19', '流水线启动失败', 'workItem', 'e3a468f851a2', '111111', 'f3fdc893ff25', '2024-05-14 15:16:03.675', '/image/70b0780504f874c2', 'ea782c6d');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('126acc7f4bba', '接口关联软件开发', 'project', '4cf6d4dec7d0', '111111', '4cf6d4dec7d0', '2024-05-14 15:16:07.023', '/image/9de30c3db540aaad', '5a46432a');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('84666a41a261', '接口设计', 'workItem', 'aaf1bdb01f96', '111111', '4cf6d4dec7d0', '2024-05-14 15:16:10.814', '/image/5c2274bfdefae884', '5a46432a');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('e22cd51190d7', '接口开发', 'workItem', '511b05fdde15', '111111', '4cf6d4dec7d0', '2024-05-14 15:16:11.83', '/image/fe76d31972a34040', '5a46432a');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('4d0350b1fbba', '接受数据失败', 'workItem', '4c2d13dbc873', '111111', '4cf6d4dec7d0', '2024-05-14 15:16:12.801', '/image/70b0780504f874c2', '5a46432a');
 
 
 --INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', 'c323f12b', '22751ea5');
@@ -705,47 +705,98 @@ INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent
 --INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', 'c430e1ad', '024227ab');
 --INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '0e425461', '024227ab');
 
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', 'c323f12b', '22751ea5');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('b81aef3b', '4cf6d4dec7d0', '7055ebc6', 'cd46de1f', '22751ea5');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('d3ef6551', '4cf6d4dec7d0', '778222e0', '12267b6d', '22751ea5');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '9c338860', 'c228b680');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '0e425461', '7aba22a3');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('d3ef6551', '4cf6d4dec7d0', '778222e0', '12267b6d', '0a6ffdf7');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', 'c323f12b', '47c6cfe2');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', 'c430e1ad', 'b8fe8b66');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('b81aef3b', '4cf6d4dec7d0', '7055ebc6', 'cd46de1f', 'f5e16a3d');
 
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', 'c430e1ad', '024227ab');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '0e425461', '024227ab');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '9c338860', '024227ab');
+INSERT INTO pmc_stage (id, stage_name, parent_id, status, progress, master, description, project_id, start_time, end_time, tree_path, root_id, deep) VALUES ('17fd0338dbca', '开发阶段', NULL, '0', 0, '111111', NULL, 'f3fdc893ff25', '2024-05-14 00:00:00', '2024-06-25 00:00:00', NULL, '17fd0338dbca', 0);
 
-INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('024227ab', '事项流程', '事项流程', 'custom', 0, 2);
-INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('22751ea5', '事项流程', '事项流程', 'custom', 0, 2);
-INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('4d040c6d', '事项流程', '事项流程', 'custom', NULL, 1);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('0a6ffdf7', '任务流程', '任务流程', 'custom', 0, 2);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('3d879830', '缺陷流程', '缺陷流程', 'custom', 0, 1);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('47c6cfe2', '缺陷流程', '缺陷流程', 'custom', 0, 2);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('4d040c6d', '任务流程', '任务流程', 'custom', 0, 1);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('7aba22a3', '需求流程', '需求流程', 'custom', 0, 2);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('a96cf9c9', '需求流程', '需求流程', 'custom', 0, 1);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('b8fe8b66', '缺陷流程', '缺陷流程', 'custom', 0, 2);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('c228b680', '任务流程', '任务流程', 'custom', 0, 2);
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('f5e16a3d', '需求流程', '需求流程', 'custom', 0, 2);
 
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('0b53c698', 'done', '22751ea5', 690, 300, 40, 100, 2, 'DONE');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('0e1eccfe', 'todo', '4d040c6d', 250, 300, 40, 100, 2, 'TODO');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('72697a07', 'start', '024227ab', 100, 290, 60, 60, 1, 'START');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('73cb56f4', '7db3a0d1', '4d040c6d', 430, 300, 40, 180, 2, 'PROGRESS');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('78258edf', 'start', '4d040c6d', 100, 290, 60, 60, 1, 'START');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('a0f286c2', 'todo', '22751ea5', 250, 300, 40, 100, 2, 'TODO');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('ad2d4449', '7db3a0d1', '22751ea5', 430, 300, 40, 180, 2, 'PROGRESS');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('b4c86536', 'start', '22751ea5', 100, 290, 60, 60, 1, 'START');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('cd764abf', '7db3a0d1', '024227ab', 430, 300, 40, 180, 2, 'PROGRESS');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('d5cdecdd', 'done', '4d040c6d', 690, 300, 40, 100, 2, 'DONE');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('eecad17a', 'done', '024227ab', 690, 300, 40, 100, 2, 'DONE');
-INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, X, Y, height, width, type, node_status) VALUES ('eedd26da', 'todo', '024227ab', 250, 300, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('67133e65', 'todo', '0a6ffdf7', 250, 300, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('ce9be175', 'start', '0a6ffdf7', 100, 290, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('69e9dc7c', 'done', '0a6ffdf7', 690, 300, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('5e5ccbd4', '7db3a0d1', '0a6ffdf7', 430, 300, 40, 180, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('d940cce1', 'todo', '3d879830', 300, 400, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('8bad1761', 'done', '3d879830', 800, 400, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('9adfa577', 'start', '3d879830', 100, 390, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('5fdc4fac', '7db3a0d1', '3d879830', 520, 400, 40, 180, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('5d28effe', '7db3a0d1', '47c6cfe2', 520, 400, 40, 180, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('759cf4d7', 'todo', '47c6cfe2', 300, 400, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('2f76517e', 'done', '47c6cfe2', 800, 400, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('f3bee50d', 'start', '47c6cfe2', 100, 390, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('d5cdecdd', 'done', '4d040c6d', 690, 300, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('78258edf', 'start', '4d040c6d', 100, 290, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('0e1eccfe', 'todo', '4d040c6d', 250, 300, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('73cb56f4', '7db3a0d1', '4d040c6d', 430, 300, 40, 180, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('a96e39e9', 'start', '7aba22a3', 100, 390, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('df600531', 'done', '7aba22a3', 740, 400, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('d14debe3', 'todo', '7aba22a3', 300, 400, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('9f4b8858', '7db3a0d1', '7aba22a3', 480, 400, 40, 160, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('9fc4e881', 'start', 'a96cf9c9', 100, 390, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('fffd4fe0', '7db3a0d1', 'a96cf9c9', 480, 400, 40, 160, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('0b7b444f', 'done', 'a96cf9c9', 740, 400, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('b191e311', 'todo', 'a96cf9c9', 300, 400, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('e98e27d3', 'todo', 'b8fe8b66', 300, 400, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('63f04004', 'done', 'b8fe8b66', 800, 400, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('9c084dcf', '7db3a0d1', 'b8fe8b66', 520, 400, 40, 180, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('0625885d', 'start', 'b8fe8b66', 100, 390, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('f675f869', 'todo', 'c228b680', 250, 300, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('6f112143', '7db3a0d1', 'c228b680', 430, 300, 40, 180, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('6cd6a006', 'done', 'c228b680', 690, 300, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('6340498a', 'start', 'c228b680', 100, 290, 60, 60, 1, 'START');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('c6f6436b', '7db3a0d1', 'f5e16a3d', 480, 400, 40, 160, 2, 'PROGRESS');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('a53399a8', 'done', 'f5e16a3d', 740, 400, 40, 100, 2, 'DONE');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('dde8156c', 'todo', 'f5e16a3d', 300, 400, 40, 100, 2, 'TODO');
+INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('ebcbdbe1', 'start', 'f5e16a3d', 100, 390, 60, 60, 1, 'START');
 
-INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('7db3a0d1', '进行中', 'PROCESS');
+INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('7db3a0d1', '进行中', 'PROGRESS');
 
-INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('19dc5e5e', '开始', '22751ea5', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('f7a1fa97', '完成', '0a6ffdf7', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('0fb56b95', '开始', '0a6ffdf7', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('0f7579d9', '创建', '0a6ffdf7', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('775cc3f2', '开始', '3d879830', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('8298f937', '创建', '3d879830', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('ac19690f', '完成', '3d879830', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('46ad93e8', '开始', '47c6cfe2', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('3044ecfd', '创建', '47c6cfe2', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('860270ab', '完成', '47c6cfe2', '7db3a0d1', 'done', 'right1', 'left1');
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('1e76c11d', '创建', '4d040c6d', 'start', 'todo', 'right1', 'left1');
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('36b0afc7', '开始', '4d040c6d', 'todo', '7db3a0d1', 'right1', 'left1');
-INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('64dbd6fa', '创建', '024227ab', 'start', 'todo', 'right1', 'left1');
-INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('755a166b', '创建', '22751ea5', 'start', 'todo', 'right1', 'left1');
 INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('8a464239', '完成', '4d040c6d', '7db3a0d1', 'done', 'right1', 'left1');
-INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('aa7bc2e6', '完成', '024227ab', '7db3a0d1', 'done', 'right1', 'left1');
-INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('e15c8797', '开始', '024227ab', 'todo', '7db3a0d1', 'right1', 'left1');
-INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('fef23ab8', '完成', '22751ea5', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('317a926d', '已完成', '7aba22a3', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('ccc2f395', '开始', '7aba22a3', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('3156e448', '创建', '7aba22a3', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('b69480fe', '创建', 'a96cf9c9', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('3ca92376', '开始', 'a96cf9c9', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('9e101c66', '已完成', 'a96cf9c9', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('3ec85c45', '开始', 'b8fe8b66', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('7616c6f8', '创建', 'b8fe8b66', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('8da278a4', '完成', 'b8fe8b66', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('adb475cf', '开始', 'c228b680', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('d2f81347', '创建', 'c228b680', 'start', 'todo', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('52d0173d', '完成', 'c228b680', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('7c838b73', '开始', 'f5e16a3d', 'todo', '7db3a0d1', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('c8d0cd55', '已完成', 'f5e16a3d', '7db3a0d1', 'done', 'right1', 'left1');
+INSERT INTO pcs_flc_transition (id, name, flow_id, from_node_id, to_node_id, from_port_id, to_port_id) VALUES ('bbf8db57', '创建', 'f5e16a3d', 'start', 'todo', 'right1', 'left1');
 
-
-INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('9bcc1be0', '4cf6d4dec7d0', '22751ea5', '4d040c6d');
-INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('b422fc1b', 'f3fdc893ff25', '024227ab', '4d040c6d');
-
+INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('9be5668b', '4cf6d4dec7d0', '0a6ffdf7', '4d040c6d');
+INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('6b5b2c4a', '4cf6d4dec7d0', '47c6cfe2', '3d879830');
+INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('5c9373d6', '4cf6d4dec7d0', 'f5e16a3d', 'a96cf9c9');
+INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('d2679bcd', 'f3fdc893ff25', 'c228b680', '4d040c6d');
+INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('9e4c7752', 'f3fdc893ff25', 'b8fe8b66', '3d879830');
+INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('9997776a', 'f3fdc893ff25', '7aba22a3', 'a96cf9c9');
 
 INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('000000', '未开始', '未开始', 1, 'system');
 INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('111111', '进行中', '进行中', 2, 'system');

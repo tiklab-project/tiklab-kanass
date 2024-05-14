@@ -1,8 +1,3 @@
-ALTER TABLE pmc_stage ADD COLUMN tree_path TEXT;
-ALTER TABLE pmc_stage ADD COLUMN root_id VARCHAR(12);
-ALTER TABLE pmc_stage ADD COLUMN deep int;
-ALTER TABLE pmc_work_item ADD COLUMN stage_id VARCHAR(12);
-
 UPDATE pcs_foc_field SET grouper = 'syscustom' WHERE id = '187d7a58';
 UPDATE pcs_foc_field SET grouper = 'syscustom' WHERE code in ('bugType', 'taskType' , 'demandType');
 

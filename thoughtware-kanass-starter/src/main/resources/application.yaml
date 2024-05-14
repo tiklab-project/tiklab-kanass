@@ -12,7 +12,9 @@ spring:
 server:
     port: 8080
 
-DATA_HOME: /opt/kanass/kanass-ce
+#mac、linux
+DATA_HOME: /opt/thoughtware/kanass-ce
+
 
 base:
     url: http://kanass-ce.test.kanass.net

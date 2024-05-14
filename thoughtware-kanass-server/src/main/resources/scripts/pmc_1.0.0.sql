@@ -105,7 +105,7 @@ CREATE TABLE pmc_work_item(
         actual_begin_time timestamp,
         actual_end_time timestamp,
         percent int,
-        plan_takeup_time int,
+        estimate_time int,
         ext_data TEXT,
         build_time timestamp,
         work_status_code VARCHAR(8),
@@ -115,7 +115,8 @@ CREATE TABLE pmc_work_item(
         work_status_node_id VARCHAR(8) NOT NULL,
         each_type VARCHAR(64),
         update_time timestamp,
-        code VARCHAR(32)
+        code VARCHAR(32),
+        stage_id VARCHAR(12)
 );
 
 
@@ -418,7 +419,10 @@ CREATE TABLE pmc_stage(
         description VARCHAR(64),
         project_id VARCHAR(12) NOT NULL,
         start_time timestamp,
-        end_time timestamp
+        end_time timestamp,
+        tree_path TEXT,
+        root_id VARCHAR(12),
+        deep int
 );
 
 
