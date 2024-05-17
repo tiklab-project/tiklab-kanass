@@ -3,7 +3,7 @@ app:
     name: thoughtware-kanass-ce
 spring:
     profiles:
-        active: demo
+        active: demoee
 
 #web config
 server:
@@ -12,7 +12,7 @@ server:
 DATA_HOME: /opt/thoughtware/kanass-ce
 
 base:
-    url: http://kanass-ce.demo.thoughtware.cn
+    url: http://kanass-ce.demoee.thoughtware.cn
 
 jdbc:
     driverClassName: org.postgresql.Driver
@@ -34,7 +34,7 @@ postgresql:
 eas:
     embbed:
         enable: false
-    address: http://eas-ce.demo.thoughtware.cn
+    address: http://eas-ce.demoee.thoughtware.cn
 #dfs config
 #dfs.server.enabled=false
 dfs:

@@ -569,7 +569,7 @@ INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('38c0375b6adf', '32
 INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('4df7c0dae8b5', '7dc47e805306', '111111');
 INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('78ddd5263ed6', 'f899d7406414', '111111');
 INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('be3d8a44ee5c', '958339ea47a6', '111111');
-INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('c9b6e4449057', '45937fbdea22', '111111');
+INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('c9b6e4449057', '1', '111111');
 
 INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('401b9f477890', 'f3fdc893ff25', '111111', 0);
 INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('5dc8b55815ae', '4cf6d4dec7d0', '111111', 0);

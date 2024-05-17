@@ -179,6 +179,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
                         projectTestCase.setTestCategoryName(testCase.getCategory().getName());
                     }
                     projectTestCase.setCaseType(testCase.getCaseType());
+                    projectTestCase.setRepository(testCase.getRepository());
                     list.add(projectTestCase);
                 }else {
                     projectTestCase.setTestCaseName("用例已被删除");
@@ -209,7 +210,6 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         String[] repositoryIds = workTestCaseQuery.getRepositoryIds();
         testCaseQuery.setInList(repositoryIds);
 
-
         List<WorkTestCase> workTestCaseList = findWorkTestCaseList(workTestCaseQuery);
         List<String> workTestCaseIds = workTestCaseList.stream().map(workTestCase -> workTestCase.getTestCaseId()).collect(Collectors.toList());
         int size = workTestCaseIds.size();
@@ -236,10 +236,10 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
             projectTestCase.setTestCaseName(testCase.getName());
             projectTestCase.setId(testCase.getId());
             projectTestCase.setCreateUser(testCase.getCreateUser().getName());
+            projectTestCase.setRepository(testCase.getRepository());
             if(!ObjectUtils.isEmpty(testCase.getCategory())){
                 projectTestCase.setTestCategoryName(testCase.getCategory().getName());
             }
-
             projectTestCase.setCaseType(testCase.getCaseType());
             projectTestCaseList.add(projectTestCase);
         }

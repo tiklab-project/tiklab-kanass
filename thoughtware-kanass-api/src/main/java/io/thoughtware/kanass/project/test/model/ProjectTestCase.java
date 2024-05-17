@@ -1,6 +1,9 @@
 package io.thoughtware.kanass.project.test.model;
 
 import io.thoughtware.postin.annotation.ApiProperty;
+import io.thoughtware.toolkit.beans.annotation.Mapping;
+import io.thoughtware.toolkit.beans.annotation.Mappings;
+import io.thoughtware.toolkit.join.annotation.JoinQuery;
 
 public class ProjectTestCase {
     @ApiProperty(name="id",desc="id")
@@ -17,6 +20,13 @@ public class ProjectTestCase {
 
     @ApiProperty(name="caseType",desc="类型")
     private String caseType;
+
+    @ApiProperty(name="repository",desc="所属模块")
+    @Mappings({
+            @Mapping(source = "repository.id",target = "repositoryId")
+    })
+    @JoinQuery(key = "id")
+    private Repository repository;
 
     @ApiProperty(name="isExist",desc="类型")
     private boolean isExist = true;
@@ -67,5 +77,13 @@ public class ProjectTestCase {
 
     public void setExist(boolean exist) {
         isExist = exist;
+    }
+
+    public Repository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(Repository repository) {
+        this.repository = repository;
     }
 }

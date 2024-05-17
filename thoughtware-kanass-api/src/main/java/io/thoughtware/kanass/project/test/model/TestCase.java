@@ -37,8 +37,16 @@ public class TestCase extends BaseModel{
     @JoinQuery(key = "id")
     private Category category;
 
+
     @ApiProperty(name="仓库Id",desc="所属仓库")
     private String repositoryId;
+
+    @ApiProperty(name="repository",desc="所属模块")
+    @Mappings({
+            @Mapping(source = "repository.id",target = "repositoryId")
+    })
+    @JoinQuery(key = "id")
+    private Repository repository;
 
     @NotNull
     @ApiProperty(name="testType",desc="测试类型:auto,perform,function",required = true)
@@ -116,14 +124,6 @@ public class TestCase extends BaseModel{
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public String getRepositoryId() {
-        return repositoryId;
-    }
-
-    public void setRepositoryId(String repositoryId) {
-        this.repositoryId = repositoryId;
     }
 
     public String getTestType() {
@@ -228,5 +228,22 @@ public class TestCase extends BaseModel{
 
     public void setPriorityLevel(Integer priorityLevel) {
         this.priorityLevel = priorityLevel;
+    }
+
+
+    public Repository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(Repository repository) {
+        this.repository = repository;
+    }
+
+    public String getRepositoryId() {
+        return repositoryId;
+    }
+
+    public void setRepositoryId(String repositoryId) {
+        this.repositoryId = repositoryId;
     }
 }

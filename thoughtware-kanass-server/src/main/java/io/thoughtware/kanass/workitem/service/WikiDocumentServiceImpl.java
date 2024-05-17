@@ -54,12 +54,12 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
         int sizeId = workItemDocumentIds.size();
         String[] stringIds = new String[sizeId];
         String[] documentIds = workItemDocumentIds.toArray(stringIds);
-        nodeQuery.setIds(documentIds);
+        nodeQuery.setNotIds(documentIds);
 
 
         HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
         String systemUrl = getSystemUrl();
-        Pagination<WikiDocument> documentPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api//node/findNodePage", nodeQuery, WikiDocument.class);
+        Pagination<WikiDocument> documentPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/node/findNodePage", nodeQuery, WikiDocument.class);
 
         Pagination<KanassDocument> kanassDocumentPage = new Pagination<KanassDocument>();
         kanassDocumentPage.setTotalRecord(documentPage.getTotalRecord());
