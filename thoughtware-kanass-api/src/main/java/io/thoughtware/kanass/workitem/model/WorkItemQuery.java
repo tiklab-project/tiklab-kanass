@@ -229,7 +229,7 @@ public class WorkItemQuery implements Serializable {
     private String title;
 
     @ApiProperty(name ="orderParams",desc = "排序参数")
-    private List<Order> orderParams = OrderBuilders.instance().desc("buildTime").get();
+    private List<Order> orderParams = OrderBuilders.instance().desc("code").get();
 
     @ApiProperty(name ="pageParam",desc = "分页参数")
     private Page pageParam = new Page();
