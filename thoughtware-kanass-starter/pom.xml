@@ -403,7 +403,7 @@
                                 <descriptor>assembly/distribution.xml</descriptor>
                             </descriptors>
 <!--                            <finalName>thoughtware-kanass-${version}-${timestamp}</finalName>-->
-                            <finalName>thoughtware-kanass-1.0.1</finalName>
+                            <finalName>thoughtware-kanass-1.0.2</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                         <phase>package</phase>
