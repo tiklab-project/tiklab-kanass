@@ -47,6 +47,15 @@ public class ProjectVirtualUserImpl extends VRoleUserServiceImpl {
                         }
                     }
                     break;
+                case "WORK_ITEM_CREATOR":
+                    workItem = workItemService.findWorkItem(modelId);
+                    if(workItem != null){
+                        User builder = workItem.getBuilder();
+                        if(builder != null){
+                            userList.add(builder);
+                        }
+                    }
+                    break;
                 case "WORK_ITEM_ASSIGNER":
                     workItem = workItemService.findWorkItem(modelId);
                     if(workItem != null){

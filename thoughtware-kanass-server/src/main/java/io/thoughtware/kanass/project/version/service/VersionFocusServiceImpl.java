@@ -1,5 +1,8 @@
 package io.thoughtware.kanass.project.version.service;
 
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
+import io.thoughtware.kanass.project.stage.entity.StageEntity;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.page.Pagination;
@@ -58,10 +61,16 @@ public class VersionFocusServiceImpl implements VersionFocusService {
 
     @Override
     public void deleteVersionFocusByQuery(VersionFocusQuery versionFocusQuery) {
-        List<VersionFocusEntity> versionFocusList = versionFocusDao.findVersionFocusList(versionFocusQuery);
-        String id = versionFocusList.get(0).getId();
+//        List<VersionFocusEntity> versionFocusList = versionFocusDao.findVersionFocusList(versionFocusQuery);
+//        String id = versionFocusList.get(0).getId();
+//
+//        versionFocusDao.deleteVersionFocus(id);
 
-        versionFocusDao.deleteVersionFocus(id);
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(VersionFocusEntity.class)
+                .eq("masterId", versionFocusQuery.getMasterId())
+                .eq("versionId", versionFocusQuery.getVersionId())
+                .get();
+        versionFocusDao.deleteVersionFocus(deleteCondition);
     }
 
     @Override

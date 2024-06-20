@@ -677,9 +677,9 @@ public class WorkItemDao{
 
         if(workItemQuery.getKeyWord() != null && workItemQuery.getKeyWord().length()>0 ){
             if(paramMap.isEmpty()){
-                sql = sql.concat(" (p.title like '%" + workItemQuery.getKeyWord() + "%' or p.id like '%" + workItemQuery.getKeyWord() + "%')");
+                sql = sql.concat(" (p.title like '%" + workItemQuery.getKeyWord() + "%' or p.code like '%" + workItemQuery.getKeyWord() + "%')");
             }else {
-                sql = sql.concat(" and (p.title like '%" +  workItemQuery.getKeyWord() + "%' or p.id like '%" + workItemQuery.getKeyWord() + "%')");
+                sql = sql.concat(" and (p.title like '%" +  workItemQuery.getKeyWord() + "%' or p.code like '%" + workItemQuery.getKeyWord() + "%')");
             }
             paramMap.put("keyWord", workItemQuery.getTitle());
         }

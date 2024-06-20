@@ -702,9 +702,8 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
 
-        String finalId = id;
+        WorkItem workItem1 = findWorkItem(id);
         executorService.submit(() -> {
-            WorkItem workItem1 = findWorkItem(finalId);
             creatWorkItemDynamic(workItem1);
             creatTodoTask(workItem1, workItem1.getBuilder());
             sendMessageForCreate(workItem1);

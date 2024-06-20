@@ -1,0 +1,1 @@
+INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('WORK_ITEM_CREATOR', '事项创建人', NULL, 2);
