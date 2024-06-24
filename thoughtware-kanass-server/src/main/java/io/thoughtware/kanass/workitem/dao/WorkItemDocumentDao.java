@@ -1,6 +1,6 @@
 package io.thoughtware.kanass.workitem.dao;
 
-import io.thoughtware.kanass.workitem.entity.WorkItemDocumentEntity;
+import io.thoughtware.kanass.project.workPrivilege.entity.WorkFunctionEntity;
 import io.thoughtware.kanass.workitem.model.WorkItemDocumentQuery;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
@@ -30,7 +30,7 @@ public class WorkItemDocumentDao{
      * @param workItemDocumentEntity
      * @return
      */
-    public String createWorkItemDocument(WorkItemDocumentEntity workItemDocumentEntity) {
+    public String createWorkItemDocument(WorkFunctionEntity workItemDocumentEntity) {
         return jpaTemplate.save(workItemDocumentEntity,String.class);
     }
 
@@ -38,7 +38,7 @@ public class WorkItemDocumentDao{
      * 更新事项文档
      * @param workItemDocumentEntity
      */
-    public void updateWorkItemDocument(WorkItemDocumentEntity workItemDocumentEntity){
+    public void updateWorkItemDocument(WorkFunctionEntity workItemDocumentEntity){
         jpaTemplate.update(workItemDocumentEntity);
     }
 
@@ -47,7 +47,7 @@ public class WorkItemDocumentDao{
      * @param id
      */
     public void deleteWorkItemDocument(String id){
-        jpaTemplate.delete(WorkItemDocumentEntity.class,id);
+        jpaTemplate.delete(WorkFunctionEntity.class,id);
     }
 
     public void deleteWorkItemDocument(DeleteCondition deleteCondition){
@@ -59,16 +59,16 @@ public class WorkItemDocumentDao{
      * @param id
      * @return
      */
-    public WorkItemDocumentEntity findWorkItemDocument(String id){
-        return jpaTemplate.findOne(WorkItemDocumentEntity.class,id);
+    public WorkFunctionEntity findWorkItemDocument(String id){
+        return jpaTemplate.findOne(WorkFunctionEntity.class,id);
     }
 
     /**
     * 查找所有事项文档
     * @return
     */
-    public List<WorkItemDocumentEntity> findAllWorkItemDocument() {
-        return jpaTemplate.findAll(WorkItemDocumentEntity.class);
+    public List<WorkFunctionEntity> findAllWorkItemDocument() {
+        return jpaTemplate.findAll(WorkFunctionEntity.class);
     }
 
     /**
@@ -76,8 +76,8 @@ public class WorkItemDocumentDao{
      * @param idList
      * @return
      */
-    public List<WorkItemDocumentEntity> findWorkItemDocumentList(List<String> idList) {
-        return jpaTemplate.findList(WorkItemDocumentEntity.class,idList);
+    public List<WorkFunctionEntity> findWorkItemDocumentList(List<String> idList) {
+        return jpaTemplate.findList(WorkFunctionEntity.class,idList);
     }
 
     /**
@@ -85,14 +85,14 @@ public class WorkItemDocumentDao{
      * @param workItemDocumentQuery
      * @return
      */
-    public List<WorkItemDocumentEntity> findWorkItemDocumentList(WorkItemDocumentQuery workItemDocumentQuery) {
-        QueryCondition queryCondition = QueryBuilders.createQuery(WorkItemDocumentEntity.class)
+    public List<WorkFunctionEntity> findWorkItemDocumentList(WorkItemDocumentQuery workItemDocumentQuery) {
+        QueryCondition queryCondition = QueryBuilders.createQuery(WorkFunctionEntity.class)
                 .eq("workItemId", workItemDocumentQuery.getWorkItemId())
                 .eq("documentId", workItemDocumentQuery.getDocumentId())
                 .eq("repositoryId", workItemDocumentQuery.getRepositoryId())
                 .orders(workItemDocumentQuery.getOrderParams())
                 .get();
-        return jpaTemplate.findList(queryCondition, WorkItemDocumentEntity.class);
+        return jpaTemplate.findList(queryCondition, WorkFunctionEntity.class);
     }
 
     /**
@@ -100,8 +100,8 @@ public class WorkItemDocumentDao{
      * @param workItemDocumentQuery
      * @return
      */
-    public Pagination<WorkItemDocumentEntity> findWorkItemDocumentPage(WorkItemDocumentQuery workItemDocumentQuery) {
-        QueryCondition queryCondition = QueryBuilders.createQuery(WorkItemDocumentEntity.class)
+    public Pagination<WorkFunctionEntity> findWorkItemDocumentPage(WorkItemDocumentQuery workItemDocumentQuery) {
+        QueryCondition queryCondition = QueryBuilders.createQuery(WorkFunctionEntity.class)
                 .eq("workItemId", workItemDocumentQuery.getWorkItemId())
                 .eq("documentId", workItemDocumentQuery.getDocumentId())
                 .like("name", workItemDocumentQuery.getName())
@@ -111,6 +111,6 @@ public class WorkItemDocumentDao{
                 .pagination(workItemDocumentQuery.getPageParam())
                 .get();
 
-        return jpaTemplate.findPage(queryCondition, WorkItemDocumentEntity.class);
+        return jpaTemplate.findPage(queryCondition, WorkFunctionEntity.class);
     }
 }

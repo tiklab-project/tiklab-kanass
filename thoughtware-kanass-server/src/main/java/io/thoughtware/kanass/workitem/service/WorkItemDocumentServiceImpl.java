@@ -1,7 +1,6 @@
 package io.thoughtware.kanass.workitem.service;
 
 import io.thoughtware.kanass.project.wiki.model.KanassDocument;
-import io.thoughtware.kanass.project.wiki.model.NodeQuery;
 import io.thoughtware.kanass.project.wiki.model.WikiDocument;
 import io.thoughtware.kanass.support.model.SystemUrl;
 import io.thoughtware.kanass.support.model.SystemUrlQuery;
@@ -13,7 +12,7 @@ import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 
 import io.thoughtware.kanass.workitem.dao.WorkItemDocumentDao;
-import io.thoughtware.kanass.workitem.entity.WorkItemDocumentEntity;
+import io.thoughtware.kanass.project.workPrivilege.entity.WorkFunctionEntity;
 
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -65,7 +64,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
         //批量创建文档
         for (WorkItemDocument itemDocument: workItemDocument){
-            WorkItemDocumentEntity workItemDocumentEntity = BeanMapper.map(itemDocument, WorkItemDocumentEntity.class);
+            WorkFunctionEntity workItemDocumentEntity = BeanMapper.map(itemDocument, WorkFunctionEntity.class);
              document = workItemDocumentDao.createWorkItemDocument(workItemDocumentEntity);
         }
         return document;
@@ -73,7 +72,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public void updateWorkItemDocument(@NotNull @Valid WorkItemDocument workItemDocument) {
-        WorkItemDocumentEntity workItemDocumentEntity = BeanMapper.map(workItemDocument, WorkItemDocumentEntity.class);
+        WorkFunctionEntity workItemDocumentEntity = BeanMapper.map(workItemDocument, WorkFunctionEntity.class);
 
         workItemDocumentDao.updateWorkItemDocument(workItemDocumentEntity);
     }
@@ -85,7 +84,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public void deleteWorkItemDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery) {
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemDocumentEntity.class)
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkFunctionEntity.class)
                 .eq("documentId", workItemDocumentQuery.getDocumentId())
                 .eq("workItemId", workItemDocumentQuery.getWorkItemId())
                 .in("workItemId", workItemDocumentQuery.getWorkItemIds())
@@ -96,14 +95,14 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
     @Override
     public void deleteWorkItemDocumentRele(WorkItemDocumentQuery workItemDocumentQuery) {
         //通过事项id和文档id查询
-        List<WorkItemDocumentEntity> workItemDocumentList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
+        List<WorkFunctionEntity> workItemDocumentList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
         workItemDocumentDao.deleteWorkItemDocument(workItemDocumentList.get(0).getId());
     }
 
 
     @Override
     public WorkItemDocument findOne(String id) {
-        WorkItemDocumentEntity itemDocument = workItemDocumentDao.findWorkItemDocument(id);
+        WorkFunctionEntity itemDocument = workItemDocumentDao.findWorkItemDocument(id);
 
         WorkItemDocument workItemDocument = BeanMapper.map(itemDocument, WorkItemDocument.class);
         return workItemDocument;
@@ -111,7 +110,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<WorkItemDocument> findList(List<String> idList) {
-        List<WorkItemDocumentEntity> workItemDocumentEntityList =  workItemDocumentDao.findWorkItemDocumentList(idList);
+        List<WorkFunctionEntity> workItemDocumentEntityList =  workItemDocumentDao.findWorkItemDocumentList(idList);
 
         List<WorkItemDocument> workItemDocumentList =  BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
         return workItemDocumentList;
@@ -127,7 +126,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<WorkItemDocument> findAllWorkItemDocument() {
-        List<WorkItemDocumentEntity> workItemDocumentEntityList =  workItemDocumentDao.findAllWorkItemDocument();
+        List<WorkFunctionEntity> workItemDocumentEntityList =  workItemDocumentDao.findAllWorkItemDocument();
 
         List<WorkItemDocument> workItemDocumentList =  BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
 
@@ -137,7 +136,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<WorkItemDocument> findWorkItemDocumentList(WorkItemDocumentQuery workItemDocumentQuery) {
-        List<WorkItemDocumentEntity> workItemDocumentEntityList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
+        List<WorkFunctionEntity> workItemDocumentEntityList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
 
         List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
 
@@ -187,7 +186,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public Pagination<WorkItemDocument> findWorkItemDocumentPage(WorkItemDocumentQuery workItemDocumentQuery) {
-        Pagination<WorkItemDocumentEntity> pagination = workItemDocumentDao.findWorkItemDocumentPage(workItemDocumentQuery);
+        Pagination<WorkFunctionEntity> pagination = workItemDocumentDao.findWorkItemDocumentPage(workItemDocumentQuery);
 
         List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(pagination.getDataList(),WorkItemDocument.class);
 
