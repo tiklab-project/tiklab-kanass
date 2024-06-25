@@ -21,6 +21,10 @@ public class WorkRoleFunction extends BaseModel {
     @ApiProperty(name="roleType",desc="角色id类型, role: 角色 vrole: 虚拟角色")
     private String roleType;
 
+    private String[] functionList;
+
+    private String privilegeId;
+
     @ApiProperty(name="functionId",desc="事项功能Id")
     private String functionId;
 
@@ -65,5 +69,21 @@ public class WorkRoleFunction extends BaseModel {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPrivilegeId() {
+        return privilegeId;
+    }
+
+    public void setPrivilegeId(String privilegeId) {
+        this.privilegeId = privilegeId;
+    }
+
+    public String[] getFunctionList() {
+        return functionList;
+    }
+
+    public void setFunctionList(String[] functionList) {
+        this.functionList = functionList;
     }
 }

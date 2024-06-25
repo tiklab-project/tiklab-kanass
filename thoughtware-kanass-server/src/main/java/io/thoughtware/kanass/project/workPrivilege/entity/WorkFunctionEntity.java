@@ -18,6 +18,9 @@ public class WorkFunctionEntity implements Serializable {
     @Column(name = "code",length = 64,notNull = true)
     private String code;
 
+    @Column(name = "parent_id",length = 64,notNull = true)
+    private String parentId;
+
     @Column(name = "sort",length = 32)
     private String sort;
 
@@ -51,5 +54,13 @@ public class WorkFunctionEntity implements Serializable {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

@@ -2,10 +2,13 @@ package io.thoughtware.kanass.project.workPrivilege.service;
 
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
+import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.thoughtware.kanass.project.workPrivilege.dao.WorkRoleFunctionDao;
 import io.thoughtware.kanass.project.workPrivilege.entity.WorkRoleFunctionEntity;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkRoleFunction;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkRoleFunctionQuery;
+import io.thoughtware.privilege.role.entity.RoleFunctionEntity;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +41,27 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
     }
 
     @Override
+    public void updateWorkRoleAllFunction(WorkRoleFunction workRoleFunction) {
+        String roleId = workRoleFunction.getRoleId();
+        deleteRoleFunctionByRoleId(roleId);
+        for (String functionId : workRoleFunction.getFunctionList()) {
+            workRoleFunction.setFunctionId(functionId);
+            createWorkRoleFunction(workRoleFunction);
+        }
+
+    }
+
+    @Override
     public void deleteWorkRoleFunction(@NotNull String id) {
         workRoleFunctionDao.deleteWorkRoleFunction(id);
+    }
+
+    @Override
+    public void deleteRoleFunctionByRoleId(String roleId) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkRoleFunctionEntity.class)
+                .eq("roleId",roleId)
+                .get();
+        workRoleFunctionDao.deleteWorkRoleFunctionCondition(deleteCondition);
     }
 
     @Override

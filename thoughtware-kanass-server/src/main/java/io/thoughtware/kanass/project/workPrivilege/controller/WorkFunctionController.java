@@ -97,4 +97,13 @@ public class WorkFunctionController {
         return Result.ok(pagination);
     }
 
+    @RequestMapping(path = "/findWorkFunctionTreeList",method = RequestMethod.POST)
+    @ApiMethod(name = "findWorkFunctionTreeList",desc = "根据查询对象按分页查询优先级列表")
+    @ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
+    public Result<List<WorkFunction>> findWorkFunctionTreeList(@RequestBody @Valid @NotNull WorkFunctionQuery workFunctionQuery){
+        List<WorkFunction> workFunctionTreeList = workFunctionService.findWorkFunctionTreeList(workFunctionQuery);
+
+        return Result.ok(workFunctionTreeList);
+    }
+
 }

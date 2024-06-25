@@ -2,6 +2,7 @@ package io.thoughtware.kanass.project.workPrivilege.dao;
 
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.dal.jpa.JpaTemplate;
+import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.thoughtware.kanass.project.workPrivilege.entity.WorkRoleFunctionEntity;
@@ -47,6 +48,10 @@ public class WorkRoleFunctionDao {
      */
     public void deleteWorkRoleFunction(String id){
         jpaTemplate.delete(WorkRoleFunctionEntity.class,id);
+    }
+
+    public void deleteWorkRoleFunctionCondition(DeleteCondition deleteCondition){
+        jpaTemplate.delete(deleteCondition);
     }
 
     /**

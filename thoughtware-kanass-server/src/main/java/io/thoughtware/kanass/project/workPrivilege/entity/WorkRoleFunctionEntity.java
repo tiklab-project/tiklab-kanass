@@ -18,6 +18,9 @@ public class WorkRoleFunctionEntity implements Serializable {
     @Column(name = "role_type",length = 64,notNull = true)
     private String roleType;
 
+    @Column(name = "privilege_id",length = 12,notNull = true)
+    private String privilegeId;
+
     @Column(name = "function_id",length = 12)
     private String functionId;
 
@@ -63,5 +66,13 @@ public class WorkRoleFunctionEntity implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPrivilegeId() {
+        return privilegeId;
+    }
+
+    public void setPrivilegeId(String privilegeId) {
+        this.privilegeId = privilegeId;
     }
 }

@@ -31,11 +31,14 @@ public interface WorkRoleFunctionService {
     */
     void updateWorkRoleFunction(@NotNull @Valid WorkRoleFunction workRoleFunction);
 
+    void updateWorkRoleAllFunction(@NotNull @Valid WorkRoleFunction workRoleFunction);
     /**
     * 删除事项优先级
     * @param id
     */
     void deleteWorkRoleFunction(@NotNull String id);
+
+    void deleteRoleFunctionByRoleId(String roleId);
 
     @FindOne
     WorkRoleFunction findOne(@NotNull String id);

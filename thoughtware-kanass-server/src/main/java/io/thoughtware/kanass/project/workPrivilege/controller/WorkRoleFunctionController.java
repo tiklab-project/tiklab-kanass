@@ -51,6 +51,15 @@ public class WorkRoleFunctionController {
         return Result.ok();
     }
 
+    @RequestMapping(path="/updateWorkRoleAllFunction",method = RequestMethod.POST)
+    @ApiMethod(name = "updateWorkRoleAllFunction",desc = "更新优先级")
+    @ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
+    public Result<Void> updateWorkRoleAllFunction(@RequestBody @NotNull @Valid WorkRoleFunction workRoleFunction){
+        workRoleFunctionService.updateWorkRoleAllFunction(workRoleFunction);
+
+        return Result.ok();
+    }
+
     @RequestMapping(path="/deleteWorkRoleFunction",method = RequestMethod.POST)
     @ApiMethod(name = "deleteWorkRoleFunction",desc = "根据优先级ID删除优先级")
     @ApiParam(name = "id",desc = "优先级ID",required = true)

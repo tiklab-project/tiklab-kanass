@@ -2,6 +2,7 @@ CREATE TABLE pmc_work_role_function(
         id VARCHAR(12) PRIMARY KEY,
         role_id VARCHAR(12) NOT NULL,
         role_type VARCHAR(64) NOT NULL,
+        privilege_id VARCHAR(12) NOT NULL,
         function_id VARCHAR(12) NOT NULL,
         type VARCHAR(12) NOT NULL
 );
@@ -18,4 +19,11 @@ CREATE TABLE pmc_project_vrole(
         id VARCHAR(12) PRIMARY KEY,
         project_id VARCHAR(12) NOT NULL,
         vrole_id VARCHAR(64) NOT NULL
+);
+
+CREATE TABLE pmc_work_privilege(
+        id VARCHAR(12) PRIMARY KEY,
+        name VARCHAR(64) NOT NULL,
+        grouper VARCHAR(64) NOT NULL,
+        scope VARCHAR(64) NOT NULL
 );

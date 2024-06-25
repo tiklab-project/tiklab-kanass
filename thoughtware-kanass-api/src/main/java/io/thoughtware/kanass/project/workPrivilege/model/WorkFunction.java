@@ -6,6 +6,7 @@ import io.thoughtware.postin.annotation.ApiProperty;
 import io.thoughtware.toolkit.beans.annotation.Mapper;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 优先级模型
@@ -22,6 +23,12 @@ public class WorkFunction extends BaseModel {
 
     @ApiProperty(name="code",desc="事项功能code")
     private String code;
+
+    @ApiProperty(name="parentId",desc="上级id")
+    private String parentId;
+
+    @ApiProperty(name="children",desc="上级id")
+    private List<WorkFunction> children;
 
     @ApiProperty(name="sort",desc="事项功能排序")
     private String sort;
@@ -50,6 +57,22 @@ public class WorkFunction extends BaseModel {
         this.code = code;
     }
 
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public List<WorkFunction> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<WorkFunction> children) {
+        this.children = children;
+    }
+
     public String getSort() {
         return sort;
     }
@@ -57,4 +80,5 @@ public class WorkFunction extends BaseModel {
     public void setSort(String sort) {
         this.sort = sort;
     }
+
 }

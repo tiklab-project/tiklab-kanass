@@ -7,12 +7,16 @@ import io.thoughtware.kanass.project.workPrivilege.entity.WorkFunctionEntity;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkFunction;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkFunctionQuery;
 import io.thoughtware.toolkit.beans.BeanMapper;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * 事项优先级服务
@@ -83,6 +87,23 @@ public class WorkFunctionServiceImpl implements WorkFunctionService {
         List<WorkFunction> workFunctionList = BeanMapper.mapList(pagination.getDataList(),WorkFunction.class);
 
         return PaginationBuilder.build(pagination,workFunctionList);
+    }
+
+    @Override
+    public List<WorkFunction> findWorkFunctionTreeList(WorkFunctionQuery workFunctionQuery) {
+        List<WorkFunction> firstWorkFunctionList = new ArrayList<>();
+        List<WorkFunction> workFunctionList = findWorkFunctionList(workFunctionQuery);
+        if(workFunctionList.size() > 0){
+            firstWorkFunctionList  = workFunctionList.stream().filter(item -> StringUtils.isEmpty(item.getParentId())).collect(Collectors.toList());
+            workFunctionList.removeAll(firstWorkFunctionList);
+            for (WorkFunction workFunction : firstWorkFunctionList) {
+                String id = workFunction.getId();
+                List<WorkFunction> childrenWorkFunction = workFunctionList.stream().filter(workFunction1 -> workFunction1.getParentId().equals(id)).collect(Collectors.toList());
+                workFunction.setChildren(childrenWorkFunction);
+                workFunctionList.removeAll(childrenWorkFunction);
+            }
+        }
+        return firstWorkFunctionList;
     }
 
 }
