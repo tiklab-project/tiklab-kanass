@@ -14,6 +14,9 @@ import java.util.List;
 @ApiModel
 public class WorkPrivilegeQuery {
 
+    private String projectId;
+
+    private String workTypeId;
 
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
@@ -39,4 +42,19 @@ public class WorkPrivilegeQuery {
     }
 
 
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getWorkTypeId() {
+        return workTypeId;
+    }
+
+    public void setWorkTypeId(String workTypeId) {
+        this.workTypeId = workTypeId;
+    }
 }

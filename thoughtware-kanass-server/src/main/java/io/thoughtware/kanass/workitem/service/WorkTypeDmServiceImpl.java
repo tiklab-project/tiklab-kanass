@@ -6,6 +6,7 @@ import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
 import io.thoughtware.form.form.model.*;
 import io.thoughtware.form.form.service.FormModelRelationService;
+import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilege;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.toolkit.beans.BeanMapper;
@@ -111,6 +112,8 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
         String workTypeDm1 = workTypeDmDao.createWorkTypeDm(workTypeDmEntity);
+
+
         // 事项类型与流程关联
         flowModelRelation.setModelId(workTypeDm1);
         flowModelRelation.setModelName(workTypeDm.getWorkType().getName());

@@ -81,6 +81,8 @@ public class WorkRoleFunctionDao {
     public List<WorkRoleFunctionEntity> findWorkRoleFunctionList(WorkRoleFunctionQuery workRoleFunctionQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkRoleFunctionEntity.class)
                 .eq("roleId", workRoleFunctionQuery.getRoleId())
+                .eq("functionType", workRoleFunctionQuery.getFunctionType())
+                .eq("privilegeId", workRoleFunctionQuery. getPrivilegeId())
                 .orders(workRoleFunctionQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkRoleFunctionEntity.class);

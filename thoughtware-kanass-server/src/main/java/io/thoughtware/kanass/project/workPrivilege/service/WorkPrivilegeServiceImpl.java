@@ -6,16 +6,14 @@ import io.thoughtware.kanass.project.workPrivilege.dao.WorkPrivilegeDao;
 import io.thoughtware.kanass.project.workPrivilege.entity.WorkPrivilegeEntity;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilege;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilegeQuery;
+import io.thoughtware.kanass.project.workPrivilege.model.WorkRoleFunction;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
 * 事项优先级服务
@@ -26,6 +24,9 @@ public class WorkPrivilegeServiceImpl implements WorkPrivilegeService {
     @Autowired
     WorkPrivilegeDao workPrivilegeDao;
 
+    @Autowired
+    WorkRoleFunctionService workRoleFunctionService;
+
     @Override
     public String createWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege) {
         WorkPrivilegeEntity workPrivilegeEntity = BeanMapper.map(workPrivilege, WorkPrivilegeEntity.class);
@@ -33,6 +34,39 @@ public class WorkPrivilegeServiceImpl implements WorkPrivilegeService {
         return workPrivilegeDao.createWorkPrivilege(workPrivilegeEntity);
     }
 
+
+    @Override
+    public String copyWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege) {
+        // 查找事项类型对应的权限方案
+//        String id = workPrivilege.getId();
+        String projectId = workPrivilege.getProjectId();
+        String workTypeId = workPrivilege.getWorkTypeId();
+        // 复制权限方案
+        WorkPrivilegeQuery workPrivilegeQuery = new WorkPrivilegeQuery();
+        workPrivilegeQuery.setWorkTypeId(workTypeId);
+        List<WorkPrivilege> workPrivilegeList = findWorkPrivilegeList(workPrivilegeQuery);
+
+        String workPrivilegeId = new String();
+
+        if(workPrivilegeList.size() > 0){
+            WorkPrivilege workPrivilege1 = workPrivilegeList.get(0);
+            String id = workPrivilege1.getId();
+            workPrivilege1.setProjectId(projectId);
+            workPrivilege1.setId(null);
+            workPrivilege1.setWorkTypeId(workTypeId);
+            workPrivilegeId = createWorkPrivilege(workPrivilege1);
+
+
+            // 复制所有的角色与权限的关联
+            WorkRoleFunction workRoleFunction = new WorkRoleFunction();
+            workRoleFunction.setPrivilegeId(id);
+            workRoleFunction.setNewPrivilegeId(workPrivilegeId);
+            workRoleFunctionService.copyAllWorkRoleFunction(workRoleFunction);
+        }
+
+
+        return workPrivilegeId;
+    }
     @Override
     public void updateWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege) {
         WorkPrivilegeEntity workPrivilegeEntity = BeanMapper.map(workPrivilege, WorkPrivilegeEntity.class);

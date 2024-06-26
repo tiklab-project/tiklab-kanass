@@ -21,6 +21,12 @@ public class WorkPrivilegeEntity implements Serializable {
     @Column(name = "scope",length = 64,notNull = true)
     private String scope;
 
+    @Column(name = "work_type_id",length = 12,notNull = true)
+    private String workTypeId;
+
+    @Column(name = "project_id",length = 12)
+    private String projectId;
+
     public String getId() {
         return id;
     }
@@ -51,5 +57,21 @@ public class WorkPrivilegeEntity implements Serializable {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getWorkTypeId() {
+        return workTypeId;
+    }
+
+    public void setWorkTypeId(String workTypeId) {
+        this.workTypeId = workTypeId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

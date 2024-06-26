@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.dal.jpa.JpaTemplate;
 import io.thoughtware.eam.common.context.LoginContext;
+import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilege;
+import io.thoughtware.kanass.project.workPrivilege.service.WorkPrivilegeService;
+import io.thoughtware.kanass.project.workPrivilege.service.WorkRoleFunctionService;
+import io.thoughtware.kanass.workitem.service.WorkPriorityService;
 import io.thoughtware.message.message.model.MessageNoticePatch;
 import io.thoughtware.message.message.service.MessageDmNoticeService;
 import io.thoughtware.privilege.role.model.PatchUser;
@@ -95,18 +99,6 @@ public class ProjectServiceImpl implements ProjectService {
     WorkItemService workItemService;
 
     @Autowired
-    SprintService sprintService;
-
-    @Autowired
-    ProjectVersionService projectVersionService;
-
-    @Autowired
-    ModuleService moduleService;
-
-    @Autowired
-    MilestoneService milestoneService;
-
-    @Autowired
     WorkTypeService workTypeService;
 
     @Autowired
@@ -116,28 +108,8 @@ public class ProjectServiceImpl implements ProjectService {
     DmFlowService dmFlowService;
 
     @Autowired
-    StateNodeService stateNodeService;
-
-    @Autowired
-    TransitionService transitionService;
-
-    @Autowired
-    StateNodeFlowService stateNodeFlowService;
-
-    @Autowired
-    FlowService flowService;
-
-    @Autowired
-    FormService formService;
-
-    @Autowired
     DmFormService dmFormService;
 
-    @Autowired
-    FormFieldService formFieldService;
-
-    @Autowired
-    SendMessageNoticeService messageDispatchNoticeService;
 
     @Autowired
     ProjectTypeService projectTypeService;
@@ -147,6 +119,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     MessageDmNoticeService messageDmNoticeService;
+
+    @Autowired
+    WorkPrivilegeService workPrivilegeService;
+
     @Value("${base.url:null}")
     String baseUrl;
 
@@ -328,6 +304,16 @@ public class ProjectServiceImpl implements ProjectService {
             workTypeDm.setForm(workType.getForm());
             workTypeDm.setProjectId(projectId);
             WorkTypeDm workTypeDm1 = workTypeDmService.createWorkTypeDm(workTypeDm);
+
+            WorkPrivilege workPrivilege = new WorkPrivilege();
+            workPrivilege.setProjectId(projectId);
+            workPrivilege.setWorkTypeId(workType.getId());
+            workPrivilegeService.copyWorkPrivilege(workPrivilege);
+            // 从全局复制创建权限
+//            WorkPrivilege workPrivilege = new WorkPrivilege();
+//            workPrivilege.setWorkTypeId(workTypeDm1.getId());
+//            workPrivilege.setName(workType.getName() + "权限");
+
             workTypeDmList.add(workTypeDm1);
         }
         return workTypeDmList;

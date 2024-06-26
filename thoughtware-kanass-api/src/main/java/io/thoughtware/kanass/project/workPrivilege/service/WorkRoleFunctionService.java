@@ -10,6 +10,7 @@ import io.thoughtware.toolkit.join.annotation.JoinProvider;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -25,6 +26,8 @@ public interface WorkRoleFunctionService {
     */
     String createWorkRoleFunction(@NotNull @Valid WorkRoleFunction workRoleFunction);
 
+    void copyAllWorkRoleFunction(@NotNull @Valid WorkRoleFunction workRoleFunction);
+
     /**
     * 更新事项优先级
     * @param workRoleFunction
@@ -38,7 +41,7 @@ public interface WorkRoleFunctionService {
     */
     void deleteWorkRoleFunction(@NotNull String id);
 
-    void deleteRoleFunctionByRoleId(String roleId);
+    void deleteRoleFunctionByRoleId(@NotNull @Valid WorkRoleFunction workRoleFunction);
 
     @FindOne
     WorkRoleFunction findOne(@NotNull String id);
@@ -73,5 +76,6 @@ public interface WorkRoleFunctionService {
     * @return
     */
     Pagination<WorkRoleFunction> findWorkRoleFunctionPage(WorkRoleFunctionQuery workRoleFunctionQuery);
-    
+
+    List<String> findUserWorkFunction(@NotNull String userId, @NotNull String workId, @NotNull String projectId);
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @ApiModel
 @Mapper
 public class WorkPrivilege extends BaseModel {
-
     @ApiProperty(name="id",desc="事项权限")
     private String id;
 
@@ -26,6 +25,8 @@ public class WorkPrivilege extends BaseModel {
     @ApiProperty(name="scope",desc="范围")
     private String scope;
 
+    private String workTypeId;
+    private String projectId;
     public String getId() {
         return id;
     }
@@ -56,5 +57,21 @@ public class WorkPrivilege extends BaseModel {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getWorkTypeId() {
+        return workTypeId;
+    }
+
+    public void setWorkTypeId(String workTypeId) {
+        this.workTypeId = workTypeId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

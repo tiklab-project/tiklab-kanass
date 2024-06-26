@@ -17,6 +17,10 @@ public class WorkRoleFunctionQuery {
     @ApiProperty(name="roleId",desc="角色id")
     private String roleId;
 
+    private String functionType;
+
+    private String privilegeId;
+
     public String getRoleId() {
         return roleId;
     }
@@ -26,7 +30,7 @@ public class WorkRoleFunctionQuery {
     }
 
     @ApiProperty(name ="orderParams",desc = "排序参数")
-    private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
+    private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
 
     @ApiProperty(name ="pageParam",desc = "分页参数")
     private Page pageParam = new Page();
@@ -48,4 +52,19 @@ public class WorkRoleFunctionQuery {
     }
 
 
+    public String getFunctionType() {
+        return functionType;
+    }
+
+    public void setFunctionType(String functionType) {
+        this.functionType = functionType;
+    }
+
+    public String getPrivilegeId() {
+        return privilegeId;
+    }
+
+    public void setPrivilegeId(String privilegeId) {
+        this.privilegeId = privilegeId;
+    }
 }

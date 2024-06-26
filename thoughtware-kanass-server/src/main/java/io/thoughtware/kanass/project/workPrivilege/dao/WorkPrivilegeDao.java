@@ -82,6 +82,8 @@ public class WorkPrivilegeDao {
      */
     public List<WorkPrivilegeEntity> findWorkPrivilegeList(WorkPrivilegeQuery workPrivilegeQuery) {
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkPrivilegeEntity.class)
+                .eq("projectId", workPrivilegeQuery.getProjectId())
+                .eq("workTypeId", workPrivilegeQuery.getWorkTypeId())
                 .orders(workPrivilegeQuery.getOrderParams());
 
         QueryCondition queryCondition = queryBuilders.get();
@@ -96,6 +98,7 @@ public class WorkPrivilegeDao {
     public Pagination<WorkPrivilegeEntity> findWorkPrivilegePage(WorkPrivilegeQuery workPrivilegeQuery) {
 
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkPrivilegeEntity.class)
+                .eq("projectId", workPrivilegeQuery.getProjectId())
                 .orders(workPrivilegeQuery.getOrderParams())
                 .pagination(workPrivilegeQuery.getPageParam());
 

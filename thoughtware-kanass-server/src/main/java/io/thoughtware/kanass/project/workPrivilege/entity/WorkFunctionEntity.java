@@ -8,8 +8,8 @@ import java.io.Serializable;
 @Table(name="pmc_work_function")
 public class WorkFunctionEntity implements Serializable {
     @Id
-    @GeneratorValue(length = 12)
-    @Column(name = "id",length = 12)
+    @GeneratorValue(length = 8)
+    @Column(name = "id",length = 8)
     private String id;
 
     @Column(name = "name",length = 64,notNull = true)
