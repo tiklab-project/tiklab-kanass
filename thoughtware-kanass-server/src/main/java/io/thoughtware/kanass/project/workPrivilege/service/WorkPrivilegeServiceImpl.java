@@ -36,7 +36,7 @@ public class WorkPrivilegeServiceImpl implements WorkPrivilegeService {
 
 
     @Override
-    public String copyWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege) {
+    public String copyWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege, String dmWorkTypeId) {
         // 查找事项类型对应的权限方案
 //        String id = workPrivilege.getId();
         String projectId = workPrivilege.getProjectId();
@@ -53,7 +53,8 @@ public class WorkPrivilegeServiceImpl implements WorkPrivilegeService {
             String id = workPrivilege1.getId();
             workPrivilege1.setProjectId(projectId);
             workPrivilege1.setId(null);
-            workPrivilege1.setWorkTypeId(workTypeId);
+            workPrivilege1.setWorkTypeId(dmWorkTypeId);
+            workPrivilege1.setScope("2");
             workPrivilegeId = createWorkPrivilege(workPrivilege1);
 
 

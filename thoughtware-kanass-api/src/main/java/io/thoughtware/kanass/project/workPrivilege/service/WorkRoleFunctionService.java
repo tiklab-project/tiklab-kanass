@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.List;
+import java.util.Set;
 
 /**
 * 事项优先级服务接口
@@ -77,5 +78,5 @@ public interface WorkRoleFunctionService {
     */
     Pagination<WorkRoleFunction> findWorkRoleFunctionPage(WorkRoleFunctionQuery workRoleFunctionQuery);
 
-    List<String> findUserWorkFunction(@NotNull String userId, @NotNull String workId, @NotNull String projectId);
+    Set<String> findUserWorkFunction(@NotNull String userId, @NotNull String workId);
 }

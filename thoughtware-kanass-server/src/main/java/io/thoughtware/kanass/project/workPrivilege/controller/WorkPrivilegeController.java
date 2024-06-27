@@ -46,8 +46,8 @@ public class WorkPrivilegeController {
     @RequestMapping(path="/copyWorkPrivilege",method = RequestMethod.POST)
     @ApiMethod(name = "copyWorkPrivilege",desc = "创建优先级")
     @ApiParam(name = "workPrivilege",desc = "优先级DTO",required = true)
-    public Result<String> copyWorkPrivilege(@RequestBody @NotNull @Valid WorkPrivilege workPrivilege){
-        String id = workPrivilegeService.copyWorkPrivilege(workPrivilege);
+    public Result<String> copyWorkPrivilege(@RequestBody @NotNull @Valid WorkPrivilege workPrivilege, String dmWorkTypeId){
+        String id = workPrivilegeService.copyWorkPrivilege(workPrivilege, dmWorkTypeId);
 
         return Result.ok(id);
     }

@@ -308,7 +308,8 @@ public class ProjectServiceImpl implements ProjectService {
             WorkPrivilege workPrivilege = new WorkPrivilege();
             workPrivilege.setProjectId(projectId);
             workPrivilege.setWorkTypeId(workType.getId());
-            workPrivilegeService.copyWorkPrivilege(workPrivilege);
+
+            workPrivilegeService.copyWorkPrivilege(workPrivilege, workTypeDm1.getId());
             // 从全局复制创建权限
 //            WorkPrivilege workPrivilege = new WorkPrivilege();
 //            workPrivilege.setWorkTypeId(workTypeDm1.getId());

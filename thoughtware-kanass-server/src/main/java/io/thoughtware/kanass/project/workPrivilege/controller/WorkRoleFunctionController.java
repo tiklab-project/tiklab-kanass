@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 优先级控制器
@@ -98,6 +99,15 @@ public class WorkRoleFunctionController {
         Pagination<WorkRoleFunction> pagination = workRoleFunctionService.findWorkRoleFunctionPage(workRoleFunctionQuery);
 
         return Result.ok(pagination);
+    }
+
+    @RequestMapping(path = "/findUserWorkFunction",method = RequestMethod.POST)
+    @ApiMethod(name = "findUserWorkFunction",desc = "根据查询对象按分页查询优先级列表")
+    @ApiParam(name = "workRoleFunctionQuery",desc = "查询对象",required = true)
+    public Result<Set<String>> findUserWorkFunction(@NotNull String userId, @NotNull String workId){
+        Set<String> userWorkFunction = workRoleFunctionService.findUserWorkFunction(userId, workId);
+
+        return Result.ok(userWorkFunction);
     }
 
 }

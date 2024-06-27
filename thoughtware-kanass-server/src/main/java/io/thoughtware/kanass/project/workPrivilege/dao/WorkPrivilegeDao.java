@@ -84,6 +84,7 @@ public class WorkPrivilegeDao {
         QueryBuilders queryBuilders = QueryBuilders.createQuery(WorkPrivilegeEntity.class)
                 .eq("projectId", workPrivilegeQuery.getProjectId())
                 .eq("workTypeId", workPrivilegeQuery.getWorkTypeId())
+                .eq("scope", workPrivilegeQuery.getScope())
                 .orders(workPrivilegeQuery.getOrderParams());
 
         QueryCondition queryCondition = queryBuilders.get();

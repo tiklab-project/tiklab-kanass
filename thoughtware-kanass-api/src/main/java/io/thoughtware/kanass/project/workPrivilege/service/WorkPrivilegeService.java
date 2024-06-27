@@ -25,7 +25,7 @@ public interface WorkPrivilegeService {
     */
     String createWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege);
 
-    String copyWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege);
+    String copyWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege, String dmWorkTypeId);
 
     /**
     * 更新事项优先级

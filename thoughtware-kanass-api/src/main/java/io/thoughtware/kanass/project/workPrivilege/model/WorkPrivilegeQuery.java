@@ -17,7 +17,7 @@ public class WorkPrivilegeQuery {
     private String projectId;
 
     private String workTypeId;
-
+    private String scope;
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
 
@@ -56,5 +56,13 @@ public class WorkPrivilegeQuery {
 
     public void setWorkTypeId(String workTypeId) {
         this.workTypeId = workTypeId;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 }

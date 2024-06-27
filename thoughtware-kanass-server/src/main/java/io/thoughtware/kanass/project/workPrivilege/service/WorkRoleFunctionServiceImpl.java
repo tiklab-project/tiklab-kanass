@@ -4,20 +4,24 @@ import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
+import io.thoughtware.form.field.model.FieldEx;
+import io.thoughtware.form.field.service.FieldService;
+import io.thoughtware.kanass.project.project.model.Project;
+import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.project.workPrivilege.dao.WorkRoleFunctionDao;
 import io.thoughtware.kanass.project.workPrivilege.entity.WorkRoleFunctionEntity;
-import io.thoughtware.kanass.project.workPrivilege.model.WorkRoleFunction;
-import io.thoughtware.kanass.project.workPrivilege.model.WorkRoleFunctionQuery;
+import io.thoughtware.kanass.project.workPrivilege.model.*;
+import io.thoughtware.kanass.sprint.model.Sprint;
+import io.thoughtware.kanass.sprint.service.SprintService;
+import io.thoughtware.kanass.workitem.model.WorkItem;
+import io.thoughtware.kanass.workitem.service.WorkItemService;
 import io.thoughtware.privilege.dmRole.model.DmRoleUser;
 import io.thoughtware.privilege.dmRole.model.DmRoleUserQuery;
 import io.thoughtware.privilege.dmRole.service.DmRoleUserService;
-import io.thoughtware.privilege.function.model.Function;
 import io.thoughtware.privilege.role.model.Role;
-import io.thoughtware.privilege.role.model.RoleFunction;
-import io.thoughtware.privilege.role.model.RoleFunctionQuery;
 import io.thoughtware.privilege.role.service.RoleFunctionService;
 import io.thoughtware.toolkit.beans.BeanMapper;
-import org.apache.commons.lang3.StringUtils;
+import io.thoughtware.user.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +43,24 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
 
     @Autowired
     RoleFunctionService roleFunctionService;
+
+    @Autowired
+    WorkFunctionService workFunctionService;
+
+    @Autowired
+    FieldService fieldService;
+
+    @Autowired
+    WorkItemService workItemService;
+
+    @Autowired
+    WorkPrivilegeService workPrivilegeService;
+
+    @Autowired
+    ProjectService projectService;
+
+    @Autowired
+    SprintService sprintService;
 
     @Override
     public String createWorkRoleFunction(@NotNull @Valid WorkRoleFunction workRoleFunction) {
@@ -134,47 +156,99 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
     }
 
     @Override
-    public List<String> findUserWorkFunction(String userId, String workId, String projectId) {
-
+    public Set<String> findUserWorkFunction(String userId, String workId) {
         Set<String> permissions = new HashSet<>();
+        WorkItem workItem = workItemService.findWorkItem(workId);
+        String projectId = workItem.getProject().getId();
+        String workTypeId = workItem.getWorkType().getId();
 
-        // 用户所有角色集合
-        Map<String, Role> hashMapRole = new HashMap<>();
+        // 获取功能权限id
+        WorkPrivilegeQuery workPrivilegeQuery = new WorkPrivilegeQuery();
+        workPrivilegeQuery.setWorkTypeId(workTypeId);
+        List<WorkPrivilege> workPrivilegeList = workPrivilegeService.findWorkPrivilegeList(workPrivilegeQuery);
+        if(workPrivilegeList.size() > 0){
+            WorkPrivilege workPrivilege = workPrivilegeList.get(0);
+            String workPrivilegeId = workPrivilege.getId();
 
-        //查询项目具有角色列表
-        DmRoleUserQuery dmRoleQuery = new DmRoleUserQuery();
-        dmRoleQuery.setDomainId(projectId);
-        dmRoleQuery.setUserId(userId);
-        List<DmRoleUser> dmRoleUserList = dmRoleUserService.findDmRoleUserList(dmRoleQuery);
+            // 用户所有角色集合
+//            Map<String, Role> hashMapRole = new HashMap<>();
+            List<String> roleIdList = new ArrayList<>();
+            //查询项目具有角色列表
+            DmRoleUserQuery dmRoleQuery = new DmRoleUserQuery();
+            dmRoleQuery.setDomainId(projectId);
+            dmRoleQuery.setUserId(userId);
+            List<DmRoleUser> dmRoleUserList = dmRoleUserService.findDmRoleUserList(dmRoleQuery);
 
-        for(DmRoleUser dmRoleUser:dmRoleUserList){
-            Role role = dmRoleUser.getRole();
-            if (Objects.equals(role.getType(), "2")) {
-                hashMapRole.put(role.getId(), role);
+            for(DmRoleUser dmRoleUser:dmRoleUserList){
+                Role role = dmRoleUser.getRole();
+                if (Objects.equals(role.getType(), "2")) {
+                    roleIdList.add(role.getId());
+                }
             }
-        }
 
-        for(String key:hashMapRole.keySet()){
-            RoleFunctionQuery roleFunctionQuery = new RoleFunctionQuery();
-            roleFunctionQuery.setRoleId(key);
-            List<RoleFunction> roleFunctionDmList = roleFunctionService.findRoleFunctionList(roleFunctionQuery);
-            if(roleFunctionDmList == null || roleFunctionDmList.isEmpty()){
-                continue;
-            }
-            for(RoleFunction roleFunction:roleFunctionDmList){
-                Function function = roleFunction.getFunction();
-                if(StringUtils.isEmpty(function.getCode())){
+            // 查找虚拟角色列表
+            List<String> userVrole = findUserVrole(userId, workItem);
+            roleIdList.addAll(userVrole);
+            for (String roleId : roleIdList) {
+                // 根据roleId 获取功能列表
+                WorkRoleFunctionQuery workRoleFunctionQuery = new WorkRoleFunctionQuery();
+                workRoleFunctionQuery.setRoleId(roleId);
+                workRoleFunctionQuery.setPrivilegeId(workPrivilegeId);
+                List<WorkRoleFunction> workRoleFunctionList = findWorkRoleFunctionList(workRoleFunctionQuery);
+                if(workRoleFunctionList == null || workRoleFunctionList.isEmpty()){
                     continue;
                 }
-                if (Objects.equals(function.getType(), "2")) {
-                    //添加到许可列表
-                    permissions.add(function.getCode());
+                for (WorkRoleFunction workRoleFunction : workRoleFunctionList) {
+                    String functionId = workRoleFunction.getFunctionId();
+                    String functionType = workRoleFunction.getFunctionType();
+                    if(functionType.equals("function")){
+                        WorkFunction workFunction = workFunctionService.findWorkFunction(functionId);
+                        String code = workFunction.getCode();
+                        permissions.add(code);
+                    }
+                    if(functionType.equals("field")){
+                        FieldEx field = fieldService.findField(functionId);
+                        String code = field.getCode();
+                        permissions.add(code);
+                    }
                 }
             }
         }
 
-
-        return null;
+        return permissions;
     }
 
+    public List<String> findUserVrole(String userId, WorkItem workItem){
+        List<String> roleIds = new ArrayList<>();
+        User builder = workItem.getBuilder();
+        if(builder.getId().equals(userId)){
+            roleIds.add("WORK_ITEM_CREATOR");
+        }
+
+        User assigner = workItem.getAssigner();
+        if(assigner.getId().equals(userId)){
+            roleIds.add("WORK_ITEM_ASSIGNER");
+        }
+
+        User reporter = workItem.getReporter();
+        if(!Objects.isNull(reporter) && reporter.getId().equals(userId)){
+            roleIds.add("WORK_ITEM_AUDITOR");
+        }
+
+        String projectId = workItem.getProject().getId();
+        Project project = projectService.findProject(projectId);
+        if(project.getMaster().getId().equals(userId)){
+            roleIds.add("PROJECT_ADMINISTRATORS");
+        }
+
+        if(workItem.getSprint() != null){
+            String sprintId = workItem.getSprint().getId();
+            Sprint sprint = sprintService.findSprint(sprintId);
+            if(sprint.getBuilder().getId().equals(userId)){
+                roleIds.add("SPRINT_MASTER");
+            }
+        }
+
+        return roleIds;
+    }
 }
