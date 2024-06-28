@@ -214,7 +214,6 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
                 }
             }
         }
-
         return permissions;
     }
 
