@@ -288,7 +288,7 @@ public class ProjectServiceImpl implements ProjectService {
             workTypeDm.setFlow(workType.getFlow());
             workTypeDm.setForm(workType.getForm());
             workTypeDm.setProjectId(projectId);
-            WorkTypeDm workTypeDm1 = workTypeDmService.createWorkTypeDm(workTypeDm);
+            WorkTypeDm workTypeDm1 = workTypeDmService.copyWorkTypeDm(workTypeDm);
 
             workTypeDmList.add(workTypeDm1);
         }

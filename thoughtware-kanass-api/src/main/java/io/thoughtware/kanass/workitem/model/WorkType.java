@@ -60,12 +60,6 @@ public class WorkType extends BaseModel {
     @JoinQuery(key = "id")
     private Flow flow;
 
-    @ApiProperty(name="privilege",desc="关联权限方案")
-    @Mappings({
-            @Mapping(source = "privilege.id",target = "privilegeId")
-    })
-    @JoinQuery(key = "id")
-    private WorkPrivilege privilege;
 
     @ApiProperty(name="iconUrl",desc="图标地址",eg="@text32")
     private java.lang.String iconUrl;
@@ -171,11 +165,4 @@ public class WorkType extends BaseModel {
         this.useNumber = useNumber;
     }
 
-    public WorkPrivilege getPrivilege() {
-        return privilege;
-    }
-
-    public void setPrivilege(WorkPrivilege privilege) {
-        this.privilege = privilege;
-    }
 }

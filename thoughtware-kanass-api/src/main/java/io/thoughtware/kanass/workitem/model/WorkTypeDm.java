@@ -49,12 +49,6 @@ public class WorkTypeDm extends BaseModel {
     @JoinQuery(key = "id")
     private Flow flow;
 
-    @ApiProperty(name="privilege",desc="关联权限方案")
-    @Mappings({
-            @Mapping(source = "privilege.id",target = "privilegeId")
-    })
-    @JoinQuery(key = "id")
-    private WorkPrivilege privilege;
 
     public java.lang.String getId() {
         return id;
@@ -96,11 +90,5 @@ public class WorkTypeDm extends BaseModel {
         this.flow = flow;
     }
 
-    public WorkPrivilege getPrivilege() {
-        return this.privilege;
-    }
 
-    public void setPrivilege(final WorkPrivilege privilege) {
-        this.privilege = privilege;
-    }
 }

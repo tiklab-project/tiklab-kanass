@@ -53,8 +53,6 @@ public class WorkTypeEntity implements Serializable {
     @Column(name = "code",length = 32)
     private String code;
 
-    @Column(name = "privilege_id",length = 12)
-    private String privilegeId;
 
     public String getId() {
         return id;
@@ -136,11 +134,4 @@ public class WorkTypeEntity implements Serializable {
         this.scope = scope;
     }
 
-    public String getPrivilegeId() {
-        return privilegeId;
-    }
-
-    public void setPrivilegeId(String privilegeId) {
-        this.privilegeId = privilegeId;
-    }
 }

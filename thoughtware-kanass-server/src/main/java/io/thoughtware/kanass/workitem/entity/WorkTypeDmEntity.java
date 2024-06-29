@@ -30,8 +30,6 @@ public class WorkTypeDmEntity {
     @Column(name = "flow_id",length = 64,notNull = true)
     private String flowId;
 
-    @Column(name = "privilege_id",length = 12)
-    private String privilegeId;
     public String getId() {
         return id;
     }
@@ -72,11 +70,4 @@ public class WorkTypeDmEntity {
         this.flowId = flowId;
     }
 
-    public String getPrivilegeId() {
-        return privilegeId;
-    }
-
-    public void setPrivilegeId(String privilegeId) {
-        this.privilegeId = privilegeId;
-    }
 }

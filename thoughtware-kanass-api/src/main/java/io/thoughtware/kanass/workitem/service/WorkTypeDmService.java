@@ -25,6 +25,8 @@ public interface WorkTypeDmService {
     */
     WorkTypeDm createWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm);
 
+    WorkTypeDm copyWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm);
+
     /**
     * 更新事项类型
     * @param workTypeDm

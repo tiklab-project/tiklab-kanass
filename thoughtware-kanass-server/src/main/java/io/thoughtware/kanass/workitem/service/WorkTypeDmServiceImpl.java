@@ -6,7 +6,6 @@ import io.thoughtware.flow.flow.model.*;
 import io.thoughtware.flow.flow.service.FlowModelRelationService;
 import io.thoughtware.form.form.model.*;
 import io.thoughtware.form.form.service.FormModelRelationService;
-import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilege;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.toolkit.beans.BeanMapper;
@@ -85,7 +84,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             flowModelRelation.setFlowId(dmFlow.getFlow().getId());
         }else {
             // 若没复制过，则复制，并关联
-            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
+            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId(), flow.getForm().getId());
             workTypeDm.setFlow(flow1);
             // 设置流程与事项类型的关联,关联复制出来时间的流程
             flowModelRelation.setFlowId(flow1.getId());
@@ -132,8 +131,8 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
     }
 
 
-
-    public WorkTypeDm createWorkTypeDm1(@NotNull @Valid WorkTypeDm workTypeDm) {
+    @Override
+    public WorkTypeDm copyWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm) {
 
         Flow flow = workTypeDm.getFlow();
         DmFlowQuery dmFlowQuery = new DmFlowQuery();
@@ -151,8 +150,9 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             // 设置流程与事项类型的关联
             flowModelRelation.setFlowId(dmFlow.getFlow().getId());
         }else {
+            String formId = workTypeDm.getForm().getId();
             // 若没复制过，则复制，并关联
-            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
+            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId(), formId);
             workTypeDm.setFlow(flow1);
             // 设置流程与事项类型的关联,关联复制出来时间的流程
             flowModelRelation.setFlowId(flow1.getId());
@@ -167,7 +167,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         flowModelRelation.setBgroup("kanass");
         flowModelRelation.setModelType("workTypeDm");
         flowModelRelationService.createFlowModelRelation(flowModelRelation);
-        return  workTypeDm;
+        return workTypeDm;
     }
 
     @Override
