@@ -6,18 +6,12 @@ import io.thoughtware.dal.jpa.JpaTemplate;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilege;
 import io.thoughtware.kanass.project.workPrivilege.service.WorkPrivilegeService;
-import io.thoughtware.kanass.project.workPrivilege.service.WorkRoleFunctionService;
-import io.thoughtware.kanass.workitem.service.WorkPriorityService;
 import io.thoughtware.message.message.model.MessageNoticePatch;
 import io.thoughtware.message.message.service.MessageDmNoticeService;
 import io.thoughtware.privilege.role.model.PatchUser;
-import io.thoughtware.kanass.project.milestone.service.MilestoneService;
-import io.thoughtware.kanass.project.module.service.ModuleService;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.model.ProjectQuery;
 import io.thoughtware.kanass.project.project.model.ProjectType;
-import io.thoughtware.kanass.project.version.service.ProjectVersionService;
-import io.thoughtware.kanass.sprint.service.SprintService;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.kanass.workitem.service.WorkTypeDmService;
 import io.thoughtware.kanass.workitem.service.WorkTypeService;
@@ -31,20 +25,11 @@ import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
 import io.thoughtware.flow.flow.service.DmFlowService;
-import io.thoughtware.flow.flow.service.FlowService;
-import io.thoughtware.flow.statenode.service.StateNodeFlowService;
-import io.thoughtware.flow.statenode.service.StateNodeService;
-import io.thoughtware.flow.transition.service.TransitionService;
 import io.thoughtware.form.form.service.DmFormService;
-import io.thoughtware.form.form.service.FormFieldService;
-import io.thoughtware.form.form.service.FormService;
 import io.thoughtware.toolkit.join.JoinTemplate;
-import io.thoughtware.message.message.model.SendMessageNotice;
-import io.thoughtware.message.message.service.SendMessageNoticeService;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
 import io.thoughtware.kanass.project.project.dao.ProjectDao;
 import io.thoughtware.kanass.project.project.entity.ProjectEntity;
-import io.thoughtware.kanass.project.project.support.MessageTemplateProject;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
 import io.thoughtware.rpc.annotation.Exporter;
 import io.thoughtware.user.dmUser.model.DmUser;
@@ -304,16 +289,6 @@ public class ProjectServiceImpl implements ProjectService {
             workTypeDm.setForm(workType.getForm());
             workTypeDm.setProjectId(projectId);
             WorkTypeDm workTypeDm1 = workTypeDmService.createWorkTypeDm(workTypeDm);
-
-            WorkPrivilege workPrivilege = new WorkPrivilege();
-            workPrivilege.setProjectId(projectId);
-            workPrivilege.setWorkTypeId(workType.getId());
-
-            workPrivilegeService.copyWorkPrivilege(workPrivilege, workTypeDm1.getId());
-            // 从全局复制创建权限
-//            WorkPrivilege workPrivilege = new WorkPrivilege();
-//            workPrivilege.setWorkTypeId(workTypeDm1.getId());
-//            workPrivilege.setName(workType.getName() + "权限");
 
             workTypeDmList.add(workTypeDm1);
         }

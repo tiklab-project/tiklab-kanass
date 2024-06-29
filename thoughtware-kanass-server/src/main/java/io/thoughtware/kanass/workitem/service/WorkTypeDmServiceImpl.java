@@ -131,6 +131,45 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         return workTypeDm;
     }
 
+
+
+    public WorkTypeDm createWorkTypeDm1(@NotNull @Valid WorkTypeDm workTypeDm) {
+
+        Flow flow = workTypeDm.getFlow();
+        DmFlowQuery dmFlowQuery = new DmFlowQuery();
+        dmFlowQuery.setDomainId(workTypeDm.getProjectId());
+        dmFlowQuery.setGlobalFlowId(flow.getId());
+
+        // 创建流程与事项类型关联记录
+        FlowModelRelation flowModelRelation = new FlowModelRelation();
+
+        // 查找当前项目是否已经复制过当前这个系统的流程
+        DmFlow dmFlow = dmFlowService.existDmFlow(dmFlowQuery);
+        if(dmFlow != null){
+            // 若复制过，直接关联到事项类型
+            workTypeDm.setFlow(dmFlow.getFlow());
+            // 设置流程与事项类型的关联
+            flowModelRelation.setFlowId(dmFlow.getFlow().getId());
+        }else {
+            // 若没复制过，则复制，并关联
+            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
+            workTypeDm.setFlow(flow1);
+            // 设置流程与事项类型的关联,关联复制出来时间的流程
+            flowModelRelation.setFlowId(flow1.getId());
+        }
+
+        WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
+        String workTypeDm1 = workTypeDmDao.createWorkTypeDm(workTypeDmEntity);
+
+        // 事项类型与流程关联
+        flowModelRelation.setModelId(workTypeDm1);
+        flowModelRelation.setModelName(workTypeDm.getWorkType().getName());
+        flowModelRelation.setBgroup("kanass");
+        flowModelRelation.setModelType("workTypeDm");
+        flowModelRelationService.createFlowModelRelation(flowModelRelation);
+        return  workTypeDm;
+    }
+
     @Override
     public void updateWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm) {
         String id = workTypeDm.getId();
