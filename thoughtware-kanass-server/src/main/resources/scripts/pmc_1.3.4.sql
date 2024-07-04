@@ -1,11 +1,4 @@
-DELETE FROM pcs_foc_field WHERE id = 'ca554bdd';
-DELETE FROM pcs_foc_form_field WHERE field_id = 'ca554bdd';
 
-UPDATE pcs_foc_field SET name = '计划日期' WHERE id = '622b36bb';
-UPDATE pcs_foc_field SET code = 'planTime' WHERE id = '622b36bb';
-
-UPDATE pcs_foc_field SET name = '预估工时' WHERE id = 'f828fa2b';
-UPDATE pcs_foc_field SET code = 'estimateTime' WHERE id = 'f828fa2b';
 
 INSERT INTO pcs_foc_field (id, name, code, field_type, grouper, is_edit_col, sort, no_edit) VALUES ('bbbf26c3', '所属版本', 'projectVersion', '2acdb67b', 'system', 0, NULL, 0);
 INSERT INTO pcs_foc_field (id, name, code, field_type, grouper, is_edit_col, sort, no_edit) VALUES ('c5710576', '审核人', 'reporter', '2acdb67b', 'system', 0, NULL, 0);
@@ -16,8 +9,7 @@ INSERT INTO pcs_foc_field (id, name, code, field_type, grouper, is_edit_col, sor
 
 INSERT INTO pcs_foc_field (id, name, code, field_type, grouper, is_edit_col, sort, no_edit) VALUES ('30026c42', '状态', 'status', '2acdb67b', 'system', 0, NULL, 1);
 INSERT INTO pcs_foc_field (id, name, code, field_type, grouper, is_edit_col, sort, no_edit) VALUES ('18f35f29', '进度', 'percent', 'ddb4490b', 'system', 0, NULL, 0);
-INSERT INTO pcs_foc_field (id, name, code, field_type, grouper, is_edit_col, sort, no_edit) VALUES ('91532da2', '创建时间', 'buildTime', 'defabc6d', 'system', 0, NULL, 1);
-UPDATE pcs_foc_field SET no_edit = 1 WHERE id = 'bd073750';
+
 
 
 UPDATE pcs_flc_flow SET form_id = '0c5d4ff9' WHERE id = 'a96cf9c9';

@@ -340,8 +340,8 @@ public class InitStateNodeFieldImpl implements InitStateNodeFiledService {
     @Override
     public void stateNodeField(){
         executorService.submit(() -> {
-//            String[] nodeIds = {"todo", "done", "7db3a0d1"};
-            String[] nodeIds = {"5b3ff31d", "3b037eb2", "5076fe7e", "b5a4ffce"};
+            String[] nodeIds = {"todo", "done", "7db3a0d1"};
+//            String[] nodeIds = {"5b3ff31d", "3b037eb2", "5076fe7e", "b5a4ffce"};
 
             String[] flowIds = {"a96cf9c9", "3d879830", "4d040c6d"};
             StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
