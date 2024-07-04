@@ -305,11 +305,6 @@
         </dependency>
         <dependency>
             <groupId>io.thoughtware</groupId>
-            <artifactId>thoughtware-plugin-spring-boot-starter</artifactId>
-            <version>${thoughtware-plugin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.thoughtware</groupId>
             <artifactId>thoughtware-message-spring-boot-starter</artifactId>
             <version>${thoughtware-message.version}</version>
         </dependency>

@@ -274,5 +274,11 @@ public class ProjectController {
 
         return Result.ok(projectSortRecentList);
     }
+    @RequestMapping(path = "/batchCreateProject",method = RequestMethod.POST)
+    @ApiMethod(name = "batchCreateProject",desc = "根据传入数量查找最近点击项目，数量不够用别的项目")
+    public Result<Void> findProjectSortRecentTime(){
+       projectService.batchCreateProject();
 
+        return Result.ok();
+    }
 }

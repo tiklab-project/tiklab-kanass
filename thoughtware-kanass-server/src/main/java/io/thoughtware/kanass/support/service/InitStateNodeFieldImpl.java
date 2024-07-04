@@ -1,4 +1,4 @@
-package io.thoughtware.kanass.starter.config;
+package io.thoughtware.kanass.support.service;
 
 import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.dal.jdbc.JdbcTemplate;
@@ -21,7 +21,6 @@ import io.thoughtware.form.form.service.FormFieldService;
 import io.thoughtware.form.form.service.FormService;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.service.ProjectService;
-import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.kanass.workitem.model.WorkTypeDm;
 import io.thoughtware.kanass.workitem.service.WorkTypeDmService;
 import io.thoughtware.privilege.dmRole.model.DmRole;
@@ -36,19 +35,18 @@ import io.thoughtware.toolkit.join.JoinTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-//@Component
-public class InitStateNodeField implements ApplicationRunner {
+@Service
+public class InitStateNodeFieldImpl implements InitStateNodeFiledService {
 
     @Autowired
     StateNodeFlowService stateNodeFlowService;
@@ -92,64 +90,66 @@ public class InitStateNodeField implements ApplicationRunner {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private static Logger logger = LoggerFactory.getLogger(InitStateNodeField.class);
+    private static Logger logger = LoggerFactory.getLogger(InitStateNodeFieldImpl.class);
 
-
-    @Transactional
-    public void run(ApplicationArguments args) {
-        System.out.println("0");
-        setRoleParent();
-//        addFormField();
-    }
-
+//    @Override
+//    @Transactional
+//    public void run(ApplicationArguments args) {
+//        System.out.println("0");
+//        setRoleParent();
+////        addFormField();
+//    }
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
+    @Override
     public void addFormField(){
+        executorService.submit(() -> {
+            String sql = "INSERT INTO pcs_foc_form_field (id, form_id, field_id, required, sort) VALUES (?, ?, ?, ?, ?)";
 
-        String sql = "INSERT INTO pcs_foc_form_field (id, form_id, field_id, required, sort) VALUES (?, ?, ?, ?, ?)";
-
-        List<Form> allForm = formService.findAllForm();
-        List<Object[]> fieldFormData = new ArrayList<>();
-        for (Form form : allForm) {
-            String formId = form.getId();
+            List<Form> allForm = formService.findAllForm();
+            List<Object[]> fieldFormData = new ArrayList<>();
+            for (Form form : allForm) {
+                String formId = form.getId();
 
 
-            FormFieldQuery formFieldQuery = new FormFieldQuery();
-            formFieldQuery.setFormId(formId);
-            List<FormField> formFieldList = formFieldService.findFormFieldList(formFieldQuery);
-            int size = formFieldList.size();
-            String id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "bbbf26c3", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "c5710576", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "d72ab706", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "da0fbb82", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "765e3fce", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "c5e9a38a", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "30026c42", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "18f35f29", 0, ++size});
-            id = UuidGenerator.getRandomIdByUUID(8);
-            fieldFormData.add(new Object[]{id, formId, "91532da2", 0, ++size});
-        }
-        try {
-            int[] newStateNodeFlow = jdbcTemplate.batchUpdate(sql, fieldFormData);
-            System.out.println("节点个数: " + newStateNodeFlow.length);
+                FormFieldQuery formFieldQuery = new FormFieldQuery();
+                formFieldQuery.setFormId(formId);
+                List<FormField> formFieldList = formFieldService.findFormFieldList(formFieldQuery);
+                int size = formFieldList.size();
+                String id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "bbbf26c3", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "c5710576", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "d72ab706", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "da0fbb82", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "765e3fce", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "c5e9a38a", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "30026c42", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "18f35f29", 0, ++size});
+                id = UuidGenerator.getRandomIdByUUID(8);
+                fieldFormData.add(new Object[]{id, formId, "91532da2", 0, ++size});
+            }
+            try {
+                int[] newStateNodeFlow = jdbcTemplate.batchUpdate(sql, fieldFormData);
+                System.out.println("节点个数: " + newStateNodeFlow.length);
 //            flowRelationForm();
-        } catch (Exception e) {
-            // 处理异常，例如回滚事务（如果在一个事务中）
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                // 处理异常，例如回滚事务（如果在一个事务中）
+                e.printStackTrace();
+            }
+        });
 
     }
 
 
     // 洗项目成员
 
-
+    @Override
     public void setRoleParent(){
         RoleQuery roleQuery = new RoleQuery();
         roleQuery.setType("2");
@@ -172,7 +172,7 @@ public class InitStateNodeField implements ApplicationRunner {
 
 
 
-
+    @Override
     public void flowRelationForm(){
         List<WorkTypeDm> allWorkTypeDm = workTypeDmService.findAllWorkTypeDm();
         FlowQuery flowQuery = new FlowQuery();
@@ -191,8 +191,9 @@ public class InitStateNodeField implements ApplicationRunner {
         }
     }
 
-
+    @Override
     public void newformFieldList(){
+        executorService.submit(() -> {
             String sql = "INSERT INTO pcs_flc_state_node_role_field (id, role_id, role_type, action, node_id, field_id, form_id, flow_id, scope) VALUES" +
                     " (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             List<Object[]> allNewStateNodeRoleFieldList = new ArrayList<>();
@@ -291,6 +292,7 @@ public class InitStateNodeField implements ApplicationRunner {
                 // 处理异常，例如回滚事务（如果在一个事务中）
                 e.printStackTrace();
             }
+        });
 
     }
 
@@ -335,23 +337,27 @@ public class InitStateNodeField implements ApplicationRunner {
         return roleMapList;
     }
 
-
+    @Override
     public void stateNodeField(){
-        String[] nodeIds = {"todo", "done", "7db3a0d1"};
-        String[] flowIds = {"a96cf9c9", "3d879830", "4d040c6d"};
-        StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
-        stateNodeFlowQuery.setNodeIds(nodeIds);
-        stateNodeFlowQuery.setInFlowIds(flowIds);
-        List<StateNodeFlow> stateNodeFlowList = stateNodeFlowService.findStateNodeFlowList(stateNodeFlowQuery);
-        for (StateNodeFlow stateNodeFlow : stateNodeFlowList) {
-            stateNodeFlowService.createNodeAllRoleField(stateNodeFlow);
-        }
+        executorService.submit(() -> {
+//            String[] nodeIds = {"todo", "done", "7db3a0d1"};
+            String[] nodeIds = {"5b3ff31d", "3b037eb2", "5076fe7e", "b5a4ffce"};
+
+            String[] flowIds = {"a96cf9c9", "3d879830", "4d040c6d"};
+            StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
+            stateNodeFlowQuery.setNodeIds(nodeIds);
+            stateNodeFlowQuery.setInFlowIds(flowIds);
+            List<StateNodeFlow> stateNodeFlowList = stateNodeFlowService.findStateNodeFlowList(stateNodeFlowQuery);
+            for (StateNodeFlow stateNodeFlow : stateNodeFlowList) {
+                stateNodeFlowService.createNodeAllRoleField(stateNodeFlow);
+            }
+        });
     }
 
     /**
      * 梳理表单字段， 任务表单添加任务类型， 缺陷表单添加缺陷类型，需求表单添加需求类型去掉多余的事项类型字段
      */
-
+    @Override
     public void updateFormField() {
         // 任务表单
         DmFormQuery dmFormQuery = new DmFormQuery();
@@ -426,6 +432,4 @@ public class InitStateNodeField implements ApplicationRunner {
         }
 
     }
-
-
 }

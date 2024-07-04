@@ -187,8 +187,8 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
             }
 
             // 查找虚拟角色列表
-            List<String> userVrole = findUserVrole(userId, workItem);
-            roleIdList.addAll(userVrole);
+//            List<String> userVrole = findUserVrole(userId, workItem);
+//            roleIdList.addAll(userVrole);
             for (String roleId : roleIdList) {
                 // 根据roleId 获取功能列表
                 WorkRoleFunctionQuery workRoleFunctionQuery = new WorkRoleFunctionQuery();
@@ -217,37 +217,5 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
         return permissions;
     }
 
-    public List<String> findUserVrole(String userId, WorkItem workItem){
-        List<String> roleIds = new ArrayList<>();
-        User builder = workItem.getBuilder();
-        if(builder.getId().equals(userId)){
-            roleIds.add("WORK_ITEM_CREATOR");
-        }
 
-        User assigner = workItem.getAssigner();
-        if(assigner.getId().equals(userId)){
-            roleIds.add("WORK_ITEM_ASSIGNER");
-        }
-
-        User reporter = workItem.getReporter();
-        if(!Objects.isNull(reporter) && reporter.getId().equals(userId)){
-            roleIds.add("WORK_ITEM_AUDITOR");
-        }
-
-        String projectId = workItem.getProject().getId();
-        Project project = projectService.findProject(projectId);
-        if(project.getMaster().getId().equals(userId)){
-            roleIds.add("PROJECT_ADMINISTRATORS");
-        }
-
-        if(workItem.getSprint() != null){
-            String sprintId = workItem.getSprint().getId();
-            Sprint sprint = sprintService.findSprint(sprintId);
-            if(sprint.getBuilder().getId().equals(userId)){
-                roleIds.add("SPRINT_MASTER");
-            }
-        }
-
-        return roleIds;
-    }
 }

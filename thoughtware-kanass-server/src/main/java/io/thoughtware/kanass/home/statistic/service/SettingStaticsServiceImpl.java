@@ -14,7 +14,6 @@ import io.thoughtware.licence.licence.model.Version;
 import io.thoughtware.licence.licence.service.VersionService;
 import io.thoughtware.message.message.service.MessageNoticeService;
 import io.thoughtware.message.setting.service.MessageSendTypeService;
-import io.thoughtware.plugin.manager.service.PluginManagerService;
 import io.thoughtware.privilege.role.service.RoleService;
 import io.thoughtware.security.backups.service.BackupsDbService;
 import io.thoughtware.user.directory.service.UserDirService;
@@ -48,9 +47,6 @@ public class SettingStaticsServiceImpl implements SettingStaticsService{
 
     @Autowired
     MessageSendTypeService messageSendTypeService;
-
-    @Autowired
-    PluginManagerService pluginManagerService;
 
     @Autowired
     VersionService versionservice;
@@ -106,11 +102,6 @@ public class SettingStaticsServiceImpl implements SettingStaticsService{
         Integer sendTypeNumber = messageSendTypeService.findSendTypeNumber();
         numMap.put("messageNotice", messageNoticeNumber);
         numMap.put("sendType", sendTypeNumber);
-        //插件
-        Integer installPluginNumber = pluginManagerService.findInstallPluginNumber();
-        Integer shopPluginNumber = pluginManagerService.findShopPluginNumber();
-        numMap.put("installPlugin", installPluginNumber);
-        numMap.put("shopPlugin", shopPluginNumber);
 
         // 系统集成
         // 事项

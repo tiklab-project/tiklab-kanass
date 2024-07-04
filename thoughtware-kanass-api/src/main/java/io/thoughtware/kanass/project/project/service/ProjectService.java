@@ -126,4 +126,5 @@ public interface ProjectService {
     String creatProjectKey(String projectName);
     List<Project> findProjectSortRecentTime(ProjectQuery projectQuery);
 
+    void batchCreateProject();
 }

@@ -10,6 +10,7 @@ import io.thoughtware.kanass.workitem.model.WorkTypeDmQuery;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 /**

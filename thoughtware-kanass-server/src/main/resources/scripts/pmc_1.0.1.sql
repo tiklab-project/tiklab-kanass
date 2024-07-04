@@ -724,6 +724,7 @@ INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUE
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('c228b680', '任务流程', '任务流程', 'custom', 0, 2);
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope) VALUES ('f5e16a3d', '需求流程', '需求流程', 'custom', 0, 2);
 
+
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('67133e65', 'todo', '0a6ffdf7', 250, 300, 40, 100, 2, 'TODO');
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('ce9be175', 'start', '0a6ffdf7', 100, 290, 60, 60, 1, 'START');
 INSERT INTO pcs_flc_state_node_flow (id, node_id, flow_id, x, y, height, width, type, node_status) VALUES ('69e9dc7c', 'done', '0a6ffdf7', 690, 300, 40, 100, 2, 'DONE');

@@ -2,12 +2,15 @@ package io.thoughtware.kanass.project.project.service;
 
 import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.utils.UuidGenerator;
+import io.thoughtware.dal.jdbc.JdbcTemplate;
 import io.thoughtware.dal.jpa.JpaTemplate;
 import io.thoughtware.eam.common.context.LoginContext;
-import io.thoughtware.kanass.project.workPrivilege.model.WorkPrivilege;
 import io.thoughtware.kanass.project.workPrivilege.service.WorkPrivilegeService;
+import io.thoughtware.kanass.workitem.controller.WorkItemController;
 import io.thoughtware.message.message.model.MessageNoticePatch;
 import io.thoughtware.message.message.service.MessageDmNoticeService;
+import io.thoughtware.privilege.dmRole.model.DmRole;
+import io.thoughtware.privilege.dmRole.model.DmRoleQuery;
 import io.thoughtware.privilege.role.model.PatchUser;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.model.ProjectQuery;
@@ -15,6 +18,11 @@ import io.thoughtware.kanass.project.project.model.ProjectType;
 import io.thoughtware.kanass.workitem.model.*;
 import io.thoughtware.kanass.workitem.service.WorkTypeDmService;
 import io.thoughtware.kanass.workitem.service.WorkTypeService;
+import io.thoughtware.privilege.role.model.Role;
+import io.thoughtware.privilege.role.model.RoleQuery;
+import io.thoughtware.privilege.role.service.RoleService;
+import io.thoughtware.privilege.vRole.model.VRole;
+import io.thoughtware.privilege.vRole.service.VRoleService;
 import io.thoughtware.security.logging.logging.model.Logging;
 import io.thoughtware.security.logging.logging.model.LoggingType;
 import io.thoughtware.security.logging.logging.service.LoggingByTempService;
@@ -37,10 +45,13 @@ import io.thoughtware.user.dmUser.model.DmUserQuery;
 import io.thoughtware.user.dmUser.service.DmUserService;
 import io.thoughtware.user.user.model.User;
 import io.thoughtware.user.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -58,9 +69,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     public final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    private static Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
     @Autowired
     JpaTemplate jpaTemplate;
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
     @Autowired
     ProjectDao projectDao;
 
@@ -107,6 +122,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     WorkPrivilegeService workPrivilegeService;
+
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    VRoleService vRoleService;
+
+
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -277,10 +300,12 @@ public class ProjectServiceImpl implements ProjectService {
      * @param projectId
      */
     public List<WorkTypeDm> initWorkType(String projectId) {
+
         List<WorkTypeDm> workTypeDmList = new ArrayList<>();
         WorkTypeQuery workTypeQuery = new WorkTypeQuery();
         workTypeQuery.setGrouper("system");
         List<WorkType> workTypeList = workTypeService.findWorkTypeList(workTypeQuery);
+
 
         for (WorkType workType : workTypeList) {
             WorkTypeDm workTypeDm = new WorkTypeDm();
@@ -292,6 +317,7 @@ public class ProjectServiceImpl implements ProjectService {
 
             workTypeDmList.add(workTypeDm1);
         }
+
         return workTypeDmList;
     }
 
@@ -682,4 +708,26 @@ public class ProjectServiceImpl implements ProjectService {
         return projectList;
     }
 
+    @Override
+    public void batchCreateProject(){
+        String sql = "INSERT INTO pmc_work_version (id, work_item_id, version_id) VALUES (?, ?, ?)";
+
+        List<Object[]> batchArgs = new ArrayList<>();
+        batchArgs.add(new Object[]{"61a4e8c529e6", "Xcodes-132", "04db9419d5ef"});
+        batchArgs.add(new Object[]{"85b7a5bd8ea0", "Xcodes-133", "04db9419d5ef"});
+
+
+        try {
+            int[] updateCounts = jdbcTemplate.batchUpdate(sql, batchArgs);
+
+            // updateCounts 数组将包含每个更新操作影响的记录数
+            // 通常情况下，对于 INSERT 语句，这个数应该是 1（除非有数据库触发器导致额外的插入）
+            for (int count : updateCounts) {
+                System.out.println("Number of records inserted: " + count);
+            }
+        } catch (Exception e) {
+            // 处理异常，例如回滚事务（如果在一个事务中）
+            e.printStackTrace();
+        }
+    }
 }

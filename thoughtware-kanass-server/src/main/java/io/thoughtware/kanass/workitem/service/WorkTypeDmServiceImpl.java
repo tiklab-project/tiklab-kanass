@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -84,7 +81,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             flowModelRelation.setFlowId(dmFlow.getFlow().getId());
         }else {
             // 若没复制过，则复制，并关联
-            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId(), flow.getForm().getId());
+            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
             workTypeDm.setFlow(flow1);
             // 设置流程与事项类型的关联,关联复制出来时间的流程
             flowModelRelation.setFlowId(flow1.getId());
@@ -150,9 +147,8 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             // 设置流程与事项类型的关联
             flowModelRelation.setFlowId(dmFlow.getFlow().getId());
         }else {
-            String formId = workTypeDm.getForm().getId();
             // 若没复制过，则复制，并关联
-            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId(), formId);
+            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
             workTypeDm.setFlow(flow1);
             // 设置流程与事项类型的关联,关联复制出来时间的流程
             flowModelRelation.setFlowId(flow1.getId());
