@@ -1,8 +1,3 @@
-INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5ad56f59e2ae', '778222e0', '任务', 'workType', '4d040c6d', 'kanass');
-INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('84a2f6124d31', '98121701', '缺陷', 'workType', '3d879830', 'kanass');
-INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5a142fd02abc', '7055ebc6', '需求', 'workType', 'a96cf9c9', 'kanass');
-
-
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('a96cf9c9', '需求流程', '需求流程', 'custom', 0, 1, '0c5d4ff9');
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3d879830', '缺陷流程', '缺陷流程', 'custom', 0, 1, '607f6be6');
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('4d040c6d', '任务流程', '任务流程', 'custom', 0, 1, '515f17bd');
