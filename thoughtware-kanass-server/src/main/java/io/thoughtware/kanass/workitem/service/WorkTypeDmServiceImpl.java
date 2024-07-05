@@ -148,10 +148,15 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             flowModelRelation.setFlowId(dmFlow.getFlow().getId());
         }else {
             // 若没复制过，则复制，并关联
-            Flow flow1 = dmFlowService.cloneFlowById(flow.getId(), workTypeDm.getProjectId());
-            workTypeDm.setFlow(flow1);
-            // 设置流程与事项类型的关联,关联复制出来时间的流程
-            flowModelRelation.setFlowId(flow1.getId());
+            String oldFlow = flow.getId();
+            String projectId = workTypeDm.getProjectId();
+
+            String flowId = flowService.copyFlow(oldFlow, projectId);
+            Flow newFlow = new Flow();
+            newFlow.setId(flowId);
+            workTypeDm.setFlow(newFlow);
+//            // 设置流程与事项类型的关联,关联复制出来时间的流程
+            flowModelRelation.setFlowId(flowId);
         }
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
