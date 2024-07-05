@@ -74,20 +74,22 @@ public class StateNodeUserFieldServiceImpl implements StateNodeUserFieldService 
         // 查找虚拟角色列表
         List<String> userVrole = findUserVrole(userId, workItem);
         roleIdList.addAll(userVrole);
+        if(roleIdList.size()> 0){
+            StateNodeRoleFieldQuery stateNodeRoleFieldQuery = new StateNodeRoleFieldQuery();
+            stateNodeRoleFieldQuery.setNodeId(stateNodeId);
 
-        StateNodeRoleFieldQuery stateNodeRoleFieldQuery = new StateNodeRoleFieldQuery();
-        stateNodeRoleFieldQuery.setNodeId(stateNodeId);
+            String[] roleIds = roleIdList.toArray(new String[roleIdList.size()]);
+            stateNodeRoleFieldQuery.setRoleIds(roleIds);
+            List<StateNodeRoleField> stateNodeRoleFieldList = stateNodeRoleFieldService.findStateNodeRoleFieldList(stateNodeRoleFieldQuery);
 
-        String[] roleIds = roleIdList.toArray(new String[roleIdList.size()]);
-        stateNodeRoleFieldQuery.setRoleIds(roleIds);
-        List<StateNodeRoleField> stateNodeRoleFieldList = stateNodeRoleFieldService.findStateNodeRoleFieldList(stateNodeRoleFieldQuery);
-
-        for (StateNodeRoleField stateNodeRoleField : stateNodeRoleFieldList) {
-            if(stateNodeRoleField.getAction() == 1){
-                String code = stateNodeRoleField.getField().getCode();
-                permissions.add(code);
+            for (StateNodeRoleField stateNodeRoleField : stateNodeRoleFieldList) {
+                if(stateNodeRoleField.getAction() == 1){
+                    String code = stateNodeRoleField.getField().getCode();
+                    permissions.add(code);
+                }
             }
         }
+
         return permissions;
     }
 
