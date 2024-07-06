@@ -1,0 +1,2 @@
+UPDATE pmc_work_type SET name = '需求', description = '需求', code = 'demand', form_id = '0c5d4ff9', flow_id = 'a96cf9c9', icon_url = '/image/5c2274bfdefae884', grouper = 'system', sort = '1', scope = 0 WHERE id = '7055ebc6';
+UPDATE pmc_work_type SET name = '缺陷', description = '缺陷', code = 'defect', form_id = '607f6be6', flow_id = '3d879830', icon_url = '/image/70b0780504f874c2', grouper = 'system', sort = '3', scope = 0 WHERE id = '98121701';
