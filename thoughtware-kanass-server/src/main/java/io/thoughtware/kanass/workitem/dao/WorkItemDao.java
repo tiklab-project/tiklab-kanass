@@ -605,27 +605,33 @@ public class WorkItemDao{
             paramMap.put("sprintId", workItemQuery.getSprintId());
         }
 
+//        if(workItemQuery.getStageId() != null && workItemQuery.getStageId().length()>0){
+//            String stageId = workItemQuery.getStageId();
+//            List<String> workItemIdsByStage = findWorkItemIdsByStage(stageId);
+//            if(workItemIdsByStage.size() > 0){
+//                String workItemIds = "(" +  workItemIdsByStage.stream().map(id -> "'" + id + "'").
+//                        collect(Collectors.joining(", ")) + ")";
+//                if(paramMap.isEmpty()){
+//                    sql = sql.concat(" p.id in " + workItemIds);
+//                }else {
+//                    sql = sql.concat(" and p.id in " + workItemIds);
+//                }
+//            }else {
+//                if(paramMap.isEmpty()){
+//                    sql = sql.concat(" p.id in ('')");
+//                }else {
+//                    sql = sql.concat(" and p.id in ('')");
+//                }
+//            }
+//            paramMap.put("stageId", workItemQuery.getStageId());
+//        }
         if(workItemQuery.getStageId() != null && workItemQuery.getStageId().length()>0){
-            String stageId = workItemQuery.getStageId();
-            List<String> workItemIdsByStage = findWorkItemIdsByStage(stageId);
-            if(workItemIdsByStage.size() > 0){
-                String workItemIds = "(" +  workItemIdsByStage.stream().map(id -> "'" + id + "'").
-                        collect(Collectors.joining(", ")) + ")";
-                if(paramMap.isEmpty()){
-                    sql = sql.concat(" p.id in " + workItemIds);
+            if(paramMap.isEmpty()){
+                    sql = sql.concat(" p.stage_id = '" + workItemQuery.getStageId() + "'");
                 }else {
-                    sql = sql.concat(" and p.id in " + workItemIds);
+                    sql = sql.concat(" and p.stage_id = '" + workItemQuery.getStageId() + "'");
                 }
-            }else {
-                if(paramMap.isEmpty()){
-                    sql = sql.concat(" p.id in ('')");
-                }else {
-                    sql = sql.concat(" and p.id in ('')");
-                }
-            }
-            paramMap.put("stageId", workItemQuery.getSprintId());
         }
-
 
         if(workItemQuery.getWorkStatusId() != null && workItemQuery.getWorkStatusId().length()>0){
 

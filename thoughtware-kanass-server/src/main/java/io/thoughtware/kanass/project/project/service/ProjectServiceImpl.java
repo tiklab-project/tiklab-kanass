@@ -595,7 +595,6 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
         joinTemplate.joinQuery(projectList);
 
-
         return projectList;
     }
 
@@ -707,6 +706,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return projectList;
     }
+
 
     @Override
     public void batchCreateProject(){
