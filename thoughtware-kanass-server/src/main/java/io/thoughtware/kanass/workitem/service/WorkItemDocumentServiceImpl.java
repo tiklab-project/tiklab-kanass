@@ -6,13 +6,13 @@ import io.thoughtware.kanass.support.model.SystemUrl;
 import io.thoughtware.kanass.support.model.SystemUrlQuery;
 import io.thoughtware.kanass.support.service.SystemUrlService;
 import io.thoughtware.kanass.support.util.HttpRequestUtil;
+import io.thoughtware.kanass.workitem.entity.WorkItemDocumentEntity;
 import io.thoughtware.kanass.workitem.model.WorkItemDocument;
 import io.thoughtware.kanass.workitem.model.WorkItemDocumentQuery;
 import io.thoughtware.dal.jpa.criterial.condition.DeleteCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 
 import io.thoughtware.kanass.workitem.dao.WorkItemDocumentDao;
-import io.thoughtware.kanass.project.workPrivilege.entity.WorkFunctionEntity;
 
 import io.thoughtware.core.page.Pagination;
 import io.thoughtware.core.page.PaginationBuilder;
@@ -64,7 +64,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
         //批量创建文档
         for (WorkItemDocument itemDocument: workItemDocument){
-            WorkFunctionEntity workItemDocumentEntity = BeanMapper.map(itemDocument, WorkFunctionEntity.class);
+            WorkItemDocumentEntity workItemDocumentEntity = BeanMapper.map(itemDocument, WorkItemDocumentEntity.class);
              document = workItemDocumentDao.createWorkItemDocument(workItemDocumentEntity);
         }
         return document;
@@ -72,7 +72,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public void updateWorkItemDocument(@NotNull @Valid WorkItemDocument workItemDocument) {
-        WorkFunctionEntity workItemDocumentEntity = BeanMapper.map(workItemDocument, WorkFunctionEntity.class);
+        WorkItemDocumentEntity workItemDocumentEntity = BeanMapper.map(workItemDocument, WorkItemDocumentEntity.class);
 
         workItemDocumentDao.updateWorkItemDocument(workItemDocumentEntity);
     }
@@ -84,7 +84,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public void deleteWorkItemDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery) {
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkFunctionEntity.class)
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemDocumentEntity.class)
                 .eq("documentId", workItemDocumentQuery.getDocumentId())
                 .eq("workItemId", workItemDocumentQuery.getWorkItemId())
                 .in("workItemId", workItemDocumentQuery.getWorkItemIds())
@@ -95,14 +95,14 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
     @Override
     public void deleteWorkItemDocumentRele(WorkItemDocumentQuery workItemDocumentQuery) {
         //通过事项id和文档id查询
-        List<WorkFunctionEntity> workItemDocumentList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
+        List<WorkItemDocumentEntity> workItemDocumentList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
         workItemDocumentDao.deleteWorkItemDocument(workItemDocumentList.get(0).getId());
     }
 
 
     @Override
     public WorkItemDocument findOne(String id) {
-        WorkFunctionEntity itemDocument = workItemDocumentDao.findWorkItemDocument(id);
+        WorkItemDocumentEntity itemDocument = workItemDocumentDao.findWorkItemDocument(id);
 
         WorkItemDocument workItemDocument = BeanMapper.map(itemDocument, WorkItemDocument.class);
         return workItemDocument;
@@ -110,7 +110,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<WorkItemDocument> findList(List<String> idList) {
-        List<WorkFunctionEntity> workItemDocumentEntityList =  workItemDocumentDao.findWorkItemDocumentList(idList);
+        List<WorkItemDocumentEntity> workItemDocumentEntityList =  workItemDocumentDao.findWorkItemDocumentList(idList);
 
         List<WorkItemDocument> workItemDocumentList =  BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
         return workItemDocumentList;
@@ -126,7 +126,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<WorkItemDocument> findAllWorkItemDocument() {
-        List<WorkFunctionEntity> workItemDocumentEntityList =  workItemDocumentDao.findAllWorkItemDocument();
+        List<WorkItemDocumentEntity> workItemDocumentEntityList =  workItemDocumentDao.findAllWorkItemDocument();
 
         List<WorkItemDocument> workItemDocumentList =  BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
 
@@ -136,7 +136,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<WorkItemDocument> findWorkItemDocumentList(WorkItemDocumentQuery workItemDocumentQuery) {
-        List<WorkFunctionEntity> workItemDocumentEntityList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
+        List<WorkItemDocumentEntity> workItemDocumentEntityList = workItemDocumentDao.findWorkItemDocumentList(workItemDocumentQuery);
 
         List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
 
@@ -170,7 +170,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
                     kanassDocument.setDocumentName(wikiDocument.getName());
                     kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
                     kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
-                    kanassDocument.setUserName(wikiDocument.getMaster().getName());
+                    kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
                     kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
                     list.add(kanassDocument);
                 }else {
@@ -186,9 +186,41 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public Pagination<WorkItemDocument> findWorkItemDocumentPage(WorkItemDocumentQuery workItemDocumentQuery) {
-        Pagination<WorkFunctionEntity> pagination = workItemDocumentDao.findWorkItemDocumentPage(workItemDocumentQuery);
+        Pagination<WorkItemDocumentEntity> pagination = workItemDocumentDao.findWorkItemDocumentPage(workItemDocumentQuery);
 
         List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(pagination.getDataList(),WorkItemDocument.class);
+
+//        List<KanassDocument> list = new ArrayList<KanassDocument>();
+        if (!ObjectUtils.isEmpty(workItemDocumentList)){
+            for (WorkItemDocument workItemDocument:workItemDocumentList){
+
+                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+                String systemUrl = getSystemUrl();
+
+                MultiValueMap param = new LinkedMultiValueMap<>();
+                param.add("id", workItemDocument.getDocumentId());
+                WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
+
+                KanassDocument kanassDocument = new KanassDocument();
+                if (!ObjectUtils.isEmpty(wikiDocument)){
+                    kanassDocument.setId(wikiDocument.getId());
+                    kanassDocument.setDocumentName(wikiDocument.getName());
+                    kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
+                    kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
+                    kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
+                    kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
+                    kanassDocument.setDocumentType(wikiDocument.getDocumentType());
+                    workItemDocument.setKanassDocument(kanassDocument);
+//                    list.add(kanassDocument);
+                }else {
+                    kanassDocument.setDocumentName("文档已删除");
+                    kanassDocument.setId(workItemDocument.getDocumentId());
+                    kanassDocument.setExist(false);
+                    workItemDocument.setKanassDocument(kanassDocument);
+//                    list.add(kanassDocument);
+                }
+            }
+        }
 
         joinTemplate.joinQuery(workItemDocumentList);
 

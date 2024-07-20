@@ -107,6 +107,7 @@ public class WorkTestCaseDao {
                 .like("name", workTestCaseQuery.getName())
                 .eq("repositoryId", workTestCaseQuery.getRepositoryId())
                 .in("repositoryId", workTestCaseQuery.getRepositoryIds())
+                .eq("projectId", workTestCaseQuery.getProjectId())
                 .orders(workTestCaseQuery.getOrderParams())
                 .pagination(workTestCaseQuery.getPageParam())
                 .get();

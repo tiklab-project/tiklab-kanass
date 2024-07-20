@@ -1,9 +1,14 @@
 package io.thoughtware.kanass.workitem.model;
 
+import io.thoughtware.kanass.project.wiki.model.KanassDocument;
 import io.thoughtware.postin.annotation.ApiModel;
 import io.thoughtware.postin.annotation.ApiProperty;
 import io.thoughtware.toolkit.beans.annotation.Mapper;
 import io.thoughtware.core.BaseModel;
+import io.thoughtware.toolkit.beans.annotation.Mapping;
+import io.thoughtware.toolkit.beans.annotation.Mappings;
+import io.thoughtware.toolkit.join.annotation.Join;
+import io.thoughtware.toolkit.join.annotation.JoinQuery;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,18 +17,30 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel
 @Mapper
+@Join
 public class WorkItemDocument extends BaseModel{
 
     @ApiProperty(name="id",desc="id")
     private java.lang.String id;
 
+//    @NotNull
+//    @ApiProperty(name="workItemId",desc="事项id",required = true)
+//    private java.lang.String workItemId;
+
     @NotNull
-    @ApiProperty(name="workItemId",desc="事项id",required = true)
-    private java.lang.String workItemId;
+    @ApiProperty(name="workItem",desc="关联事项",required = true)
+    @Mappings({
+            @Mapping(source = "workItem.id",target = "workItemId")
+    })
+    @JoinQuery(key = "id")
+    private WorkItem workItem;
 
     @NotNull
     @ApiProperty(name="documentId",desc="文档id",required = true)
     private java.lang.String documentId;
+
+
+    private KanassDocument kanassDocument;
 
     @NotNull
     @ApiProperty(name="repositoryId",desc="知识库id",required = true)
@@ -32,6 +49,10 @@ public class WorkItemDocument extends BaseModel{
     @ApiProperty(name="sort",desc="排序")
     private java.lang.Integer sort;
 
+    @ApiProperty(name="projectId",desc="所属项目")
+    private String projectId;
+
+
     public java.lang.String getId() {
         return id;
     }
@@ -39,13 +60,15 @@ public class WorkItemDocument extends BaseModel{
     public void setId(java.lang.String id) {
         this.id = id;
     }
-    public java.lang.String getWorkItemId() {
-        return workItemId;
+
+    public WorkItem getWorkItem() {
+        return workItem;
     }
 
-    public void setWorkItemId(java.lang.String workItemId) {
-        this.workItemId = workItemId;
+    public void setWorkItem(WorkItem workItem) {
+        this.workItem = workItem;
     }
+
     public java.lang.String getDocumentId() {
         return documentId;
     }
@@ -67,5 +90,21 @@ public class WorkItemDocument extends BaseModel{
 
     public void setRepositoryId(String repositoryId) {
         this.repositoryId = repositoryId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public KanassDocument getKanassDocument() {
+        return kanassDocument;
+    }
+
+    public void setKanassDocument(KanassDocument kanassDocument) {
+        this.kanassDocument = kanassDocument;
     }
 }

@@ -38,6 +38,8 @@ public class WikiDocument extends BaseModel{
     @ApiProperty(name ="treePath",desc = "路径")
     private String treePath;
 
+    private String documentType;
+
     @ApiProperty(name="updateTime",desc="updateTime",required = true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Timestamp updateTime;
@@ -254,5 +256,13 @@ public class WikiDocument extends BaseModel{
 
     public void setTreePath(String treePath) {
         this.treePath = treePath;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
 }

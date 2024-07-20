@@ -36,6 +36,8 @@ public class WorkTestCaseQuery {
         @ApiProperty(name ="repositoryId",desc = "空间id")
         private String repositoryId;
 
+        private String projectId;
+
         @ApiProperty(name ="repositoryIds",desc = "空间id")
         private String[] repositoryIds;
 
@@ -128,5 +130,13 @@ public class WorkTestCaseQuery {
 
     public void setTestCaseIds(String[] testCaseIds) {
         this.testCaseIds = testCaseIds;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

@@ -93,6 +93,9 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.0.8", new String[]{
                 "message_1.0.8"
         });
+        dsmConfig.newVersion("1.1.1", new String[]{
+                "user_1.1.1"
+        });
         dsmConfig.newVersion("1.1.5", new String[]{
                 "pmc_1.1.5"
         });

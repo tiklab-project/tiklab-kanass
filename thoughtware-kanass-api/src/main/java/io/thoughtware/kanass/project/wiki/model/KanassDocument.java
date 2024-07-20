@@ -22,6 +22,7 @@ public class KanassDocument {
     @ApiProperty(name="UserName",desc="父级阶段")
     private String UserName;
 
+    private String DocumentType;
     @ApiProperty(name="isExist",desc="父级阶段")
     private boolean isExist = true;
 
@@ -84,5 +85,13 @@ public class KanassDocument {
 
     public void setExist(boolean exist) {
         isExist = exist;
+    }
+
+    public String getDocumentType() {
+        return DocumentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        DocumentType = documentType;
     }
 }

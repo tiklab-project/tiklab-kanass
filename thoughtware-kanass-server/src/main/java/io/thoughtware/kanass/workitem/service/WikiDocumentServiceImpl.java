@@ -48,6 +48,7 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
 
         nodeQuery.setPageParam(workItemDocumentQuery.getPageParam());
         nodeQuery.setName(workItemDocumentQuery.getName());
+        nodeQuery.setType("document");
         List<WorkItemDocument> workItemDocumentList = workItemDocumentService.findWorkItemDocumentList(workItemDocumentQuery);
         List<String> workItemDocumentIds = workItemDocumentList.stream().map(workItemDocument -> workItemDocument.getDocumentId()).collect(Collectors.toList());
 

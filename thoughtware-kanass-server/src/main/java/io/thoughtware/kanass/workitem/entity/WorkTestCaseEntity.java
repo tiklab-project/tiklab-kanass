@@ -27,6 +27,8 @@ public class WorkTestCaseEntity implements Serializable {
     @Column(name = "repository_id",length = 12,notNull = true)
     private String repositoryId;
 
+    @Column(name = "project_id",length = 12,notNull = true)
+    private String projectId;
     // 排序
     @Column(name = "sort",length = 4)
     private Integer sort;
@@ -69,5 +71,13 @@ public class WorkTestCaseEntity implements Serializable {
 
     public void setRepositoryId(String repositoryId) {
         this.repositoryId = repositoryId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

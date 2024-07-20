@@ -98,8 +98,8 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
     @Override
     public void deleteWorkTestCaseList(WorkTestCaseQuery workTestCaseQuery) {
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkTestCaseEntity.class)
-                .eq("documentId", workTestCaseQuery.getTestCaseId())
-                .in("documentId", workTestCaseQuery.getTestCaseIds())
+                .eq("testCaseId", workTestCaseQuery.getTestCaseId())
+                .in("testCaseId", workTestCaseQuery.getTestCaseIds())
                 .eq("workItemId", workTestCaseQuery.getWorkItemId())
                 .in("workItemId", workTestCaseQuery.getWorkItemIds())
                 .get();
@@ -168,13 +168,13 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
                 param.add("id", workTestCase.getTestCaseId());
                 TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
 
-//                TestCase testCase = testCaseServiceRpc().findTestCase(workTestCase.getTestCaseId());
+
                 ProjectTestCase projectTestCase = new ProjectTestCase();
 
                 if (!ObjectUtils.isEmpty(testCase)){
                     projectTestCase.setTestCaseName(testCase.getName());
                     projectTestCase.setId(testCase.getId());
-                    projectTestCase.setCreateUser(testCase.getCreateUser().getName());
+                    projectTestCase.setCreateUser(testCase.getCreateUser().getNickname());
                     if(!ObjectUtils.isEmpty(testCase.getCategory())){
                         projectTestCase.setTestCategoryName(testCase.getCategory().getName());
                     }
@@ -200,6 +200,35 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
         joinTemplate.joinQuery(workTestCaseList);
 
+        if (!ObjectUtils.isEmpty(workTestCaseList)){
+            for (WorkTestCase workTestCase:workTestCaseList){
+                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+                String systemUrl = getSystemUrl();
+                MultiValueMap param = new LinkedMultiValueMap<>();
+                param.add("id", workTestCase.getTestCaseId());
+                TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
+
+
+                ProjectTestCase projectTestCase = new ProjectTestCase();
+
+                if (!ObjectUtils.isEmpty(testCase)){
+                    projectTestCase.setTestCaseName(testCase.getName());
+                    projectTestCase.setId(testCase.getId());
+                    projectTestCase.setCreateUser(testCase.getCreateUser().getNickname());
+                    if(!ObjectUtils.isEmpty(testCase.getCategory())){
+                        projectTestCase.setTestCategoryName(testCase.getCategory().getName());
+                    }
+                    projectTestCase.setCaseType(testCase.getCaseType());
+                    projectTestCase.setRepository(testCase.getRepository());
+                    workTestCase.setProjectTestCase(projectTestCase);
+                }else {
+                    projectTestCase.setTestCaseName("用例已被删除");
+                    projectTestCase.setId(workTestCase.getTestCaseId());
+                    projectTestCase.setExist(false);
+                    workTestCase.setProjectTestCase(projectTestCase);
+                }
+            }
+        }
         return PaginationBuilder.build(pagination,workTestCaseList);
     }
 

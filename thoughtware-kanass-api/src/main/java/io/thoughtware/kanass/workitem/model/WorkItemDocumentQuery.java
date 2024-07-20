@@ -25,6 +25,8 @@ public class WorkItemDocumentQuery {
         @ApiProperty(name ="documentId",desc = "文档id，精确匹配")
         private String[] documentIds;
 
+        private String projectId;
+
         //只用于project查询 sward 使用
         @ApiProperty(name ="name",desc = "文档名字")
         private String name;
@@ -115,5 +117,13 @@ public class WorkItemDocumentQuery {
 
     public void setWorkItemIds(String[] workItemIds) {
         this.workItemIds = workItemIds;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

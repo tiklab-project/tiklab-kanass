@@ -361,20 +361,19 @@ public class ProjectInsightReportDao {
         String sql = "select * from pmc_project_burndowm p where p.project_id = '" +
                 projectId + "' and p.record_time < '"+ endTime +"' and p.record_time >='" + startTime +"'";
 
-        List<ProjectBurnDowmChartEntity> ProjectBurnDowmChartList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(ProjectBurnDowmChartEntity.class));
+        List<ProjectBurnDowmChartEntity> projectBurnDowmChartList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(ProjectBurnDowmChartEntity.class));
         List<Map<String, Object>> endWorkItemList = statisticsProjectEndWorkItem(workItemCountQuery, dayList);
-        List<Map<String, Object>> creatWorkItemList = statisticsProjectNewWorkItem(workItemCountQuery, dayList);
-        Integer workItemCount = 0;
+        List<Map<String, Object>> createWorkItemList = statisticsProjectNewWorkItem(workItemCountQuery, dayList);
 
-        if(ProjectBurnDowmChartList.size() > 0){
+        if(projectBurnDowmChartList.size() > 0){
             int size = dayList.size();
             for (int i= 0; i< size-1; i++ ) {
                 String start = dayList.get(i);
                 String end = dayList.get(i + 1);
-                List<ProjectBurnDowmChartEntity> ProjectBurnDowmChars = ProjectBurnDowmChartList.stream().filter(item -> item.getRecordTime().substring(0, 10).equals(start.substring(0, 10))).collect(Collectors.toList());
+                List<ProjectBurnDowmChartEntity> ProjectBurnDowmChars = projectBurnDowmChartList.stream().filter(item -> item.getRecordTime().substring(0, 10).equals(start.substring(0, 10))).collect(Collectors.toList());
                 Integer remainWorkitemCount = 0;
                 Integer endWorkItemCount = 0;
-                Integer creatWorkItemCount = 0;
+                Integer createWorkItemCount = 0;
                 HashMap<String, Integer> workItemTrend = new HashMap<>();
                 if(workItemTypeCode != null && workItemTypeCode.length() > 0) {
                     ProjectBurnDowmChartEntity projectBurnDowmChart = new ProjectBurnDowmChartEntity();
@@ -393,7 +392,7 @@ public class ProjectInsightReportDao {
                                             toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId)))
                                     .collect(Collectors.toList()).size();
-                            creatWorkItemCount = creatWorkItemList.stream().filter(work -> (work.get("build_time").
+                            createWorkItemCount = createWorkItemList.stream().filter(work -> (work.get("build_time").
                                             toString().compareTo(start) >= 0 && work.get("build_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId)))
                                     .collect(Collectors.toList()).size();
@@ -404,7 +403,7 @@ public class ProjectInsightReportDao {
                                             toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId) && work.get("work_type_code").equals("demand")))
                                     .collect(Collectors.toList()).size();
-                            creatWorkItemCount = creatWorkItemList.stream().filter(work -> (work.get("build_time").
+                            createWorkItemCount = createWorkItemList.stream().filter(work -> (work.get("build_time").
                                             toString().compareTo(start) >= 0 && work.get("build_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId) && work.get("work_type_code").equals("demand")))
                                     .collect(Collectors.toList()).size();
@@ -415,7 +414,7 @@ public class ProjectInsightReportDao {
                                             toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId) && work.get("work_type_code").equals("task")))
                                     .collect(Collectors.toList()).size();
-                            creatWorkItemCount = creatWorkItemList.stream().filter(work -> (work.get("build_time").
+                            createWorkItemCount = createWorkItemList.stream().filter(work -> (work.get("build_time").
                                             toString().compareTo(start) >= 0 && work.get("build_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId) && work.get("work_type_code").equals("task")))
                                     .collect(Collectors.toList()).size();
@@ -426,47 +425,74 @@ public class ProjectInsightReportDao {
                                             toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId) && work.get("work_type_code").equals("defect")))
                                     .collect(Collectors.toList()).size();
-                            creatWorkItemCount = creatWorkItemList.stream().filter(work -> (work.get("build_time").
+                            createWorkItemCount = createWorkItemList.stream().filter(work -> (work.get("build_time").
                                             toString().compareTo(start) >= 0 && work.get("build_time").toString().compareTo(end) <= 0 &&
                                             work.get("project_id").equals(projectId) && work.get("work_type_code").equals("defect")))
                                     .collect(Collectors.toList()).size();
                             break;
                         default:
-                            workItemCount = 0;
                             break;
                     }
                     workItemTrend.put("remain", remainWorkitemCount);
                     workItemTrend.put("end", endWorkItemCount);
-                    workItemTrend.put("new", creatWorkItemCount);
+                    workItemTrend.put("new", createWorkItemCount);
                 }
                 countList.add(workItemTrend);
             }
-
-
         }
         return countList;
     }
 
-    //每天新增，完成，剩余事项统计
-    public Map<String, Integer> statisticsWorkItemTrend(WorkItemCountQuery workItemCountQuery){
-        HashMap<String, Integer> workItemTrend = new HashMap<>();
-        String startTime = workItemCountQuery.getStartDate();
-        String endTime = workItemCountQuery.getEndDate();
+    public List<Map<String, Integer>> findAllWorkItemTrend(List<String> dayList) {
+        String startTime = dayList.get(0);
+        String endTime = dayList.get(dayList.size() - 1);
 
-        //总剩余趋势
-        Integer nostartWorkItem = statisticsDayWorkItemCount(workItemCountQuery, startTime, endTime);
+        List<Map<String, Integer>> countList = new ArrayList<Map<String, Integer>>();
 
-        //每天新增
-        Integer newWorkItemCount = statisticsProjectNewWorkItemCount(workItemCountQuery, startTime, endTime);
+        String sql = "SELECT p.record_time, sum(remain_workitem_count) AS remain_workitem_count FROM pmc_project_burndowm p " +
+                "WHERE p.record_time < '" + endTime + "' AND p.record_time >= '" + startTime + "' GROUP BY p.record_time";
 
-        //每天完成
-        Integer endWorkItemCount  = statisticsProjectEndWorkItemCount(workItemCountQuery, startTime, endTime);
+        List<ProjectBurnDowmChartEntity> projectBurnDowmChartList = this.jpaTemplate.getJdbcTemplate().query(sql, new String[]{}, new BeanPropertyRowMapper(ProjectBurnDowmChartEntity.class));
+        List<Map<String, Object>> endWorkItemList = statisticsAllEndWorkItem(dayList);
+        List<Map<String, Object>> createWorkItemList = statisticsAllNewWorkItem(dayList);
 
-        workItemTrend.put("remain", nostartWorkItem);
-        workItemTrend.put("end", endWorkItemCount);
-        workItemTrend.put("new", newWorkItemCount);
+        if(projectBurnDowmChartList.size() > 0){
+            int size = dayList.size();
+            // 根据日期获取剩余，结束，创建的事项
+            for (int i= 0; i< size-1; i++ ) {
+                String start = dayList.get(i);
+                String end = dayList.get(i + 1);
+                List<ProjectBurnDowmChartEntity> ProjectBurnDowmChars = projectBurnDowmChartList.stream().filter(item -> item.getRecordTime().substring(0, 10).
+                        equals(start.substring(0, 10))).
+                        collect(Collectors.toList());
+                Integer remainWorkitemCount = 0;
+                Integer endWorkItemCount = 0;
+                Integer createWorkItemCount = 0;
+                HashMap<String, Integer> workItemTrend = new HashMap<>();
+                ProjectBurnDowmChartEntity projectBurnDowmChart = new ProjectBurnDowmChartEntity();
 
-        return  workItemTrend;
+                if(ProjectBurnDowmChars.size() > 0){
+                    projectBurnDowmChart = ProjectBurnDowmChars.get(0);
+                    remainWorkitemCount = projectBurnDowmChart.getRemainWorkitemCount();
+                    endWorkItemCount= endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
+                                    toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0))
+                            .collect(Collectors.toList()).size();
+                    createWorkItemCount = createWorkItemList.stream().filter(work -> (work.get("build_time").
+                                    toString().compareTo(start) >= 0 && work.get("build_time").toString().compareTo(end) <= 0))
+                            .collect(Collectors.toList()).size();
+                }else {
+                    projectBurnDowmChart.setRemainWorkitemCount(0);
+                    projectBurnDowmChart.setEndDemandCount(0);
+                    projectBurnDowmChart.setEndBugCount(0);
+                    projectBurnDowmChart.setEndTaskCount(0);
+                }
+                workItemTrend.put("remain", remainWorkitemCount);
+                workItemTrend.put("end", endWorkItemCount);
+                workItemTrend.put("new", createWorkItemCount);
+                countList.add(workItemTrend);
+            }
+        }
+        return countList;
     }
 
 
@@ -492,6 +518,14 @@ public class ProjectInsightReportDao {
         if(workItemTypeCode != null && workItemTypeCode.length() > 0 && !workItemTypeCode.equals("all")){
             sql = sql.concat("and t.work_type_code = '" + workItemTypeCode + "'");
         }
+
+        Integer totalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{},Integer.class);
+        return totalCount;
+    }
+
+    public Integer statisticsAllNewWorkItemCount(String startTime, String endTime) {
+        String sql = "select count(1) as totalCount from pmc_work_item t where t.build_time < '"+ endTime
+                +"' and t.build_time >='" + startTime +"' ";
 
         Integer totalCount = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,new String[]{},Integer.class);
         return totalCount;
@@ -564,6 +598,8 @@ public class ProjectInsightReportDao {
         List<Map<String, Object>> endWorkItem = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
         return endWorkItem;
     }
+
+
 
     /**
      * 统计某段时间累计进行中事项的缺陷
@@ -643,6 +679,82 @@ public class ProjectInsightReportDao {
         return workItemCount;
     }
 
+    public List<Map<String, Object>> statisticsAllEndWorkItem(List<String> dayList) {
+        String startTime = dayList.get(0);
+        String endTime = dayList.get(dayList.size() - 1);
+
+        String sql = "select actual_end_time, project_id, work_type_code from pmc_work_item t where t.actual_end_time < '"+ endTime
+                +"' and t.actual_end_time >='" + startTime +"' and t.work_status_code = 'DONE'";
+        List<Map<String, Object>> endWorkItem = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        return endWorkItem;
+    }
+
+    public List<Map<String, Object>> statisticsAllNewWorkItem(List<String> dayList) {
+        String startTime = dayList.get(0);
+        String endTime = dayList.get(dayList.size() - 1);
+
+        String sql = "select build_time, project_id, work_type_code from pmc_work_item t where t.build_time < '"+ endTime
+                +"' and t.build_time >='" + startTime +"' ";
+
+        List<Map<String, Object>> creatWorkItem = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        return creatWorkItem;
+    }
+
+    public Map<String, Integer> statisticeProjectByStatus() {
+        Map<String, Integer> projectCount = new HashMap<>();
+        // 全部项目
+        String sql = "SELECT count(*) from pmc_project";
+        Integer totalProject = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,Integer.class);
+        projectCount.put("total", totalProject);
+
+        // 未完成项目
+        sql = "SELECT count(*) from pmc_project WHERE project_state != '3'";
+        Integer noEndProject = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,Integer.class);
+        projectCount.put("noend", noEndProject);
+
+        // 进行中
+        sql = "SELECT count(*) from pmc_project WHERE project_state = '2'";
+        Integer progressProject = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
+        projectCount.put("progress", progressProject);
+
+        // 逾期
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = simpleDateFormat.format(date);
+        sql = "SELECT count(*) from pmc_project WHERE project_state != '3' and end_time < '" + currentTime +"'";
+        Integer overdueProject = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
+        projectCount.put("overdue", overdueProject);
+
+        return projectCount;
+    }
+
+    public Map<String, Integer> statisticsWorkItemByStatus() {
+        Map<String, Integer> workItemCount = new HashMap<>();
+        // 未完成事项
+        String sql = "SELECT count(*) from pmc_work_item w WHERE w.work_status_code != 'DONE'";
+        Integer remain = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,Integer.class);
+        workItemCount.put("remain", remain);
+
+        // 进行中
+        sql = "SELECT count(*) from pmc_work_item w WHERE w.work_status_code = 'PROGRESS'";
+        Integer progress = this.jpaTemplate.getJdbcTemplate().queryForObject(sql,Integer.class);
+        workItemCount.put("progress", progress);
+
+        // 未开始
+        sql = "SELECT count(*) from pmc_work_item w WHERE w.work_status_code = 'TODO'";
+        Integer progressProject = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
+        workItemCount.put("todo", progressProject);
+
+        // 逾期
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = simpleDateFormat.format(date);
+        sql = "SELECT count(*) from pmc_work_item w WHERE w.work_status_code != 'DONE' and w.plan_end_time < '" + currentTime +"'";
+        Integer overdueProject = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
+        workItemCount.put("overdue", overdueProject);
+
+        return workItemCount;
+    }
     public JdbcTemplate getJdbcTemplate() {
 
         return jpaTemplate.getJdbcTemplate();

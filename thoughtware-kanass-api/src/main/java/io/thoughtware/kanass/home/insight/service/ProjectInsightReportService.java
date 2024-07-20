@@ -33,6 +33,12 @@ public interface ProjectInsightReportService {
      */
     Map<String, Object> statisticsNewWorkItemCountList(@NotNull @Valid WorkItemCountQuery workItemCountQuery);
 
+
+    /**
+     * 统计某段时间，以天，周，月，季，年为单位新增事项的数据
+     * @return
+     */
+    Map<String, Object> statisticsAllNewWorkItemTend();
     /**
      * 统计某段时间，以天，周，月，季，年为单位完成事项的数据
      * @param workItemCountQuery
@@ -113,6 +119,14 @@ public interface ProjectInsightReportService {
     Map<String, Object> statisticsDayWorkItemCount(WorkItemCountQuery workItemCountQuery);
 
     /**
+     * 统计最近7天所有的事项趋势
+     * 单位时间（天）的新增，完成，剩余趋势，
+     * 用于首页展示
+     * @return
+     */
+    Map<String, Object> statisticsDayAllWorkItemCount();
+
+    /**
      * 统计某个项目下，某个成员负责的事项对比
      * @param workItemCountQuery
      * @return
@@ -120,4 +134,7 @@ public interface ProjectInsightReportService {
     Map<String, Object> statisticsUserWorkItemCount(WorkItemCountQuery workItemCountQuery);
 
 
+    Map<String, Integer> statisticsProjectByStatus();
+
+    Map<String, Integer> statisticsWorkItemByStatus();
 }

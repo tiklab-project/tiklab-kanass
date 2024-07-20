@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,6 +60,13 @@ public class ProjectInsightReportController {
         Map<String,Object> newWorkItemCount = projectInsightReportService.statisticsNewWorkItemCountList(workItemCountQuery);
 
         return Result.ok(newWorkItemCount);
+    }
+
+    @RequestMapping(path = "/statisticsAllNewWorkItemTend",method = RequestMethod.POST)
+    @ApiMethod(name  = "statisticsAllNewWorkItemTend",desc = "根据查询对象查事项新增趋势")
+    public Result<Map<String, Object>> statisticsAllNewWorkItemTend(){
+        Map<String, Object> dayCalendar = projectInsightReportService.statisticsAllNewWorkItemTend();
+        return Result.ok(dayCalendar);
     }
 
     @RequestMapping(path="/statisticsEndWorkItemCount",method = RequestMethod.POST)
@@ -160,6 +166,14 @@ public class ProjectInsightReportController {
         return Result.ok(dayWorkItemCount);
     }
 
+    @RequestMapping(path="/statisticsDayAllWorkItemCount",method = RequestMethod.POST)
+    @ApiMethod(name = "statisticsDayAllWorkItemCount",desc = "统计某个项目下事项单位时间（天）的新增，完成，剩余趋势 用于仪表盘")
+    public Result<Map<String,Object>> statisticsDayAllWorkItemCount(){
+        Map<String, Object> dayWorkItemCount = projectInsightReportService.statisticsDayAllWorkItemCount();
+
+        return Result.ok(dayWorkItemCount);
+    }
+
 
     @RequestMapping(path="/statisticsUserWorkItemCount",method = RequestMethod.POST)
     @ApiMethod(name = "statisticsUserWorkItemCount",desc = "统计某个项目下，某个成员负责的事项对比")
@@ -168,6 +182,21 @@ public class ProjectInsightReportController {
         Map<String,Object> userCount = projectInsightReportService.statisticsUserWorkItemCount(workItemCountQuery);
 
         return Result.ok(userCount);
+    }
+
+    @RequestMapping(path="/statisticsProjectByStatus",method = RequestMethod.POST)
+    @ApiMethod(name = "statisticsProjectByStatus",desc = "统计某个项目下，某个成员负责的事项对比")
+    public Result<Map<String,Object>> statisticsProjectByStatus(){
+        Map<String, Integer> projectCount = projectInsightReportService.statisticsProjectByStatus();
+
+        return Result.ok(projectCount);
+    }
+    @RequestMapping(path="/statisticsWorkItemByStatus",method = RequestMethod.POST)
+    @ApiMethod(name = "statisticsWorkItemByStatus",desc = "统计某个项目下，某个成员负责的事项对比")
+    public Result<Map<String,Object>> statisticsWorkItemByStatus(){
+        Map<String, Integer> workItemCount = projectInsightReportService.statisticsWorkItemByStatus();
+
+        return Result.ok(workItemCount);
     }
 
 }
