@@ -44,7 +44,6 @@ public class ProjectBurnDowmChartServiceImpl implements ProjectBurnDowmChartServ
             projectBurnDowmChart.setProjectId(id);
             createProjectBurnDowmChart(projectBurnDowmChart);
         }
-
     }
 
 
