@@ -1,6 +1,8 @@
 package io.thoughtware.kanass.home.insight.service;
 
 
+import io.thoughtware.core.page.Pagination;
+import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.home.insight.model.ProjectOperateReport;
 import io.thoughtware.kanass.home.insight.model.ProjectOperateReportQuery;
 import io.thoughtware.kanass.home.insight.model.WorkItemCountQuery;
@@ -8,6 +10,7 @@ import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.model.ProjectQuery;
 import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.projectset.model.ProjectSet;
+import io.thoughtware.kanass.projectset.model.ProjectSetQuery;
 import io.thoughtware.kanass.projectset.service.ProjectSetService;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.service.SprintService;
@@ -19,11 +22,16 @@ import io.thoughtware.core.exception.ApplicationException;
 import io.thoughtware.flow.statenode.service.StateNodeService;
 import io.thoughtware.kanass.home.insight.dao.ProjectInsightReportDao;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
+import io.thoughtware.security.logging.logging.model.LoggingQuery;
+import io.thoughtware.todotask.todo.model.Task;
+import io.thoughtware.todotask.todo.model.TaskQuery;
+import io.thoughtware.todotask.todo.service.TaskService;
 import io.thoughtware.user.dmUser.model.DmUser;
 import io.thoughtware.user.dmUser.model.DmUserQuery;
 import io.thoughtware.user.dmUser.service.DmUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -61,6 +69,8 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
     @Autowired
     ProjectInsightReportDao projectInsightReportDao;
 
+    @Autowired
+    TaskService taskService;
 
     /**
      * 统计某个项目集下所有项目的数据
@@ -937,5 +947,95 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
     public Map<String, Integer> statisticsWorkItemByStatus(){
         Map<String, Integer> projectCount = projectInsightReportDao.statisticsWorkItemByStatus();
         return projectCount;
-    };
+    }
+
+    @Override
+    public Map<String, Integer> statisticsTodoWorkByStatus(HashMap<String, String> params) {
+        Map<String, Integer> todoCount = new HashMap<>();
+        LinkedHashMap data = new LinkedHashMap();
+
+        String projectId = params.get("projectId");
+        String projectSetId = params.get("projectSetId");
+        String sprintId = params.get("sprintId");
+        String versionId = params.get("versionId");
+        if(!StringUtils.isEmpty(projectId)){
+            data.put("projectId", projectId);
+            todoCount = getTodoStatistics(data);
+        }
+        if(!StringUtils.isEmpty(sprintId)){
+            data.put("sprintId", sprintId);
+            todoCount = getTodoStatistics(data);
+        }
+        if(!StringUtils.isEmpty(versionId)){
+            data.put("versionId", versionId);
+            todoCount = getTodoStatistics(data);
+        }
+        if(!StringUtils.isEmpty(projectSetId)){
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setProjectSetId(projectSetId);
+            List<Project> projectList = projectService.findProjectList(projectQuery);
+            int total = 0;
+            int progress = 0;
+            int end = 0;
+            int overdue = 0;
+            for (Project project : projectList) {
+                String projectId1 = project.getId();
+                data.put("projectId", projectId1);
+                todoCount = getTodoStatistics(data);
+
+                Integer total1 = todoCount.get("total");
+                total = total + total1;
+
+                Integer progress1 = todoCount.get("progress");
+                progress = progress + progress1;
+
+                Integer end1 = todoCount.get("end");
+                end = end + end1;
+
+                Integer overdue1 = todoCount.get("overdue");
+                overdue = overdue + overdue1;
+            }
+            todoCount.put("total", total);
+            todoCount.put("progress", progress);
+            todoCount.put("end", end);
+            todoCount.put("overdue", overdue);
+        }
+
+        if(StringUtils.isEmpty(projectSetId) && StringUtils.isEmpty(projectId)
+                && StringUtils.isEmpty(sprintId) && StringUtils.isEmpty(versionId)){
+            todoCount = getTodoStatistics(data);
+        }
+        return todoCount;
+
+    }
+
+    public Map<String, Integer> getTodoStatistics(LinkedHashMap data){
+        Map<String, Integer> todoCount = new HashMap<>();
+
+        String loginId = LoginContext.getLoginId();
+        TaskQuery taskQuery = new TaskQuery();
+        taskQuery.setData(data);
+
+        taskQuery.setBgroup("kanass");
+        taskQuery.setAssignUserId(loginId);
+
+        Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+        todoCount.put("total", taskPage.getTotalRecord());
+
+        taskQuery.setStatus(1);
+        taskPage = taskService.findTaskPage(taskQuery);
+        todoCount.put("progress", taskPage.getTotalRecord());
+
+        taskQuery.setStatus(2);
+        taskPage = taskService.findTaskPage(taskQuery);
+        todoCount.put("end", taskPage.getTotalRecord());
+
+        taskQuery.setStatus(1);
+        taskQuery.setIsExpire(3);
+        taskPage = taskService.findTaskPage(taskQuery);
+        todoCount.put("overdue", taskPage.getTotalRecord());
+
+        return todoCount;
+    }
+
 }

@@ -87,9 +87,9 @@ public class ProjectDao{
      * @param projectQuery
      * @return
      */
-    public List<ProjectEntity> findProjectList(ProjectQuery projectQuery) {
+    public List<ProjectEntity> findProjectList1(ProjectQuery projectQuery) {
         QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectEntity.class);
-        QueryCondition queryCondition = queryBuilders
+        QueryCondition queryCondition = queryBuilders.leftJoin(ProjectFocusEntity.class,"pf","pf.projectId=pj.id")
                 .like("projectName", projectQuery.getProjectName())
                 .eq("projectSetId", projectQuery.getProjectSetId())
                 .eq("master", projectQuery.getMaster())
@@ -105,6 +105,27 @@ public class ProjectDao{
 
         return jpaTemplate.findList(queryCondition, ProjectEntity.class);
     }
+
+    public List<ProjectEntity> findProjectList(ProjectQuery projectQuery) {
+        QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectEntity.class, "pj");
+        QueryCondition queryCondition = queryBuilders.leftJoin(ProjectFocusEntity.class,"pf","pf.projectId=pj.id")
+                .like("pj.projectName", projectQuery.getProjectName())
+                .eq("pj.projectSetId", projectQuery.getProjectSetId())
+                .eq("pj.master", projectQuery.getMaster())
+                .eq("pj.creator", projectQuery.getCreator())
+                .eq("pj.id", projectQuery.getProjectId())
+                .eq("pj.projectTypeId", projectQuery.getProjectTypeId())
+                .eq("pj.projectState", projectQuery.getProjectState())
+                .eq("pj.projectLimits",projectQuery.getProjectLimits())
+                .in("pj.id",projectQuery.getProjectIds())
+                .in("pj.projectSetId", projectQuery.getProjectSetIds())
+                .eq("pf.masterId", projectQuery.getFocusUser())
+                .orders(projectQuery.getOrderParams())
+                .get();
+
+        return jpaTemplate.findList(queryCondition, ProjectEntity.class);
+    }
+
 
     public String creatProjectKey(String projectName){
         // 去掉名字中的数字

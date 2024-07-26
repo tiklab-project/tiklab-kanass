@@ -199,4 +199,12 @@ public class ProjectInsightReportController {
         return Result.ok(workItemCount);
     }
 
+    @RequestMapping(path="/statisticsTodoWorkByStatus",method = RequestMethod.POST)
+    @ApiMethod(name = "statisticsTodoWorkByStatus",desc = "统计某个项目下，某个成员负责的事项对比")
+    public Result<Map<String,Object>> statisticsTodoWorkByStatus(@RequestBody @NotNull @Valid  HashMap<String, String> params){
+        Map<String, Integer> todoCount = projectInsightReportService.statisticsTodoWorkByStatus(params);
+
+        return Result.ok(todoCount);
+    }
+
 }

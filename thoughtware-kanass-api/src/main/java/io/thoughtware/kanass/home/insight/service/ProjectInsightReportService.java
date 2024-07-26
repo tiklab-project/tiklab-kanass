@@ -137,4 +137,7 @@ public interface ProjectInsightReportService {
     Map<String, Integer> statisticsProjectByStatus();
 
     Map<String, Integer> statisticsWorkItemByStatus();
+
+    Map<String, Integer> statisticsTodoWorkByStatus(HashMap<String, String> params);
+
 }

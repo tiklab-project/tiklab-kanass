@@ -74,6 +74,7 @@ public class ProjectQuery implements Serializable {
     @ApiProperty(name = "creator",desc = "项目创建者")
     private String creator;
 
+    private String focusUser;
     /**
      * @pi.name: projectTypeId
      * @pi.value: projectTypeId
@@ -205,5 +206,13 @@ public class ProjectQuery implements Serializable {
 
     public void setProjectSetIds(String[] projectSetIds) {
         this.projectSetIds = projectSetIds;
+    }
+
+    public String getFocusUser() {
+        return focusUser;
+    }
+
+    public void setFocusUser(String focusUser) {
+        this.focusUser = focusUser;
     }
 }
