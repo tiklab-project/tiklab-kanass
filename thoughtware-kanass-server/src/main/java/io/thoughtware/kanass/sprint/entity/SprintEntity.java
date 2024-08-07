@@ -38,6 +38,9 @@ public class SprintEntity implements Serializable {
     @Column(name = "description",length = 64)
     private String desc;
 
+    @Column(name = "color")
+    private int color;
+
     // 迭代所属项目
     @Column(name = "project_id",length = 12,notNull = true)
     private String projectId;
@@ -147,5 +150,13 @@ public class SprintEntity implements Serializable {
 
     public void setBuilder(String builder) {
         this.builder = builder;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

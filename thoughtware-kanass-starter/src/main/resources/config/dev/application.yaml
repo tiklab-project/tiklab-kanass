@@ -22,6 +22,7 @@ jdbc:
   username: postgres
   password: darth2020
 
+
 postgresql:
   type: local
   embbed:

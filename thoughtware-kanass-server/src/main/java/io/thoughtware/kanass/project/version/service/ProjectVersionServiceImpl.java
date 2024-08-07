@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -53,8 +54,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         user.setId(createId);
         projectVersion.setBuilder(user);
 
-        ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
+        int color = new Random().nextInt(3) + 1;
+        System.out.println(color);
+        projectVersion.setColor(color);
 
+        ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
         return projectVersionDao.createVersion(projectVersionEntity);
     }
 

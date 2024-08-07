@@ -25,6 +25,9 @@ public class StageEntity implements Serializable {
     @Column(name = "tree_path")
     private String treePath;
 
+    @Column(name = "color")
+    private int color;
+
     // 父级id
     @Column(name = "parent_id",length = 64)
     private String parentId;
@@ -167,5 +170,13 @@ public class StageEntity implements Serializable {
 
     public void setDeep(Integer deep) {
         this.deep = deep;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

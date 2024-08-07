@@ -28,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -50,9 +51,14 @@ public class StageServiceImpl implements StageService {
 
     @Override
     public String createStage(@NotNull @Valid Stage stage) {
+        int color = new Random().nextInt(3) + 1;
+        System.out.println(color);
+        stage.setColor(color);
+
         StageEntity stageEntity = BeanMapper.map(stage, StageEntity.class);
         String stageId = stageDao.createStage(stageEntity);
         stageEntity.setId(stageId);
+
         if(stage.getParentStage() != null && stage.getParentStage().getId() != "nullstring"){
             String id = stage.getParentStage().getId();
             Stage stageParent = findStage(id);

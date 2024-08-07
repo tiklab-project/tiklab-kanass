@@ -122,6 +122,16 @@ public class ProjectSetController {
         return Result.ok(projectList);
     }
 
+//    @RequestMapping(path = "/findProjectSetLogList",method = RequestMethod.POST)
+//    @ApiMethod(name = "findProjectSetLogList",desc = "查询项目集所有动态")
+//    @ApiParam(name = "id",desc = "项目集id",required = true)
+//    public Result<Project> findProjectSetLogList(@NotNull String id){
+//        List<Project> projectList = projectSetService.findProjectSetLogList(id);
+//
+//        return Result.ok(projectList);
+//    }
+
+
     @RequestMapping(path = "/findProjectIsOrNotRe",method = RequestMethod.POST)
     @ApiMethod(name = "findProjectIsOrNotRe",desc = "查询所有关联项目集项目和未关联项目")
     public Result<Map> findProjectIsOrNotRe(){

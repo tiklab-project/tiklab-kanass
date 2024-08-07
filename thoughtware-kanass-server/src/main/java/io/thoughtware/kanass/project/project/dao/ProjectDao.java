@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.project.project.dao;
 
+import io.thoughtware.dal.jdbc.JdbcTemplate;
 import io.thoughtware.kanass.project.project.entity.ProjectEntity;
 import io.thoughtware.kanass.project.project.entity.ProjectFocusEntity;
 import io.thoughtware.kanass.project.project.model.ProjectQuery;
@@ -10,6 +11,7 @@ import io.thoughtware.dal.jpa.criterial.condition.QueryCondition;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.thoughtware.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.thoughtware.dal.jpa.JpaTemplate;
+import io.thoughtware.kanass.workitem.entity.WorkItemEntity;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -120,10 +121,106 @@ public class ProjectDao{
                 .in("pj.id",projectQuery.getProjectIds())
                 .in("pj.projectSetId", projectQuery.getProjectSetIds())
                 .eq("pf.masterId", projectQuery.getFocusUser())
+                .in("pj.projectState", projectQuery.getProjectStates())
                 .orders(projectQuery.getOrderParams())
                 .get();
 
         return jpaTemplate.findList(queryCondition, ProjectEntity.class);
+    }
+
+    public List<ProjectEntity> findJoinProjectList(ProjectQuery projectQuery) {
+        String sql = "Select * from pmc_project pr where";
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        String focusUser = projectQuery.getFocusUser();
+        if(!ObjectUtils.isEmpty(focusUser)){
+            sql = "Select pr.*, pf.master_id from pmc_project pr LEFT JOIN pmc_project_focus pf on pr.id = pf.project_id where";
+        }
+
+        if(projectQuery.getFocusUser() != null ){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pf.master_id  = '" + projectQuery.getFocusUser() + "'");
+            }else {
+                sql = sql.concat(" and pf.master_id = '" + projectQuery.getFocusUser() + "'");
+            }
+            paramMap.put("project_name", projectQuery.getFocusUser());
+        }
+
+        if(projectQuery.getCreator() != null ){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pr.creator = '" + projectQuery.getCreator() + "'");
+            }else {
+                sql = sql.concat(" and pr.creator = '" + projectQuery.getCreator() + "'");
+            }
+            paramMap.put("creator", projectQuery.getCreator());
+        }
+
+        if(projectQuery.getProjectIds() != null ){
+//            if(paramMap.isEmpty()){
+//                sql = sql.concat(" pr.id  in '" + projectQuery.getProjectIds() + "'");
+//            }else {
+//                sql = sql.concat(" and pr.id in '" + projectQuery.getProjectIds() + "'");
+//            }
+//            paramMap.put("id", projectQuery.getProjectIds());
+            String[] projectIds = projectQuery.getProjectIds();
+            String s = new String();
+            s =  "(";
+            for(String projectId:projectIds){
+                s = s.concat("'" + projectId + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s = s.concat(")");
+
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pr.id in " + s);
+            }else {
+                sql = sql.concat(" and pr.id in " + s);
+            }
+            paramMap.put("projectIds", projectQuery.getProjectIds());
+        }
+
+        if(projectQuery.getProjectStates() != null && projectQuery.getProjectStates().length > 0){
+            String[] projectStates = projectQuery.getProjectStates();
+            String s = new String();
+            s =  "(";
+            for(String projectState: projectStates){
+                s = s.concat("'" + projectState + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s = s.concat(")");
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pr.project_state  in " + s);
+            }else {
+                sql = sql.concat(" and pr.project_state in " + s);
+            }
+            paramMap.put("project_state", projectQuery.getProjectStates());
+        }
+
+        if(projectQuery.getProjectName() != null ){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pr.project_name like '%" + projectQuery.getProjectName() + "%'");
+            }else {
+                sql = sql.concat(" and pr.project_name like '%" + projectQuery.getProjectName() + "%'");
+            }
+            paramMap.put("project_name", projectQuery.getProjectName());
+        }
+
+        if(projectQuery.getOverdue() != null && projectQuery.getOverdue()){
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = simpleDateFormat.format(date);
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pr.project_state  != '3' and pr.end_time < '" + currentTime +"'");
+            }else {
+                sql = sql.concat(" and pr.project_state  != '3' and pr.end_time < '" + currentTime +"'");
+            }
+            paramMap.put("overdue", projectQuery.getOverdue());
+        }
+
+
+        List<ProjectEntity> projectEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectEntity.class));
+
+
+        return projectEntityList;
     }
 
 

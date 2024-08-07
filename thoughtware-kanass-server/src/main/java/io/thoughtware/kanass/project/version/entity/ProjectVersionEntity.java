@@ -52,6 +52,9 @@ public class ProjectVersionEntity implements Serializable {
     @Column(name="version_state",length = 12,notNull = true)
     private String versionState;
 
+    @Column(name="color",length = 12)
+    private int color;
+
     public String getId() {
         return id;
     }
@@ -132,5 +135,13 @@ public class ProjectVersionEntity implements Serializable {
 
     public void setBuilder(String builder) {
         this.builder = builder;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

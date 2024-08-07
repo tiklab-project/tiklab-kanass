@@ -39,6 +39,8 @@ public class Sprint extends BaseModel {
     @ApiProperty(name="desc",desc="迭代描述",eg="@text32")
     private String desc;
 
+    private int color;
+
     @ApiProperty(name="master",desc="负责人")
     @Mappings({
             @Mapping(source = "master.id",target = "master")
@@ -232,5 +234,14 @@ public class Sprint extends BaseModel {
 
     public void setFocusIs(boolean focusIs) {
         this.focusIs = focusIs;
+    }
+
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

@@ -82,6 +82,11 @@ public class ProjectQuery implements Serializable {
     @ApiProperty(name ="projectTypeId",desc = "类型ID")
     private String projectTypeId;
 
+
+    private String[] projectStates;
+
+    private Boolean overdue;
+
     /**
      * @pi.name: recentMasterId
      * @pi.value: recentMasterId
@@ -214,5 +219,21 @@ public class ProjectQuery implements Serializable {
 
     public void setFocusUser(String focusUser) {
         this.focusUser = focusUser;
+    }
+
+    public String[] getProjectStates() {
+        return projectStates;
+    }
+
+    public void setProjectStates(String[] projectStates) {
+        this.projectStates = projectStates;
+    }
+
+    public Boolean getOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(Boolean overdue) {
+        this.overdue = overdue;
     }
 }

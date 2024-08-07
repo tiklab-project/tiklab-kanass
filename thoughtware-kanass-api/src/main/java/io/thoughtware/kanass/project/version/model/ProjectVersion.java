@@ -32,6 +32,8 @@ public class ProjectVersion extends BaseModel {
     @ApiProperty(name = "name", desc = "版本名称")
     private String name;
 
+    private int color;
+
     @ApiProperty(name="master",desc="负责人")
     @Mappings({
             @Mapping(source = "master.id",target = "master")
@@ -215,5 +217,14 @@ public class ProjectVersion extends BaseModel {
 
     public void setBuilder(User builder) {
         this.builder = builder;
+    }
+
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

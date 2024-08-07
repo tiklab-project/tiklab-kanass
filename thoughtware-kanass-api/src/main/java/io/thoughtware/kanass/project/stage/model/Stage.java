@@ -40,6 +40,8 @@ public class Stage extends BaseModel {
     @ApiProperty(name="treePath",desc="所有上级事项按层级排序")
     private String treePath;
 
+    private int color;
+
     @ApiProperty(name="rootId",desc="所有根节点")
     private String rootId;
 
@@ -212,5 +214,13 @@ public class Stage extends BaseModel {
 
     public void setChangeParent(boolean changeParent) {
         isChangeParent = changeParent;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

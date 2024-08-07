@@ -2052,7 +2052,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         HashMap<String, Integer> workItemRelationModelCount = workItemDao.findWorkItemRelationModelCount(workItemId, workTypeCode);
 
         LoggingQuery loggingQuery = new LoggingQuery();
-        LinkedHashMap<Object, Object> linkedHashMap = new LinkedHashMap<>();
+        LinkedHashMap linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put("workItemId", workItemId);
         loggingQuery.setData(linkedHashMap);
         loggingQuery.setBgroup("kanass");

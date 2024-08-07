@@ -175,6 +175,10 @@ public class SprintServiceImpl implements SprintService {
         user.setId(createUserId);
         sprint.setBuilder(user);
 
+        int color = new Random().nextInt(3) + 1;
+        System.out.println(color);
+        sprint.setColor(color);
+
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
         Sprint sprint1 = findSprint(id);

@@ -54,6 +54,10 @@
             <artifactId>thoughtware-privilege-api</artifactId>
             <version>${thoughtware-privilege.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.thoughtware</groupId>
+            <artifactId>thoughtware-security-api</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

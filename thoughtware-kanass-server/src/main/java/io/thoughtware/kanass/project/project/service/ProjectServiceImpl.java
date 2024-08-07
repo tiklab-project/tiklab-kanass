@@ -537,8 +537,9 @@ public class ProjectServiceImpl implements ProjectService {
         projectQuery.setProjectLimits(null);
         projectQuery.setProjectIds(allProjectIds);
 
-        List<Project> projectList = findProjectList(projectQuery);
-
+        List<ProjectEntity> joinProjectListEntity = projectDao.findJoinProjectList(projectQuery);
+        List<Project> projectList = BeanMapper.mapList(joinProjectListEntity,Project.class);
+        joinTemplate.joinQuery(projectList);
         return projectList;
 
     }
