@@ -1,3 +1,31 @@
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('1', 'admin', '管理员', 'system', '1', 1, 0, 1, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('2', 'admin', '管理员', 'system', '2', 1, 0, 1, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 0, 0, 2, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('32521b1d228f', 'admin', '管理员', 'system', '2', 0, 0, 2, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('7fd9ce1c7be1', '普通用户', '初始化', 'system', '2', 0, 0, 2, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('f899d7406414', 'admin', '管理员', 'system', '2', 0, 0, 2, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('111111', '超级管理员', '系统超级管理员角色,只能存在一个。', 'system', '1', 2, 2, 1, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('pro_111111', '项目超级管理员', '项目超级管理员角色,只能存在一个。', 'system', '2', 2, 2, 1, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('4559d54bc8b7', '普通用户', '初始化', 'system', '2', 0, 1, 1, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('77f512ab7c53', '普通用户', '初始化', 'custom', '1', 0, 1, 1, NULL);
+
+
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('05a4fd811427', 'f3fdc893ff25', '323810f03653');
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('86912b2f65de', '4cf6d4dec7d0', '7fd9ce1c7be1');
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('d34704c82822', 'f3fdc893ff25', 'f899d7406414');
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('f1968b10de30', '4cf6d4dec7d0', '32521b1d228f');
+
+
+INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('177715b8d071', 'd34704c82822', 'f3fdc893ff25', '111111');
+INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('639f1838c88e', '05a4fd811427', 'f3fdc893ff25', '111111');
+INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('8061e9feec9f', '86912b2f65de', '4cf6d4dec7d0', '111111');
+INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('b882c6171f34', 'f1968b10de30', '4cf6d4dec7d0', '111111');
+
+INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('38c0375b6adf', '32521b1d228f', '111111');
+INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('4df7c0dae8b5', '7dc47e805306', '111111');
+INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('78ddd5263ed6', 'f899d7406414', '111111');
+INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('be3d8a44ee5c', '958339ea47a6', '111111');
+INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('c9b6e4449057', '1', '111111');
 
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('025e702fc3c4', '流程列表', 'SysFlowList', '063143949cc7', 42, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('05edc354e9ce', '添加报表', 'ReportAdd', '36bb7d9c537e', 29, '2');
@@ -62,20 +90,85 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('f569dfa96880', '版本与许可证', 'SysVersion', 'fdb16c391ffc', 0, '1');
 
 
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('05a4fd811427', 'f3fdc893ff25', '323810f03653');
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('86912b2f65de', '4cf6d4dec7d0', '7fd9ce1c7be1');
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('d34704c82822', 'f3fdc893ff25', 'f899d7406414');
-INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('f1968b10de30', '4cf6d4dec7d0', '32521b1d228f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b67ca7e80fd3', '111111', '63fd58715558');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ca57e43dc9a6', '111111', '2f2548b9de7b');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('49d14805f011', '111111', '77da6376511e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('35ee58756a2b', '111111', '4cdb5348a9ca');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d909ab540994', '111111', '0c73e628fd54');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6c91c49f202a', '111111', 'fdb16c391ffc');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('66a7b880a7cd', '111111', 'f569dfa96880');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('cb85094c0fe9', '111111', '90b4e472163a');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('f08e95feb597', '111111', 'fec1a8ee3f6c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('522fd5372a7f', '111111', '321751dfd3a5');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('3224f95852f0', '111111', '7ff4702ebe64');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0735dd9a8af7', '111111', '1f777ba063f7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e95f04c04a62', '111111', 'c5af706628c2');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('a030da80ecb9', '111111', '49e12c2b8fca');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5bfe4d81850f', '111111', '48717b977129');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('f54580bcd692', '111111', '5d5b64c3d172');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('7692874267eb', '111111', 'f9e27dd6f76e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6d1d0c9d35d0', '111111', '47fb980c2919');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('aeaec72e0d73', '111111', 'a11ca9e4559e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b1838fb9f397', '111111', '746c3becb86f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ceb8f0dc3c76', '111111', '138654cdc36c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('3ccd2f378bed', '111111', '290accfb27c3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0419a7f4eba4', '111111', '8d33e4945151');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('394b6b9d8d5c', '111111', '7c8652d3e2f0');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c325b87a00da', '111111', '519fc38f6390');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('dac346a16d29', '111111', '063143949cc7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5d4fa3c8f76d', '111111', 'de21752872e9');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('a7e83c2b5b6c', '111111', '025e702fc3c4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('51af28f69a9d', '111111', '64bdf62686a4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d70be9f57202', '111111', 'cb6c8c3f4048');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b81416bb41b1', '111111', '4cc4e67319a0');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('56b9f90a2bc4', '111111', 'e5b34be19fab');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b59c9401f8b8', '111111', '4235d2624bdf');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('08a15ef655bd', '111111', 'hf43e412151e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('a7d3ecbca3f5', '111111', 'oug5371be8ec');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d13f375ffd80', '111111', 'hfg5371be8ec');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('569f891e8010', '111111', '43e7d41decf7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('803f2ab9cea9', '111111', 'wqre9998fc00');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0109830fb40b', '111111', '585d26bcbdf3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('55c88dbd43bb', '111111', '890e7d41decf');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c5ed6919d310', '111111', '447d9998fc00');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('f696a795dac3', '111111', '925371be8ec6');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('252709b11337', '111111', '043e412151db');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d53bb53e4070', '111111', '6b61fbe5091a');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('deb5f94291c5', '111111', '325c2503007f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('58409b12b54d', '111111', '9c99b8a096c8');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c3053072f172', '111111', 'cb954a7c0be3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('89811f7afdbe', '111111', 'e8bf9843bc9d');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('33f1219173d9', '111111', '5fb7863b09a8');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0bfb55283e28', '111111', '428be660dea3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('31ffeb47ee87', '111111', '57a3bcd1e5fe');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('4b2d8576f523', '111111', 'dd81bdbb52bc');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5f42c66d8226', '111111', '9633d9475886');
 
-
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('1', 'admin', '管理员', 'system', '1', 1, 1);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('2', 'admin', '管理员', 'system', '2', 1, 1);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('4559d54bc8b7', '普通用户', '初始化', 'system', '2', 1, 0);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('77f512ab7c53', '普通用户', '初始化', 'custom', '1', 1, 0);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 2, 0);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('32521b1d228f', 'admin', '管理员', 'system', '2', 2, 0);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('7fd9ce1c7be1', '普通用户', '初始化', 'system', '2', 2, 0);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, scope, business_type) VALUES ('f899d7406414', 'admin', '管理员', 'system', '2', 2, 0);
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0e9f53a26249', 'pro_111111', 'b80a4416f42f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('2139a69cf108', 'pro_111111', '4b982e213c12');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c1d548647274', 'pro_111111', 'fdb16c391ffc');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5b6359199097', 'pro_111111', 'ce9b25e6cac7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('2fd403fb570f', 'pro_111111', 'd7e0583f53e7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('9e0e5fc344e1', 'pro_111111', 'dae13d309463');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('8d7d9f9ac17d', 'pro_111111', '9538263abda4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('a60714124735', 'pro_111111', 'df306d70374c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0d92e2116681', 'pro_111111', '66bd7120b0de');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('956207fef4f9', 'pro_111111', '72e68d34870e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5b7fc1a30034', 'pro_111111', 'a3ee33eba363');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c4f1c473044c', 'pro_111111', 'd893af6f93ff');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b17d8f414cbb', 'pro_111111', '36bb7d9c537e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('938d537cc3de', 'pro_111111', 'a13114663695');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('8e12005e95a6', 'pro_111111', '05edc354e9ce');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('dee112b49bae', 'pro_111111', '1843bd5f5a73');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('277e58687e63', 'pro_111111', '40d00b88b805');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('64ea5404f0a2', 'pro_111111', '2a6be8fda76f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b52cef768cc3', 'pro_111111', 'abe6fffaae63');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('9dd6cf1979b9', 'pro_111111', 'da52f90b3707');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('596b54c858ba', 'pro_111111', 'd3447a36dd98');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('1480c62ad6bd', 'pro_111111', '1ff199504908');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('779d96eb7d94', 'pro_111111', '5386b5add6a5');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('4750ee2ebd63', 'pro_111111', '09a64b79b631');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('1f8499947b5a', 'pro_111111', 'bfbb4a6b97a4');
 
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ba2c6ec37566', '77f512ab7c53', 'f569dfa96880');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0384b19fb96f', '323810f03653', '556157bb8449');
@@ -327,97 +420,12 @@ INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ca5636f06d
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5cde17f1b39c', '1', '321751dfd3a5');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('1a08cd5778cb', '1', '9633d9475886');
 
-
-INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('177715b8d071', 'd34704c82822', 'f3fdc893ff25', '111111');
-INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('639f1838c88e', '05a4fd811427', 'f3fdc893ff25', '111111');
-INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('8061e9feec9f', '86912b2f65de', '4cf6d4dec7d0', '111111');
-INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('b882c6171f34', 'f1968b10de30', '4cf6d4dec7d0', '111111');
-
-INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('38c0375b6adf', '32521b1d228f', '111111');
-INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('4df7c0dae8b5', '7dc47e805306', '111111');
-INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('78ddd5263ed6', 'f899d7406414', '111111');
-INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('be3d8a44ee5c', '958339ea47a6', '111111');
-INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('c9b6e4449057', '1', '111111');
-
 INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('401b9f477890', 'f3fdc893ff25', '111111', 0);
 INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('5dc8b55815ae', '4cf6d4dec7d0', '111111', 0);
 
-INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('1bba4e45931f', '事项更新', 'kanass');
-INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('a1f2cb478fad', '事项添加', 'kanass');
-INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('ff0a79e4fc61', '添加项目', 'kanass');
 
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('31d39e6f981a', '事项状态修改', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
-        <div style=display: flex;align-items: center;>
-            <div style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;>${createUserIcon}</div>
-            <div style=display: flex; flex-direction: column; padding: 0 20px;>
-                <div>
-                    <span style=padding-right: 10px;> ${master.nickname} </span> 更新了
-                    <span style=color: #5d70ea;font-size: 13px; font-weight: 500;> ${workItemTitle} </span> 状态
-                </div>
-                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
-                    <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;>
-                    ${oldValue. name}
-                    </div> ——— <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;>
-                     ${newValue. name}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style=font-size: 13px;> ${receiveTime} </div>
-    </div>', 'index/work/workone/${workItemId}', 'kanass', '${master.nickname}更新了状态');
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('c5613dbc2726', '项目添加日志', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
-        <div style=display: flex;align-items: center;>
-            <div style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;>${createUserIcon}</div>
-            <div style=display: flex; flex-direction: column; padding: 0 20px;>
-                <div> <span style=padding-right: 10px;> ${master} </span> 创建了项目 </div>
-                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
-                    <div style=font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right:10px;>
-                    <img src=${projectIcon} alt= width=16px height=16px> </div>
-                    <div style=color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px;border-radius: 5px;> ${projectName} </div>
-                </div>
-            </div>
-        </div>
-        <div style=font-size: 13px;> ${creatTime} </div>
-    </div>', '/index/${projectType}/${projectId}/survey', 'kanass', '${master}添加项目');
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('4c4d9114ddc0', '事项负责人修改', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
-        <div style=display: flex;align-items: center;>
-            <div style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px;text-align: center; color: #fff;>${createUserIcon}</div>
-            <div style=display: flex; flex-direction: column; padding: 0 20px;>
-                <div>
-                    <span style=padding-right: 10px;> ${master.nickname} </span> 更新了
-                    <span style=color: #5d70ea;font-size: 13px; font-weight: 500;> ${workItemTitle} </span> 负责人 </div>
-                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
-                    <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px;border-radius: 5px; margin-right: 10px;>
-                    ${oldValue.nickname}
-                    </div> ———
-                    <div style=padding: 5px 10px; background-color: #F4F5F7; font-size: 12px; line-height: 15px; border-radius: 5px;margin-left: 10px;> ${newValue.nickname} </div>
-                </div>
-            </div>
-        </div>
-        <div style=font-size: 13px;> ${receiveTime} </div>
-    </div>', 'index/work/workone/${workItemId}', 'kanass', '${master.nickname}更换负责人');
-INSERT INTO pcs_op_log_template (id, title, content, link, bgroup, abstract_content) VALUES ('f621925c6e63', '事项添加', '<div style=display: flex; align-items: center; font-size: 14px; justify-content: space-between;>
-        <div style=display: flex;align-items: center;>
-            <div
-                style=width: 25px; height: 25px; line-height: 25px; background-color: #ccc; border-radius: 32px; text-align: center; color: #fff;>
-                ${createUserIcon}
-            </div>
-            <div style=display: flex; flex-direction: column; padding: 0 20px;>
-                <div> <span style=padding-right: 10px;> ${master} </span> 创建了${workItemTypeName} </div>
-                <div style=line-height: 40px; display: flex; align-items: center; height: 40px;>
-                    <div
-                        style=font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px; margin-right: 10px;>
-                        <img src=${workItemIcon} alt=width=16px height=16px>
-                    </div>
-                    <div
-                        style=color: #5d70ea; cursor: pointer; font-size: 12px; height: 15px; line-height: 15px; border-radius: 5px;>
-                        ${workItemTitle} </div>
-                </div>
-            </div>
-        </div>
-        <div style=font-size: 13px;> ${createTime} </div>
-    </div>', 'index/work/workone/${workItemId}', 'kanass', '${master}添加事项');
-
-
-
-
+INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('WORK_ITEM_AUDITOR', '事项审核员', NULL, 2);
+INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('WORK_ITEM_ASSIGNER', '事项负责人', NULL, 2);
+INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('PROJECT_ADMINISTRATORS', '项目管理员', NULL, 2);
+INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('SPRINT_MASTER', '迭代负责人', NULL, 2);
+INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('WORK_ITEM_CREATOR', '事项创建人', NULL, 2);

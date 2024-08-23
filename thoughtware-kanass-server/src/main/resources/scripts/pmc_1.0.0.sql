@@ -42,7 +42,11 @@ CREATE TABLE pmc_sprint(
         master VARCHAR(12),
         sprint_state_id varchar (12),
         start_time timestamp,
-        end_time  timestamp
+        end_time  timestamp,
+        builder VARCHAR(12),
+        rela_start_time timestamp,
+        rela_end_time timestamp,
+        color INT
 );
 
 
@@ -58,11 +62,15 @@ CREATE TABLE pmc_version(
         id VARCHAR(12) PRIMARY KEY,
         name VARCHAR(64) NOT NULL,
         master VARCHAR(12) NOT NULL,
-        publish_date timestamp NOT NULL,
+        publish_time timestamp NOT NULL,
         start_time timestamp NOT NULL,
         project_id VARCHAR(12) NOT NULL,
         version_state VARCHAR(32) NOT NULL,
-        rela_publish_date timestamp
+        rela_publish_time timestamp,
+        builder VARCHAR(12),
+        rela_start_time timestamp,
+        color INT
+
 
 );
 CREATE TABLE pmc_version_focus(
@@ -125,7 +133,8 @@ CREATE TABLE pmc_work_item_document(
         work_item_id VARCHAR(16) NOT NULL,
         document_id VARCHAR(12) NOT NULL,
         repository_id VARCHAR(12) NOT NULL,
-        sort int
+        sort int,
+        project_id VARCHAR(12)
 );
 
 
@@ -356,7 +365,7 @@ CREATE TABLE pmc_insight(
         insight_group VARCHAR(12) NOT NULL,
         master VARCHAR(12),
         createdTime timestamp,
-        data VARCHAR(1024)
+        data TEXT
 );
 
 
@@ -422,7 +431,8 @@ CREATE TABLE pmc_stage(
         end_time timestamp,
         tree_path TEXT,
         root_id VARCHAR(12),
-        deep int
+        deep int,
+        color INT
 );
 
 
@@ -459,7 +469,8 @@ CREATE TABLE pmc_work_test_case(
         work_item_id VARCHAR(16) NOT NULL,
         test_case_id VARCHAR(12) NOT NULL,
         repository_id VARCHAR(12),
-        sort int
+        sort int,
+        project_id VARCHAR(12)
 );
 
 CREATE TABLE pmc_insight_focus(
@@ -494,4 +505,40 @@ CREATE TABLE pmc_version_burndowm(
         progress_task_count int,
         nostart_task_count int
 );
+CREATE TABLE pmc_work_sprint(
+    id VARCHAR(12) PRIMARY KEY,
+    work_item_id VARCHAR(16) NOT NULL,
+    sprint_id VARCHAR(12) NOT NULL
+);
 
+CREATE TABLE pmc_work_version(
+    id VARCHAR(12) PRIMARY KEY,
+    work_item_id VARCHAR(16) NOT NULL,
+    version_id VARCHAR(12) NOT NULL
+);
+
+CREATE TABLE pmc_stage_burndowm(
+        id VARCHAR(12) NOT NULL PRIMARY KEY,
+        stage_id VARCHAR(12) NOT NULL,
+        record_time timestamp,
+        remain_workitem_count int,
+        total_workitem_count int,
+        end_workitem_count int,
+        progress_workitem_count int,
+        nostart_workitem_count int,
+        remain_bug_count int,
+        total_bug_count int,
+        end_bug_count int,
+        progress_bug_count int,
+        nostart_bug_count int,
+        remain_demand_count int,
+        total_demand_count int,
+        end_demand_count int,
+        progress_demand_count int,
+        nostart_demand_count int,
+        remain_task_count int,
+        total_task_count int,
+        end_task_count int,
+        progress_task_count int,
+        nostart_task_count int
+);

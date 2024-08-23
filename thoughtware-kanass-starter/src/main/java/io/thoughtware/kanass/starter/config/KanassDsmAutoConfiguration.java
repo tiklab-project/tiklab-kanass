@@ -17,7 +17,6 @@ public class KanassDsmAutoConfiguration {
         DsmConfig dsmConfig = DsmConfigBuilder.instance();
         //1.0.0
         dsmConfig.newVersion("1.0.0", new String[]{
-                //PrivilegeDsm
                 "privilege_1.0.0",
                 //UserDsm
                 "user_1.0.0",
@@ -39,12 +38,11 @@ public class KanassDsmAutoConfiguration {
                 //TeamWireDsm
                 "pmc_1.0.0",
                 "backups_1.0.0"
-
         });
         dsmConfig.newVersion("1.0.1", new String[]{
-                "pmc_1.0.1",
                 "flow_1.0.1",
                 "form_1.0.1",
+                "privilege_1.0.1",
                 "message_1.0.1",
                 //SecurityDsm
                 "oplog_1.0.1",
@@ -52,21 +50,17 @@ public class KanassDsmAutoConfiguration {
                 "todotask_1.0.1",
                 "apply-auth_1.0.1",
                 "privilege_1.0.1"
-
         });
         dsmConfig.newVersion("1.0.2", new String[]{
                 "message_1.0.2",
                 "oplog_1.0.2",
                 "flow_1.0.2",
-                "form_1.0.2",
-                "pmc_1.0.2",
                 "todotask_1.0.2",
                 "apply-auth_1.0.2",
                 "privilege_1.0.2",
                 "form_1.0.2"
         });
         dsmConfig.newVersion("1.0.3", new String[]{
-                "pmc_1.0.3",
                 "message_1.0.3",
                 "flow_1.0.3",
                 "apply-auth_1.0.3",
@@ -93,66 +87,15 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.0.8", new String[]{
                 "message_1.0.8"
         });
+        dsmConfig.newVersion("1.1.0", new String[]{
+                "user_1.1.0"
+        });
         dsmConfig.newVersion("1.1.1", new String[]{
                 "user_1.1.1"
         });
-        dsmConfig.newVersion("1.1.5", new String[]{
-                "pmc_1.1.5"
-        });
-        dsmConfig.newVersion("1.1.6", new String[]{
-                "pmc_1.1.6"
-        });
 
-        dsmConfig.newVersion("1.1.8", new String[]{
-                "pmc_1.1.8"
-        });
-        dsmConfig.newVersion("1.1.9", new String[]{
-                "pmc_1.1.9"
-        });
-        dsmConfig.newVersion("1.2.0", new String[]{
-                "pmc_1.2.0"
-        });
-        dsmConfig.newVersion("1.2.1", new String[]{
-                "pmc_1.2.1"
-        });
-        dsmConfig.newVersion("1.2.2", new String[]{
-                "pmc_1.2.2"
-        });
-        dsmConfig.newVersion("1.2.3", new String[]{
-                "pmc_1.2.3"
-        });
-        dsmConfig.newVersion("1.2.4", new String[]{
-                "pmc_1.2.4"
-        });
-        dsmConfig.newVersion("1.2.5", new String[]{
-                "pmc_1.2.5"
-        });
-//        dsmConfig.newVersion("1.2.6", new String[]{
-//                "pmc_1.2.6"
-//        });
-        dsmConfig.newVersion("1.2.7", new String[]{
-                "pmc_1.2.7"
-        });
-        dsmConfig.newVersion("1.2.8", new String[]{
-                "pmc_1.2.8"
-        });
-        dsmConfig.newVersion("1.3.2", new String[]{
-                "pmc_1.3.2"
-        });
-        dsmConfig.newVersion("1.3.3", new String[]{
-                "pmc_1.3.3"
-        });
-        dsmConfig.newVersion("1.3.5", new String[]{
-                "pmc_1.3.5"
-        });
-        dsmConfig.newVersion("1.3.9", new String[]{
-                "pmc_1.3.9"
-        });
-        dsmConfig.newVersion("1.3.7", new String[]{
-                "pmc_1.3.7"
-        });
-        dsmConfig.newVersion("1.4.0", new String[]{
-                "pmc_1.4.0"
+        dsmConfig.newVersion("1.4.3", new String[]{
+                "pmc_1.4.3"
         });
         return dsmConfig;
     }
