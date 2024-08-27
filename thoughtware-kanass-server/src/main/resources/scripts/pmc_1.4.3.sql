@@ -6,15 +6,15 @@ INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('c8
 INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('779c5885', 'f3fdc893ff25', '3b0fc788', '4d040c6d');
 
 
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('a96cf9c9', '需求流程', '需求流程', 'custom', 0, 1, '0c5d4ff9');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3d879830', '缺陷流程', '缺陷流程', 'custom', 0, 1, '607f6be6');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('4d040c6d', '任务流程', '任务流程', 'custom', 0, 1, '515f17bd');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('6fef9d3d', '需求流程', '需求流程', 'custom', 0, 2, 'b1eb0414');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('5b1c9c40', '缺陷流程', '缺陷流程', 'custom', 0, 2, '071890ba');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('9e7f5ea4', '任务流程', '任务流程', 'custom', 0, 2, '47a9d800');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('b1c53a54', '需求流程', '需求流程', 'custom', 0, 2, '12775095');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('34d7bf2c', '缺陷流程', '缺陷流程', 'custom', 0, 2, '3d923ff1');
-INSERT INTO public.pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3b0fc788', '任务流程', '任务流程', 'custom', 0, 2, '5d383b2d');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('a96cf9c9', '需求流程', '需求流程', 'custom', 0, 1, '0c5d4ff9');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3d879830', '缺陷流程', '缺陷流程', 'custom', 0, 1, '607f6be6');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('4d040c6d', '任务流程', '任务流程', 'custom', 0, 1, '515f17bd');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('6fef9d3d', '需求流程', '需求流程', 'custom', 0, 2, 'b1eb0414');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('5b1c9c40', '缺陷流程', '缺陷流程', 'custom', 0, 2, '071890ba');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('9e7f5ea4', '任务流程', '任务流程', 'custom', 0, 2, '47a9d800');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('b1c53a54', '需求流程', '需求流程', 'custom', 0, 2, '12775095');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('34d7bf2c', '缺陷流程', '缺陷流程', 'custom', 0, 2, '3d923ff1');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3b0fc788', '任务流程', '任务流程', 'custom', 0, 2, '5d383b2d');
 
 INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5ad56f59e2ae', '778222e0', '任务', 'workType', '4d040c6d', 'kanass');
 INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('84a2f6124d31', '98121701', '缺陷', 'workType', '3d879830', 'kanass');
@@ -6855,9 +6855,9 @@ INSERT INTO pcs_foc_select_item_rela (id, field_id, select_item_id, relation_id)
 
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('1', 'admin', '管理员', 'system', '1', 1, 0, 1, NULL);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('2', 'admin', '管理员', 'system', '2', 1, 0, 1, NULL);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 0, 0, 2, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('323810f03653', '普通用户', '初始化', 'system', '2', 0, 1, 2, NULL);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('32521b1d228f', 'admin', '管理员', 'system', '2', 0, 0, 2, NULL);
-INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('7fd9ce1c7be1', '普通用户', '初始化', 'system', '2', 0, 0, 2, NULL);
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('7fd9ce1c7be1', '普通用户', '初始化', 'system', '2', 0, 1, 2, NULL);
 INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('f899d7406414', 'admin', '管理员', 'system', '2', 0, 0, 2, NULL);
 --INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('111111', '超级管理员', '系统超级管理员角色,只能存在一个。', 'system', '1', 2, 2, 1, NULL);
 --INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('pro_111111', '项目超级管理员', '项目超级管理员角色,只能存在一个。', 'system', '2', 2, 2, 1, NULL);

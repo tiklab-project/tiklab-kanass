@@ -1320,7 +1320,7 @@ public class WorkItemDao{
             if(name.equals("id")){
                 sql = sql.concat(" split_part(p.id, '-', 1) " + orderType + ", cast(split_part (p.id, '-', 2) as integer) " + orderType + ",");
             } else if(name.equals("work_priority_id")){
-                sql = sql.concat(" priority.sort " + orderType + "," );
+                sql = sql.concat(" priority " + orderType + "," );
             } else {
                 sql = sql.concat(" " + name + " " + orderType + "," );
             }
