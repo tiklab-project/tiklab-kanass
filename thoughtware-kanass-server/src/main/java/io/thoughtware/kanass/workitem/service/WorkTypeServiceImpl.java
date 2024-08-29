@@ -120,8 +120,6 @@ public class WorkTypeServiceImpl implements WorkTypeService {
             throw new SystemException(3001,"类型使用中，不可删除");
         }else {
             workTypeDao.deleteWorkType(id);
-            // 删除关联关系
-            formModelRelationService.deleteFormModelRelationByModalId(id);
 
             FlowModelRelationQuery flowModelRelationQuery = new FlowModelRelationQuery();
             flowModelRelationQuery.setModelId(id);
