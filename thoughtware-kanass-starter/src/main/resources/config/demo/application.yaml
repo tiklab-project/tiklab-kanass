@@ -30,11 +30,11 @@ postgresql:
         password: darth2020
         address: ${DATA_HOME}/postgresql
 
-#eas config
-eas:
+#soular config
+soular:
     embbed:
         enable: false
-    address: http://eas-ce.demoee.thoughtware.cn
+    address: http://soular-ce.demoee.thoughtware.cn
 #dfs config
 #dfs.server.enabled=false
 dfs:

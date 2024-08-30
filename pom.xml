@@ -26,7 +26,6 @@
         <thoughtware-postgresql.version>1.0.3-SNAPSHOT</thoughtware-postgresql.version>
         <thoughtware-install.version>1.0.2-SNAPSHOT</thoughtware-install.version>
         <thoughtware-rpc.version>1.0.0</thoughtware-rpc.version>
-        <thoughtware-plugin.version>1.0.1-SNAPSHOT</thoughtware-plugin.version>
 
 
         <thoughtware-user.version>1.0.1-SNAPSHOT</thoughtware-user.version>
@@ -109,12 +108,6 @@
                 <groupId>io.thoughtware</groupId>
                 <artifactId>thoughtware-dcs-spring-boot-starter</artifactId>
                 <version>${thoughtware-dcs.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.thoughtware</groupId>
-                <artifactId>thoughtware-plugin-spring-boot-starter</artifactId>
-                <version>${thoughtware-plugin.version}</version>
             </dependency>
 
             <dependency>

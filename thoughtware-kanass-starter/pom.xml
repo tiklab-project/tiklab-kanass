@@ -416,7 +416,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>eas-clean</id>
+                        <id>soular-clean</id>
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>

@@ -19,7 +19,7 @@ import java.util.List;
  * @pi.model: Category
  */
 @ApiModel
-@Mapper(targetName  = "io.thoughtware.teston.category.entity.CategoryEntity")
+@Mapper
 @Join
 public class Category extends BaseModel{
 

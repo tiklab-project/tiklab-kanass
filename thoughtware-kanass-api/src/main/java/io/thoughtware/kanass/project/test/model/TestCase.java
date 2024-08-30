@@ -19,7 +19,7 @@ import java.util.Map;
  * 测试用例 模型
  */
 @ApiModel
-@Mapper(targetName  = "io.thoughtware.teston.test.test.entity.TestCasesEntity")
+@Mapper
 @Join
 public class TestCase extends BaseModel{
 

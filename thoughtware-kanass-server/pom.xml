@@ -98,11 +98,6 @@
             <artifactId>thoughtware-dfs-client</artifactId>
             <version>${thoughtware-dfs.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.thoughtware</groupId>
-            <artifactId>thoughtware-plugin-spring-boot-starter</artifactId>
-            <version>${thoughtware-plugin.version}</version>
-        </dependency>
         <!--pcs-->
         <dependency>
             <groupId>io.thoughtware</groupId>

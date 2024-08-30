@@ -58,9 +58,9 @@ dcs:
     group: g1
     database: dcs1
     expire: 7200
-#address: http://eas.local.kanass.net
-#  address: http://eas.dev.kanass.net
-eas:
+#address: http://soular.local.kanass.net
+#  address: http://soular.dev.kanass.net
+soular:
   embbed:
     enable: true
   web:
