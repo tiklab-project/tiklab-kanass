@@ -38,7 +38,7 @@ public class JiraImportDataController {
         }else {
             try {
                 InputStream inputStream = uploadFile.getInputStream();
-                String importJireDate = jiraImportDataService.importJireData(inputStream);
+                String importJireDate = jiraImportDataService.importJiraData(inputStream);
                 return Result.ok(importJireDate);
             } catch (IOException e) {
                 throw new ApplicationException(e);
@@ -47,22 +47,7 @@ public class JiraImportDataController {
     }
 
 
-    @RequestMapping(path="/saxParse",method = RequestMethod.POST)
-    @ApiMethod(name = "saxParse",desc = "导入jire数据")
-    @ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
-    public Result saxParse(@RequestParam("uploadFile")MultipartFile uploadFile){
-        if (uploadFile == null) {
-            throw new ApplicationException("文件不能为空");
-        }else {
-            try {
-                InputStream inputStream = uploadFile.getInputStream();
-                String importJireDate = jiraImportDataService.saxParse(inputStream);
-                return Result.ok(importJireDate);
-            } catch (IOException e) {
-                throw new ApplicationException(e);
-            }
-        }
-    }
+
     @RequestMapping(path="/findJiraInputSchedule",method = RequestMethod.POST)
     @ApiMethod(name = "findJiraInputSchedule",desc = "导入jire数据")
     public Result<Map<String, Object>> findJiraInputSchedule(){

@@ -48,7 +48,8 @@ public class CopyFlowToProjectImpl implements CopyFlowToProjectService {
             String projectId = project.getId();
             for (Flow flow : flowList) {
                 String oldFlow = flow.getId();
-                String flowId = flowService.copyFlow(oldFlow, projectId);
+                Flow flow2 = flowService.copyFlow(oldFlow, projectId);
+                String flowId = flow2.getId();
                 if(oldFlow.equals("a96cf9c9")){
                     WorkTypeDmQuery workTypeDmQuery = new WorkTypeDmQuery();
                     workTypeDmQuery.setWorkTypeId("7055ebc6");

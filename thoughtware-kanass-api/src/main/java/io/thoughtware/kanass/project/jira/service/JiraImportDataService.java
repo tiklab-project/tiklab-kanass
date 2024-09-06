@@ -13,9 +13,8 @@ public interface JiraImportDataService {
      * @param inputStream
      * @return
      */
-    String  importJireData(InputStream inputStream);
+    String importJiraData(InputStream inputStream);
 
-    String  saxParse(InputStream inputStream);
 
     Map<String, Object> findJiraInputSchedule();
 

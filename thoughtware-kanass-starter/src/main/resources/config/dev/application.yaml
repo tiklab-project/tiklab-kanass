@@ -77,7 +77,7 @@ plugin:
 
 #zip config
 unzip:
-  path: ${DATA_HOME}/unzip/Jire
+  path: ${DATA_HOME}/unzip/Jira
 
 #证书文件路径
 licences:

@@ -87,24 +87,6 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             flowModelRelation.setFlowId(flow1.getId());
         }
 
-        Form form = workTypeDm.getForm();
-        DmFormQuery dmFormQuery = new DmFormQuery();
-        dmFormQuery.setDomainId(workTypeDm.getProjectId());
-        dmFormQuery.setGlobalFormId(form.getId());
-        DmForm dmForm = dmFormService.existDmForm(dmFormQuery);
-        FormModelRelation formModelRelation = new FormModelRelation();
-
-        if(dmForm != null){
-            workTypeDm.setForm(dmForm.getForm());
-            formModelRelation.setFormId(dmForm.getForm().getId());
-
-        }else {
-            String formId = dmFormService.cloneFormById(form.getId(),workTypeDm.getProjectId());
-            Form form1 = new Form();
-            form1.setId(formId);
-            workTypeDm.setForm(form1);
-            formModelRelation.setFormId(formId);
-        }
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
         String workTypeDm1 = workTypeDmDao.createWorkTypeDm(workTypeDmEntity);
@@ -117,12 +99,6 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         flowModelRelation.setModelType("workTypeDm");
         flowModelRelationService.createFlowModelRelation(flowModelRelation);
 
-        // 事项类型与表单关联
-        formModelRelation.setModelId(workTypeDm1);
-        formModelRelation.setModelName(workTypeDm.getWorkType().getName());
-        formModelRelation.setBgroup("kanass");
-        formModelRelation.setModelType("workTypeDm");
-        formModelRelationService.createFormModelRelation(formModelRelation);
         workTypeDm.setId(workTypeDm1);
         return workTypeDm;
     }
@@ -151,16 +127,16 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
             String oldFlow = flow.getId();
             String projectId = workTypeDm.getProjectId();
 
-            String flowId = flowService.copyFlow(oldFlow, projectId);
-            Flow newFlow = new Flow();
-            newFlow.setId(flowId);
-            workTypeDm.setFlow(newFlow);
+            Flow flow1 = flowService.copyFlow(oldFlow, projectId);
+            String flowId =  flow1.getId();
+            workTypeDm.setFlow(flow1);
 //            // 设置流程与事项类型的关联,关联复制出来时间的流程
             flowModelRelation.setFlowId(flowId);
         }
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
         String workTypeDm1 = workTypeDmDao.createWorkTypeDm(workTypeDmEntity);
+        workTypeDm.setId(workTypeDm1);
 
         // 事项类型与流程关联
         flowModelRelation.setModelId(workTypeDm1);
@@ -176,12 +152,6 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         String id = workTypeDm.getId();
         FormModelRelationQuery formModelRelationQuery = new FormModelRelationQuery();
         formModelRelationQuery.setModelId(id);
-        List<FormModelRelation> formModelRelationList = formModelRelationService.findFormModelRelationList(formModelRelationQuery);
-        for (FormModelRelation formModelRelation : formModelRelationList) {
-            String formId = workTypeDm.getForm().getId();
-            formModelRelation.setFormId(formId);
-            formModelRelationService.updateFormModelRelation(formModelRelation);
-        }
 
         FlowModelRelationQuery flowModelRelationQuery = new FlowModelRelationQuery();
         flowModelRelationQuery.setModelId(id);

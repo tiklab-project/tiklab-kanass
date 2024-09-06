@@ -183,8 +183,7 @@ public class InitStateNodeFieldImpl implements InitStateNodeFiledService {
             List<WorkTypeDm> workTypeDmList = allWorkTypeDm.stream().filter(workTypeDm -> workTypeDm.getFlow().getId().equals(id)).collect(Collectors.toList());
             int size = workTypeDmList.size();
             if(size > 0){
-                WorkTypeDm workTypeDm = workTypeDmList.get(0);
-                Form form = workTypeDm.getForm();
+                Form form = flow.getForm();
                 flow.setForm(form);
                 flowService.updateFlow(flow);
             }

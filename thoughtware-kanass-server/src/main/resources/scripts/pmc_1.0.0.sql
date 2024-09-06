@@ -191,7 +191,7 @@ CREATE TABLE pmc_work_type(
         description VARCHAR(2048),
         code VARCHAR(64),
         form_id VARCHAR(8),
-        flow_id VARCHAR(8),
+        flow_id VARCHAR(8) NOT NULL,
         icon_url VARCHAR(64),
         grouper VARCHAR(64) NOT NULL,
         sort  VARCHAR(64),
@@ -414,7 +414,7 @@ CREATE TABLE pmc_work_type_dm(
         id VARCHAR(8) PRIMARY KEY,
         project_id VARCHAR(12) NOT NULL,
         work_type_id VARCHAR(8) NOT NULL,
-        form_id VARCHAR(8) NOT NULL,
+        form_id VARCHAR(8),
         flow_id VARCHAR(8) NOT NULL
 );
 
@@ -542,3 +542,5 @@ CREATE TABLE pmc_stage_burndowm(
         progress_task_count int,
         nostart_task_count int
 );
+
+ALTER TABLE pmc_work_type_dm ALTER COLUMN form_id DROP NOT NULL;

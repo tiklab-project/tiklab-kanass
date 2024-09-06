@@ -34,12 +34,7 @@ public class WorkTypeDm extends BaseModel {
     @JoinQuery(key = "id")
     private WorkType workType;
 
-    @ApiProperty(name="form",desc="关联表单")
-    @Mappings({
-            @Mapping(source = "form.id",target = "formId")
-    })
-    @JoinQuery(key = "id")
-    private Form form;
+
 
 
     @ApiProperty(name="flow",desc="关联流程")
@@ -74,13 +69,6 @@ public class WorkTypeDm extends BaseModel {
         this.workType = workType;
     }
 
-    public Form getForm() {
-        return form;
-    }
-
-    public void setForm(Form form) {
-        this.form = form;
-    }
 
     public Flow getFlow() {
         return flow;

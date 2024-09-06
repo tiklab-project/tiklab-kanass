@@ -93,10 +93,13 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.1.1", new String[]{
                 "user_1.1.1"
         });
-
+        dsmConfig.newVersion("1.4.3", new String[]{
+                "pmc_1.4.2"
+        });
         dsmConfig.newVersion("1.4.3", new String[]{
                 "pmc_1.4.3"
         });
+
         return dsmConfig;
     }
 }

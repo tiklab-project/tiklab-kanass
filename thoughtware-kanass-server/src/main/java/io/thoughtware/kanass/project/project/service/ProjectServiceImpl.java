@@ -276,7 +276,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         String projectKey = project.getProjectKey();
         String usedProjectName = projectDao.projectKeyIsOnly(projectKey);
-        if(!usedProjectName.isEmpty()){
+        if(usedProjectName != null && !usedProjectName.isEmpty()){
             throw new ApplicationException("项目key已被" + usedProjectName + "项目使用");
         }
 
@@ -311,7 +311,6 @@ public class ProjectServiceImpl implements ProjectService {
             WorkTypeDm workTypeDm = new WorkTypeDm();
             workTypeDm.setWorkType(workType);
             workTypeDm.setFlow(workType.getFlow());
-            workTypeDm.setForm(workType.getForm());
             workTypeDm.setProjectId(projectId);
             WorkTypeDm workTypeDm1 = workTypeDmService.copyWorkTypeDm(workTypeDm);
 
@@ -337,7 +336,6 @@ public class ProjectServiceImpl implements ProjectService {
             WorkTypeDm workTypeDm = new WorkTypeDm();
             workTypeDm.setWorkType(workType);
             workTypeDm.setFlow(workType.getFlow());
-            workTypeDm.setForm(workType.getForm());
             workTypeDm.setProjectId(projectId);
             WorkTypeDm workTypeDm1 = workTypeDmService.createWorkTypeDm(workTypeDm);
             workTypeDmList.add(workTypeDm1);

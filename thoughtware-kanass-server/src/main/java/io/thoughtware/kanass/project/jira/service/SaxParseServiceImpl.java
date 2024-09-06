@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.project.jira.service;
 
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -10,16 +11,20 @@ import javax.xml.parsers.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SaxParseServiceImpl extends DefaultHandler {
+public class SaxParseServiceImpl extends DefaultHandler  {
     private String preTag = null;
 
     ArrayList<Element> ElementList = new ArrayList<Element>();
-    String[] flags = {"User", "Project", "Issue","UserHistoryItem", "ProjectRole", "ProjectRoleActor", "IssueParentAssociation", "Status"};
+    String JiraVersion = new String();
+    String[] flags = {"User", "ApplicationUser", "Project", "Issue", "IssueLink","UserHistoryItem", "ProjectRole",
+            "ProjectRoleActor", "IssueParentAssociation", "Status", "Version"};
+
 
     @Override
     public void startDocument() throws SAXException {
 //        users = new ArrayList<User>();
         ElementList.clear();
+        JiraVersion = null;
     }
 
     @Override
@@ -36,6 +41,16 @@ public class SaxParseServiceImpl extends DefaultHandler {
                 }
                 ElementList.add(element);
             }
+            if(qName.equals("PluginVersion") && StringUtils.isEmpty(JiraVersion)){
+                for (int i = 0; i < attributes.getLength(); i++) {
+                    element.setAttribute(attributes.getQName(i), attributes.getValue(i));
+                }
+                String name = element.getAttribute("name");
+                if(name.equals("Jira Software Application")){
+                    JiraVersion = element.getAttribute("version");
+                    return;
+                }
+            }
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -47,9 +62,7 @@ public class SaxParseServiceImpl extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if("Project".equals(qName)){
             for (Element attributes : ElementList) {
-
                 String classAttr = attributes.getAttribute("name");
-                System.out.println("name attribute: " + classAttr);
             }
         }
 
@@ -73,5 +86,8 @@ public class SaxParseServiceImpl extends DefaultHandler {
 
     public ArrayList<Element> getElementList(){
         return ElementList;
+    }
+    public String getJiraVersion(){
+        return JiraVersion;
     }
 }
