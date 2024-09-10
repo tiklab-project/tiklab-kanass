@@ -12,7 +12,7 @@ server:
 DATA_HOME: /opt/thoughtware/kanass-ce
 
 base:
-    url: http://kanass-ce.demoee.thoughtware.cn
+    url: http://kanass-ce.demoee.tiklab.net
 
 jdbc:
     driverClassName: org.postgresql.Driver
@@ -34,7 +34,7 @@ postgresql:
 soular:
     embbed:
         enable: false
-    address: http://soular-ce.demoee.thoughtware.cn
+    address: http://soular-ce.demoee.tiklab.net
 #dfs config
 #dfs.server.enabled=false
 dfs:

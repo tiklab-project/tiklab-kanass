@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import io.thoughtware.core.utils.UuidGenerator;
 import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.kanass.project.project.service.ProjectService;
-import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.sprint.model.Sprint;
 import io.thoughtware.kanass.sprint.model.SprintQuery;
 import io.thoughtware.kanass.sprint.model.SprintState;
 import io.thoughtware.kanass.sprint.model.SprintStateQuery;
 import io.thoughtware.kanass.workitem.service.WorkSprintService;
-import io.thoughtware.message.setting.service.MessageSendTypeService;
 import io.thoughtware.privilege.vRole.model.VRoleDomain;
 import io.thoughtware.toolkit.beans.BeanMapper;
 import io.thoughtware.core.page.Pagination;
@@ -21,7 +19,6 @@ import io.thoughtware.kanass.sprint.dao.SprintDao;
 import io.thoughtware.kanass.sprint.dao.SprintStateDao;
 import io.thoughtware.kanass.sprint.entity.SprintEntity;
 import io.thoughtware.kanass.workitem.model.WorkItem;
-import io.thoughtware.kanass.workitem.model.WorkItemQuery;
 import io.thoughtware.kanass.workitem.service.WorkItemService;
 import io.thoughtware.message.message.model.Message;
 import io.thoughtware.message.message.model.SendMessageNotice;
@@ -187,6 +184,13 @@ public class SprintServiceImpl implements SprintService {
         return id;
     }
 
+    @Override
+    public String createJiraSprint(@NotNull @Valid Sprint sprint) {
+        //初始化迭代状态
+        SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
+        String id = sprintDao.createSprint(sprintEntity);
+        return id;
+    }
 
     @Override
     public void updateSprint(@NotNull @Valid Sprint sprint) {

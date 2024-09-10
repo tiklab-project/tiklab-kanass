@@ -7,17 +7,19 @@ import io.thoughtware.flow.flow.service.DmFlowService;
 import io.thoughtware.flow.statenode.model.StateNodeFlow;
 import io.thoughtware.flow.statenode.service.StateNodeFlowService;
 import io.thoughtware.form.field.model.SelectItem;
+import io.thoughtware.kanass.project.module.model.Module;
+import io.thoughtware.kanass.project.module.service.ModuleService;
 import io.thoughtware.kanass.project.project.model.Project;
 import io.thoughtware.kanass.project.project.model.ProjectType;
 import io.thoughtware.kanass.project.project.service.ProjectService;
 import io.thoughtware.kanass.project.version.model.ProjectVersion;
 import io.thoughtware.kanass.project.version.model.VersionState;
-import io.thoughtware.kanass.workitem.model.WorkItem;
-import io.thoughtware.kanass.workitem.model.WorkType;
-import io.thoughtware.kanass.workitem.model.WorkTypeDm;
-import io.thoughtware.kanass.workitem.service.WorkItemService;
-import io.thoughtware.kanass.workitem.service.WorkTypeDmService;
-import io.thoughtware.kanass.workitem.service.WorkTypeService;
+import io.thoughtware.kanass.project.version.service.ProjectVersionService;
+import io.thoughtware.kanass.sprint.model.Sprint;
+import io.thoughtware.kanass.sprint.model.SprintState;
+import io.thoughtware.kanass.sprint.service.SprintService;
+import io.thoughtware.kanass.workitem.model.*;
+import io.thoughtware.kanass.workitem.service.*;
 import io.thoughtware.privilege.dmRole.model.DmRole;
 import io.thoughtware.privilege.dmRole.model.DmRoleUser;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
@@ -41,6 +43,7 @@ import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Element;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -57,10 +60,25 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     WorkItemService workItemService;
 
     @Autowired
+    WorkSprintService workSprintService;
+
+    @Autowired
     WorkTypeService workTypeService;
 
     @Autowired
+    SprintService sprintService;
+
+    @Autowired
     ProjectService projectService;
+
+    @Autowired
+    ModuleService moduleService;
+
+    @Autowired
+    WorkVersionService workVersionService;
+
+    @Autowired
+    ProjectVersionService projectVersionService;
 
     @Autowired
     RoleService roleService;
@@ -101,25 +119,43 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     private ThreadLocal<ArrayList<Element>> SubWorkItemElementList = new ThreadLocal<>();
 
     private ThreadLocal<ArrayList<Element>> VersionElementList = new ThreadLocal<>();
+
+    private ThreadLocal<ArrayList<Element>> ComponentElementList = new ThreadLocal<>();
+    private ThreadLocal<ArrayList<Element>> ChangeItemElementList = new ThreadLocal<>();
+    private ThreadLocal<ArrayList<Element>> SprintElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<Element>> IssueLinkElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<String>> TodoStatusIds = new ThreadLocal<ArrayList<String>>();
     private ThreadLocal<ArrayList<String>> ProcessStatusIds = new ThreadLocal<ArrayList<String>>();
     private ThreadLocal<ArrayList<String>> DoneStatusIds = new ThreadLocal<ArrayList<String>>();
+
+    private ThreadLocal<ArrayList<Element>> CustomFieldValueElementList = new ThreadLocal<>();
+    private ThreadLocal<ArrayList<Element>> CustomFieldElementList = new ThreadLocal<>();
+    private ThreadLocal<ArrayList<Element>>  ChangeGroupElementList = new  ThreadLocal<>();
+
     private ThreadLocal<Map<String, Object>> ImportSchedule = new ThreadLocal<Map<String, Object>>();
 
     public static Map<String, Integer> Percent = new HashMap();
-    public static Map<String, Project> CurrentProject = new HashMap();
 
     @Override
-    public String writeData(List<Element> elements) {
+    public String writeData(List<Element> elements, Map<String, Project> CurrentProject, Map<String, Integer> Percent) {
         String createUserId = LoginContext.getLoginId();
         try {
 
             ArrayList<Element> globalUserElementList = new ArrayList<>();
+
             ArrayList<Element> globalApplicationUserElementList = new ArrayList<>();
 
             ArrayList<Element> projectElementList = new ArrayList<>();
+
             ArrayList<Element> versionElementList = new ArrayList<>();
+            ArrayList<Element> changeItemElementList = new ArrayList<>();
+            ArrayList<Element> changeGroupElementList = new ArrayList<>();
+            ArrayList<Element> componentElementList = new ArrayList<>();
+
+            ArrayList<Element> sprintElementList = new ArrayList<>();
+
+            ArrayList<Element> customFieldValueElementList = new ArrayList<>();
+            ArrayList<Element> customFieldElementList = new ArrayList<>();
             ArrayList<Element> userHistoryItemElementList = new ArrayList<>();
 
             ArrayList<String> projectRoleElementList = new ArrayList<>();
@@ -173,6 +209,24 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                     case "Version":
                         versionElementList.add(element);
                         break;
+                    case "Sprint":
+                        sprintElementList.add(element);
+                        break;
+                    case "Component":
+                        componentElementList.add(element);
+                        break;
+                    case "CustomFieldValue":
+                        customFieldValueElementList.add(element);
+                        break;
+                    case "CustomField":
+                        customFieldElementList.add(element);
+                        break;
+                    case "ChangeItem":
+                        changeItemElementList.add(element);
+                        break;
+                    case "ChangeGroup":
+                        changeGroupElementList.add(element);
+                        break;
                     case "UserHistoryItem":
                         userHistoryItemElementList.add(element);
                         break;
@@ -202,10 +256,13 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                             default:
                                 break;
                         }
+                        break;
                     default:
                         break;
                 }
             }
+
+
             this.GlobalUserElementList.set(globalUserElementList);
             this.GlobalApplicationUserElementList.set(globalApplicationUserElementList);
             this.UserHistoryItemElementList.set(userHistoryItemElementList);
@@ -219,14 +276,25 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
             this.DoneStatusIds.set(doneStatusIds);
             this.IssueParentAssociationElementList.set(issueParentAssociationElementList);
             this.VersionElementList.set(versionElementList);
+            this.SprintElementList.set(sprintElementList);
+            this.CustomFieldElementList.set(customFieldElementList);
+            this.ChangeItemElementList.set(changeItemElementList);
+            this.ComponentElementList.set(componentElementList);
+            this.ChangeGroupElementList.set(changeGroupElementList);
+
+            ArrayList<Element> sprintCustomField = getSprintCustomField(customFieldValueElementList);
+            this.CustomFieldValueElementList.set(sprintCustomField);
+
             for (Element globalUserElement : this.GlobalUserElementList.get()) {
                 setGlobalUser(globalUserElement);
             }
             // 获取导入项目的总数
             int size = projectElementList.size();
             Percent.put(createUserId + "total", size);
+
+            setGroupItemIssue();
             for (Element projectElement : projectElementList) {
-                setProject(projectElement, createUserId);
+                setProject(projectElement, createUserId, CurrentProject, Percent);
             }
             this.UserHistoryItemElementList.remove();
             this.ProjectRoleElementList.remove();
@@ -236,12 +304,48 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
             this.TodoStatusIds.remove();
             this.ProcessStatusIds.remove();
             this.DoneStatusIds.remove();
+            this.ChangeItemElementList.remove();
+            this.CustomFieldValueElementList.remove();
+            this.ChangeGroupElementList.remove();
+            this.ComponentElementList.remove();
+            this.SprintElementList.remove();
+            this.CustomFieldElementList.remove();
             return "succed";
         } catch (Exception e) {
             throw new ApplicationException(e);
         }
     }
+    public ArrayList<Element> getSprintCustomField(ArrayList<Element> customFieldValueElementList){
+        ArrayList<Element> fieldValueElementList = new ArrayList<>();
+        ArrayList<Element> elementList = this.CustomFieldElementList.get();
+        for (Element element : elementList) {
+            String customFieldname = element.getAttribute("name");
+            if(customFieldname.equals("Sprint")){
+                String id = element.getAttribute("id");
+                for (Element customFieldValue : customFieldValueElementList) {
+                    String customfield = customFieldValue.getAttribute("customfield");
+                    if(customfield.equals(id)){
+                        fieldValueElementList.add(customFieldValue);
+                    }
+                }
 
+            }
+        }
+        return fieldValueElementList;
+    }
+    public void setGroupItemIssue(){
+        for (Element changeItemElement : this.ChangeItemElementList.get()) {
+            String group = changeItemElement.getAttribute("group");
+            for (Element changeGroupElement : this.ChangeGroupElementList.get()) {
+                String id = changeGroupElement.getAttribute("id");
+                String issue = changeGroupElement.getAttribute("issue");
+                if(group.equals(id)){
+                    changeItemElement.setAttribute("issue", issue);
+                }
+            }
+        }
+
+    }
 
     public void setGlobalUser(Element element){
         String active = element.getAttribute("active");
@@ -289,7 +393,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     }
 
 
-    public void setProject(Element element, String createUserId){
+    public void setProject(Element element, String createUserId, Map<String, Project> CurrentProject, Map<String, Integer> Percent){
         String projectId = element.getAttribute("id");
         //项目名字
         String projectName = element.getAttribute("name");
@@ -302,7 +406,6 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         String projecttype = element.getAttribute("projecttype");
         Project project = projectService.findProject(projectId);
         if (ObjectUtils.isEmpty(project) && projecttype.equals("software")){
-
             Project project1 = new Project();
             project1.setProjectName(projectName);
             project1.setProjectKey(originalkey);
@@ -337,6 +440,9 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 Map<String, String> roleIds = setProjectRole(jiraProjectId);
                 setProjectUser(element, roleIds);
                 setVersion(element);
+                setSprint(element);
+                setModule(element);
+
                 // 初始化事项类型
                 List<WorkTypeDm> workTypeDmList = projectService.initWorkType(jiraProjectId);
 
@@ -362,10 +468,10 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         for (Element versionElement : this.VersionElementList.get()) {
             String project1 = versionElement.getAttribute("project");
             if(pid.equals(project1)){
-                String name = element.getAttribute("name");
-                String startdate = element.getAttribute("startdate");
-                String releasedate = element.getAttribute("releasedate");
-                String released = element.getAttribute("released");
+                String name = versionElement.getAttribute("name");
+                String startdate = versionElement.getAttribute("startdate");
+                String releasedate = versionElement.getAttribute("releasedate");
+                String released = versionElement.getAttribute("released");
 
                 ProjectVersion projectVersion = new ProjectVersion();
                 Project project = new Project();
@@ -396,11 +502,121 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                     versionState.setId("000000");
                     projectVersion.setVersionState(versionState);
                 }
+                String version = projectVersionService.createVersion(projectVersion);
+                versionElement.setAttribute("newId", version);
+            }
+        }
+    }
+
+    public void setModule(Element element){
+        String pid = element.getAttribute("id");
+        String newId = element.getAttribute("newId");
+        for (Element moduleElement : this.ComponentElementList.get()) {
+            String project1 = moduleElement.getAttribute("project");
+            if(pid.equals(project1)){
+                String name = moduleElement.getAttribute("name");
+                String description = moduleElement.getAttribute("description");
+
+                Module module = new Module();
+                Project project = new Project();
+                project.setId(newId);
+                module.setProject(project);
+                module.setModuleName(name);
+                module.setDesc(description);
+
+                String moduleId = moduleService.createModule(module);
+                moduleElement.setAttribute("newId", moduleId);
+            }
+        }
+    }
+    public void setSprint(Element element){
+        String pid = element.getAttribute("id");
+        String newId = element.getAttribute("newId");
+        List<String> sprintIdList = new ArrayList<String>();
+        // 查找此项目的事项关联的所有迭代
+        for (Element issueElement : this.IssueElementList.get()) {
+            String project = issueElement.getAttribute("project");
+            if(pid.equals(project)){
+                String issueId = issueElement.getAttribute("id");
+                for(Element customFieldElement : this.CustomFieldValueElementList.get()) {
+                    String sprintIssueId = customFieldElement.getAttribute("issue");
+                    String sprintId = customFieldElement.getAttribute("stringvalue");
+                    if(issueId.equals(sprintIssueId)){
+                        issueElement.setAttribute("sprint", sprintId);
+                        if(!sprintIdList.contains(sprintId)){
+                            sprintIdList.add(sprintId);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 循环迭代与事项关联,添加迭代
+        for(Element sprintElement : this.SprintElementList.get()){
+            String sprintId = sprintElement.getAttribute("id");
+            if(sprintIdList.contains(sprintId)){
+                // 创建迭代
+                Sprint sprint = new Sprint();
+
+                String name = sprintElement.getAttribute("name");
+                String activatedDate = sprintElement.getAttribute("activated_date");
+                activatedDate = toDateString(activatedDate);
+                if(activatedDate != null && !activatedDate.isEmpty()){
+
+                    sprint.setRelaStartTime(activatedDate);
+                }
+
+                String completeDate = sprintElement.getAttribute("complete_date");
+                completeDate = toDateString(completeDate);
+                if(completeDate != null && !completeDate.isEmpty()){
+                    sprint.setRelaEndTime(completeDate);
+                }
+
+                String endDate = sprintElement.getAttribute("end_date");
+                endDate = toDateString(endDate);
+                if(endDate != null && !endDate.isEmpty()){
+                    sprint.setEndTime(endDate);
+                }
+
+                String startDate = sprintElement.getAttribute("start_date");
+                startDate = toDateString(startDate);
+                if(startDate != null && !startDate.isEmpty()){
+                    sprint.setStartTime(startDate);
+                }
+
+                sprint.setSprintName(name);
+
+                User user = new User();
+                user.setId("111111");
+                sprint.setBuilder(user);
+                sprint.setMaster(user);
+
+                Project project = new Project();
+                project.setId(newId);
+                sprint.setProject(project);
+
+
+                String started = sprintElement.getAttribute("started");
+
+                String closed = sprintElement.getAttribute("closed");
+                SprintState sprintState = new SprintState();
+                if(started.equals("true") && closed.equals("true")){
+                    sprintState.setId("222222");
+                }else if(started.equals("true") && closed.equals("false")){
+                    sprintState.setId("111111");
+                }else if(started.equals("false")){
+                    sprintState.setId("000000");
+                }
+                sprint.setSprintState(sprintState);
+
+                int color = new Random().nextInt(3) + 1;
+                System.out.println(color);
+                sprint.setColor(color);
+                String jiraSprintId = sprintService.createJiraSprint(sprint);
+                sprintElement.setAttribute("newId", jiraSprintId);
             }
 
         }
-
-
     }
     public void setWorkItem(Element projectElement, List<WorkTypeDm> workTypeDmList,String action){
         WorkTypeDm taskWorkTypeDm = new WorkTypeDm();
@@ -408,7 +624,6 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         WorkTypeDm defectWorkTypeDm = new WorkTypeDm();
         for (WorkTypeDm workTypeDm : workTypeDmList) {
             String code = workTypeDm.getWorkType().getCode();
-
             switch (code){
                 case "defect":
                     defectWorkTypeDm = workTypeDm;
@@ -457,6 +672,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 String currentProject = element.getAttribute("project");
                 String code = element.getAttribute("key");
                 String number = element.getAttribute("number");
+
                 String pid = projectElement.getAttribute("id");
                 String projectId = projectElement.getAttribute("newId");
                 if(currentProject.equals(pid)){
@@ -498,10 +714,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                         default:
                             break;
                     }
-
                     workItem.setWorkPriority(selectItem);
-
-
 
                     User user = new User();
                     String creator = element.getAttribute("creator");
@@ -525,15 +738,13 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                     user.setId(getUserId(reporter));
                     workItem.setReporter(user);
 
-
-
                     String updated = element.getAttribute("updated");
                     workItem.setUpdateTime(updated);
 
                     workItem.setDesc("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]");
                     // 设置状态
                     String status = element.getAttribute("status");
-                   if(this.ProcessStatusIds.get().contains(status)){
+                    if(this.ProcessStatusIds.get().contains(status)){
                         List<StateNodeFlow> nodeFlowList = workTypeDm.getFlow().getNodeFlowList();
                         for (StateNodeFlow stateNodeFlow : nodeFlowList) {
                             if(stateNodeFlow.getNodeStatus().equals("PROGRESS")){
@@ -543,7 +754,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                                 workItem.setWorkStatusCode("PROGRESS");
                             }
                         }
-                   }else if(this.DoneStatusIds.get().contains(status)){
+                    }else if(this.DoneStatusIds.get().contains(status)){
                         List<StateNodeFlow> nodeFlowList = workTypeDm.getFlow().getNodeFlowList();
                         for (StateNodeFlow stateNodeFlow : nodeFlowList) {
                             if(stateNodeFlow.getNodeStatus().equals("DONE")){
@@ -553,7 +764,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                                 workItem.setWorkStatusCode("DONE");
                             }
                         }
-                   }else {
+                    }else {
                         List<StateNodeFlow> nodeFlowList = workTypeDm.getFlow().getNodeFlowList();
                         for (StateNodeFlow stateNodeFlow : nodeFlowList) {
                             if(stateNodeFlow.getNodeStatus().equals("TODO")){
@@ -563,17 +774,95 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                                 workItem.setWorkStatusCode("TODO");
                             }
                         }
-                   }
-                   String workId = workItemService.createJiraWorkItem(workItem);
-                   element.setAttribute("newId", workId);
-                   workItem.setId(workId);
-                   workItem.setRootId(workId + ";");
-                   workItemService.updateWork(workItem);
-
+                    }
+                    String workId = workItemService.createJiraWorkItem(workItem);
+                    element.setAttribute("newId", workId);
+                    workItem.setId(workId);
+                    workItem.setRootId(workId + ";");
+                    // 设置版本
+                    setWorkVersion(workItem, element);
+                    // 设置迭代
+                    setWorkSprint(workItem, element);
+                    // 设置模块
+                    setWorkModule(workItem, element);
+                    workItemService.updateWork(workItem);
                 }
             }
         }catch (Exception e){
             throw new ApplicationException(2000, "添加事项失败" + e.getMessage());
+        }
+    }
+
+    public void setWorkVersion(WorkItem workItem, Element element){
+        String id = element.getAttribute("id");
+        for (Element changeItem : this.ChangeItemElementList.get()) {
+            String field = changeItem.getAttribute("field");
+            String issue = changeItem.getAttribute("issue");
+            String newvalue = changeItem.getAttribute("newvalue");
+            if(issue.equals(id) && field.equals("Fix Version")){
+
+                for (Element element1 : this.VersionElementList.get()) {
+                    String newId = element1.getAttribute("newId");
+                    String versionId = element1.getAttribute("id");
+                    if(versionId.equals(newvalue)){
+                        ProjectVersion projectVersion = new ProjectVersion();
+                        projectVersion.setId(newId);
+                        workItem.setProjectVersion(projectVersion);
+
+                        // 添加版本与事项的关联
+                        WorkVersion workVersion = new WorkVersion();
+                        workVersion.setVersionId(newId);
+                        String id1 = workItem.getId();
+                        workVersion.setWorkItemId(id1);
+                        workVersionService.createWorkVersion(workVersion);
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void setWorkModule(WorkItem workItem, Element element){
+        String id = element.getAttribute("id");
+        for (Element changeItem : this.ChangeItemElementList.get()) {
+            String field = changeItem.getAttribute("field");
+            String issue = changeItem.getAttribute("issue");
+            String newvalue = changeItem.getAttribute("newvalue");
+            if(issue.equals(id) && field.equals("Component")){
+
+                for (Element element1 : this.ComponentElementList.get()) {
+                    String newId = element1.getAttribute("newId");
+                    String moduleId = element1.getAttribute("id");
+                    if(moduleId.equals(newvalue)){
+                        Module module = new Module();
+                        module.setId(newId);
+                        workItem.setModule(module);
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    public void setWorkSprint(WorkItem workItem, Element element){
+        String sprintId = element.getAttribute("sprint");
+        String id = workItem.getId();
+        if(sprintId != null && !sprintId.isEmpty()){
+            for (Element sprintElement : this.SprintElementList.get()) {
+                String sprintOldId = sprintElement.getAttribute("id");
+                String sprintNewId = sprintElement.getAttribute("newId");
+                if(sprintOldId.equals(sprintId)){
+                    Sprint sprint = new Sprint();
+                    sprint.setId(sprintNewId);
+                    workItem.setSprint(sprint);
+
+                    WorkSprint workSprint = new WorkSprint();
+                    workSprint.setWorkItemId(id);
+                    workSprint.setSprintId(sprintNewId);
+                    workSprintService.createWorkSprint(workSprint);
+                }
+            }
         }
     }
     public void setFirstLevelWorkItem(Element projectElement, List<WorkTypeDm> workTypeDmList,String action){
@@ -613,6 +902,8 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     public void setProjectUser(Element element, Map<String, String> roleIds){
         String projectId = element.getAttribute("newId");
         String pid1 = element.getAttribute("id");
+        String lead = element.getAttribute("lead");
+        boolean haveLead = false;
         String admin = roleIds.get("admin");
         String common = roleIds.get("common");
         for (Element projectUser : this.ProjectRoleActorElementList.get()) {
@@ -623,7 +914,11 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 if(userPid.equals(pid1) && roletypeparameter.contains("JIRAUSER")){
                     for (Element userElement : this.GlobalUserElementList.get()) {
                         String userKey = userElement.getAttribute("userKey");
+
                         if(userKey.equals(roletypeparameter)){
+                            if(userKey.equals(lead)){
+                                haveLead = true;
+                            }
                             String userId = userElement.getAttribute("newId");
                             User user = new User();
                             user.setId(userId);
@@ -662,8 +957,50 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                             }
                         }
                     }
+                }
+            }
+        }
+        // 如果项目角色中没有项目管理员，加上管理员
+        if(!haveLead){
+            for (Element userElement : this.GlobalUserElementList.get()) {
+                String userKey = userElement.getAttribute("userKey");
+                if(userKey.equals(lead)){
+                    String userId = userElement.getAttribute("newId");
+                    User user = new User();
+                    user.setId(userId);
+                    // 查找人员是否在已经在当前项目中
+                    DmUserQuery dmUserQuery = new DmUserQuery();
+                    dmUserQuery.setDomainId(projectId);
+                    dmUserQuery.setUserId(userId);
+                    List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
 
+                    if(dmUserList.isEmpty()){
+                        // 创建项目人员
+                        DmUser dmUser = new DmUser();
+                        dmUser.setUser(user);
+                        dmUser.setDomainId(projectId);
+                        try {
+                            dmUserService.createDmUserEntity(dmUser);
+                        }catch (Exception e){
+                            throw new ApplicationException(2000,"项目成员添加失败" + e.getMessage());
+                        }
+                        // 创建角色与项目成员的关联
+                        try{
+                            if(!StringUtils.isEmpty(admin)) {
+                                DmRole dmRole = new DmRole();
+                                dmRole.setId(admin);
+                                DmRoleUser dmRoleUser = new DmRoleUser();
+                                dmRoleUser.setDomainId(projectId);
+                                dmRoleUser.setDmRole(dmRole);
+                                dmRoleUser.setUserId(userId);
+                                dmRoleUserService.createDmRoleUser(dmRoleUser);
+                            }
+                        }catch (Exception e){
+                            throw new ApplicationException(2000,"项目角色成员添加失败" + e.getMessage());
 
+                        }
+
+                    }
                 }
             }
         }
@@ -748,7 +1085,25 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         return  treePath;
     }
 
-
+    /**
+     * 转换为时间戳转换为日期
+     * @param timetamp
+     * @return
+     */
+    public String toDateString(String timetamp){
+         // 示例时间戳字符串
+        String formattedDate = new String();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            long timestamp = Long.parseLong(timetamp);
+            Date date = new Date(timestamp); // 时间戳通常是以秒为单位，所以需要乘以1000转成毫秒
+            formattedDate = sdf.format(date);
+            System.out.println("Formatted Date: " + formattedDate);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid timestamp");
+        }
+        return formattedDate;
+    }
     public JdbcTemplate getJdbcTemplet(){
       return  jpaTemplate.getJdbcTemplate();
     }

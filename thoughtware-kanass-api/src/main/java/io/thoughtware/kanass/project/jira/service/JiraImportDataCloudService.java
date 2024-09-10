@@ -1,5 +1,6 @@
 package io.thoughtware.kanass.project.jira.service;
 
+import io.thoughtware.kanass.project.project.model.Project;
 import org.w3c.dom.Element;
 
 import java.io.InputStream;
@@ -12,6 +13,6 @@ import java.util.Map;
 public interface JiraImportDataCloudService {
 
 
-    String writeData(List<Element> Element);
+    String writeData(List<Element> elements, Map<String, Project> CurrentProject, Map<String, Integer> Percent);
 
 }

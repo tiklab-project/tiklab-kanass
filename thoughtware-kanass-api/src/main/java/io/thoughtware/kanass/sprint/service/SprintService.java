@@ -25,6 +25,8 @@ public interface SprintService {
     */
     String createSprint(@NotNull @Valid Sprint sprint);
 
+    String createJiraSprint(@NotNull @Valid Sprint sprint);
+
     /**
     * 更新迭代
     * @param sprint

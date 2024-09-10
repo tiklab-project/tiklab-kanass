@@ -17,8 +17,9 @@ public class SaxParseServiceImpl extends DefaultHandler  {
     ArrayList<Element> ElementList = new ArrayList<Element>();
     String JiraVersion = new String();
     String[] flags = {"User", "ApplicationUser", "Project", "Issue", "IssueLink","UserHistoryItem", "ProjectRole",
-            "ProjectRoleActor", "IssueParentAssociation", "Status", "Version"};
-
+            "ProjectRoleActor", "IssueParentAssociation", "Status",  "CustomFieldValue", "CustomField",  "Version",
+            "ChangeGroup", "Component"};
+    String[] fields = {"Component", "Fix Version"};
 
     @Override
     public void startDocument() throws SAXException {
@@ -41,6 +42,13 @@ public class SaxParseServiceImpl extends DefaultHandler  {
                 }
                 ElementList.add(element);
             }
+            String value = attributes.getValue(3);
+            if(qName.equals("ChangeItem") && Arrays.asList(fields).contains(value)){
+                for (int i = 0; i < attributes.getLength(); i++) {
+                    element.setAttribute(attributes.getQName(i), attributes.getValue(i));
+                }
+                ElementList.add(element);
+            }
             if(qName.equals("PluginVersion") && StringUtils.isEmpty(JiraVersion)){
                 for (int i = 0; i < attributes.getLength(); i++) {
                     element.setAttribute(attributes.getQName(i), attributes.getValue(i));
@@ -51,6 +59,7 @@ public class SaxParseServiceImpl extends DefaultHandler  {
                     return;
                 }
             }
+
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -60,12 +69,6 @@ public class SaxParseServiceImpl extends DefaultHandler  {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if("Project".equals(qName)){
-            for (Element attributes : ElementList) {
-                String classAttr = attributes.getAttribute("name");
-            }
-        }
-
         preTag = null;
     }
 

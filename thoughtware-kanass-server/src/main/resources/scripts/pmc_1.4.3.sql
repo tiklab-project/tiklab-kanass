@@ -1341,8 +1341,8 @@ INSERT INTO pmc_sprint_status (id, name, description, sort, grouper) VALUES ('22
 
 INSERT INTO pmc_stage (id, stage_name, parent_id, status, progress, master, description, project_id, start_time, end_time, tree_path, root_id, deep, color) VALUES ('17fd0338dbca', '开发阶段', NULL, '0', 0, '111111', NULL, 'f3fdc893ff25', '2024-05-14 00:00:00', '2024-06-25 00:00:00', NULL, '17fd0338dbca', 0, 4);
 
-INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('f7ee9a10', 'sward', 'http://sward.thoughtware.cn', 'http://sward.thoughtware.cn');
-INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('991f95a1', 'teston', 'http://teston.thoughtware.cn', 'http://teston.thoughtware.cn');
+INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('f7ee9a10', 'sward', 'http://sward.tiklab.net', 'http://sward.tiklab.net');
+INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('991f95a1', 'teston', 'http://teston.tiklab.net', 'http://teston.tiklab.net');
 
 
 INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('000000', '未开始', '未开始', 1, 'system');

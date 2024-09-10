@@ -93,15 +93,17 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
                 // Parse the XML using SAX parser
                 parser.parse(is, saxParseService);
             }
-            
+
             //InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("entities.xml");
             List<Element> elements = saxParseService.getElementList();
+//            List<Element> sprintElement = analyActiveobjects();
+//            elements.addAll(sprintElement);
             String jiraVersion = saxParseService.getJiraVersion();
             if(jiraVersion != null && !jiraVersion.isEmpty() && jiraVersion.equals("9.4.0")){
                 System.out.println(jiraVersion);
-                jiraImportData94Service.writeData(elements);
+                jiraImportData94Service.writeData(elements, CurrentProject, Percent);
             }else {
-                jiraImportDataCloudService.writeData(elements);
+                jiraImportDataCloudService.writeData(elements, CurrentProject, Percent);
             }
             return "success";
         } catch (Exception e) {
@@ -110,8 +112,33 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
 
     }
 
+
+    public List<Element> analyActiveobjects() {
+        SaxParseRowServiceImpl saxParseRowService = new SaxParseRowServiceImpl();
+
+        try {
+            String path=unzipAddress+"/activeobjects.xml";
+
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser parser = factory.newSAXParser();
+
+            try (FileInputStream fis = new FileInputStream(path);
+                 Reader reader = new InvalidXMLCharFilter(new InputStreamReader(fis, "UTF-8"))) {
+                // Wrap the Reader in InputSource
+                InputSource is = new InputSource(reader);
+                // Parse the XML using SAX parser
+                parser.parse(is, saxParseRowService);
+            }
+
+        } catch (Exception e) {
+            throw new ApplicationException(e);
+        }
+        ArrayList<Element> elementList = saxParseRowService.getElementList();
+        return elementList;
+    }
+
     @Override
-//    @Transactional
+    @Transactional
     public Map<String, Object> findJiraInputSchedule(){
         String loginId = LoginContext.getLoginId();
         Map<String, Object> logMap = new HashMap<>();
