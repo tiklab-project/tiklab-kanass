@@ -5,7 +5,9 @@ import io.thoughtware.eam.common.context.LoginContext;
 import io.thoughtware.flow.flow.service.DmFlowService;
 import io.thoughtware.flow.statenode.model.StateNodeFlow;
 import io.thoughtware.flow.statenode.service.StateNodeFlowService;
+import io.thoughtware.flow.transition.model.Transition;
 import io.thoughtware.form.field.model.SelectItem;
+import io.thoughtware.ids.tenant.common.TenantHolder;
 import io.thoughtware.privilege.dmRole.model.DmRole;
 import io.thoughtware.privilege.dmRole.model.DmRoleUser;
 import io.thoughtware.privilege.dmRole.service.DmRoleService;
@@ -35,6 +37,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -43,6 +46,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * jira 数据导入服务
@@ -63,22 +69,54 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
     @Autowired
     ProjectService projectService;
 
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
 
     @Value("${unzip.path}")
     String unzipAddress;
 
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static Map<String, Integer> Percent = new HashMap();
     public static Map<String, Project> CurrentProject = new HashMap();
+//    @Override
+//    public String importJiraData(InputStream inputStream) {
+//        return transactionTemplate.execute((status) -> {
+//            // 在这里执行需要在事务中的操作
+//            return setData(inputStream);
+//        });
+//    }
     @Override
-    @Transactional
-    public String importJiraData(InputStream inputStream) {
+    public void importJiraData(InputStream inputStream) {
+//        executorService.submit(() -> {
+        String s = TenantHolder.get();
+        transactionTemplate.execute((status) -> {
+            String t = TenantHolder.get();
+            // 在这里执行需要在事务中的操作
+            return setData(inputStream);
+        });
+//        });
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String s = TenantHolder.get();
+//                transactionTemplate.execute((status) -> {
+//                    String t = TenantHolder.get();
+//                    // 在这里执行需要在事务中的操作
+//                    return setData(inputStream);
+//                });
+//            }
+//        }).start();
+
+    }
+    public String setData(InputStream inputStream) {
         BufferedReader unZIP=null;
         String createUserId = LoginContext.getLoginId();
         CurrentProject.put(createUserId + "project", null);
         Percent.put(createUserId + "total", 0);
         Percent.put(createUserId + "currentNum", 0);
+        Percent.put(createUserId + "status", 0);
         try {
             unZIP = new UncompressUtil().unZIP(inputStream, unzipAddress);
             String path=unzipAddress+"/entities.xml";
@@ -95,16 +133,20 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
             }
 
             //InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("entities.xml");
-            List<Element> elements = saxParseService.getElementList();
-//            List<Element> sprintElement = analyActiveobjects();
-//            elements.addAll(sprintElement);
             String jiraVersion = saxParseService.getJiraVersion();
+            List<Element> elements = saxParseService.getElementList();
+
             if(jiraVersion != null && !jiraVersion.isEmpty() && jiraVersion.equals("9.4.0")){
                 System.out.println(jiraVersion);
+                List<Element> sprintElement = analyActiveobjects();
+                elements.addAll(sprintElement);
                 jiraImportData94Service.writeData(elements, CurrentProject, Percent);
             }else {
+                List<Element> sprintElement = analyActiveobjectsCloud();
+                elements.addAll(sprintElement);
                 jiraImportDataCloudService.writeData(elements, CurrentProject, Percent);
             }
+            Percent.put(createUserId + "status", 1);
             return "success";
         } catch (Exception e) {
             throw new ApplicationException(e);
@@ -115,7 +157,6 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
 
     public List<Element> analyActiveobjects() {
         SaxParseRowServiceImpl saxParseRowService = new SaxParseRowServiceImpl();
-
         try {
             String path=unzipAddress+"/activeobjects.xml";
 
@@ -137,6 +178,29 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
         return elementList;
     }
 
+    public List<Element> analyActiveobjectsCloud() {
+        SaxParseRowCloudServiceImpl saxParseRowCloudService = new SaxParseRowCloudServiceImpl();
+        try {
+            String path=unzipAddress+"/activeobjects.xml";
+
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser parser = factory.newSAXParser();
+
+            try (FileInputStream fis = new FileInputStream(path);
+                 Reader reader = new InvalidXMLCharFilter(new InputStreamReader(fis, "UTF-8"))) {
+                // Wrap the Reader in InputSource
+                InputSource is = new InputSource(reader);
+                // Parse the XML using SAX parser
+                parser.parse(is, saxParseRowCloudService);
+            }
+
+        } catch (Exception e) {
+            throw new ApplicationException(e);
+        }
+        ArrayList<Element> elementList = saxParseRowCloudService.getElementList();
+        return elementList;
+    }
+
     @Override
     @Transactional
     public Map<String, Object> findJiraInputSchedule(){
@@ -145,6 +209,7 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
         logMap.put("project", CurrentProject.get(loginId + "project"));
         logMap.put("total", Percent.get(loginId + "total"));
         logMap.put("currentNum", Percent.get(loginId + "currentNum"));
+        logMap.put("status", Percent.get(loginId + "status"));
         return logMap;
     }
 

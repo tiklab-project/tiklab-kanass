@@ -16,10 +16,10 @@ public class SaxParseServiceImpl extends DefaultHandler  {
 
     ArrayList<Element> ElementList = new ArrayList<Element>();
     String JiraVersion = new String();
-    String[] flags = {"User", "ApplicationUser", "Project", "Issue", "IssueLink","UserHistoryItem", "ProjectRole",
+    String[] flags = {"User", "ApplicationUser", "Project", "Issue", "IssueLink", "IssueType", "UserHistoryItem", "ProjectRole",
             "ProjectRoleActor", "IssueParentAssociation", "Status",  "CustomFieldValue", "CustomField",  "Version",
             "ChangeGroup", "Component"};
-    String[] fields = {"Component", "Fix Version"};
+    String[] fields = {"Component", "Fix Version", "Sprint"};
 
     @Override
     public void startDocument() throws SAXException {

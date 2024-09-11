@@ -32,6 +32,7 @@ import io.thoughtware.user.dmUser.model.DmUser;
 import io.thoughtware.user.dmUser.model.DmUserQuery;
 import io.thoughtware.user.dmUser.service.DmUserService;
 import io.thoughtware.user.user.model.User;
+import io.thoughtware.user.user.model.UserQuery;
 import io.thoughtware.user.user.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -353,30 +354,41 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         if(active.equals("1")){
             String userName = element.getAttribute("displayName");
             String emailAddress = element.getAttribute("emailAddress");
-            User user = new User();
-            user.setNickname(userName);
-            user.setName(userName);
-            user.setEmail(emailAddress);
-            user.setStatus(1);
-            user.setDirId("1");
-            user.setPassword("123456");
-            user.setType(0);
-            try {
-                String userId = userService.createUser(user);
-                element.setAttribute("newId", userId);
-                ArrayList<Element> globalApplicationUserElementList = this.GlobalApplicationUserElementList.get();
-                for (Element applicationElement : globalApplicationUserElementList) {
-                    String userKey = applicationElement.getAttribute("userKey");
-                    String applicationUserId = applicationElement.getAttribute("id");
-                    if(applicationUserId.equals(id)){
-                        element.setAttribute("userKey", userKey);
+            UserQuery userQuery = new UserQuery();
+            userQuery.setEmail(emailAddress);
+            List<User> userList = userService.findUserList(userQuery);
+
+
+                try {
+                    String userId = new String();
+                    if(ObjectUtils.isEmpty(userList)){
+                        User user = new User();
+                        user.setNickname(userName);
+                        user.setName(userName);
+                        user.setEmail(emailAddress);
+                        user.setStatus(1);
+                        user.setDirId("1");
+                        user.setPassword("123456");
+                        user.setType(0);
+                        userId = userService.createUser(user);
+                    }else {
+                        User user = userList.get(0);
+                        userId = user.getId();
                     }
+                    element.setAttribute("newId", userId);
+                    ArrayList<Element> globalApplicationUserElementList = this.GlobalApplicationUserElementList.get();
+                    for (Element applicationElement : globalApplicationUserElementList) {
+                        String userKey = applicationElement.getAttribute("userKey");
+                        String applicationUserId = applicationElement.getAttribute("id");
+                        if(applicationUserId.equals(id)){
+                            element.setAttribute("userKey", userKey);
+                        }
+                    }
+                    System.out.println( element.getAttribute("newId"));
+                }catch (Exception e){
+                    throw new ApplicationException(2000,"成员添加失败" + e.getMessage());
                 }
-                System.out.println( element.getAttribute("newId"));
-            }catch (Exception e){
-                throw new ApplicationException(2000,"成员添加失败" + e.getMessage());
             }
-        }
     }
 
     public String getUserId(String key){
@@ -523,7 +535,6 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 module.setProject(project);
                 module.setModuleName(name);
                 module.setDesc(description);
-
                 String moduleId = moduleService.createModule(module);
                 moduleElement.setAttribute("newId", moduleId);
             }
@@ -550,7 +561,6 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 }
             }
         }
-
         // 循环迭代与事项关联,添加迭代
         for(Element sprintElement : this.SprintElementList.get()){
             String sprintId = sprintElement.getAttribute("id");

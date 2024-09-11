@@ -76,7 +76,7 @@ plugin:
 
 #zip config
 unzip:
-    path: ${DATA_HOME}/unzip/Jire
+    path: ${DATA_HOME}/unzip/Jira
 
 homes:
     address: http://192.168.10.6:8070

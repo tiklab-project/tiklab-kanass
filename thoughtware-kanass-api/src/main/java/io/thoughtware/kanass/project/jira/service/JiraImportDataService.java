@@ -13,7 +13,7 @@ public interface JiraImportDataService {
      * @param inputStream
      * @return
      */
-    String importJiraData(InputStream inputStream);
+    void importJiraData(InputStream inputStream);
 
 
     Map<String, Object> findJiraInputSchedule();

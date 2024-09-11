@@ -32,14 +32,14 @@ public class JiraImportDataController {
     @RequestMapping(path="/importJireDate",method = RequestMethod.POST)
     @ApiMethod(name = "importJireDate",desc = "导入jire数据")
     @ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
-    public Result importJireDate(@RequestParam("uploadFile")MultipartFile uploadFile){
+    public Result<Void> importJireDate(@RequestParam("uploadFile")MultipartFile uploadFile){
         if (uploadFile == null) {
             throw new ApplicationException("文件不能为空");
         }else {
             try {
                 InputStream inputStream = uploadFile.getInputStream();
-                String importJireDate = jiraImportDataService.importJiraData(inputStream);
-                return Result.ok(importJireDate);
+                jiraImportDataService.importJiraData(inputStream);
+                return Result.ok();
             } catch (IOException e) {
                 throw new ApplicationException(e);
             }

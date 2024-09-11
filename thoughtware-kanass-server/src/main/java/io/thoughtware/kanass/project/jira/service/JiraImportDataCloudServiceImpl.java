@@ -32,6 +32,7 @@ import io.thoughtware.user.dmUser.model.DmUser;
 import io.thoughtware.user.dmUser.model.DmUserQuery;
 import io.thoughtware.user.dmUser.service.DmUserService;
 import io.thoughtware.user.user.model.User;
+import io.thoughtware.user.user.model.UserQuery;
 import io.thoughtware.user.user.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,13 +109,13 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
     @Value("${unzip.path}")
     String unzipAddress;
     private ThreadLocal<ArrayList<Element>> GlobalUserElementList = new ThreadLocal<>();
-
     private ThreadLocal<ArrayList<Element>> GlobalApplicationUserElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<Element>> UserHistoryItemElementList = new ThreadLocal<ArrayList<Element>>();
     private ThreadLocal<ArrayList<String>> ProjectRoleElementList = new ThreadLocal<ArrayList<String>>();
     private ThreadLocal<ArrayList<Element>> ProjectRoleActorElementList = new ThreadLocal<ArrayList<Element>>();
     private ThreadLocal<ArrayList<Element>> IssueElementList = new ThreadLocal<ArrayList<Element>>();
 
+    private ThreadLocal<ArrayList<Element>> IssueTypeElementList = new ThreadLocal<ArrayList<Element>>();
     private ThreadLocal<ArrayList<Element>> IssueParentAssociationElementList = new ThreadLocal<ArrayList<Element>>();
     private ThreadLocal<ArrayList<Element>> SubWorkItemElementList = new ThreadLocal<>();
 
@@ -153,7 +154,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             ArrayList<Element> componentElementList = new ArrayList<>();
 
             ArrayList<Element> sprintElementList = new ArrayList<>();
-
+            ArrayList<Element> issueTypeElementList = new ArrayList<>();
             ArrayList<Element> customFieldValueElementList = new ArrayList<>();
             ArrayList<Element> customFieldElementList = new ArrayList<>();
             ArrayList<Element> userHistoryItemElementList = new ArrayList<>();
@@ -201,6 +202,9 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                         }else {
                             subWorkItemElementList.add(element);
                         }
+                        break;
+                    case "IssueType":
+                        issueTypeElementList.add(element);
                         break;
                     case "IssueLink":
                         issueLinkElementList.add(element);
@@ -269,6 +273,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             this.ProjectRoleElementList.set(projectRoleElementList);
             this.ProjectRoleActorElementList.set(projectRoleActorElementList);
             this.IssueElementList.set(issueElementList);
+            this.IssueTypeElementList.set(issueTypeElementList);
             this.SubWorkItemElementList.set(subWorkItemElementList);
             this.IssueLinkElementList.set(issueLinkElementList);
             this.TodoStatusIds.set(todoStatusIds);
@@ -294,12 +299,16 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
 
             setGroupItemIssue();
             for (Element projectElement : projectElementList) {
-                setProject(projectElement, createUserId, CurrentProject, Percent);
+                String simplified = projectElement.getAttribute("simplified");
+                if(simplified.equals("true")){
+                    setProject(projectElement, createUserId, CurrentProject, Percent);
+                }
             }
             this.UserHistoryItemElementList.remove();
             this.ProjectRoleElementList.remove();
             this.ProjectRoleActorElementList.remove();
             this.IssueElementList.remove();
+            this.IssueTypeElementList.remove();
             this.SubWorkItemElementList.remove();
             this.TodoStatusIds.remove();
             this.ProcessStatusIds.remove();
@@ -349,34 +358,38 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
 
     public void setGlobalUser(Element element){
         String active = element.getAttribute("active");
-        String id = element.getAttribute("id");
-        boolean status = id.contains("ug:");
-        if(status == true && active.equals("1")){
-            String userName = element.getAttribute("displayName");
+        String userName = element.getAttribute("userName");
+        boolean status = userName.contains("ug:");
+        if(status && active.equals("1")){
+            String displayName = element.getAttribute("displayName");
             String emailAddress = element.getAttribute("emailAddress");
-            User user = new User();
-            user.setNickname(userName);
-            user.setName(userName);
-            user.setEmail(emailAddress);
-            user.setStatus(1);
-            user.setDirId("1");
-            user.setPassword("123456");
-            user.setType(0);
-            try {
-                String userId = userService.createUser(user);
-                element.setAttribute("newId", userId);
-                ArrayList<Element> globalApplicationUserElementList = this.GlobalApplicationUserElementList.get();
-                for (Element applicationElement : globalApplicationUserElementList) {
-                    String userKey = applicationElement.getAttribute("userKey");
-                    String applicationUserId = applicationElement.getAttribute("id");
-                    if(applicationUserId.equals(id)){
-                        element.setAttribute("userKey", userKey);
-                    }
+            UserQuery userQuery = new UserQuery();
+            userQuery.setEmail(emailAddress);
+
+            List<User> userList = userService.findUserList(userQuery);
+            if(ObjectUtils.isEmpty(userList)){
+                User user = new User();
+                user.setNickname(displayName);
+                user.setName(displayName);
+                user.setEmail(emailAddress);
+                user.setStatus(1);
+                user.setDirId("1");
+                user.setPassword("123456");
+                user.setType(0);
+
+                try {
+                    String userId = userService.createUser(user);
+                    element.setAttribute("newId", userId);
+                    System.out.println( element.getAttribute("newId"));
+                }catch (Exception e){
+                    throw new ApplicationException(2000,"成员添加失败" + e.getMessage());
                 }
-                System.out.println( element.getAttribute("newId"));
-            }catch (Exception e){
-                throw new ApplicationException(2000,"成员添加失败" + e.getMessage());
+            }else {
+                User user = userList.get(0);
+                element.setAttribute("newId", user.getId());
             }
+
+
         }
     }
 
@@ -384,7 +397,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
         String userId = new String();
         ArrayList<Element> globalUserElementList = this.GlobalUserElementList.get();
         for (Element globalUserElement : globalUserElementList) {
-            String userKey = globalUserElement.getAttribute("userKey");
+            String userKey = globalUserElement.getAttribute("userName");
             String applicationUserId = globalUserElement.getAttribute("newId");
             if(userKey.equals(key)){
                 userId = applicationUserId;
@@ -406,7 +419,9 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
         String originalkey = element.getAttribute("originalkey");
         String projecttype = element.getAttribute("projecttype");
         Project project = projectService.findProject(projectId);
-        if (ObjectUtils.isEmpty(project) && projecttype.equals("software")){
+        String simplified = element.getAttribute("simplified");
+
+        if (ObjectUtils.isEmpty(project) && simplified.equals("true")){
             Project project1 = new Project();
             project1.setProjectName(projectName);
             project1.setProjectKey(originalkey);
@@ -437,13 +452,12 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             try {
                 String jiraProjectId = projectService.createJiraProject(project1);
                 element.setAttribute("newId", jiraProjectId);
-
                 Map<String, String> roleIds = setProjectRole(jiraProjectId);
                 setProjectUser(element, roleIds);
-                setVersion(element);
-//                setSprint(element);
-                setModule(element);
-
+//                setVersion(element);
+                setSprint(element);
+//                setModule(element);
+//
                 // 初始化事项类型
                 List<WorkTypeDm> workTypeDmList = projectService.initWorkType(jiraProjectId);
 
@@ -458,6 +472,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                 }
                 CurrentProject.put(createUserId + "project",project1);
             }catch (Exception e) {
+                Percent.put(createUserId + "status", 2);
                 throw new ApplicationException(2000, "项目添加失败" + e.getMessage());
             }
         }
@@ -534,25 +549,26 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
         String pid = element.getAttribute("id");
         String newId = element.getAttribute("newId");
         List<String> sprintIdList = new ArrayList<String>();
-        // 查找此项目的事项关联的所有迭代
-        for (Element issueElement : this.IssueElementList.get()) {
-            String project = issueElement.getAttribute("project");
-            if(pid.equals(project)){
-                String issueId = issueElement.getAttribute("id");
-                for(Element customFieldElement : this.CustomFieldValueElementList.get()) {
-                    String sprintIssueId = customFieldElement.getAttribute("issue");
-                    String sprintId = customFieldElement.getAttribute("stringvalue");
-                    if(issueId.equals(sprintIssueId)){
-                        issueElement.setAttribute("sprint", sprintId);
-                        if(!sprintIdList.contains(sprintId)){
-                            sprintIdList.add(sprintId);
+        for (Element changeItem : this.ChangeItemElementList.get()) {
+            String field = changeItem.getAttribute("field");
+            String issue = changeItem.getAttribute("issue");
+            String newvalue = changeItem.getAttribute("newvalue");
+            if(field.equals("Sprint")){
+                for (Element issueElement: this.IssueElementList.get()) {
+                    String project = issueElement.getAttribute("project");
+                    if(pid.equals(project)){
+                        String oldWorkId = issueElement.getAttribute("id");
+                        if(oldWorkId.equals(issue)){
+                            issueElement.setAttribute("sprint", newvalue);
+                            if(!sprintIdList.contains(newvalue)){
+                                sprintIdList.add(newvalue);
+                            }
                         }
                     }
                 }
             }
         }
 
-        // 循环迭代与事项关联,添加迭代
         for(Element sprintElement : this.SprintElementList.get()){
             String sprintId = sprintElement.getAttribute("id");
             if(sprintIdList.contains(sprintId)){
@@ -618,6 +634,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             }
 
         }
+
     }
     public void setWorkItem(Element projectElement, List<WorkTypeDm> workTypeDmList,String action){
         WorkTypeDm taskWorkTypeDm = new WorkTypeDm();
@@ -651,34 +668,54 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             for (Element element : issueElementList) {
                 WorkTypeDm workTypeDm = new WorkTypeDm();
                 String type = element.getAttribute("type");
-                switch (type){
-                    case "10002":
-                        workTypeDm = demandWorkTypeDm;
-                        break;
-                    case "10001":
-                        workTypeDm = demandWorkTypeDm;
-                        break;
-                    case "10003":
-                        workTypeDm = taskWorkTypeDm;
-                        break;
-                    case "10000":
-                        workTypeDm = taskWorkTypeDm;
-                        break;
-                    case "10004":
-                        workTypeDm = defectWorkTypeDm;
-                        break;
+                for (Element issueTypeElement : this.IssueTypeElementList.get()) {
+                    String id = issueTypeElement.getAttribute("id");
+                    if(id.equals(type)){
+                        String typeName = issueTypeElement.getAttribute("name");
+                        switch (typeName){
+                            case "长篇故事":
+                                workTypeDm = demandWorkTypeDm;
+                                break;
+                            case "需求":
+                                workTypeDm = demandWorkTypeDm;
+                                break;
+                            case "Epic":
+                                workTypeDm = demandWorkTypeDm;
+                                break;
+                            case "故事":
+                                workTypeDm = demandWorkTypeDm;
+                                break;
+                            case "子任务":
+                                workTypeDm = taskWorkTypeDm;
+                                break;
+                            case "任务":
+                                workTypeDm = taskWorkTypeDm;
+                                break;
+                            case "故障":
+                                workTypeDm = defectWorkTypeDm;
+                                break;
+                            case "缺陷":
+                                workTypeDm = defectWorkTypeDm;
+                                break;
+                            default:
+                                workTypeDm = demandWorkTypeDm;
+                                break;
+                        }
+                    }
                 }
+
+
                 WorkItem workItem = new WorkItem();
                 String id = element.getAttribute("id");
                 String currentProject = element.getAttribute("project");
-                String code = element.getAttribute("key");
+                String code = element.getAttribute("projectKey");
                 String number = element.getAttribute("number");
 
                 String pid = projectElement.getAttribute("id");
                 String projectId = projectElement.getAttribute("newId");
                 if(currentProject.equals(pid)){
 
-                    workItem.setCode(code);
+                    workItem.setCode(code + "-" + number);
                     workItem.setOrderNum(Integer.valueOf(number));
                     String summary = element.getAttribute("summary");
                     workItem.setTitle(summary);
@@ -748,7 +785,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                     if(this.ProcessStatusIds.get().contains(status)){
                         List<StateNodeFlow> nodeFlowList = workTypeDm.getFlow().getNodeFlowList();
                         for (StateNodeFlow stateNodeFlow : nodeFlowList) {
-                            if(stateNodeFlow.getNodeStatus().equals("PROGRESS")){
+                            if(stateNodeFlow.getNodeStatus().equals("PROGRESS") && stateNodeFlow.getNode().getName().equals("进行中")){
                                 workItem.setWorkStatus(stateNodeFlow);
                                 workItem.setWorkStatusNode(stateNodeFlow.getNode());
 
@@ -781,11 +818,11 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                     workItem.setId(workId);
                     workItem.setRootId(workId + ";");
                     // 设置版本
-                    setWorkVersion(workItem, element);
+//                    setWorkVersion(workItem, element);
                     // 设置迭代
-//                    setWorkSprint(workItem, element);
+                    setWorkSprint(workItem, element);
                     // 设置模块
-                    setWorkModule(workItem, element);
+//                    setWorkModule(workItem, element);
                     workItemService.updateWork(workItem);
                 }
             }
@@ -912,9 +949,9 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             if(!ObjectUtils.isEmpty(userPid)){
                 String roletypeparameter = projectUser.getAttribute("roletypeparameter");
                 String projectroleId = projectUser.getAttribute("projectroleid");
-                if(userPid.equals(pid1) && roletypeparameter.contains("JIRAUSER")){
+                if(userPid.equals(pid1) && roletypeparameter.contains("ug:")){
                     for (Element userElement : this.GlobalUserElementList.get()) {
-                        String userKey = userElement.getAttribute("userKey");
+                        String userKey = userElement.getAttribute("userName");
 
                         if(userKey.equals(roletypeparameter)){
                             if(userKey.equals(lead)){

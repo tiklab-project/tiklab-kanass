@@ -35,8 +35,6 @@ public class WorkTypeDm extends BaseModel {
     private WorkType workType;
 
 
-
-
     @ApiProperty(name="flow",desc="关联流程")
     @Mappings({
             @Mapping(source = "flow.id",target = "flowId")
