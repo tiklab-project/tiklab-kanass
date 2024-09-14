@@ -42,7 +42,7 @@ soular:
         enable: true
     address: http://soular-ce.test.kanass.net
 #dfs config
-#dfs.server.enabled=false
+#dfs.service.enabled=false
 dfs:
     server:
         enabled: true
@@ -54,7 +54,7 @@ dfs:
         bucket: kanass
 
 #dcs config
-#dcs.server.enabled=false
+#dcs.service.enabled=false
 dcs:
     server:
         enabled: true

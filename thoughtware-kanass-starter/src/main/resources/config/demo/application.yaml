@@ -36,7 +36,7 @@ soular:
         enable: false
     address: http://soular-ce.demoee.tiklab.net
 #dfs config
-#dfs.server.enabled=false
+#dfs.service.enabled=false
 dfs:
     server:
         enabled: true

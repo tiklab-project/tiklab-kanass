@@ -183,10 +183,10 @@
 <!--                    <mainClass>io.thoughtware.postin.doclet.starter.DocletApplication</mainClass>-->
 <!--                    <arguments>-->
 <!--                        &lt;!&ndash; modules 传入api，server两个文件&ndash;&gt;-->
-<!--                        <argument>/Users/yuanjiexuan/Desktop/bate/project-server/thoughtware-kanass/thoughtware-kanass-api;/Users/yuanjiexuan/Desktop/bate/project-server/thoughtware-kanass/thoughtware-kanass-server</argument>-->
+<!--                        <argument>/Users/yuanjiexuan/Desktop/bate/project-service/thoughtware-kanass/thoughtware-kanass-api;/Users/yuanjiexuan/Desktop/bate/project-service/thoughtware-kanass/thoughtware-kanass-service</argument>-->
 <!--                        &lt;!&ndash; workspaceId 空间Id，放到哪个空间&ndash;&gt;-->
 <!--                        <argument>f0da2e3e4e84</argument>-->
-<!--                        &lt;!&ndash; server  postin服务&ndash;&gt;-->
+<!--                        &lt;!&ndash; service  postin服务&ndash;&gt;-->
 <!--                        <argument>http://192.168.10.21:8090</argument>-->
 <!--                    </arguments>-->
 <!--                </configuration>-->
