@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class WorkRepositoryServiceImpl implements WorkRepositoryService {
@@ -72,13 +73,16 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
 //        List<WikiRepository> list = repositoryServiceRpc().findList(idList);
         List<KanassRepository> kanassRepositoryList = new ArrayList<KanassRepository>();
         for (WikiRepository wikiRepository : list) {
-            KanassRepository kanassRepository = new KanassRepository();
-            kanassRepository.setId(wikiRepository.getId());
-            kanassRepository.setKanassRepositoryName(wikiRepository.getName());
-            kanassRepository.setUserName(wikiRepository.getMaster().getName());
-            kanassRepository.setCreateTime(wikiRepository.getCreateTime());
-            kanassRepository.setIconUrl(wikiRepository.getIconUrl());
-            kanassRepositoryList.add(kanassRepository);
+            if(!Objects.isNull(wikiRepository)){
+                KanassRepository kanassRepository = new KanassRepository();
+                kanassRepository.setId(wikiRepository.getId());
+                kanassRepository.setKanassRepositoryName(wikiRepository.getName());
+                kanassRepository.setUserName(wikiRepository.getMaster().getName());
+                kanassRepository.setCreateTime(wikiRepository.getCreateTime());
+                kanassRepository.setIconUrl(wikiRepository.getIconUrl());
+                kanassRepositoryList.add(kanassRepository);
+            }
+
         }
 
         return kanassRepositoryList;

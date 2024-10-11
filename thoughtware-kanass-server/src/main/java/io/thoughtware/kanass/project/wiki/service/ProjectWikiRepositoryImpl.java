@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -92,7 +93,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
 
         List<KanassRepository> allWikiRepository = workRepositoryService.findAllRepository();
 
-        List<KanassRepository> wikiRepositoryList = allWikiRepository.stream().filter(repository -> !repositoryIds.contains(repository.getId())).collect(Collectors.toList());
+        List<KanassRepository> wikiRepositoryList = allWikiRepository.stream().filter(repository ->  !Objects.isNull(repository) && !repositoryIds.contains(repository.getId())).collect(Collectors.toList());
 
 
         return wikiRepositoryList;

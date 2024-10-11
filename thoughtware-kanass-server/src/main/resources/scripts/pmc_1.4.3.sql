@@ -833,7 +833,7 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('2a6be8fda76f', '里程碑', 'Milestone', NULL, 5, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('72e68d34870e', '项目', 'Project', NULL, 1, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('fdb16c391ffc', '事项', 'WorkItem', NULL, 1, '2');
-INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('2f2548b9de7b', '添加项目集', 'ProjectsetAdd', NULL, 1, '1');
+INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('2f2548b9de7b', '添加项目集', 'ProjectSetAdd', NULL, 1, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('63fd58715558', '用户与权限', 'SysUserPrivilege', NULL, 0, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('6f46ee561c59', '应用', 'SysApplication', NULL, 7, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('b541fa884bc4', '安全', 'SysSecure', NULL, 6, '1');
