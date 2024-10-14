@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.tiklab</groupId>
+        <artifactId>tiklab-kanass</artifactId>
+        <version>1.0.2</version>
+    </parent>
+    <artifactId>tiklab-kanass-server</artifactId>
+    <name>${project.artifactId}</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-kanass-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!--common-->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version> <!-- 使用最新版本 -->
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--        获取中文首字母-->
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <!--spring-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        
+        <!--platform-->
+
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-rpc-annotation</artifactId>
+            <version>${tiklab-rpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-rpc-client</artifactId>
+            <version>${tiklab-rpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-dfs-client</artifactId>
+            <version>${tiklab-dfs.version}</version>
+        </dependency>
+        <!--pcs-->
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-message-api</artifactId>
+            <version>${tiklab-message.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-security-api</artifactId>
+            <version>${tiklab-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-eam-api</artifactId>
+            <version>${tiklab-eam.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-user-api</artifactId>
+            <version>${tiklab-user.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-user-server</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-form-api</artifactId>
+            <version>${tiklab-form.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-flow-server</artifactId>
+            <version>${tiklab-flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-privilege-server</artifactId>
+            <version>${tiklab-privilege.version}</version>
+        </dependency>
+        <!--其它-->
+
+
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-postin-annotation</artifactId>
+            <version>${tiklab-postin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-postin-client</artifactId>
+            <version>${tiklab-postin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-privilege-api</artifactId>
+            <version>${tiklab-privilege.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-licence-api</artifactId>
+        </dependency>
+
+    </dependencies>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>exec-maven-plugin</artifactId>-->
+<!--                <version>3.0.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>test</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <mainClass>io.tiklab.postin.doclet.starter.DocletApplication</mainClass>-->
+<!--                    <arguments>-->
+<!--                        &lt;!&ndash; modules 传入api，server两个文件&ndash;&gt;-->
+<!--                        <argument>/Users/yuanjiexuan/Desktop/bate/project-service/tiklab-kanass/tiklab-kanass-api;/Users/yuanjiexuan/Desktop/bate/project-service/tiklab-kanass/tiklab-kanass-service</argument>-->
+<!--                        &lt;!&ndash; workspaceId 空间Id，放到哪个空间&ndash;&gt;-->
+<!--                        <argument>f0da2e3e4e84</argument>-->
+<!--                        &lt;!&ndash; service  postin服务&ndash;&gt;-->
+<!--                        <argument>http://192.168.10.21:8090</argument>-->
+<!--                    </arguments>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--</plugins>-->
+<!--    </build>-->
+</project>
