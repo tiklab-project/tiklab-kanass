@@ -22,10 +22,6 @@ public class WorkTypeDmEntity {
     @Column(name = "work_type_id",length = 64,notNull = true)
     private String workTypeId;
 
-    // 事项类型关联表单
-    @Column(name = "form_id",length = 64,notNull = true)
-    private String formId;
-
     // 事项类型关联流程
     @Column(name = "flow_id",length = 64,notNull = true)
     private String flowId;
@@ -52,14 +48,6 @@ public class WorkTypeDmEntity {
 
     public void setWorkTypeId(String workTypeId) {
         this.workTypeId = workTypeId;
-    }
-
-    public String getFormId() {
-        return formId;
-    }
-
-    public void setFormId(String formId) {
-        this.formId = formId;
     }
 
     public String getFlowId() {
