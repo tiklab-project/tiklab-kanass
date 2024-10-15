@@ -2,11 +2,11 @@ package io.tiklab.kanass.project.jira.service;
 
 import io.tiklab.core.exception.ApplicationException;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.ids.tenant.common.TenantHolder;
 import io.tiklab.kanass.project.jira.util.UncompressUtil;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.project.service.ProjectService;
 import io.tiklab.dal.jpa.JpaTemplate;
-import io.tiklab.tenant.ids.common.TenantHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
