@@ -115,7 +115,7 @@ CREATE TABLE pmc_work_item(
         percent int,
         estimate_time int,
         ext_data TEXT,
-        build_time timestamp,
+        build_time timestamp NOT NULL,
         work_status_code VARCHAR(8),
         work_type_code VARCHAR(8),
         surplus_time int,

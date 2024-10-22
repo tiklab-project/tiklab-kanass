@@ -102,7 +102,7 @@ public class SprintServiceImpl implements SprintService {
 
         sendMessageNotice.setBaseUrl(baseUrl);
         sendMessageNotice.setId("KANASS_MESSAGE_SPRINTCREATE");
-        sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/workTable");
+        sendMessageNotice.setLink("/${projectId}/sprint/${sprintId}/workitem");
         sendMessageNotice.setAction(sprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
         sendMessageNotice.setSiteData(msg);
@@ -147,7 +147,7 @@ public class SprintServiceImpl implements SprintService {
 
         sendMessageNotice.setBaseUrl(baseUrl);
         sendMessageNotice.setId("KANASS_MESSAGE_SPRINTUPDATE");
-        sendMessageNotice.setLink("/${projectId}/sprintdetail/${sprintId}/workTable");
+        sendMessageNotice.setLink("/${projectId}/sprint/${sprintId}/workitem");
         sendMessageNotice.setAction(newSprint.getSprintName());
         sendMessageNotice.setSendId(user.getId());
         sendMessageNotice.setSiteData(msg);

@@ -100,7 +100,7 @@ public class WorkItemEntity implements Serializable {
     private String assignerId;
 
     //创建人ID
-    @Column(name = "builder_id",length = 32)
+    @Column(name = "builder_id",length = 32,notNull = true)
     private String builderId;
 
     //报告人ID

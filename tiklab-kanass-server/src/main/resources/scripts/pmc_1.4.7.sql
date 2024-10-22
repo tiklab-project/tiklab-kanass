@@ -1,6 +1,4 @@
 
-
-
 --INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('1bba4e45931f', '事项更新', 'kanass');
 --INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('a1f2cb478fad', '事项添加', 'kanass');
 --INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('ff0a79e4fc61', '添加项目', 'kanass');

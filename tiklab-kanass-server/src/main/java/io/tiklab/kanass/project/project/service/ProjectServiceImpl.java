@@ -151,7 +151,7 @@ public class ProjectServiceImpl implements ProjectService {
         log.setCreateTime(new Timestamp(System.currentTimeMillis()));
         log.setData(JSONObject.toJSONString(content));
         log.setBaseUrl(baseUrl);
-        log.setLink("/projectDetail/${projectId}/workTable");
+        log.setLink("/project/${projectId}/workitem");
         log.setAction(content.get("projectName"));
         opLogByTemplService.createLog(log);
     }

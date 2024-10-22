@@ -249,7 +249,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         objects.add(messageReceiver);
         message.setMessageReceiverList(objects);
         message.setBaseUrl(baseUrl);
-        message.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        message.setLink("/project/${projectId}/workitem/${workItemId}");
         message.setAction(workItem.getTitle());
         message.setSendId(user.getId());
         message.setData(content);
@@ -305,7 +305,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
 
         message.setBaseUrl(baseUrl);
-        message.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        message.setLink("/project/${projectId}/workitem/${workItemId}");
         message.setAction(workItem.getTitle());
         message.setMessageSendTypeId("site");
         // 发送者
@@ -347,7 +347,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         SendMessageNotice sendMessageNotice = new SendMessageNotice();
         sendMessageNotice.setId("KANASS_MESSAGE_UPDATESTATUS");
         sendMessageNotice.setDomainId(projectId);
-        sendMessageNotice.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        sendMessageNotice.setLink("/project/${projectId}/workitem/${workItemId}");
         sendMessageNotice.setAction(workItem.getTitle());
         sendMessageNotice.setBaseUrl(baseUrl);
         sendMessageNotice.setSiteData(msg);
@@ -422,7 +422,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         task.setAction(workItem.getTitle());
-        task.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        task.setLink("/project/${projectId}/workitem/${workItemId}");
         taskByTempService.createTask(task);
     }
 
@@ -553,7 +553,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         log.setBaseUrl(baseUrl);
         log.setAction(workItem.getTitle());
-        log.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        log.setLink("/project/${projectId}/workitem/${workItemId}");
         log.setData(JSON.toJSONString(logContent));
 
         opLogByTemplService.createLog(log);
@@ -591,7 +591,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         log.setData(JSONObject.toJSONString(content));
-        log.setLink("/projectDetail/${projectId}/work/${workItemId}");
+        log.setLink("/project/${projectId}/workitem/${workItemId}");
         log.setBaseUrl(baseUrl);
         log.setAction(content.get("workItemTitle"));
         opLogByTemplService.createLog(log);

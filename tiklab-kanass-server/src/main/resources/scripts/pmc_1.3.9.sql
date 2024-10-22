@@ -3,7 +3,7 @@ INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id
 INSERT INTO pcs_flc_flow_relation (id, model_id, model_name, model_type, flow_id, bgroup) VALUES ('5a142fd02abc', '7055ebc6', '需求', 'workType', 'a96cf9c9', 'kanass');
 
 INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('start', '开始', 'START');
-INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('todo', '代办', 'TODO');
+INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('todo', '待办', 'TODO');
 INSERT INTO pcs_flc_state_node (id, name, status) VALUES ('done', '完成', 'DONE');
 INSERT INTO pcs_flc_state_node (id, name, status, scope) VALUES ('7db3a0d1', '进行中', 'PROGRESS', NULL);
 

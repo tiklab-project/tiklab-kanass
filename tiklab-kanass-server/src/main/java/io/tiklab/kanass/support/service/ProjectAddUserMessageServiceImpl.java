@@ -86,7 +86,7 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
         message.setMessageType(messageType);
         message.setMessageReceiverList(objects);
         message.setBaseUrl(baseUrl);
-        message.setLink("/projectDetail/${projectId}/workTable");
+        message.setLink("/project/${projectId}/workitem");
         message.setAction(project.getProjectName());
         message.setSendId(createUser.getId());
         message.setData(content);
