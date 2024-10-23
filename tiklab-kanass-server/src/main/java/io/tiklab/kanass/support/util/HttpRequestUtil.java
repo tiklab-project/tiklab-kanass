@@ -210,9 +210,6 @@ public class HttpRequestUtil {
         if (Objects.isNull(data)){
             throw new SystemException("接口返回为空！");
         }
-//        Pagination pagination = data.toJavaObject(Pagination.class);
-//
-//        return pagination;
 
         Pagination pagination = JSONObject.parseObject(data.toJSONString(), Pagination.class);
         JSONArray objects = JSONObject.parseArray(pagination.getDataList().toString());
