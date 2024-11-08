@@ -90,6 +90,7 @@ public class WorkItemDocumentDao{
                 .eq("workItemId", workItemDocumentQuery.getWorkItemId())
                 .eq("documentId", workItemDocumentQuery.getDocumentId())
                 .eq("repositoryId", workItemDocumentQuery.getRepositoryId())
+                .in("repositoryId", workItemDocumentQuery.getRepositoryIds())
                 .orders(workItemDocumentQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkItemDocumentEntity.class);

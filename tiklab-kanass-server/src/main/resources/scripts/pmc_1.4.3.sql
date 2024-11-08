@@ -6,9 +6,9 @@ INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('c8
 INSERT INTO pcs_flc_dm_flow (id, domain_id, flow_id, global_flow_id) VALUES ('779c5885', 'f3fdc893ff25', '3b0fc788', '4d040c6d');
 
 
-INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('a96cf9c9', '需求流程', '需求流程', 'custom', 0, 1, '0c5d4ff9');
-INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3d879830', '缺陷流程', '缺陷流程', 'custom', 0, 1, '607f6be6');
-INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('4d040c6d', '任务流程', '任务流程', 'custom', 0, 1, '515f17bd');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('a96cf9c9', '需求流程', '需求流程', 'system', 0, 1, '0c5d4ff9');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('3d879830', '缺陷流程', '缺陷流程', 'system', 0, 1, '607f6be6');
+INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('4d040c6d', '任务流程', '任务流程', 'system', 0, 1, '515f17bd');
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('6fef9d3d', '需求流程', '需求流程', 'custom', 0, 2, 'b1eb0414');
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('5b1c9c40', '缺陷流程', '缺陷流程', 'custom', 0, 2, '071890ba');
 INSERT INTO pcs_flc_flow (id, name, description, grouper, defaults, scope, form_id) VALUES ('9e7f5ea4', '任务流程', '任务流程', 'custom', 0, 2, '47a9d800');
@@ -894,6 +894,9 @@ INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VA
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('86db94ef62a6', '用户管理', 'SysUser', '1465dc3ae3c4', NULL, '2');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('de21752872e9', '流程状态', 'SysFlowNode', '063143949cc7', 43, '1');
 INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('025e702fc3c4', '流程列表', 'SysFlowList', '063143949cc7', 42, '1');
+INSERT INTO pcs_prc_function (id, name, code, parent_function_id, sort, type) VALUES ('ce3d831118c5', '事项类型', 'SysWorkType', NULL, 1, '1');
+
+
 
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('3762f0cb3200', '111111', 'wqre9998fc00');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('73a38f876a05', '111111', '43e7d41decf7');
@@ -1285,7 +1288,8 @@ INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('93d5f8c029
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ce0926fe80aa', '8906a088f99c', 'd7e0583f53e7');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('34223e9d9281', '8906a088f99c', 'ce9b25e6cac7');
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6e7802a2096f', '8906a088f99c', 'fdb16c391ffc');
-
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6605aaa8e7f8', '111111', 'ce3d831118c5');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('69c2d022b4c3', '1', 'ce3d831118c5');
 
 
 INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('401b9f477890', 'f3fdc893ff25', '111111', 0);
@@ -1342,7 +1346,7 @@ INSERT INTO pmc_sprint_status (id, name, description, sort, grouper) VALUES ('22
 INSERT INTO pmc_stage (id, stage_name, parent_id, status, progress, master, description, project_id, start_time, end_time, tree_path, root_id, deep, color) VALUES ('17fd0338dbca', '开发阶段', NULL, '0', 0, '111111', NULL, 'f3fdc893ff25', '2024-05-14 00:00:00', '2024-06-25 00:00:00', NULL, '17fd0338dbca', 0, 4);
 
 INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('f7ee9a10', 'sward', 'http://sward.tiklab.net', 'http://sward.tiklab.net');
-INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('991f95a1', 'teston', 'http://teston.tiklab.net', 'http://teston.tiklab.net');
+INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('991f95a1', 'teston', 'http://testhubo.tiklab.net', 'http://testhubo.tiklab.net');
 
 
 INSERT INTO pmc_version_status (id, name, description, sort, grouper) VALUES ('000000', '未开始', '未开始', 1, 'system');

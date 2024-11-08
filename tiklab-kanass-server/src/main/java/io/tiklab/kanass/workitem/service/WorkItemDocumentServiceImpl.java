@@ -172,6 +172,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
                     kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
                     kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
                     kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
+                    kanassDocument.setDocumentType(wikiDocument.getDocumentType());
                     list.add(kanassDocument);
                 }else {
                     kanassDocument.setDocumentName("文档已删除");

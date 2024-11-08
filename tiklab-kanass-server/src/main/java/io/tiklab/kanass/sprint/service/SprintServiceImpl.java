@@ -289,13 +289,13 @@ public class SprintServiceImpl implements SprintService {
     public Sprint findSprint(@NotNull String id) {
         Sprint sprint = findOne(id);
 
-//        WorkItemQuery workItemQuery = new WorkItemQuery();
-//        workItemQuery.setCurrentSprintId(id);
-//        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-        HashMap<String, Integer> sprintWorkItemNum = workItemService.findSprintWorkItemNum(id);
-        sprint.setWorkNumber(sprintWorkItemNum.get("all"));
-        sprint.setWorkDoneNumber(sprintWorkItemNum.get("done"));
-        sprint.setWorkProgressNumber(sprintWorkItemNum.get("progress"));
+        if(!Objects.isNull(sprint)){
+            HashMap<String, Integer> sprintWorkItemNum = workItemService.findSprintWorkItemNum(id);
+            sprint.setWorkNumber(sprintWorkItemNum.get("all"));
+            sprint.setWorkDoneNumber(sprintWorkItemNum.get("done"));
+            sprint.setWorkProgressNumber(sprintWorkItemNum.get("progress"));
+        }
+
 
         joinTemplate.joinQuery(sprint);
         return sprint;
