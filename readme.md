@@ -30,7 +30,7 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   项目列表：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image.png)
+  ![alt text](./tiklab-kanass-starter/assets/image.png)
 
 ## 1.2 事项管理
 事项有需求、任务、缺陷三种基本事项类型，列表，详情，甘特图，看板4种视图，还可自定义属性与流程规则
@@ -43,19 +43,19 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   列表视图：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image1.png)
+  ![alt text](./tiklab-kanass-starter/assets/image1.png)
 
   详情视图：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image2.png)
+  ![alt text](./tiklab-kanass-starter/assets/image2.png)
 
   看板视图：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image3.png)
+  ![alt text](./tiklab-kanass-starter/assets/image3.png)
 
   甘特图：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image4.png)
+  ![alt text](./tiklab-kanass-starter/assets/image4.png)
 
 
 * 支持自定义事项属性与状态流转
@@ -93,7 +93,7 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   工时列表：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image5.png)
+  ![alt text](./tiklab-kanass-starter/assets/image5.png)
 
 ## 1.5 统计分析
 支持事项统计，工时统计，还有可自由组合的仪表盘功能。
@@ -108,7 +108,7 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   仪表盘详情：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image6.png)
+  ![alt text](./tiklab-kanass-starter/assets/image6.png)
 
 # 2. Kanass的优点
 
@@ -130,7 +130,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
   事项详情：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image7.png)
+  ![alt text](./tiklab-kanass-starter/assets/image7.png)
 
 ## 2.2 丰富的报表和统计功能
 
@@ -143,7 +143,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
   事项字段统计：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image8.png)
+  ![alt text](./tiklab-kanass-starter/assets/image8.png)
 
 * 可灵活设计的仪表盘
 
@@ -167,7 +167,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
   流程设计页面：
 
-  ![alt text](./tiklab-Kanass-starter/assets/image9.png)
+  ![alt text](./tiklab-kanass-starter/assets/image9.png)
 
 * 自定义权限
 
