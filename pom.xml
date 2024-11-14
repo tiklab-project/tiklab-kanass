@@ -48,7 +48,6 @@
         <module>tiklab-kanass-api</module>
         <module>tiklab-kanass-server</module>
         <module>tiklab-kanass-starter</module>
-        <module>tiklab-kanass-starter/assets</module>
     </modules>
 
     <dependencyManagement>

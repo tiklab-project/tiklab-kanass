@@ -197,11 +197,12 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
 可集成JIRA数据，sward知识系统，并提供OpenApi，便于被第三方集成
 * 集成JIRA
+
   可以导入JIRA，轻松的实现从JIRA到Kanass的数据迁移
 
 * 集成sward、TestHubo
 
-  集成tiklab全家桶中的sward知识库工具和TestHubo自动化测试工具，能够在Kanass中使用知识资源和接口测试功能
+  为了优化集成，我们将 sward 知识库工具和 TestHubo 自动化测试工具无缝整合到 Kanass 中，提升团队协作效率与测试流程的顺畅度。
 
 * OpenApi
 
