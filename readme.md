@@ -1,5 +1,5 @@
 
-# 项目管理工具——kanass
+# 项目管理工具——Kanass
 
 Kanass项目管理系统是专为项目管理而设计的应用软件，帮助项目管理者在有限的资源约束下，运用系统项目涉及的全部工作进行有效管理；本系统支持敏捷式项目管理与瀑布式项目管理两种模型；主要功能有项目管理，事项管理，工时管理，统计等
 
@@ -30,7 +30,7 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   项目列表：
 
-  ![alt text](./tiklab-kanass-starter/assets/image.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image.png)
 
 ## 1.2 事项管理
 事项有需求、任务、缺陷三种基本事项类型，列表，详情，甘特图，看板4种视图，还可自定义属性与流程规则
@@ -43,19 +43,19 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   列表视图：
 
-  ![alt text](./tiklab-kanass-starter/assets/image1.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image1.png)
 
   详情视图：
 
-  ![alt text](./tiklab-kanass-starter/assets/image2.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image2.png)
 
   看板视图：
 
-  ![alt text](./tiklab-kanass-starter/assets/image3.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image3.png)
 
   甘特图：
 
-  ![alt text](./tiklab-kanass-starter/assets/image4.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image4.png)
 
 
 * 支持自定义事项属性与状态流转
@@ -93,7 +93,7 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   工时列表：
 
-  ![alt text](./tiklab-kanass-starter/assets/image5.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image5.png)
 
 ## 1.5 统计分析
 支持事项统计，工时统计，还有可自由组合的仪表盘功能。
@@ -108,7 +108,7 @@ Kanass支持两种项目模型，每个项目还拥有独立的成员权限管�
 
   仪表盘详情：
 
-  ![alt text](./tiklab-kanass-starter/assets/image6.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image6.png)
 
 # 2. Kanass的优点
 
@@ -130,7 +130,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
   事项详情：
 
-  ![alt text](./tiklab-kanass-starter/assets/image7.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image7.png)
 
 ## 2.2 丰富的报表和统计功能
 
@@ -143,7 +143,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
   事项字段统计：
 
-  ![alt text](./tiklab-kanass-starter/assets/image8.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image8.png)
 
 * 可灵活设计的仪表盘
 
@@ -167,7 +167,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
   流程设计页面：
 
-  ![alt text](./tiklab-kanass-starter/assets/image9.png)
+  ![alt text](./tiklab-Kanass-starter/assets/image9.png)
 
 * 自定义权限
 
@@ -195,17 +195,17 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
 ## 2.5 集成开放
 
-可集成jira数据，sward知识系统，并提供OpenApi，便于被第三方集成
-* 集成jira
-  可以导入jira，轻松的实现从jira到Kanass的数据迁移
+可集成JIRA数据，sward知识系统，并提供OpenApi，便于被第三方集成
+* 集成JIRA
+  可以导入JIRA，轻松的实现从JIRA到Kanass的数据迁移
 
-* 集成sward、testHubo
+* 集成sward、TestHubo
 
-  集成tiklab全家桶中的sward知识库工具和testHubo自动化测试工具，能够在kanass中使用知识资源和接口测试功能
+  集成tiklab全家桶中的sward知识库工具和TestHubo自动化测试工具，能够在Kanass中使用知识资源和接口测试功能
 
-* openApi
+* OpenApi
 
-  我们提供openApI接口，用于被第三方应用集成
+  我们提供OpenApi接口，用于被第三方应用集成
 
 ## 2.6 多版本、多终端
 
@@ -235,14 +235,14 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
 * 使用
 
-  公有云版本使用是进入官网注册一个账号，可用手机号与邮箱注册
+  公有云版本使用是进入[官网](https://tiklab.net/)注册一个账号，可用手机号与邮箱注册
   登录进入工作台选择要点击Kanass，就成功的开通了Kanass，就可进入系统使用了
 
 # 4. 运行 TestHubo
 
 ```
 1. git clone 
-2. cd tiklab-kanass
+2. cd tiklab-Kanass
 3. MAC系统：mvn clean package -P system-mac,env-dev
    Linux系统：mvn clean package -P system-linux,env-dev
    Windows系统：mvn clean package -P system-windows,env-dev
