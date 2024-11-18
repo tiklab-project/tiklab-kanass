@@ -7,6 +7,8 @@ import io.tiklab.kanass.project.worklog.model.CalendarHeader;
 import io.tiklab.kanass.project.worklog.model.ProjectLog;
 import io.tiklab.kanass.project.worklog.model.WorkLog;
 import io.tiklab.kanass.project.worklog.model.WorkLogQuery;
+import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkItemService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
@@ -24,6 +26,8 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
 * 事项工时服务
@@ -113,11 +117,24 @@ public class WorkLogServiceImpl implements WorkLogService {
     @Override
     public Pagination<WorkLog> findWorkLogPage(WorkLogQuery workLogQuery) {
 
-        Pagination<WorkLogEntity>  pagination = workLogDao.findWorkLogPage(workLogQuery);
+        Pagination<WorkLogEntity> pagination = workLogDao.findWorkLogPage(workLogQuery);
 
         List<WorkLog> workLogList = BeanMapper.mapList(pagination.getDataList(),WorkLog.class);
-
         joinTemplate.joinQuery(workLogList);
+        // 获取日志的事项详情
+        List<String> workItemIds = workLogList.stream().map(workLog -> workLog.getWorkItem().getId()).collect(Collectors.toList());
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        String[] ids = workItemIds.toArray(new String[0]);
+        workItemQuery.setIds(ids);
+        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+
+        for (WorkLog workLog : workLogList) {
+            String id = workLog.getWorkItem().getId();
+            List<WorkItem> workItemList1 = workItemList.stream().filter(workItem -> workItem.getId().equals(id)).collect(Collectors.toList());
+            workLog.setWorkItem(workItemList1.get(0));
+        }
+
+
 
         return PaginationBuilder.build(pagination,workLogList);
     }
