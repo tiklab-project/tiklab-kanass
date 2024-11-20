@@ -16,7 +16,8 @@ public class DfsInitAutoConfiguration {
     DfsConfig initDfsConfig() {
         DfsConfig dfsConfig = new DfsConfig()
                 .newVersion("data_1.0.0")
-                .newVersion("data_1.0.1");
+                .newVersion("data_1.0.1")
+                .newVersion("data_1.0.2");
         return dfsConfig;
     }
 }
