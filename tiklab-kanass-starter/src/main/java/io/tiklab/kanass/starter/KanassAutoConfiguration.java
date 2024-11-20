@@ -4,6 +4,7 @@ import io.tiklab.dal.boot.starter.annotation.EnableDal;
 import io.tiklab.dcs.boot.starter.annotation.EnableDcsClient;
 import io.tiklab.dcs.boot.starter.annotation.EnableDcsServer;
 import io.tiklab.dfs.boot.starter.annotation.EnableDfsClient;
+import io.tiklab.dfs.boot.starter.annotation.EnableDfsInit;
 import io.tiklab.dfs.boot.starter.annotation.EnableDfsServer;
 import io.tiklab.dsm.boot.starter.annotation.EnableDsm;
 import io.tiklab.eam.boot.starter.annotation.EnableEamClient;
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableDsm
 @EnableDfsServer
 @EnableDfsClient
+@EnableDfsInit
 @EnableDcsServer
 @EnableDcsClient
 @EnableRpc
