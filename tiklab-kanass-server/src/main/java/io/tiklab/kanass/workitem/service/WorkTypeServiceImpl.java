@@ -68,13 +68,6 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         flowModelRelation.setBgroup("kanass");
         flowModelRelationService.createFlowModelRelation(flowModelRelation);
 
-        FormModelRelation formModelRelation = new FormModelRelation();
-        formModelRelation.setFormId(workType.getForm().getId());
-        formModelRelation.setModelId(workTypeId);
-        formModelRelation.setModelName(workType.getName());
-        formModelRelation.setModelType("workType");
-        formModelRelation.setBgroup("kanass");
-        formModelRelationService.createFormModelRelation(formModelRelation);
         return workTypeId;
     }
 
