@@ -15,9 +15,7 @@ public class DfsInitAutoConfiguration {
     @Bean
     DfsConfig initDfsConfig() {
         DfsConfig dfsConfig = new DfsConfig()
-                .newVersion("data_1.0.0")
-                .newVersion("data_1.0.1")
-                .newVersion("data_1.0.2");
+                .newVersion("1.0.0","data_1.0.0");
         return dfsConfig;
     }
 }

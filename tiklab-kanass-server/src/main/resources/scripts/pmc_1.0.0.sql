@@ -93,7 +93,7 @@ CREATE TABLE pmc_work_item(
         id VARCHAR(16) PRIMARY KEY,
         order_num int,
         root_id VARCHAR(16),
-        title VARCHAR(64) NOT NULL,
+        title VARCHAR(128) NOT NULL,
         description TEXT,
         parent_id VARCHAR(16),
         tree_path VARCHAR(2048),
@@ -284,7 +284,7 @@ CREATE TABLE pmc_report(
 
 CREATE TABLE pmc_recent(
         id VARCHAR(12) NOT NULL PRIMARY KEY,
-        name VARCHAR(64) NOT NULL,
+        name VARCHAR(128) NOT NULL,
         model VARCHAR(64) NOT NULL,
         model_id VARCHAR(16) NOT NULL,
         master_id VARCHAR(12) NOT NULL,

@@ -47,6 +47,11 @@
             <outputDirectory>/plugin</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>${basedir}/data</directory>
+            <fileMode>755</fileMode>
+            <outputDirectory>/data</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>${basedir}/embbed</directory>
             <fileMode>755</fileMode>
             <outputDirectory>/embbed</outputDirectory>
