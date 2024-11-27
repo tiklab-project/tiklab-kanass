@@ -18,7 +18,7 @@ server:
 
 jdbc:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://172.10.1.10:5432/tiklab_kanass1?stringtype=unspecified
+  url: jdbc:postgresql://172.10.1.10:5432/tiklab_kanass?stringtype=unspecified
 #  url: jdbc:postgresql://172.13.1.17:5432/teamwire_ee?stringtype=unspecified
   username: postgres
   password: darth2020

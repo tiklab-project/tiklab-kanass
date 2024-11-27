@@ -805,6 +805,9 @@ INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, d
 --INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('f1968b10de30', '4cf6d4dec7d0', '32521b1d228f');
 --INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('37df0298b225', '4cf6d4dec7d0', 'f873c801cf35');
 --INSERT INTO pcs_prc_dm_role (id, domain_id, role_id) VALUES ('5150dd80ba74', 'f3fdc893ff25', '8906a088f99c');
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('5780a5de700c', '项目超级管理员', '项目超级管理员角色,只能存在一个。', 'system', '2', 2, 2, 2, 'pro_111111');
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('4f6dd633d13e', '普通用户', '初始化', 'system', '2', 0, 1, 2, '4559d54bc8b7');
+INSERT INTO pcs_prc_role (id, name, description, grouper, type, business_type, default_role, scope, parent_id) VALUES ('ce5a1d690405', 'admin', '管理员', 'system', '2', 1, 0, 2, '2');
 
 INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('05a4fd811427', 'f3fdc893ff25', '323810f03653', 0);
 INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('86912b2f65de', '4cf6d4dec7d0', '7fd9ce1c7be1', 0);
@@ -812,6 +815,10 @@ INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('d34
 INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('f1968b10de30', '4cf6d4dec7d0', '32521b1d228f', 0);
 INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('37df0298b225', '4cf6d4dec7d0', 'f873c801cf35', 2);
 INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('5150dd80ba74', 'f3fdc893ff25', '8906a088f99c', 2);
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('e49cbafa6f9e', '4c690ab87ce0', '5780a5de700c', 2);
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('384a7ed5289c', '4c690ab87ce0', '4f6dd633d13e', 0);
+INSERT INTO pcs_prc_dm_role (id, domain_id, role_id, business_type) VALUES ('0e783142a28c', '4c690ab87ce0', 'ce5a1d690405', 1);
+
 
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('177715b8d071', 'd34704c82822', 'f3fdc893ff25', '111111');
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('639f1838c88e', '05a4fd811427', 'f3fdc893ff25', '111111');
@@ -819,6 +826,8 @@ INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('80
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('b882c6171f34', 'f1968b10de30', '4cf6d4dec7d0', '111111');
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('e59fc2901e78', '37df0298b225', '4cf6d4dec7d0', '111111');
 INSERT INTO pcs_prc_dm_role_user (id, dmRole_id, domain_id, user_id) VALUES ('f5f9f0e27116', '5150dd80ba74', 'f3fdc893ff25', '111111');
+INSERT INTO pcs_prc_dm_role_user (id, dmrole_id, domain_id, user_id) VALUES ('7e0664131040', 'e49cbafa6f9e', '4c690ab87ce0', '111111');
+
 
 INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('38c0375b6adf', '32521b1d228f', '111111');
 INSERT INTO pcs_prc_role_user (id, role_id, user_id) VALUES ('4df7c0dae8b5', '7dc47e805306', '111111');
@@ -1294,9 +1303,104 @@ INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6605aaa8e7
 INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('69c2d022b4c3', '1', 'ce3d831118c5');
 
 
-INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('401b9f477890', 'f3fdc893ff25', '111111', 0);
-INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type) VALUES ('5dc8b55815ae', '4cf6d4dec7d0', '111111', 0);
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('32838baf6e93', '5780a5de700c', '094b29db8a89');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e2d02e5cc074', '5780a5de700c', 'b80a4416f42f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ccef6de0252a', '5780a5de700c', '4b982e213c12');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('17cffee42a64', '5780a5de700c', '1843bd5f5a73');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e059489a9685', '5780a5de700c', 'bfbb4a6b97a4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('e7cb35f49188', '5780a5de700c', '09a64b79b631');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('7fc58e03c891', '5780a5de700c', '5386b5add6a5');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('7ee2638d783d', '5780a5de700c', '1ff199504908');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('188403a56634', '5780a5de700c', 'd3447a36dd98');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('3adce07354cb', '5780a5de700c', 'da52f90b3707');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c3cfd36d5369', '5780a5de700c', 'abe6fffaae63');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('96637ba031cc', '5780a5de700c', '2a6be8fda76f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('4a05f8570d38', '5780a5de700c', 'd893af6f93ff');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('3963d6dc1eee', '5780a5de700c', 'a3ee33eba363');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6295187ea2f9', '5780a5de700c', 'dc6e2228367b');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('106be3edef11', '5780a5de700c', '3a763b21fca2');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5a0215feed51', '5780a5de700c', 'b8e5ccedad50');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0a4310823099', '5780a5de700c', '0e2c45a64049');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5bfe134cef67', '5780a5de700c', 'd3a09529d29d');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('49c56fe551a1', '5780a5de700c', '4c94d187cb44');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('777cea1072c8', '5780a5de700c', '72e68d34870e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('32e3e5bcc20d', '5780a5de700c', '66bd7120b0de');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('226eaf6a9a00', '5780a5de700c', 'df306d70374c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('2681cf8cef7d', '5780a5de700c', '9538263abda4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0ca0c5a6c28c', '5780a5de700c', 'c90234e86fa7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ec347a3b7788', '5780a5de700c', '0532f166f19e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('162d6bd01920', '5780a5de700c', 'dae13d309463');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('02ee385e7c78', '5780a5de700c', 'bef27cf6bbb3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('9b5b8a426fdc', '5780a5de700c', 'fa03f824ef14');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ec9cd4fc8ee9', '5780a5de700c', 'a685bb7ae67c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('909c53f60118', '5780a5de700c', '428d1c69d167');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('bd5955c6c34d', '5780a5de700c', 'd7e0583f53e7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('14eb4d7fab4c', '5780a5de700c', 'ce9b25e6cac7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('447de0793f29', '5780a5de700c', 'fdb16c391ffc');
 
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('eacb39c98b36', '4f6dd633d13e', 'fdb16c391ffc');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d59c7c52cda9', '4f6dd633d13e', 'd7e0583f53e7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('44fdd38615a7', '4f6dd633d13e', 'dae13d309463');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c6720f9ea685', '4f6dd633d13e', '2a6be8fda76f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('4863bc9e42dd', '4f6dd633d13e', 'abe6fffaae63');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('070094c0b024', '4f6dd633d13e', 'da52f90b3707');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('bf90e7094c5d', '4f6dd633d13e', 'd3447a36dd98');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('480ede1f2581', '4f6dd633d13e', '1843bd5f5a73');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('7d905453a477', '4f6dd633d13e', '4b982e213c12');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('130abcdbedbb', '4f6dd633d13e', 'b80a4416f42f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('5edf47e21104', '4f6dd633d13e', 'dc6e2228367b');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('f870bcb976e3', '4f6dd633d13e', 'a3ee33eba363');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('982068fd8472', '4f6dd633d13e', '72e68d34870e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('2ebe36788eda', '4f6dd633d13e', '428d1c69d167');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('9896fd9c98bd', '4f6dd633d13e', 'a685bb7ae67c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('40c0e5a66ceb', '4f6dd633d13e', 'fa03f824ef14');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('030721aa9a1c', '4f6dd633d13e', '66bd7120b0de');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('1c3e8761b2e9', '4f6dd633d13e', '9538263abda4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6f0d42b6ab95', '4f6dd633d13e', 'bef27cf6bbb3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('394ceb5bb16c', '4f6dd633d13e', '1ff199504908');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6cebb791f69b', '4f6dd633d13e', '5386b5add6a5');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('44f76a5c3045', '4f6dd633d13e', '09a64b79b631');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('7d5bdc00a151', '4f6dd633d13e', 'bfbb4a6b97a4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('8dea151e2c20', '4f6dd633d13e', 'ce9b25e6cac7');
+
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('9d54edac53de', 'ce5a1d690405', 'd3a09529d29d');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('288b4d6da995', 'ce5a1d690405', '0e2c45a64049');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('9d0e4f7e8a5d', 'ce5a1d690405', 'b8e5ccedad50');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d3ec57b9817c', 'ce5a1d690405', '3a763b21fca2');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('68b2dc357439', 'ce5a1d690405', 'dc6e2228367b');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('204eb3845afa', 'ce5a1d690405', 'a3ee33eba363');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c1ede377f218', 'ce5a1d690405', 'd893af6f93ff');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('46d9f6ce1c69', 'ce5a1d690405', '1ff199504908');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('46a3805a7ebf', 'ce5a1d690405', '5386b5add6a5');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('32e492acbecc', 'ce5a1d690405', '09a64b79b631');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d00d651d5d70', 'ce5a1d690405', 'bfbb4a6b97a4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('4572f81bf6f1', 'ce5a1d690405', '1843bd5f5a73');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('2e86ce1ca510', 'ce5a1d690405', '4b982e213c12');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('959d85fbaa6f', 'ce5a1d690405', '094b29db8a89');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('cf7982c8e299', 'ce5a1d690405', '72e68d34870e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('ef9ba5b79b36', 'ce5a1d690405', 'd3447a36dd98');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('6872a48a704d', 'ce5a1d690405', 'da52f90b3707');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('a0510c2b97cc', 'ce5a1d690405', 'abe6fffaae63');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('bea9683d41b3', 'ce5a1d690405', '2a6be8fda76f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('49d04f59978b', 'ce5a1d690405', '66bd7120b0de');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('4b15cd72bbb9', 'ce5a1d690405', 'df306d70374c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('d7be5a701772', 'ce5a1d690405', '9538263abda4');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('2a20123b2b7f', 'ce5a1d690405', 'c90234e86fa7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('c9c009d1c2ed', 'ce5a1d690405', '0532f166f19e');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('f0309c91e58d', 'ce5a1d690405', 'dae13d309463');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('fcf39fec013e', 'ce5a1d690405', 'bef27cf6bbb3');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('806f7d4c1a2d', 'ce5a1d690405', 'b80a4416f42f');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b9fc696c469b', 'ce5a1d690405', 'fdb16c391ffc');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('f2d4be9ea8f7', 'ce5a1d690405', 'ce9b25e6cac7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('7bba5e08394e', 'ce5a1d690405', 'd7e0583f53e7');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('04f3ce9f90f1', 'ce5a1d690405', '428d1c69d167');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('0a20efb9a15a', 'ce5a1d690405', 'a685bb7ae67c');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('b2d8e19c31b7', 'ce5a1d690405', 'fa03f824ef14');
+INSERT INTO pcs_prc_role_function (id, role_id, function_id) VALUES ('673988839216', 'ce5a1d690405', '4c94d187cb44');
+
+INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type, status)VALUES ('401b9f477890', 'f3fdc893ff25', '111111', 0, 1);
+INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type, status) VALUES ('5dc8b55815ae', '4cf6d4dec7d0', '111111', 0, 1);
+INSERT INTO pcs_ucc_dm_user (id, domain_id, user_id, type, status) VALUES ('228ddaddffac', '4c690ab87ce0', '111111', 0, 1);
 
 INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('WORK_ITEM_AUDITOR', '事项审核员', NULL, 2);
 INSERT INTO pcs_prc_vrole (id, name, des, type) VALUES ('WORK_ITEM_ASSIGNER', '事项负责人', NULL, 2);
@@ -1319,8 +1423,8 @@ INSERT INTO pmc_icon (id, icon_name, icon_url, icon_type) VALUES ('5ce7cab32924'
 INSERT INTO pmc_icon (id, icon_name, icon_url, icon_type) VALUES ('c3ee42e730ac', 'workType8.png', 'workType8.png', 'workType');
 
 
-INSERT INTO pmc_project (id, project_key, project_name, project_type_id, project_limits, creator, master, description, project_set_id, project_state, start_time, end_time, icon_url) VALUES ('4cf6d4dec7d0', 'kanass', 'Kanass', '5a46432a', '0', '111111', '111111', 'asa', '4c690ab87ce0', '1', '2022-12-13 00:00:00', '2022-12-31 00:00:00', 'project2.png');
-INSERT INTO pmc_project (id, project_key, project_name, project_type_id, project_limits, creator, master, description, project_set_id, project_state, start_time, end_time, icon_url) VALUES ('f3fdc893ff25', 'sward', 'sward', 'ea782c6d', '0', '111111', '111111', NULL, '4c690ab87ce0', '1', '2022-12-13 00:00:00', '2023-01-31 00:00:00', 'project1.png');
+INSERT INTO pmc_project (id, project_key, project_name, project_type_id, project_limits, creator, master, description, project_set_id, project_state, start_time, end_time, icon_url) VALUES ('4cf6d4dec7d0', 'kanass', '示例敏捷式项目', '5a46432a', '0', '111111', '111111', '示例敏捷式项目', '4c690ab87ce0', '1', '2022-12-13 00:00:00', '2022-12-31 00:00:00', 'project2.png');
+INSERT INTO pmc_project (id, project_key, project_name, project_type_id, project_limits, creator, master, description, project_set_id, project_state, start_time, end_time, icon_url) VALUES ('f3fdc893ff25', 'sward', '示例瀑布研发项目', 'ea782c6d', '0', '111111', '111111', '示例瀑布研发项目', '4c690ab87ce0', '1', '2022-12-13 00:00:00', '2023-01-31 00:00:00', 'project1.png');
 
 INSERT INTO pmc_project_type (id, type, name, icon_url, description) VALUES ('5a46432a', 'scrum', '敏捷式项目', 'project1.png', '敏捷式项目');
 INSERT INTO pmc_project_type (id, type, name, icon_url, description) VALUES ('ea782c6d', 'nomal', '瀑布研发项目', 'project2.png', '瀑布研发项目');
@@ -1329,21 +1433,21 @@ INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('f14060dd135a', '2024-06-03 ~ 2024-06-14', 'sprint', '0410da30425b', '111111', '4cf6d4dec7d0', '2024-11-25 10:25:29.147', NULL, '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('a26523d4e19c', '前端实现知识库导航鼠标点击显示切换知识库列表', 'workItem', '4972da6af75c', '111111', 'f3fdc893ff25', '2024-11-25 11:13:47.032', 'workType2.png', 'ea782c6d');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('48df84ee2f74', '富文本表格移动行有时候会保存不成功', 'workItem', '04775ebf4565', '111111', 'f3fdc893ff25', '2024-11-25 11:13:49.567', 'workType3.png', 'ea782c6d');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('3fd0b09de11b', 'Kanass,sward', 'projectSet', 'b4886df1594d', '111111', NULL, '2024-11-25 11:18:07.888', NULL, NULL);
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('3fd0b09de11b', '示例项目集', 'projectSet', 'b4886df1594d', '111111', NULL, '2024-11-25 11:18:07.888', NULL, NULL);
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('c79c4a7aa848', '迭代1', 'sprint', '0410da30425b', '111111', '4cf6d4dec7d0', '2024-11-25 09:38:33.603', NULL, '5a46432a');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('221511e8fad3', 'Kanass,sward', 'projectSet', '4c690ab87ce0', '111111', NULL, '2024-11-25 11:18:13.461', NULL, NULL);
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('221511e8fad3', '示例项目集', 'projectSet', '4c690ab87ce0', '111111', NULL, '2024-11-25 11:18:13.461', NULL, NULL);
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('9265e9fac7ff', '迭代2', 'sprint', 'caa684dfa094', '111111', '4cf6d4dec7d0', '2024-11-25 09:39:41.207', NULL, '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('26fcd93641e1', '迭代2', 'sprint', 'caa684dfa094', '111111', '4cf6d4dec7d0', '2024-11-25 09:39:53.129', NULL, '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('0332028c4e29', 'beta-1.0.0', 'version', '63b6e50d8dde', '111111', '4cf6d4dec7d0', '2024-11-25 09:42:19.57', NULL, '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('f3e836cc654a', '富文本表格移动行有时候会保存不成功', 'workItem', 'e3a468f851a2', '111111', 'f3fdc893ff25', '2024-11-25 10:28:30.211', 'workType3.png', 'ea782c6d');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('126acc7f4bba', 'Kanass', 'project', '4cf6d4dec7d0', '111111', '4cf6d4dec7d0', '2024-11-25 10:30:10.603', 'project2.png', '5a46432a');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('126acc7f4bba', '示例敏捷项目', 'project', '4cf6d4dec7d0', '111111', '4cf6d4dec7d0', '2024-11-25 10:30:10.603', 'project2.png', '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('665b9154361f', '工时预计与工时填写的处理', 'workItem', '4f57e82e181e', '111111', '4cf6d4dec7d0', '2024-11-25 11:12:43.084', 'workType1.png', '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('9ee122d3b8ac', '修改日志列表内容过宽，导致一些列被挤压样式变形问题', 'workItem', 'a666ab207fb3', '111111', '4cf6d4dec7d0', '2024-11-25 11:12:51.292', 'workType2.png', '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('a7e0fb37ad08', '事项工时页面第一行行间距过小', 'workItem', '609d026e60d2', '111111', '4cf6d4dec7d0', '2024-11-25 11:12:53.016', 'workType3.png', '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('3c7bfade0c2f', '事项详情添加工时改为页内浮层、优化关联事项、子事项浮层效果', 'workItem', 'c9eb66ec1137', '111111', '4cf6d4dec7d0', '2024-11-25 11:12:56.101', 'workType3.png', '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('495c762d125e', '录入项目，事项模块的测试用例', 'workItem', '52e201ba2c09', '111111', '4cf6d4dec7d0', '2024-11-25 11:12:58.932', 'workType2.png', '5a46432a');
 INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('b24f213b5f21', '修改的时候在描述中添加图片发生样式问题', 'workItem', '98d2b5055b51', '111111', '4cf6d4dec7d0', '2024-11-25 11:13:01.202', 'workType3.png', '5a46432a');
-INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('debe79ee7e25', 'sward', 'project', 'f3fdc893ff25', '111111', 'f3fdc893ff25', '2024-11-25 11:13:08.508', 'project1.png', 'ea782c6d');
+INSERT INTO pmc_recent (id, name, model, model_id, master_id, project_id, recent_time, icon_url, project_type_id) VALUES ('debe79ee7e25', '示例瀑布研发项目', 'project', 'f3fdc893ff25', '111111', 'f3fdc893ff25', '2024-11-25 11:13:08.508', 'project1.png', 'ea782c6d');
 
 INSERT INTO pmc_sprint (id, sprint_name, description, project_id, master, sprint_state_id, start_time, end_time, builder, rela_start_time, rela_end_time, color) VALUES ('0410da30425b', '2024-06-03 ~ 2024-06-14', NULL, '4cf6d4dec7d0', '111111', '000000', '2024-06-03 00:00:00', '2024-06-14 00:00:00', NULL, NULL, '2024-11-25 09:39:34', 0);
 INSERT INTO pmc_sprint (id, sprint_name, description, project_id, master, sprint_state_id, start_time, end_time, builder, rela_start_time, rela_end_time, color) VALUES ('caa684dfa094', '2024-06-17 ~ 2024-06-28', NULL, '4cf6d4dec7d0', '111111', '000000', '2024-06-17 00:00:00', '2024-06-28 00:00:00', NULL, NULL, '2024-11-25 09:40:38', 0);
@@ -1398,18 +1502,18 @@ INSERT INTO pmc_work_type (id, name, description, code, form_id, flow_id, icon_u
 INSERT INTO pmc_work_type (id, name, description, code, form_id, flow_id, icon_url, grouper, sort, scope) VALUES ('98121701', '缺陷', '缺陷', 'defect', '607f6be6', '3d879830', 'workType3.png', 'system', '3', 0);
 
 INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('2add03b6e285', '111111', 'soular', 'USER_LOGIN', NULL, '2024-11-25 09:27:23.492', 'soular', '{"logType":"USER_LOGIN","name":"admin","userName":"管理员","message":""}', NULL, NULL, 'admin');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('1d2c5d754c59', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 09:43:35.772', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"a64e8050","workItemId":"c9eb66ec1137","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType3.png","workItemTitle":"事项详情添加工时改为页内浮层、优化关联事项、子事项浮层效果","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/c9eb66ec1137', NULL, '事项详情添加工时改为页内浮层、优化关联事项、子事项浮层效果');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('78a84dc44d0f', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 09:44:38.704', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"d3ef6551","workItemId":"52e201ba2c09","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType2.png","workItemTitle":"录入项目，事项模块的测试用例","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/52e201ba2c09', NULL, '录入项目，事项模块的测试用例');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('dcc25e77e5d8', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 09:44:39.666', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"d3ef6551","workItemId":"f3a22d838292","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType2.png","workItemTitle":"录入项目，事项模块的测试用例","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/f3a22d838292', NULL, '录入项目，事项模块的测试用例');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('1d2c5d754c59', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 09:43:35.772', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"a64e8050","workItemId":"c9eb66ec1137","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType3.png","workItemTitle":"事项详情添加工时改为页内浮层、优化关联事项、子事项浮层效果","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/c9eb66ec1137', NULL, '事项详情添加工时改为页内浮层、优化关联事项、子事项浮层效果');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('78a84dc44d0f', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 09:44:38.704', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"d3ef6551","workItemId":"52e201ba2c09","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType2.png","workItemTitle":"录入项目，事项模块的测试用例","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/52e201ba2c09', NULL, '录入项目，事项模块的测试用例');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('dcc25e77e5d8', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 09:44:39.666', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"d3ef6551","workItemId":"f3a22d838292","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType2.png","workItemTitle":"录入项目，事项模块的测试用例","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/f3a22d838292', NULL, '录入项目，事项模块的测试用例');
 INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('9d62fbef4a11', '111111', 'soular', 'USER_LOGIN', NULL, '2024-11-25 10:00:49.612', 'soular', '{"logType":"USER_LOGIN","name":"admin","userName":"管理员","message":""}', NULL, NULL, 'admin');
 INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('0f4891c1f360', '111111', 'soular', 'USER_LOGIN', NULL, '2024-11-25 10:14:06.923', 'soular', '{"logType":"USER_LOGIN","name":"admin","userName":"管理员","message":""}', NULL, NULL, 'admin');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('3a7fda2d3a0f', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:23:28.713', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"a64e8050","workItemId":"98d2b5055b51","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType3.png","workItemTitle":"修改的时候在描述中添加图片发生样式问题","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/98d2b5055b51', NULL, '修改的时候在描述中添加图片发生样式问题');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('fbe433be2268', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:24:34.22', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"b81aef3b","workItemId":"4f57e82e181e","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType1.png","workItemTitle":"工时预计与工时填写的处理","workItemTypeName":"需求","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/4f57e82e181e', NULL, '工时预计与工时填写的处理');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('dcf49e207785', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:24:48.32', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"d3ef6551","workItemId":"a666ab207fb3","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType2.png","workItemTitle":"修改日志列表内容过宽，导致一些列被挤压样式变形问题","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/a666ab207fb3', NULL, '修改日志列表内容过宽，导致一些列被挤压样式变形问题');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('14047feb4bf8', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:25:00.233', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"a64e8050","workItemId":"609d026e60d2","projectName":"Kanass","projectId":"4cf6d4dec7d0","workItemIcon":"workType3.png","workItemTitle":"事项工时页面第一行行间距过小","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/609d026e60d2', NULL, '事项工时页面第一行行间距过小');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('a6386a99ca46', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:28:11.247', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"ef23b25f","workItemId":"01801bd8979b","projectName":"sward","projectId":"f3fdc893ff25","workItemIcon":"workType1.png","workItemTitle":"实现文档的收藏功能","workItemTypeName":"需求","master":"管理员"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/01801bd8979b', NULL, '实现文档的收藏功能');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('a93e97cbae9c', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:28:28.259', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"c9e59337","workItemId":"4972da6af75c","projectName":"sward","projectId":"f3fdc893ff25","workItemIcon":"workType2.png","workItemTitle":"前端实现知识库导航鼠标点击显示切换知识库列表","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/4972da6af75c', NULL, '前端实现知识库导航鼠标点击显示切换知识库列表');
-INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('98dda0615f19', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:28:38.601', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"dcbf7211","workItemId":"04775ebf4565","projectName":"sward","projectId":"f3fdc893ff25","workItemIcon":"workType3.png","workItemTitle":"富文本表格移动行有时候会保存不成功","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/04775ebf4565', NULL, '富文本表格移动行有时候会保存不成功');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('3a7fda2d3a0f', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:23:28.713', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"a64e8050","workItemId":"98d2b5055b51","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType3.png","workItemTitle":"修改的时候在描述中添加图片发生样式问题","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/98d2b5055b51', NULL, '修改的时候在描述中添加图片发生样式问题');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('fbe433be2268', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:24:34.22', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"b81aef3b","workItemId":"4f57e82e181e","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType1.png","workItemTitle":"工时预计与工时填写的处理","workItemTypeName":"需求","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/4f57e82e181e', NULL, '工时预计与工时填写的处理');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('dcf49e207785', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:24:48.32', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"d3ef6551","workItemId":"a666ab207fb3","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType2.png","workItemTitle":"修改日志列表内容过宽，导致一些列被挤压样式变形问题","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/a666ab207fb3', NULL, '修改日志列表内容过宽，导致一些列被挤压样式变形问题');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('14047feb4bf8', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:25:00.233', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"a64e8050","workItemId":"609d026e60d2","projectName":"示例敏捷项目","projectId":"4cf6d4dec7d0","workItemIcon":"workType3.png","workItemTitle":"事项工时页面第一行行间距过小","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/609d026e60d2', NULL, '事项工时页面第一行行间距过小');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('a6386a99ca46', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:28:11.247', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"ef23b25f","workItemId":"01801bd8979b","projectName":"示例瀑布研发项目","projectId":"f3fdc893ff25","workItemIcon":"workType1.png","workItemTitle":"实现文档的收藏功能","workItemTypeName":"需求","master":"管理员"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/01801bd8979b', NULL, '实现文档的收藏功能');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('a93e97cbae9c', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:28:28.259', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"c9e59337","workItemId":"4972da6af75c","projectName":"示例瀑布研发项目","projectId":"f3fdc893ff25","workItemIcon":"workType2.png","workItemTitle":"前端实现知识库导航鼠标点击显示切换知识库列表","workItemTypeName":"任务","master":"管理员"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/4972da6af75c', NULL, '前端实现知识库导航鼠标点击显示切换知识库列表');
+INSERT INTO pcs_op_log (id, user_id, module, action_type, content, create_time, bgroup, data, link, abstract_content, action) VALUES ('98dda0615f19', '111111', 'workItem', 'KANASS_LOGTYPE_WORKITEMADD', NULL, '2024-11-25 10:28:38.601', 'kanass', '{"createTime":"2024-11-25","createUserIcon":"管","workItemType":"dcbf7211","workItemId":"04775ebf4565","projectName":"示例瀑布研发项目","projectId":"f3fdc893ff25","workItemIcon":"workType3.png","workItemTitle":"富文本表格移动行有时候会保存不成功","workItemTypeName":"缺陷","master":"管理员"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/04775ebf4565', NULL, '富文本表格移动行有时候会保存不成功');
 
 INSERT INTO pcs_todo_task (id, create_user, assign_user, title, status, bgroup, endtime, createtime, remark, content, starttime, todo_type, data, link, action) VALUES ('7167abf6ca7f', '111111', '111111', '待办事项', 1, 'kanass', '2024-11-25 23:59:59', '2024-11-25 10:28:11.284', NULL, NULL, NULL, 'KANASS_TODOTYPE_WORKITEMTODO', '{"receiveTime":"2024-11-25","versionId":"72cd3ba61143","createUserIcon":"管","createUser":{"dirId":"1","id":"111111","name":"admin","nickname":"管理员","password":"e10adc3949ba59abbe56e057f20f883e","status":1,"type":1},"workItemId":"01801bd8979b","projectId":"f3fdc893ff25","workItemTitle":"实现文档的收藏功能"}', 'http://192.168.10.7:8080/#/project/f3fdc893ff25/workitem/01801bd8979b', '实现文档的收藏功能');
 INSERT INTO pcs_todo_task (id, create_user, assign_user, title, status, bgroup, endtime, createtime, remark, content, starttime, todo_type, data, link, action) VALUES ('f2521477bcbd', '111111', '111111', '待办事项', 1, 'kanass', '2024-11-25 23:59:59', '2024-11-25 09:44:38.733', NULL, NULL, NULL, 'KANASS_TODOTYPE_WORKITEMTODO', '{"receiveTime":"2024-11-25","sprintId":"caa684dfa094","versionId":"63b6e50d8dde","createUserIcon":"管","createUser":{"dirId":"1","id":"111111","name":"admin","nickname":"管理员","password":"e10adc3949ba59abbe56e057f20f883e","status":1,"type":1},"workItemId":"52e201ba2c09","projectId":"4cf6d4dec7d0","workItemTitle":"录入项目，事项模块的测试用例"}', 'http://192.168.10.7:8080/#/project/4cf6d4dec7d0/workitem/52e201ba2c09', '录入项目，事项模块的测试用例');
@@ -1429,7 +1533,7 @@ INSERT INTO pmc_module (id, module_name, description, parent_id, project_id) VAL
 INSERT INTO pmc_module (id, module_name, description, parent_id, project_id) VALUES ('911b7d4506bc', '文档模块', '文档模块', NULL, 'f3fdc893ff25');
 INSERT INTO pmc_module (id, module_name, description, parent_id, project_id) VALUES ('4f14bc486fb6', '知识库模块', '知识库模块', NULL, 'f3fdc893ff25');
 
-INSERT INTO pmc_project_set (id, name, start_time, end_time, creator, project_set_limits, remark, sort, master, is_delete, creat_time, update_time, color) VALUES ('4c690ab87ce0', 'Kanass,sward', '2019-11-01 00:00:00', '2025-03-01 00:00:00', '111111', '0', NULL, 1, '111111', NULL, '2024-11-25 00:00:00', NULL, 2);
+INSERT INTO pmc_project_set (id, name, start_time, end_time, creator, project_set_limits, remark, sort, master, is_delete, creat_time, update_time, color) VALUES ('4c690ab87ce0', '示例项目集', '2019-11-01 00:00:00', '2025-03-01 00:00:00', '111111', '0', NULL, 1, '111111', NULL, '2024-11-25 00:00:00', NULL, 2);
 
 INSERT INTO pmc_work_log (id, work_item_id, worker, work_date, takeup_time, work_content, creat_time, update_time, project_id) VALUES ('779a2c3734a0', '01801bd8979b', '111111', '2024-11-25 10:29:37.399', 1, '实现接口', NULL, NULL, 'f3fdc893ff25');
 INSERT INTO pmc_work_log (id, work_item_id, worker, work_date, takeup_time, work_content, creat_time, update_time, project_id) VALUES ('073d2ffeacbf', '01801bd8979b', '111111', '2024-11-25 10:29:58.512', 1, '实现前端页面', NULL, NULL, 'f3fdc893ff25');
