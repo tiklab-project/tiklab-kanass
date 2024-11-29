@@ -143,6 +143,8 @@ public class WorkItemDao{
                 .like("wi.title",workItemQuery.getTitle())
                 .eq("wi.projectId",workItemQuery.getProjectId())
                 .in("wi.parentId", workItemQuery.getParentIdIn())
+                .in("wi.stageId", workItemQuery.getStageIds())
+                .notIn("wi.id", workItemQuery.getIdNotIn())
                 .eq("wi.parentId", workItemQuery.getParentId())
                 .eq("wi.versionId", workItemQuery.getCurrentVersionId())
                 .eq("wi.workTypeId", workItemQuery.getWorkTypeId())
@@ -152,11 +154,11 @@ public class WorkItemDao{
                 .eq("wi.workTypeCode", workItemQuery.getWorkTypeCode())
                 .eq("wi.sprintId", workItemQuery.getCurrentSprintId())
                 .eq("wi,stageId", workItemQuery.getStageId())
-                .in("wi.stageId", workItemQuery.getStageIds())
-                .in("wi.id", workItemQuery.getIds())
-                .notIn("wi.id", workItemQuery.getIdNotIn())
                 .orders(workItemQuery.getOrderParams());
 
+        if(workItemQuery.getIds() != null && workItemQuery.getIds().length != 0 ){
+            queryBuilders.in("wi.id", workItemQuery.getIds());
+        }
         //是否属于项目版本
         if(workItemQuery.getVersionIdIsNull() != null) {
             if(workItemQuery.getVersionIdIsNull() == true){

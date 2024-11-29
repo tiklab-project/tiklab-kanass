@@ -56,10 +56,14 @@ public class WorkAttachServiceImpl implements WorkAttachService {
 
     @Override
     public void deleteWorkAttachList(WorkAttachQuery workAttachQuery){
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkAttachEntity.class)
-                .eq("workItemId", workAttachQuery.getWorkItemId())
-                .in("workItemId", workAttachQuery.getWorkItemIds())
-                .get();
+        DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(WorkAttachEntity.class)
+                .eq("workItemId", workAttachQuery.getWorkItemId());
+
+
+        if(workAttachQuery.getWorkItemIds() != null && workAttachQuery.getWorkItemIds().length != 0){
+            deleteBuilders.in("workItemId", workAttachQuery.getWorkItemIds());
+        }
+        DeleteCondition deleteCondition = deleteBuilders.get();
         workAttachDao.deleteWorkAttach (deleteCondition);
     }
 

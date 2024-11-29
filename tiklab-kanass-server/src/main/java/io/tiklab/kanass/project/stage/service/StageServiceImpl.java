@@ -165,10 +165,13 @@ public class StageServiceImpl implements StageService {
 
     }
     public void deleteStageCondition(StageQuery stageQuery){
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(StageEntity.class)
-                .eq("id", stageQuery.getId())
-                .in("id", stageQuery.getIds())
-                .get();
+        DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(StageEntity.class)
+                .eq("id", stageQuery.getId());
+
+        if(stageQuery.getIds() != null && stageQuery.getIds().length != 0){
+            deleteBuilders.in("id", stageQuery.getIds());
+        }
+        DeleteCondition deleteCondition = deleteBuilders.get();
         stageDao.deleteStageCondition(deleteCondition);
     }
 

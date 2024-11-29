@@ -50,10 +50,13 @@ public class WorkCommentServiceImpl implements WorkCommentService {
     }
 
     public void deleteWorkCommentList(WorkCommentQuery workCommentQuery) {
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkCommentEntity.class)
-                .eq("workItemId", workCommentQuery.getWorkItemId())
-                .in("workItemId", workCommentQuery.getWorkItemIds())
-                .get();
+        DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(WorkCommentEntity.class)
+                .eq("workItemId", workCommentQuery.getWorkItemId());
+
+        if(workCommentQuery.getWorkItemIds() != null && workCommentQuery.getWorkItemIds().length != 0){
+            deleteBuilders.in("workItemId", workCommentQuery.getWorkItemIds());
+        }
+        DeleteCondition deleteCondition = deleteBuilders.get();
         workCommentDao.deleteWorkComment(deleteCondition);
     }
 

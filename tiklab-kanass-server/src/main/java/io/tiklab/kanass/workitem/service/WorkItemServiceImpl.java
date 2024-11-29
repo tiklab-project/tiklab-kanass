@@ -1506,11 +1506,18 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     public void deleteWorkItemCondition(WorkItemQuery workItemQuery) {
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemEntity.class)
-                .eq("id", workItemQuery.getId())
-                .in("id", workItemQuery.getIds())
-                .in("stageId", workItemQuery.getStageIds())
-                .get();
+        DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(WorkItemEntity.class)
+                .eq("id", workItemQuery.getId());
+
+        if(workItemQuery.getIds() != null && workItemQuery.getIds().length != 0){
+            deleteBuilders.in("id", workItemQuery.getIds());
+        }
+
+        if(workItemQuery.getStageIds() != null && workItemQuery.getStageIds().length != 0){
+            deleteBuilders.in("stageId", workItemQuery.getStageIds());
+        }
+
+        DeleteCondition deleteCondition = deleteBuilders.get();
         workItemDao.deleteWorkItemList(deleteCondition);
     }
     @Override

@@ -50,11 +50,13 @@ public class WorkVersionServiceImpl implements WorkVersionService {
     }
 
     public void deleteWorkVersionList(WorkVersionQuery workVersionQuery) {
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkVersionEntity.class)
-                .eq("workItemId", workVersionQuery.getWorkItemId())
-                .in("workItemId", workVersionQuery.getWorkItemIds())
-                .get();
+        DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(WorkVersionEntity.class)
+                .eq("workItemId", workVersionQuery.getWorkItemId());
 
+        if(workVersionQuery.getWorkItemIds() != null && workVersionQuery.getWorkItemIds().length != 0){
+             deleteBuilders.in("workItemId", workVersionQuery.getWorkItemIds());
+        }
+        DeleteCondition deleteCondition = deleteBuilders.get();
         workVersionDao.deleteWorkVersionList(deleteCondition);
     }
 

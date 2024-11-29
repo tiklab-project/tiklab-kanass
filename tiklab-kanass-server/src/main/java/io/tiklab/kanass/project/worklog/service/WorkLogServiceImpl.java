@@ -74,10 +74,14 @@ public class WorkLogServiceImpl implements WorkLogService {
 
     @Override
     public void deleteWorkLogList(@NotNull @Valid WorkLogQuery workLogQuery){
-        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkLogEntity.class)
-                .eq("workItemId", workLogQuery.getWorkItemId())
-                .in("workItemId", workLogQuery.getWorkItemIds())
-                .get();
+        DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(WorkLogEntity.class)
+                .eq("workItemId", workLogQuery.getWorkItemId());
+
+
+        if(workLogQuery.getWorkItemIds()!= null && workLogQuery.getWorkItemIds().length != 0){
+            deleteBuilders.in("workItemId", workLogQuery.getWorkItemIds());
+        }
+        DeleteCondition deleteCondition = deleteBuilders.get();
         workLogDao.deleteWorkLogList(deleteCondition);
     }
 
