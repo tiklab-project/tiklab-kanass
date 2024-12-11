@@ -57,7 +57,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("teston");
+        systemUrlQuery.setName("testhubo");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return url;
@@ -65,7 +65,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
     UserService userServiceRpc(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("teston");
+        systemUrlQuery.setName("testhubo");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));

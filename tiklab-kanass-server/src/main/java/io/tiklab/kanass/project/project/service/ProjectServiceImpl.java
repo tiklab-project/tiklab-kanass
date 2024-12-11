@@ -199,18 +199,16 @@ public class ProjectServiceImpl implements ProjectService {
         if(projectType.getType().equals("nomal")){
             content.put("projectType", "projectNomalDetail");
         }
-
         executorService.submit(() -> {
             creatDynamic(content);
             MessageNoticePatch messageNoticePatch = new MessageNoticePatch();
             messageNoticePatch.setDomainId(id);
             messageDmNoticeService.initMessageDmNotice(messageNoticePatch);
         });
-        //creatDynamic(content);
+
         //初始事项类型
         initWorkType(id);
         // 复制项目通知方案
-
         return id;
     }
 
@@ -305,7 +303,8 @@ public class ProjectServiceImpl implements ProjectService {
             workTypeDm.setWorkType(workType);
             workTypeDm.setFlow(workType.getFlow());
             workTypeDm.setProjectId(projectId);
-            WorkTypeDm workTypeDm1 = workTypeDmService.copyWorkTypeDm(workTypeDm);
+            workTypeDm.setForm(workType.getForm());
+            WorkTypeDm workTypeDm1 = workTypeDmService.createWorkTypeDm(workTypeDm);
 
             workTypeDmList.add(workTypeDm1);
         }

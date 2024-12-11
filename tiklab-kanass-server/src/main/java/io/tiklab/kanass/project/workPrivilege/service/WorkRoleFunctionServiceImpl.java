@@ -96,7 +96,6 @@ public class WorkRoleFunctionServiceImpl implements WorkRoleFunctionService {
             workRoleFunction.setFunctionId(functionId);
             createWorkRoleFunction(workRoleFunction);
         }
-
     }
 
     @Override

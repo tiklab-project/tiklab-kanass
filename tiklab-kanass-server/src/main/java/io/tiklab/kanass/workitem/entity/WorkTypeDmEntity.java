@@ -2,12 +2,14 @@ package io.tiklab.kanass.workitem.entity;
 
 import io.tiklab.dal.jpa.annotation.*;
 
+import java.io.Serializable;
+
 /**
  * 项目事项类型实例
  */
 @Entity
 @Table(name="pmc_work_type_dm")
-public class WorkTypeDmEntity {
+public class WorkTypeDmEntity  implements Serializable {
 
     @Id
     @GeneratorValue(length = 8)
@@ -25,6 +27,9 @@ public class WorkTypeDmEntity {
     // 事项类型关联流程
     @Column(name = "flow_id",length = 64,notNull = true)
     private String flowId;
+
+    @Column(name = "form_id",length = 64,notNull = true)
+    private String formId;
 
     public String getId() {
         return id;
@@ -58,4 +63,11 @@ public class WorkTypeDmEntity {
         this.flowId = flowId;
     }
 
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
 }

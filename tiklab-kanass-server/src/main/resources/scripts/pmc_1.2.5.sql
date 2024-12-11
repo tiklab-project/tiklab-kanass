@@ -1,1 +1,0 @@
-ALTER TABLE pmc_insight ALTER COLUMN data type TEXT;

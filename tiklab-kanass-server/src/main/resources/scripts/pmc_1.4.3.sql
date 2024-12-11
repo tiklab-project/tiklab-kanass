@@ -1467,7 +1467,7 @@ INSERT INTO pmc_sprint_status (id, name, description, sort, grouper) VALUES ('22
 INSERT INTO pmc_stage (id, stage_name, parent_id, status, progress, master, description, project_id, start_time, end_time, tree_path, root_id, deep, color) VALUES ('17fd0338dbca', '开发阶段', NULL, '0', 0, '111111', NULL, 'f3fdc893ff25', '2024-05-14 00:00:00', '2024-06-25 00:00:00', NULL, '17fd0338dbca', 0, 4);
 
 INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('f7ee9a10', 'sward', 'http://sward.tiklab.net', 'http://sward.tiklab.net');
-INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('991f95a1', 'teston', 'http://testhubo.tiklab.net', 'http://testhubo.tiklab.net');
+INSERT INTO pmc_system_url (id, name, system_url, web_url) VALUES ('991f95a1', 'testhubo', 'http://testhubo.tiklab.net', 'http://testhubo.tiklab.net');
 
 INSERT INTO pmc_version (id, name, master, publish_time, start_time, project_id, version_state, rela_publish_time, builder, rela_start_time, color) VALUES ('63b6e50d8dde', 'beta-1.0.0', '111111', '2024-09-30 18:00:00', '2024-06-01 09:00:00', '4cf6d4dec7d0', '000000', NULL, '111111', NULL, 1);
 INSERT INTO pmc_version (id, name, master, publish_time, start_time, project_id, version_state, rela_publish_time, builder, rela_start_time, color) VALUES ('72cd3ba61143', 'v1.0.0', '111111', '2024-06-30 18:00:00', '2024-06-01 09:00:00', 'f3fdc893ff25', '000000', NULL, '111111', NULL, 1);

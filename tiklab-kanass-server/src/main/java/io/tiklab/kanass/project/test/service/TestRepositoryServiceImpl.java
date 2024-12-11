@@ -29,7 +29,7 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
     String getSystemUrl(){
 
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("teston");
+        systemUrlQuery.setName("testhubo");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return url;

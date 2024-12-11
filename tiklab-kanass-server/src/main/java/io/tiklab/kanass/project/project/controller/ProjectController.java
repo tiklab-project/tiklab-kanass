@@ -47,9 +47,7 @@ public class ProjectController {
     @ApiMethod(name = "createProject",desc = "创建项目")
     @ApiParam(name = "project",desc = "项目DTO",required = true)
     public Result<String> createProject(@Validated @RequestBody Project project){
-
         String id = projectService.createProject(project);
-
         return Result.ok(id);
     }
 
