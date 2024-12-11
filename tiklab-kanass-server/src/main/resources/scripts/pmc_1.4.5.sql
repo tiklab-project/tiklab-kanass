@@ -20,6 +20,20 @@ CREATE TABLE pmc_work_item_function(
         name VARCHAR(12) NOT NULL,
         code VARCHAR(64) NOT NULL
 );
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('35d2aead', '添加子事项', 'WorkChildrenAdd');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('b5fcfe63', '添加关联事项', 'WorkRelationAdd');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('c9fc24e3', '解除父子关联', 'WorkChildrenDelete');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('81675c48', '解除关联事项', 'WorkRelationDelete');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('1d9f3269', '添加任务', 'WorkTaskAdd');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('ebf77e16', '解除任务', 'WorkTaskDelete');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('c04cbba3', '添加工时', 'WorkLogAdd');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('3b3b1fec', '删除工时', 'WorkLogDelete');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('fdab72c5', '编辑工时', 'WorkLogEdit');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('dd504a7a', '添加文档', 'WorkDocumentAdd');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('f1cba68e', '删除文档', 'WorkDocumentDelete');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('e3f2fa6d', '添加用例', 'WorkTestAdd');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('1758ba93', '删除用例', 'WorkTestDelete');
+INSERT INTO pmc_work_item_function (id, name, code) VALUES ('911e381a', '删除事项', 'WorkItemDelete');
 
 
 INSERT INTO pmc_work_role_function (id, work_type_id, function_id, function_type, role_id) VALUES ('55aba62eb04d', '778222e0', 'ebf77e16', 'function', 'pro_111111');
