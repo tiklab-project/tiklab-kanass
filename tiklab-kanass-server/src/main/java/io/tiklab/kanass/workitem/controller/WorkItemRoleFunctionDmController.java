@@ -51,6 +51,15 @@ public class WorkItemRoleFunctionDmController {
         return Result.ok();
     }
 
+    @RequestMapping(path="/updateWorkItemRoleFunctionDm1",method = RequestMethod.POST)
+    @ApiMethod(name = "updateWorkItemRoleFunctionDm1",desc = "更新优先级")
+    @ApiParam(name = "workItemRoleFunctionDm",desc = "优先级DTO",required = true)
+    public Result<Void> updateWorkItemRoleFunctionDm1(){
+        workItemRoleFunctionDmService.updateWorkItemRoleFunctionDm1();
+
+        return Result.ok();
+    }
+
     @RequestMapping(path="/updateWorkItemRoleAllFunctionDm",method = RequestMethod.POST)
     @ApiMethod(name = "updateWorkItemRoleAllFunctionDm",desc = "更新优先级")
     @ApiParam(name = "workItemRoleFunctionDm",desc = "优先级DTO",required = true)

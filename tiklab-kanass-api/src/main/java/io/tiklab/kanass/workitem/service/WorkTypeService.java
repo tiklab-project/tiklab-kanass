@@ -33,6 +33,8 @@ public interface WorkTypeService {
     */
     void updateWorkType(@NotNull @Valid WorkType workType);
 
+    void updateWorkType1();
+
     /**
     * 删除事项类型
     * @param id

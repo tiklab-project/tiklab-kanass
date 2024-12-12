@@ -4,6 +4,7 @@ import io.tiklab.flow.flow.model.Flow;
 import io.tiklab.flow.flow.model.FlowModelRelation;
 import io.tiklab.flow.flow.model.FlowModelRelationQuery;
 import io.tiklab.flow.flow.service.FlowModelRelationService;
+import io.tiklab.flow.flow.service.FlowService;
 import io.tiklab.form.form.model.FormModelRelation;
 import io.tiklab.form.form.model.FormModelRelationQuery;
 import io.tiklab.form.form.service.FormModelRelationService;
@@ -26,6 +27,7 @@ import org.springframework.util.ObjectUtils;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
 * 事项类型服务
@@ -40,13 +42,19 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     WorkItemService workItemService;
 
     @Autowired
+    WorkTypeDmService workTypeDmService;
+
+    @Autowired
+    FlowService flowService;
+
+    @Autowired
+    WorkTypeService workTypeService;
+
+    @Autowired
     JoinTemplate joinTemplate;
 
     @Autowired
     FormService formService;
-
-    @Autowired
-    WorkTypeDmService workTypeDmService;
 
     @Autowired
     FlowModelRelationService flowModelRelationService;
@@ -102,6 +110,33 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         }
         workTypeDao.updateWorkType(workTypeEntity);
     }
+
+    @Override
+    public void updateWorkType1(){
+        List<WorkType> allWorkType = workTypeService.findAllWorkType();
+        for (WorkType workType : allWorkType) {
+            String id = workType.getFlow().getForm().getId();
+            Form form = new Form();
+            form.setId(id);
+            workType.setForm(form);
+            workTypeService.updateWorkType(workType);
+        }
+
+        List<WorkTypeDm> allWorkTypeDm = workTypeDmService.findAllWorkTypeDm();
+        System.out.println("走了");
+        for (WorkTypeDm workTypeDm : allWorkTypeDm) {
+            String id = workTypeDm.getFlow().getId();
+            Flow flow = flowService.findFlow(id);
+            if(!Objects.isNull(flow)){
+                String formId = flow.getForm().getId();
+                Form form = new Form();
+                form.setId(formId);
+                workTypeDm.setForm(form);
+                workTypeDmService.updateWorkTypeDm(workTypeDm);
+            }
+        }
+    }
+
 
     @Override
     public String deleteWorkType(@NotNull String id) {

@@ -518,6 +518,14 @@ public class ProjectDao{
             logger.info("删除事项类型失败");
         }
 
+        // 事项权限
+        sql = "DELETE FROM pmc_work_role_function_dm where domain_id = '" + projectId + "'";
+        update = jpaTemplate.getJdbcTemplate().update(sql);
+        if(update >= 0){
+            logger.info("删除事项权限成功");
+        }else {
+            logger.info("删除事项权限失败");
+        }
         // 模块
         sql = "DELETE FROM pmc_module where project_id = '" + projectId + "'";
         update = jpaTemplate.getJdbcTemplate().update(sql);

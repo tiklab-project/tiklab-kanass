@@ -11,8 +11,8 @@ import io.tiklab.kanass.sprint.service.SprintService;
 import io.tiklab.kanass.workitem.dao.WorkItemRoleFunctionDmDao;
 import io.tiklab.kanass.workitem.entity.WorkItemRoleFunctionDmEntity;
 import io.tiklab.kanass.workitem.model.*;
+import io.tiklab.message.message.model.MessageNoticePatch;
 import io.tiklab.privilege.dmRole.model.DmRole;
-import io.tiklab.privilege.dmRole.model.DmRoleQuery;
 import io.tiklab.privilege.dmRole.model.DmRoleUser;
 import io.tiklab.privilege.dmRole.model.DmRoleUserQuery;
 import io.tiklab.privilege.dmRole.service.DmRoleUserService;
@@ -28,14 +28,15 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
 * 事项优先级服务
 */
 @Service
 public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDmService {
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     WorkItemRoleFunctionDmDao workItemRoleFunctionDmDao;
     
@@ -62,6 +63,9 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
 
     @Autowired
     DmRoleUserService dmRoleUserService;
+
+    @Autowired
+    WorkTypeDmService workTypeDmService;
 
     @Override
     public String createWorkItemRoleFunctionDm(@NotNull @Valid WorkItemRoleFunctionDm workItemRoleFunctionDm) {
@@ -90,6 +94,31 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
         }
 
         return null;
+    }
+
+    @Override
+    public void updateWorkItemRoleFunctionDm1() {
+        for (Project project : projectService.findAllProject()) {
+            String projectId = project.getId();
+
+            WorkTypeDmQuery workTypeDmQuery = new WorkTypeDmQuery();
+            workTypeDmQuery.setProjectId(projectId);
+            List<WorkTypeDm> workTypeDmList = workTypeDmService.findWorkTypeDmList(workTypeDmQuery);
+            for (WorkTypeDm workTypeDm : workTypeDmList) {
+                String id = workTypeDm.getWorkType().getId();
+                String newWorkTypeId = workTypeDm.getId();
+                WorkItemRoleFunctionDm workItemRoleFunctionDm = new WorkItemRoleFunctionDm();
+                workItemRoleFunctionDm.setDomainId(projectId);
+                workItemRoleFunctionDm.setNewWorkTypeId(newWorkTypeId);
+                workItemRoleFunctionDm.setWorkTypeId(id);
+                executorService.submit(() -> {
+                    copyWorkItemRoleFunctionDm(workItemRoleFunctionDm);
+                });
+
+            }
+
+        }
+
     }
 
     @Override

@@ -27,6 +27,8 @@ public interface WorkItemRoleFunctionDmService {
 
     String copyWorkItemRoleFunctionDm(@NotNull @Valid WorkItemRoleFunctionDm workItemRoleFunctionDm);
 
+    void updateWorkItemRoleFunctionDm1();
+
     /**
     * 更新事项优先级
     * @param workItemRoleFunction

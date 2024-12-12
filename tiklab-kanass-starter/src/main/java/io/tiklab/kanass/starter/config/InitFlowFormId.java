@@ -4,9 +4,6 @@ import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.flow.flow.model.Flow;
 import io.tiklab.flow.flow.service.FlowService;
 import io.tiklab.form.form.model.Form;
-import io.tiklab.form.form.service.FormService;
-import io.tiklab.kanass.support.service.CopyFlowToProjectService;
-import io.tiklab.kanass.support.service.InitStateNodeFiledService;
 import io.tiklab.kanass.workitem.model.WorkType;
 import io.tiklab.kanass.workitem.model.WorkTypeDm;
 import io.tiklab.kanass.workitem.service.WorkTypeDmService;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

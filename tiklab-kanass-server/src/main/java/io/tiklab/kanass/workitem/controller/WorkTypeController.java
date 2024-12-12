@@ -54,6 +54,14 @@ public class WorkTypeController {
         return Result.ok();
     }
 
+    @RequestMapping(path="/updateWorkType1",method = RequestMethod.POST)
+    @ApiMethod(name = "updateWorkType1",desc = "更新事项类型")
+    @ApiParam(name = "workType",desc = "事项类型DTO",required = true)
+    public Result<Void> updateWorkType1(){
+        workTypeService.updateWorkType1();
+        return Result.ok();
+    }
+
     @RequestMapping(path="/deleteWorkType",method = RequestMethod.POST)
     @ApiMethod(name = "deleteWorkType",desc = "根据ID删除事项类型")
     @ApiParam(name = "id",desc = "事项ID",required = true)
