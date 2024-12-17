@@ -47,26 +47,25 @@ public class InitFlowFormId implements ApplicationRunner {
 
     public void updateWorkType(){
         List<WorkType> allWorkType = workTypeService.findAllWorkType();
-        for (WorkType workType : allWorkType) {
-            String id = workType.getFlow().getForm().getId();
-            Form form = new Form();
-            form.setId(id);
-            workType.setForm(form);
-            workTypeService.updateWorkType(workType);
-        }
-
-        List<WorkTypeDm> allWorkTypeDm = workTypeDmService.findAllWorkTypeDm();
-        System.out.println("走了");
-        for (WorkTypeDm workTypeDm : allWorkTypeDm) {
-            String id = workTypeDm.getFlow().getId();
-            Flow flow = flowService.findFlow(id);
-            if(!Objects.isNull(flow)){
-                String formId = flow.getForm().getId();
-                Form form = new Form();
-                form.setId(formId);
-                workTypeDm.setForm(form);
-                workTypeDmService.updateWorkTypeDm(workTypeDm);
-            }
-        }
-    }
+//        for (WorkType workType : allWorkType) {
+//            Form form = new Form();
+//            form.setId(id);
+//            workType.setForm(form);
+//            workTypeService.updateWorkType(workType);
+//        }
+//
+//        List<WorkTypeDm> allWorkTypeDm = workTypeDmService.findAllWorkTypeDm();
+//        System.out.println("走了");
+//        for (WorkTypeDm workTypeDm : allWorkTypeDm) {
+//            String id = workTypeDm.getFlow().getId();
+//            Flow flow = flowService.findFlow(id);
+//            if(!Objects.isNull(flow)){
+//                String formId = flow.getForm().getId();
+//                Form form = new Form();
+//                form.setId(formId);
+//                workTypeDm.setForm(form);
+//                workTypeDmService.updateWorkTypeDm(workTypeDm);
+//            }
+//        }
+  }
 }

@@ -1541,12 +1541,12 @@ INSERT INTO pmc_work_log (id, work_item_id, worker, work_date, takeup_time, work
 INSERT INTO pmc_work_log (id, work_item_id, worker, work_date, takeup_time, work_content, creat_time, update_time, project_id) VALUES ('c480e46739b6', '4f57e82e181e', '111111', '2024-11-25 10:31:20.477', 4, '实现功能', NULL, NULL, '4cf6d4dec7d0');
 
 
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('b81aef3b', '4cf6d4dec7d0', '7055ebc6', 'cd46de1f', '6fef9d3d');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', 'c323f12b', '5b1c9c40');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('d3ef6551', '4cf6d4dec7d0', '778222e0', '12267b6d', '9e7f5ea4');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '0e425461', 'b1c53a54');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', 'c430e1ad', '34d7bf2c');
-INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id) VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '9c338860', '3b0fc788');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id)  VALUES ('ef23b25f', 'f3fdc893ff25', '7055ebc6', '12775095', 'b1c53a54');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id)  VALUES ('dcbf7211', 'f3fdc893ff25', '98121701', '3d923ff1', '34d7bf2c');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id)  VALUES ('c9e59337', 'f3fdc893ff25', '778222e0', '5d383b2d', '3b0fc788');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id)  VALUES ('b81aef3b', '4cf6d4dec7d0', '7055ebc6', 'b1eb0414', '6fef9d3d');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id)  VALUES ('d3ef6551', '4cf6d4dec7d0', '778222e0', '47a9d800', '9e7f5ea4');
+INSERT INTO pmc_work_type_dm (id, project_id, work_type_id, form_id, flow_id)  VALUES ('a64e8050', '4cf6d4dec7d0', '98121701', '071890ba', '5b1c9c40');
 
 --INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('1bba4e45931f', '事项更新', 'kanass');
 --INSERT INTO pcs_op_log_type (id, name, bgroup) VALUES ('a1f2cb478fad', '事项添加', 'kanass');

@@ -2,6 +2,8 @@ package io.tiklab.kanass.workitem.service;
 
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
+import io.tiklab.core.utils.UuidGenerator;
+import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.form.field.model.FieldEx;
 import io.tiklab.form.field.service.FieldService;
 import io.tiklab.kanass.project.project.model.Project;
@@ -67,6 +69,10 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
     @Autowired
     WorkTypeDmService workTypeDmService;
 
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     @Override
     public String createWorkItemRoleFunctionDm(@NotNull @Valid WorkItemRoleFunctionDm workItemRoleFunctionDm) {
         WorkItemRoleFunctionDmEntity workItemRoleFunctionDmEntity = BeanMapper.map(workItemRoleFunctionDm, WorkItemRoleFunctionDmEntity.class);
@@ -82,17 +88,20 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
         WorkItemRoleFunctionQuery workItemRoleFunctionQuery = new WorkItemRoleFunctionQuery();
         workItemRoleFunctionQuery.setWorkTypeId(workTypeId);
         List<WorkItemRoleFunction> workItemRoleFunctionList = workItemRoleFunctionService.findWorkItemRoleFunctionList(workItemRoleFunctionQuery);
-
+        String sql = "INSERT INTO pmc_work_role_function_dm (id, domain_id, work_type_id, function_id, function_type, role_id) VALUES" +
+                " (?, ?, ?, ?, ?, ?)";
+        List<Object[]> allNewWorkItemRoleFunction = new ArrayList<>();
         for (WorkItemRoleFunction itemRoleFunction : workItemRoleFunctionList) {
-            WorkItemRoleFunctionDm workItemRoleFunctionDm1 = new WorkItemRoleFunctionDm();
-            workItemRoleFunctionDm1.setWorkTypeId(newWorkTypeId);
-            workItemRoleFunctionDm1.setFunctionId(itemRoleFunction.getFunctionId());
-            workItemRoleFunctionDm1.setFunctionType(itemRoleFunction.getFunctionType());
-            workItemRoleFunctionDm1.setDomainId(domainId);
-            workItemRoleFunctionDm1.setRoleId(itemRoleFunction.getRoleId());
-            createWorkItemRoleFunctionDm(workItemRoleFunctionDm1);
+            String id = UuidGenerator.getRandomIdByUUID(12);
+            allNewWorkItemRoleFunction.add(new Object[]{id, domainId, newWorkTypeId, itemRoleFunction.getFunctionId(), itemRoleFunction.getFunctionType(), itemRoleFunction.getRoleId()});
         }
-
+        try {
+            int[] workItemRoleFunctionDmNum = jdbcTemplate.batchUpdate(sql, allNewWorkItemRoleFunction);
+            System.out.println("事项权限个数: " + workItemRoleFunctionDmNum.length);
+        } catch (Exception e) {
+            // 处理异常，例如回滚事务（如果在一个事务中）
+            e.printStackTrace();
+        }
         return null;
     }
 

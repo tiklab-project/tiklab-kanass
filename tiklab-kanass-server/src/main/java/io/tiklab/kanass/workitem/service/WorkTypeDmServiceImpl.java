@@ -229,18 +229,29 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         String id = workTypeDm.getId();
         FormModelRelationQuery formModelRelationQuery = new FormModelRelationQuery();
         formModelRelationQuery.setModelId(id);
+        List<FormModelRelation> formModelRelationList = formModelRelationService.findFormModelRelationList(formModelRelationQuery);
+        for (FormModelRelation formModelRelation : formModelRelationList) {
+            Form form = workTypeDm.getForm();
+            if(form != null){
+                String formId = form.getId();
+                formModelRelation.setFormId(formId);
+                formModelRelationService.updateFormModelRelation(formModelRelation);
+            }
+        }
 
         FlowModelRelationQuery flowModelRelationQuery = new FlowModelRelationQuery();
         flowModelRelationQuery.setModelId(id);
         List<FlowModelRelation> flowModelRelationList = flowModelRelationService.findFlowModelRelationList(flowModelRelationQuery);
         for (FlowModelRelation flowModelRelation : flowModelRelationList) {
-            String flowId = workTypeDm.getFlow().getId();
-            flowModelRelation.setFlowId(flowId);
-            flowModelRelationService.updateFlowModelRelation(flowModelRelation);
+            Flow flow = workTypeDm.getFlow();
+            if(flow != null){
+                String flowId = flow.getId();
+                flowModelRelation.setFlowId(flowId);
+                flowModelRelationService.updateFlowModelRelation(flowModelRelation);
+            }
         }
 
         WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
-
         workTypeDmDao.updateWorkTypeDm(workTypeDmEntity);
     }
 
