@@ -102,7 +102,7 @@ public class GatewayFilterAutoConfiguration{
                         "/workItem/findWorkItem",
                         "/message/messageItem/syncUpdateMessage",
                         "/message/messageItem/syncDeleteMessage",
-
+                        "/init/install/findStatus"
 
                 })
                 .ignorePreUrls(new String[]{
