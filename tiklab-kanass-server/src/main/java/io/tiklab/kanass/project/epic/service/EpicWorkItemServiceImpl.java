@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* EpicWorkItemServiceImpl
+* EpicWorkItemServiceImpl， 弃用
 */
 @Service
 public class EpicWorkItemServiceImpl implements EpicWorkItemService {

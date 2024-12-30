@@ -173,7 +173,6 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemType(projectIds);
             List<WorkType> allWorkType = workTypeService.findAllWorkType();
             for (WorkType workType : allWorkType) {
-                String workTypeId = workType.getId();
                 String code = workType.getCode();
                 types.add(code);
 
@@ -237,18 +236,6 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         return paramMap;
     }
 
-    @Override
-    public Map<String, Object> statisticsAllNewWorkItemTend() {
-        List<String> dayList = getFirstSevenDay();
-
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        List<Integer> workItemCountList = statisticsAllNewWorkItemCount(dayList);
-
-        paramMap.put("dateList", dayList);
-        paramMap.put("workItemCountList", workItemCountList);
-
-        return paramMap;
-    }
 
     /**
      * 统计某段时间，以天，周，月，季，年为单位完成事项的数据
@@ -319,6 +306,11 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         return sprintCount;
     }
 
+    /**
+     * 统计某段时间，以天，周，月，季，年为单位累计新增事项的数据
+     * @param workItemCountQuery
+     * @return
+     */
     @Override
     public Map<String, Object> statisticsWorkItemTotalCountList(WorkItemCountQuery workItemCountQuery) {
         String projectSetId = workItemCountQuery.getProjectSetId();
@@ -379,6 +371,11 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         return paramMap;
     }
 
+    /**
+     * 统计某段时间，以天，周，月，季，年为单位累计完成事项的数据
+     * @param workItemCountQuery
+     * @return
+     */
     @Override
     public Map<String, Object> statisticsSprintEndWorkItemTotalCountList(WorkItemCountQuery workItemCountQuery) {
         String sprintId = workItemCountQuery.getSprintId();
@@ -463,41 +460,6 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             String startTime = dayList.get(i);
             String endTime = dayList.get(i+1);
             int sum = projectInsightReportDao.statisticsProjectNewWorkItemCount(workItemCountQuery, startTime, endTime);
-            countList.add(sum);
-        }
-        return countList;
-    }
-
-    /**
-     * 按照时间统计日期，统计某段时间系统新增所有事项的数据
-     * @param dayList
-     * @return
-     */
-    public List<Integer> statisticsAllNewWorkItemCount(List<String> dayList) {
-        int size = dayList.size();
-        List<Integer> countList = new ArrayList<>();
-        for (int i= 0; i< size-1; i++ ) {
-            String startTime = dayList.get(i);
-            String endTime = dayList.get(i+1);
-            int sum = projectInsightReportDao.statisticsAllNewWorkItemCount(startTime, endTime);
-            countList.add(sum);
-        }
-        return countList;
-    }
-
-    /**
-     * 按照时间统计日期，统计某段时间新增事项的数据
-     * @param workItemCountQuery
-     * @param dayList
-     * @return
-     */
-    public List<Integer> statisticsProjectEndWorkItemCount(WorkItemCountQuery workItemCountQuery, List<String> dayList) {
-        int size = dayList.size();
-        List<Integer> countList = new ArrayList<>();
-        for (int i= 0; i<size-1; i++ ) {
-            String startTime = dayList.get(i);
-            String endTime = dayList.get(i+1);
-            int sum = projectInsightReportDao.statisticsProjectEndWorkItemCount(workItemCountQuery, startTime, endTime);
             countList.add(sum);
         }
         return countList;
@@ -863,6 +825,10 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         return dayWorkItem;
     }
 
+    /**
+     * 获取前7天的日期数组
+     * @return
+     */
     public List<String> getFirstSevenDay(){
         List<String> dateList = new ArrayList<>();
 
@@ -935,18 +901,31 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         return projectUserCount;
     }
 
+    /**
+     * 统计各个状态下的项目数量
+     * @return
+     */
     @Override
     public Map<String, Integer> statisticsProjectByStatus(){
         Map<String, Integer> projectCount = projectInsightReportDao.statisticeProjectByStatus();
         return projectCount;
     };
 
+    /**
+     * 统计各个状态下的事项的数量
+     * @return
+     */
     @Override
     public Map<String, Integer> statisticsWorkItemByStatus(){
         Map<String, Integer> projectCount = projectInsightReportDao.statisticsWorkItemByStatus();
         return projectCount;
     }
 
+    /**
+     * 统计全部，已逾期，完成，进行中的待办事项数量
+     * @param params
+     * @return
+     */
     @Override
     public Map<String, Integer> statisticsTodoWorkByStatus(HashMap<String, String> params) {
         Map<String, Integer> todoCount = new HashMap<>();
@@ -1007,6 +986,11 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
 
     }
 
+    /**
+     * 获取不同待办的个数
+     * @param data
+     * @return
+     */
     public Map<String, Integer> getTodoStatistics(LinkedHashMap data){
         Map<String, Integer> todoCount = new HashMap<>();
 

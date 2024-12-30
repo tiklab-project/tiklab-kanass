@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 事项优先级服务
+* 事项优先级服务, 弃用
 */
 @Service
 public class WorkPriorityServiceImpl implements WorkPriorityService {

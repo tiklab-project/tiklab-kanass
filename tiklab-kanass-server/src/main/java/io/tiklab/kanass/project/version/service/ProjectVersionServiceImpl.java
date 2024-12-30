@@ -26,7 +26,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
-* 项目版本服务
+* 版本接口
 */
 @Service
 public class ProjectVersionServiceImpl implements ProjectVersionService {
@@ -53,6 +53,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         user.setId(createId);
         projectVersion.setBuilder(user);
 
+        // 设置版本头像颜色
         int color = new Random().nextInt(3) + 1;
         System.out.println(color);
         projectVersion.setColor(color);
@@ -63,10 +64,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
     @Override
     public void updateVersion(@NotNull @Valid ProjectVersion projectVersion) {
-
         VersionState versionState = projectVersion.getVersionState();
         if(versionState != null && versionState.getId().equals("222222")){
-            // 创建新的迭代与事项的记录
+            // 若版本完成，没有完成事项转到新版本或者暂时不关联版本
+            // 更新事项表中版本的信息为新版本或者为版本为空
+            // 未完成事项转移到新版本，创建新的版本与事项的关联关系
             String versionId = projectVersion.getId();
             String newVersionId = projectVersion.getNewVersionId();
             List<WorkItem> versionWorkItemList = workItemService.findVersionWorkItemList(versionId);
@@ -78,10 +80,12 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                         projectVersion1.setId(newVersionId);
                         workItem.setProjectVersion(projectVersion1);
                         workItem.setUpdateField("projectVersion");
+                        // 更新待办中版本信息
                         workItemService.updateTodoTaskData(workItem);
                     }else {
                         workItem.setUpdateField("projectVersion");
                         workItem.setProjectVersion(null);
+                        // 更新待办中版本信息
                         workItemService.updateTodoTaskData(workItem);
                     }
 
@@ -92,17 +96,15 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                 int length = valueString.length() - 1;
                 String substring = valueString.substring(0, length);
                 if(newVersionId != null){
+                    // 创建新版本与事项的关联
                     workVersionService.createBatchWorkVersion(substring);
                 }
-
-
             }
-
-
+            // 批量更新事项的版本
             workItemService.updateBatchWorkItemVersion(versionId, newVersionId);
         }
         if(versionState != null && versionState.getId().equals("111111")){
-            //设置创建时间
+            //设置开始时间
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = formater.format(new Date());
             projectVersion.setRelaStartTime(format);
@@ -142,6 +144,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     public ProjectVersion findVersion(@NotNull String id) {
         ProjectVersion projectVersion = findOne(id);
         HashMap<String, Integer> versionWorkItemNum = workItemService.findVersionWorkItemNum(id);
+        // 设置已完成的，进行中，所有的事项个数
         projectVersion.setWorkNumber(versionWorkItemNum.get("all"));
         projectVersion.setWorkDoneNumber(versionWorkItemNum.get("done"));
         projectVersion.setWorkProgressNumber(versionWorkItemNum.get("progress"));

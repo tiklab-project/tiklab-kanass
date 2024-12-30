@@ -47,7 +47,11 @@ public class RecentServiceImpl implements RecentService {
     @Autowired
     WorkItemService workItemService;
 
-
+    /**
+     * 创建最近访问的项目，项目集，事项
+     * @param recent
+     * @return
+     */
     @Override
     public String createRecent(@NotNull @Valid Recent recent) {
         recent.setRecentTime(new Timestamp(System.currentTimeMillis()));
@@ -72,6 +76,12 @@ public class RecentServiceImpl implements RecentService {
         return id;
     }
 
+    /**
+     * 创建最近查看的，多于5条的删掉之前的
+     * @param recent
+     * @param num
+     * @return
+     */
     public String createRecentByCondition(Recent recent, int num){
         String id = new String();
         RecentQuery recentQuery = new RecentQuery();
@@ -177,6 +187,12 @@ public class RecentServiceImpl implements RecentService {
 
         return recentList;
     }
+
+    /**
+     * 获取最近查看的事项列表、项目列表
+     * @param recentQuery
+     * @return
+     */
     @Override
     public List<Recent> findRecentListToModel(RecentQuery recentQuery) {
         List<RecentEntity> recentEntityList = recentDao.findRecentList(recentQuery);

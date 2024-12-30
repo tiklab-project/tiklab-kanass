@@ -48,7 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * jira 数据导入服务
+ * cloud 版本jira 数据导入
  */
 @Service
 @EnableTransactionManagement
@@ -177,6 +177,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
 
             ArrayList<String> doneStatusIds = new ArrayList<>();
 
+            // 根据标签，归类各个模型
             for (Element element : elements) {
                 String name = element.getTagName();
                 switch (name){
@@ -324,6 +325,12 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             throw new ApplicationException(e);
         }
     }
+
+    /**
+     * 导入迭代
+     * @param customFieldValueElementList
+     * @return
+     */
     public ArrayList<Element> getSprintCustomField(ArrayList<Element> customFieldValueElementList){
         ArrayList<Element> fieldValueElementList = new ArrayList<>();
         ArrayList<Element> elementList = this.CustomFieldElementList.get();
@@ -342,6 +349,8 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
         }
         return fieldValueElementList;
     }
+
+
     public void setGroupItemIssue(){
         for (Element changeItemElement : this.ChangeItemElementList.get()) {
             String group = changeItemElement.getAttribute("group");

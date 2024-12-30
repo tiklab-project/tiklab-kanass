@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 项目
+* 项目动态数据统计，定时器每天跑一次
 */
 @Service
 public class ProjectBurnDowmChartServiceImpl implements ProjectBurnDowmChartService {

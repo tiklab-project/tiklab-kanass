@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * 收藏迭代的服务
+ * 项目管理的知识库
  */
 @Service
 public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {

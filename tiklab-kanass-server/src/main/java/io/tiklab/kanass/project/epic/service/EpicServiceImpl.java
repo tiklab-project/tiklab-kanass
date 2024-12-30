@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* EpicServiceImpl
+* 需求池（史诗）接口，弃用
 */
 @Service
 public class EpicServiceImpl implements EpicService {
@@ -92,6 +92,11 @@ public class EpicServiceImpl implements EpicService {
         return epicList;
     }
 
+    /**
+     * 获取需求池的属性结构，
+     * @param epicQuery
+     * @return
+     */
     @Override
     public List<Epic> findEpicListTree(EpicQuery epicQuery) {
 //        epicQuery.setEpicParentNull(true);

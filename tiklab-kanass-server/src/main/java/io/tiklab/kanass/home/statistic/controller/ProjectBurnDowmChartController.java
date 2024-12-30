@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 项目下数据动态记录控制器
+ * 项目下数据动态记录控制器，用于项目燃尽图和统计
  */
 @RestController
 @RequestMapping("/projectBurnDowmChart")

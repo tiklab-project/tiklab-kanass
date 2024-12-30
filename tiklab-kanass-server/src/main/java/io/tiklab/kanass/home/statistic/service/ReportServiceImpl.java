@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
-* 报表服务
+* 报表服务，弃用
 */
 @Service
 public class ReportServiceImpl implements ReportService {

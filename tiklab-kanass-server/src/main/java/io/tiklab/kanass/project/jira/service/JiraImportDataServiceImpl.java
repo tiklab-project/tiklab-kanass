@@ -70,18 +70,6 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
             // 在这里执行需要在事务中的操作
             return setData(inputStream);
         });
-//        });
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String s = TenantHolder.get();
-//                transactionTemplate.execute((status) -> {
-//                    String t = TenantHolder.get();
-//                    // 在这里执行需要在事务中的操作
-//                    return setData(inputStream);
-//                });
-//            }
-//        }).start();
 
     }
     public String setData(InputStream inputStream) {

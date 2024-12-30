@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 项目收藏服务
+* 仪表盘收藏
 */
 @Service
 public class InsightFocusServiceImpl implements InsightFocusService {

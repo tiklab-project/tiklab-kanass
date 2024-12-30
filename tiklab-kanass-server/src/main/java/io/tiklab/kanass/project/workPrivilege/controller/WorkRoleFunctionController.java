@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 优先级控制器
+ * 事项角色权限接口, 弃用
  */
 @RestController
 @RequestMapping("/workRoleFunction")

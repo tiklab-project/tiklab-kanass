@@ -145,7 +145,7 @@ public class ProjectSetController {
     @ApiMethod(name = "addRelevance",desc = "添加关联项目")
     @ApiParam(name = "projectSet",desc = "关联对象",required = true)
     public Result addRelevance(@RequestBody @NotNull @Valid ProjectSet projectSet){
-          projectSetService.addRelevance(projectSet);
+        projectSetService.addRelevance(projectSet);
         return Result.ok();
     }
 

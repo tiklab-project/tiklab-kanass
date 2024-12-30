@@ -45,6 +45,11 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
     @Value("${base.url:null}")
     String baseUrl;
 
+
+    /**
+     * 重写方法，发送创建项目或者项目集的消息给相关人员
+     * @param dmUser
+     */
     @Override
     public void dmUserCallback(DmUser dmUser) {
         String domainId = dmUser.getDomainId();
@@ -53,7 +58,7 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
         user = userService.findUser(id);
         Project project = projectService.findProject(domainId);
         if(project != null){
-            creatPojectMessage(user, project);
+            creatProjectMessage(user, project);
         }
 
         ProjectSet projectSet = projectSetService.findProjectSet(domainId);
@@ -62,7 +67,12 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
         }
     }
 
-    void creatPojectMessage(User user, Project project){
+    /**
+     * 创建项目发送消息
+     * @param user
+     * @param project
+     */
+    void creatProjectMessage(User user, Project project){
         HashMap<String, Object> content = new HashMap<>();
         content.put("projectName", project.getProjectName());
         content.put("projectId", project.getId());
@@ -99,6 +109,11 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
         sendMessageNoticeService.sendMessage(message);
     }
 
+    /**
+     * 创建项目集发送消息
+     * @param user
+     * @param projectSet
+     */
     void creatPojectSetMessage(User user, ProjectSet projectSet){
         HashMap<String, Object> content = new HashMap<>();
         content.put("projectSetName", projectSet.getName());

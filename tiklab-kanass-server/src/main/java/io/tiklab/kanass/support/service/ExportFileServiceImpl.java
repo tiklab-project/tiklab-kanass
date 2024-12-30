@@ -37,7 +37,11 @@ public class ExportFileServiceImpl implements ExportFileService {
     @Value("${user.home:null}")
     String userHome;
 
-
+    /**
+     * 导出事项excel
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public byte[] exportWorkItemXml(WorkItemQuery workItemQuery) {
 

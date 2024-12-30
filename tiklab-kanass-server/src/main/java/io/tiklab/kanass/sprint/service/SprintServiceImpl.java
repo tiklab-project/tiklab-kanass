@@ -339,6 +339,11 @@ public class SprintServiceImpl implements SprintService {
         return sprintList;
     }
 
+    /**
+     * 查找迭代并设置是否被当前用户关注
+     * @param sprintQuery
+     * @return
+     */
     @Override
     public Pagination<Sprint> findSprintPage(SprintQuery sprintQuery) {
 
@@ -377,17 +382,6 @@ public class SprintServiceImpl implements SprintService {
         return sprintList;
     }
 
-    /**
-     * 查询请迭代状态
-     *
-     * @param sprintState
-     */
-    public List<SprintStateEntity> findSprintState(SprintState sprintState) {
-        SprintStateQuery sprintStateQuery = new SprintStateQuery();
-        sprintStateQuery.setSort(sprintState.getSort());
-        return sprintStateDao.findSprintStateList(sprintStateQuery);
-    }
-
     @Override
     public List<Sprint> findProgressSprint() {
         List<SprintEntity> sprintEntityList = sprintDao.findProgressSprint();
@@ -398,6 +392,11 @@ public class SprintServiceImpl implements SprintService {
         return sprintList;
     }
 
+    /**
+     * 根据事项id 查找被关联的迭代
+     * @param workId
+     * @return
+     */
     @Override
     public List<Sprint> findWorkSprintList(String workId) {
         List<SprintEntity> sprintEntityList = sprintDao.findWorkSprintList(workId);

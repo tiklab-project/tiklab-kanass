@@ -43,7 +43,7 @@ public class RoadMapController {
     }
 
     @RequestMapping(path="/findEpicRoadMap",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpicRoadMap",desc = "史诗路线图")
+    @ApiMethod(name = "findEpicRoadMap",desc = "史诗路线图， 弃用")
     @ApiParam(name = "projectId",desc = "项目id",required = true)
     public Result<List<Epic>> findEpicRoadMap(@NotNull String projectId){
         List<Epic> epicList = roadMapService.findEpicRoadMap(projectId);

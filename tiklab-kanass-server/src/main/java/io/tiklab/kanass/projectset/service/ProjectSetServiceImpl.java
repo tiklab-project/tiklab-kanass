@@ -69,14 +69,16 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         projectSet.setMaster(user);
+
+        // 设置项目集头像颜色
         int color = new Random().nextInt(3) + 1;
         System.out.println(color);
         projectSet.setColor(color);
         projectSet.setCreator(createUserId);
+
+         // 设置创建时间
         String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         projectSet.setCreatTime(format);
-
-
 
         ProjectSetEntity projectSetEntity = BeanMapper.map(projectSet, ProjectSetEntity.class);
         String projectSetId = projectSetDao.createProjectSet(projectSetEntity);
@@ -87,6 +89,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         return projectSetId;
     }
 
+    /**
+     * 初始化项目集角色
+     * @param masterId
+     * @param projectSetId
+     */
     public void initProjectSetDmRole(String masterId, String projectSetId){
         List<PatchUser> patchUsers = new ArrayList<PatchUser>();
         if(!masterId.equals("111111")){
@@ -216,6 +223,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         return PaginationBuilder.build(pagination,projectSetList);
     }
 
+    /**
+     * 查询项目集下面的项目列表
+     * @param projectQuery
+     * @return
+     */
     @Override
     public List<Project> findProjectSetDetailList(ProjectQuery projectQuery) {
         List<Project> projectList = projectService.findProjectList(projectQuery);
@@ -242,8 +254,10 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     }
 
 
-
-
+    /**
+     * 查询所有关联项目集项目和未关联项目
+     * @return
+     */
     @Override
     public Map findProjectIsOrNotRe()  {
         Map projectMap = new HashMap<>();
@@ -260,6 +274,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         return projectMap;
     }
 
+
+    /**
+     * 添加关联项目
+     * @param projectSet
+     */
     @Override
     public void addRelevance(ProjectSet projectSet) {
         //关联的项目id
@@ -273,35 +292,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     }
 
 
-
     /**
-     * 查询事项
-     * @param id,type
+     * 查找关注的项目集列表
+     * @param projectSetQuery
+     * @return
      */
-//    public List<WorkItem> findWorkItemList(String id, Integer type){
-//        WorkItemQuery workItemQuery = new WorkItemQuery();
-//        if (type==0){
-//            workItemQuery.setProjectId(id);
-//        }
-//       if (type==1){
-//           workItemQuery.setCurrentSprintId(id);
-//       }
-//        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
-//        joinTemplate.joinQuery(workItemList);
-//        return workItemList;
-//    }
-
-    /**
-     * 查询迭代
-     * @param id
-     */
-    public List<Sprint> findSprint(String id){
-        SprintQuery sprintQuery = new SprintQuery();
-        sprintQuery.setProjectId(id);
-        List<Sprint> sprintList = sprintService.findSprintList(sprintQuery);
-        return sprintList;
-    }
-
     @Override
     public List<ProjectSet> findFocusProjectSetList(ProjectSetQuery projectSetQuery) {
         String userId = LoginContext.getLoginId();
@@ -316,6 +311,11 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         return projectSetList;
     }
 
+    /**
+     * 查找最近查看的项目集列表
+     * @param projectSetQuery
+     * @return
+     */
     @Override
     public List<ProjectSet> findRecentProjectSetList(ProjectSetQuery projectSetQuery) {
         String userId = LoginContext.getLoginId();
@@ -330,7 +330,6 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         return projectSetList;
     }
 
-//    @Override
     /**
      * 查看我能看到的所有项目集
      */
@@ -355,7 +354,10 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
     }
 
-
+    /**
+     * 查找对应添加项目的个数
+     * @param projectSetList
+     */
     public void findProjectNum(List<ProjectSet> projectSetList){
         int size = projectSetList.size();
         if(size > 0){

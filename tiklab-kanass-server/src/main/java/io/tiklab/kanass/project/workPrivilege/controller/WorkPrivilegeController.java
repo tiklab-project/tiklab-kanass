@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 优先级控制器
+ * 权限， 弃用
  */
 @RestController
 @RequestMapping("/workPrivilege")

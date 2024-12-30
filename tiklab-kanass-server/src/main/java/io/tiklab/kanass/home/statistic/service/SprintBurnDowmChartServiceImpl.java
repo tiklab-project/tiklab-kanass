@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* SprintBurnDowmChartServiceImpl
+* 迭代动态数据记录
 */
 @Service
 public class SprintBurnDowmChartServiceImpl implements SprintBurnDowmChartService {
@@ -35,8 +35,9 @@ public class SprintBurnDowmChartServiceImpl implements SprintBurnDowmChartServic
     SprintService sprintService;
 
 
-
-//    @Scheduled(cron="0 0/1 * * * ?")
+    /**
+     * 每天23点跑一次
+     */
     @Scheduled(cron="0 0 23 * * ?")
     public void everyProjectBurnDownCharts() {
         System.out.println("20");
@@ -49,6 +50,7 @@ public class SprintBurnDowmChartServiceImpl implements SprintBurnDowmChartServic
         }
 
     }
+
 
     @Override
     public String createSprintBurnDowmChart(@NotNull @Valid SprintBurnDowmChart sprintBurnDowmChart) {

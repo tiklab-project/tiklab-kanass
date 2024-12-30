@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 迭代状态服务
+* 版本状态接口
 */
 @Service
 public class VersionStateServiceImpl implements VersionStateService {

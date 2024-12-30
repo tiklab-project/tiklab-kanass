@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 事项优先级服务
+* 事项权限
 */
 @Service
 public class WorkItemFunctionServiceImpl implements WorkItemFunctionService {

@@ -28,6 +28,11 @@ public class RoadMapServiceImpl implements RoadMapService {
     @Autowired
     EpicService epicService;
 
+    /**
+     * 获取迭代路线图的渲染数据
+     * @param projectId
+     * @return
+     */
     @Override
     public List<Sprint> findSprintRoadMap(String projectId) {
         SprintQuery sprintQuery = new SprintQuery();
@@ -36,6 +41,11 @@ public class RoadMapServiceImpl implements RoadMapService {
         return sprintList;
     }
 
+    /**
+     * 获取项目路线图的渲染数据
+     * @param projectId
+     * @return
+     */
     @Override
     public List<ProjectVersion> findVersionRoadMap(String projectId) {
         ProjectVersionQuery ProjectVersionQuery = new ProjectVersionQuery();
@@ -44,6 +54,11 @@ public class RoadMapServiceImpl implements RoadMapService {
         return projectVersionList;
     }
 
+    /**
+     * 获取史诗路线图的渲染数据， 弃用
+     * @param projectId
+     * @return
+     */
     @Override
     public List<Epic> findEpicRoadMap(String projectId) {
         EpicQuery epicQuery = new EpicQuery();

@@ -182,7 +182,7 @@ public class WorkItemController {
      * @pi.param: model=WorkItemQuery
      */
     @RequestMapping(path = "/findSelectChildrenWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSelectChildrenWorkItemList",desc = "根据查询对象查找可被其他类型  添加的子事项列表")
+    @ApiMethod(name = "findSelectChildrenWorkItemList",desc = "根据查询对象查找可被添加的子事项列表")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findSelectChildrenWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> workItemList = workItemService.findSelectChildrenWorkItemList(workItemQuery);
@@ -481,7 +481,7 @@ public class WorkItemController {
      * @pi.param: model=WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemRelationModelCount",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的前置事项")
+    @ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的事项")
     public Result<HashMap<String, Integer>> findWorkItemRelationModelCount(@NotNull String workItemId, @NotNull String workTypeCode){
         HashMap<String, Integer> workItemRelationModelCount = workItemService.findWorkItemRelationModelCount(workItemId, workTypeCode);
 

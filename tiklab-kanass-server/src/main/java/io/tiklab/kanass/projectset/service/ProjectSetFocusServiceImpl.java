@@ -109,6 +109,10 @@ public class ProjectSetFocusServiceImpl implements ProjectSetFocusService {
         return PaginationBuilder.build(pagination,projectSetFocusList);
     }
 
+    /**
+     * 通过条件删除项目集关联关系
+     * @param projectSetFocusQuery
+     */
     @Override
     public void deleteProjectSetFocusByQuery(@NotNull @Valid ProjectSetFocusQuery projectSetFocusQuery) {
         List<ProjectSetFocusEntity> projectSetFocusList = projectSetFocusDao.findProjectSetFocusList(projectSetFocusQuery);

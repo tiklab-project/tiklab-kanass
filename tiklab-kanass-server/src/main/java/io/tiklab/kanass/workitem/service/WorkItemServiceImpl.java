@@ -191,7 +191,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     String baseUrl;
 
     /**
-     * 设置事项id
+     * 设置事项code
      */
     public String setWorkItemCode(WorkItem workItem){
         String projectId = workItem.getProject().getId();
@@ -317,6 +317,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         sendMessageNoticeService.sendMessage(message);
     }
 
+    /**
+     * 事项状态变化发送消息
+     * @param oldWorkItem
+     * @param workItem
+     */
     void sendMessageForUpdateStatus(WorkItem oldWorkItem, WorkItem workItem){
         String projectId = oldWorkItem.getProject().getId();
         String workItemId = workItem.getId();
@@ -360,13 +365,6 @@ public class WorkItemServiceImpl implements WorkItemService {
         vRoleDomain.setDomainId(projectId);
         sendMessageNotice.setvRoleDomain(vRoleDomain);
         sendMessageNoticeService.sendDmMessageNotice(sendMessageNotice);
-//        message.setMessageSendTypeId("site");
-
-//        sendMessageNoticeService.sendMessage(message);
-//
-//        message.setId(null);
-//        message.setMessageSendTypeId("qywechat");
-//        sendMessageNoticeService.sendMessage(message);
     }
 
 
@@ -426,6 +424,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         taskByTempService.createTask(task);
     }
 
+    /**
+     * 更新待办
+     * @param workItem
+     * @param taskId
+     */
     void updateTodoTask(WorkItem workItem, String taskId){
         Task task = taskService.findOne(taskId);
         String createUserId = LoginContext.getLoginId();
@@ -501,6 +504,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return stateNode;
     }
 
+    /**
+     * 创建事项与状态节点的关联关系
+     * @param workItem
+     * @param stateNode
+     */
     void createWorkStateNodeRelation(WorkItem workItem, StateNodeFlow stateNode){
         //设置节点跟事项关联
         String id = workItem.getId();
@@ -597,6 +605,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         opLogByTemplService.createLog(log);
     }
 
+    /**
+     * 创建事项
+     * @param workItem
+     * @return
+     */
     @Override
     public String createWorkItem(@NotNull @Valid WorkItem workItem) {
         // 设置初始状态
@@ -655,6 +668,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             selectItemRelationService.createSelectItemRelation(selectItemRelation);
         }
 
+        // 设置默认优先级
         if(workItem.getWorkPriority() != null && workItem.getWorkPriority().getId() != null
                 && workItem.getWorkPriority().getId() != "nullstring" ){
             SelectItemRelation selectItemRelation = new SelectItemRelation();
@@ -712,6 +726,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return id;
     }
 
+    /**
+     * 用于jira导入
+     * @param workItem
+     * @return
+     */
     @Override
     public String createJiraWorkItem(@NotNull @Valid WorkItem workItem) {
 
@@ -719,6 +738,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         String workItemId = workItemDao.createWorkItem(workItemEntity);
         return workItemId;
     }
+
+    /**
+     * 更新事项
+     * @param workItem
+     */
     @Override
     public void updateWorkItem(@NotNull WorkItem workItem) {
         String updateField = workItem.getUpdateField();
@@ -770,12 +794,17 @@ public class WorkItemServiceImpl implements WorkItemService {
         };
     }
 
+
     @Override
     public void updateWork(@NotNull WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
     }
 
+    /**
+     * 更新事项标题
+     * @param workItem
+     */
     public void updateTitle(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
@@ -785,6 +814,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateTodoTaskData(workItem1);
     }
 
+    /**
+     * 更新待办
+     * @param workItem
+     */
     public void updateTodoTaskData(WorkItem workItem) {
         String id = workItem.getId();
         TaskQuery taskQuery = new TaskQuery();
@@ -803,6 +836,10 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     }
 
+    /**
+     * 更新事项迭代
+     * @param workItem
+     */
     public void updateWorkItemListSprint(WorkItem workItem){
         String id = workItem.getId();
         Sprint sprint = workItem.getSprint();
@@ -818,6 +855,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
     }
 
+    /**
+     * 更新事项迭代，并更新事项与迭代的关联表
+     * @param workItem
+     */
     public void updateWorkItemSprint(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的迭代
@@ -869,6 +910,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateTodoTaskData(workItem1);
     }
 
+    /**
+     * 更新事项的版本
+     * @param workItem
+     */
     public void updateWorkItemListVersion(WorkItem workItem){
         String id = workItem.getId();
         ProjectVersion projectVersion = workItem.getProjectVersion();
@@ -883,6 +928,11 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
     }
+
+    /**
+     * 更新事项版本，并更新事项与版本的关联表
+     * @param workItem
+     */
     public void updateWorkItemVersion(WorkItem workItem){
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         // 更新事项的版本
@@ -932,6 +982,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         updateTodoTaskData(workItem1);
     }
 
+    /**
+     * 更新事项计划时间
+     * @param workItem
+     */
     public void updateWorkItemPlanTime(WorkItem workItem){
         String id = workItem.getId();
         TaskQuery taskQuery = new TaskQuery();
@@ -963,6 +1017,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateWorkItem(workItemEntity);
     }
 
+    /**
+     * 更新前置事项
+     * @param workItem
+     */
     public void updatePreDependWorkItem(WorkItem workItem){
         // 判断所选事项是否能添加为前置
         String id = workItem.getId();
@@ -981,6 +1039,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateWorkItem(workItemEntity);
     }
 
+    /**
+     * 更新缺陷类型、需求类型、任务类型
+     * @param workItem
+     */
     public void updateEachType(WorkItem workItem){
         // 添加选项与事项的关联关系
         String eachType = workItem.getEachType();
@@ -1000,6 +1062,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateWorkItem(workItemEntity);
     }
 
+    /**
+     * 更新事项优先级
+     * @param workItem
+     */
     public void updateWorkPriority(WorkItem workItem){
         // 添加选项与事项的关联关系
         SelectItem workPriority = workItem.getWorkPriority();
@@ -1090,6 +1156,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItemDao.updateWorkItem(workItemEntity);
     }
 
+    /**
+     * 更新状态
+     * @param workItem
+     */
     public void updateStatus(WorkItem workItem){
         // 设置状态之后处理前置事项，后置事项，完成时间
 
@@ -1130,6 +1200,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
     }
 
+    /**
+     * 更新负责人
+     * @param workItem
+     */
     public void updateAssigner(WorkItem workItem){
         // 若更新负责人发送待办、消息和更新日志
         String id = workItem.getId();
@@ -1160,6 +1234,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         creatUpdateOplog(newWorkItem, logContent, "KANASS_LOGTYPE_WORKUPDATEMASTER");
     }
 
+    /**
+     * 更新状态之后更新对应的待办事项
+     * @param workItem
+     * @param oldWorkItem
+     */
     void updateWorkItemStatus(WorkItem workItem, WorkItem oldWorkItem) {
         // 1. 判断子事项是否全部解决完成
         String status = workItem.getWorkStatusNode().getStatus();
@@ -1285,6 +1364,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
     }
 
+    /**
+     * 设置事项与流程的关联关系
+     * @param workItem
+     */
     void setFlowRelation(WorkItem workItem){
         StateNodeRelation stateNodeRelation = new StateNodeRelation();
         StateNodeRelationQuery stateNodeRelationQuery = new StateNodeRelationQuery();
@@ -1309,23 +1392,6 @@ public class WorkItemServiceImpl implements WorkItemService {
             stateNodeRelationService.createStateNodeRelation(stateNodeRelation);
         }
 
-    }
-    /**
-     * get property value of a object
-     * @param fieldName
-     * @param o
-     * @return
-     */
-    private static Object getFieldValueByName(String fieldName, Object o) {
-        try {
-            String firstLetter = fieldName.substring(0, 1).toUpperCase();
-            String getter = "get" + firstLetter + fieldName.substring(1);
-            Method method = o.getClass().getMethod(getter, new Class[] {});
-            Object value = method.invoke(o, new Object[] {});
-            return value;
-        } catch (Exception e) {
-            throw new ApplicationException(e);
-        }
     }
 
 
@@ -1545,6 +1611,11 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
 
+    /**
+     * 获取事项详情和事项关联过得版本与迭代的列表
+     * @param id
+     * @return
+     */
     @Override
     public WorkItem findWorkItemAndSprintVersion(@NotNull String id) {
         WorkItem workItem = findWorkItem(id);
@@ -1569,6 +1640,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItem;
     }
 
+    /**
+     * 根据事项ID查找事项和事项所用时间
+     * @param id
+     * @return
+     */
     @Override
     public WorkItem findWorkItemAndUsedTime(@NotNull String id) {
         WorkItem workItem = findWorkItem(id);
@@ -1581,6 +1657,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
         return workItem;
     }
+
 
     @Override
     public List<WorkItem> findAllWorkItem() {
@@ -1622,6 +1699,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 根据查询对象查找可被添加的子事项列表
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public Pagination<WorkItem> findSelectChildrenWorkItemList(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity> pagination = workItemDao.findSelectChildrenWorkItemList(workItemQuery);
@@ -1633,6 +1715,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 查找事项列表，平铺
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public List<WorkItem> findConditionWorkItemList(WorkItemQuery workItemQuery) {
         List<WorkItemEntity> workItemEntityList = workItemDao.findConditionWorkItemList(workItemQuery);
@@ -1667,6 +1754,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 安装分页查找事项列表，平铺
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public Pagination<WorkItem> findConditionWorkItemPage(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity> pagination = workItemDao.findConditionWorkItemPage(workItemQuery);
@@ -1677,6 +1769,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         return PaginationBuilder.build(pagination,workItemList);
     }
+
 
     //按条件查找一级节点以及子事项
     @Override
@@ -1872,6 +1965,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return childList;
     }
 
+    /**
+     * 根据成员分组查找看板结构的事项列表，暂时没用
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public List<WorkUserGroupBoard> findWorkUserGroupBoardList(WorkItemQuery workItemQuery) {
         ArrayList<WorkUserGroupBoard> workUserGroupBoardArrayList = new ArrayList<>();
@@ -1900,6 +1998,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workUserGroupBoardArrayList;
     }
 
+    /**
+     * 查找看板状态下的事项列表
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public List<WorkBoard> findWorkBoardList(WorkItemQuery workItemQuery) {
         List<WorkBoard> workBoardList = new ArrayList<>();
@@ -1954,6 +2057,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workBoardList;
     }
 
+    /**
+     * 看板分页
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public WorkBoard findChangePageWorkBoardList(WorkItemQuery workItemQuery) {
         WorkBoard workBoard = new WorkBoard();
@@ -1979,6 +2087,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 计划中使用，弃用
+     * @param workItemQuery@return
+     * @return
+     */
     @Override
     public Pagination<WorkItem> findUnPlanWorkItemPage(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity>  pagination = workItemDao.findUnPlanWorkItemPage(workItemQuery);
@@ -1990,6 +2103,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 弃用
+     * @param workItemQuery
+     * @return
+     */
     public List<WorkItem> findPlanWorkItemPage(WorkItemQuery workItemQuery) {
         List<WorkItemEntity> workItemEntityList= workItemDao.findPlanWorkItemPage(workItemQuery);
 
@@ -2000,6 +2118,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItemList;
     }
 
+    /**
+     * 根据标题关键字搜索事项
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public Pagination<WorkItem> findWorkItemByKeyWorks(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity> pagination = workItemDao.findWorkItemByKeyWorks(workItemQuery);
@@ -2010,30 +2133,55 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 查找各个事项类型下事项的数量，只查第一级
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery) {
         HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkType(workItemQuery);
         return workItemNumByWorkType;
     }
 
+    /**
+     * 查找各个事项类型下事项的数量，差所有的
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public HashMap<String, Integer> findWorkItemListNumByWorkType(WorkItemQuery workItemQuery) {
         HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemListNumByWorkType(workItemQuery);
         return workItemNumByWorkType;
     }
 
+    /**
+     * 查找各个状态下事项的个数
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public HashMap<String, Integer> findWorkItemNumByWorkStatus(WorkItemQuery workItemQuery) {
         HashMap<String, Integer> workItemNumByWorkType = workItemDao.findWorkItemNumByWorkStatus(workItemQuery);
         return workItemNumByWorkType;
     }
 
+    /**
+     * 查找我的待办，已完成，已逾期，进行中的事项个数
+     * @param workItemQuery
+     * @return
+     */
     public HashMap<String, Integer> findWorkItemNumByQuickSearch(WorkItemQuery workItemQuery) {
         HashMap<String, Integer> workItemNumByQuickSearch = workItemDao.findWorkItemNumByQuickSearch(workItemQuery);
 
         return  workItemNumByQuickSearch;
     }
 
+    /**
+     * 查找能被设置为上级的事项列表
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public Pagination<WorkItem> findCanBeRelationParentWorkItemList(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity> pagination = workItemDao.findCanBeRelationParentWorkItemList(workItemQuery);
@@ -2043,6 +2191,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    /**
+     * 查找能被设置为前置事项的事项列表
+     * @param workItemQuery
+     * @return
+     */
     @Override
     public Pagination<WorkItem> findCanBeRelationPerWorkItemList(WorkItemQuery workItemQuery) {
         Pagination<WorkItemEntity> pagination = workItemDao.findCanBeRelationPreWorkItemList(workItemQuery);
@@ -2053,6 +2206,13 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
 
+    /**
+     * 查找事项关联的各个模型的格式，子事项，子需求，关联事项，评论，动态
+     * 文档这些的个数，用于事项详情页展示
+     * @param workItemId
+     * @param workTypeCode
+     * @return
+     */
     @Override
     public HashMap<String, Integer> findWorkItemRelationModelCount(String workItemId, String workTypeCode) {
         // 查找关联事项个数
@@ -2069,22 +2229,32 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItemRelationModelCount;
     }
 
-    @Override
-    public List<Map<String, Object>> findWorkItemNum(String colunm, String ids) {
-        List<Map<String, Object>> workItemNum = workItemDao.findWorkItemNum(colunm, ids);
-        return  workItemNum;
-    }
 
+    /**
+     * 批量更新事项的迭代
+     * @param oldSprintId
+     * @param newSprintId
+     */
     @Override
     public void updateBatchWorkItemSprint(String oldSprintId, String newSprintId) {
         workItemDao.updateBatchWorkItemSprint(oldSprintId, newSprintId);
     }
 
+    /**
+     * 批量更新事项的版本
+     * @param oldVersionId
+     * @param newVersionId
+     */
     @Override
     public void updateBatchWorkItemVersion(String oldVersionId, String newVersionId) {
         workItemDao.updateBatchWorkItemVersion(oldVersionId, newVersionId);
     }
 
+    /**
+     * 根据迭代id查找没有完成的事项列表
+     * @param sprintId
+     * @return
+     */
     @Override
     public List<WorkItem> findSprintWorkItemList(String sprintId) {
         List<WorkItemEntity> sprintWorkItemList = workItemDao.findSprintWorkItemList(sprintId);
@@ -2094,6 +2264,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItemList;
     }
 
+    /**
+     * 根据版本id查找没有完成的事项列表
+     * @param versionId
+     * @return
+     */
     @Override
     public List<WorkItem> findVersionWorkItemList(String versionId) {
         List<WorkItemEntity> versionWorkItemList = workItemDao.findVersionWorkItemList(versionId);
@@ -2102,29 +2277,50 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItemList;
     }
 
+    /**
+     * 查找迭代下事项的个数
+     * @param sprintId
+     * @return
+     */
     @Override
     public HashMap<String, Integer> findSprintWorkItemNum(String sprintId) {
         HashMap<String, Integer> sprintWorkItemNum = workItemDao.findSprintWorkItemNum(sprintId);
         return sprintWorkItemNum;
     }
 
+    /**
+     * 查找版本下事项的个数
+     * @param versionId
+     * @return
+     */
     @Override
     public HashMap<String, Integer> findVersionWorkItemNum(String versionId) {
         HashMap<String, Integer> versionWorkItemNum = workItemDao.findVersionWorkItemNum(versionId);
         return versionWorkItemNum;
     }
 
+    /**
+     * 查找当前事项有几层下级事项
+     * @param id
+     * @return
+     */
     @Override
     public Integer findChildrenLevel(String id) {
         Integer childrenLevel = workItemDao.findChildrenLevel(id);
         return childrenLevel;
     }
 
+
     @Override
     public void updateEpicWork(String projectId, String workTypeId, String dmWorkTypeId){
        workItemDao.updateEpicWork(projectId, workTypeId, dmWorkTypeId);
     }
 
+    /**
+     * 查找事项以及下级事项
+     * @param id
+     * @return
+     */
     public WorkItem findWorkItemAndChidren(String id){
         WorkItem workItem = findWorkItem(id);
         WorkItemQuery workItemQuery = new WorkItemQuery();
@@ -2154,6 +2350,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         return isHave;
     }
 
+    /**
+     * 查找事项的下级事项id
+     * @param workItemId
+     * @return
+     */
     @Override
    public List<String> findWorkItemAndChildrenIds(String workItemId){
        List<String> workItemAndChildrenIds = workItemDao.findWorkItemAndChildrenIds(workItemId);

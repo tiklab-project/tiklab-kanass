@@ -93,7 +93,7 @@ public interface ProjectSetService {
     Map findProjectIsOrNotRe();
 
     /**
-     * 添加关联对象
+     * 添加关联项目
      * @param
      * @return
      */

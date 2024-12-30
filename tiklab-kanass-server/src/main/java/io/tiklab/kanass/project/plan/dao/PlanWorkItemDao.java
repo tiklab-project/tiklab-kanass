@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 计划事项关联模型
+ * 计划事项关联模型， 弃用
  */
 @Repository
 public class PlanWorkItemDao{

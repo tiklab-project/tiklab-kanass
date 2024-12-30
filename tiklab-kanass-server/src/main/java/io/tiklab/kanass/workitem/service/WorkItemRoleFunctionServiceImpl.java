@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 事项优先级服务
+* 系统的事项角色的权限接口
 */
 @Service
 public class WorkItemRoleFunctionServiceImpl implements WorkItemRoleFunctionService {

@@ -1579,20 +1579,6 @@ public class WorkItemDao{
         return relationModel;
     }
 
-    /**
-     * 查找不同字段关联的事项数量
-     * @param colunm
-     * @param ids
-     * @return
-     */
-    public List<Map<String, Object>> findWorkItemNum(String colunm, String ids) {
-
-        String sql = "select id, " + colunm  + " from pmc_work_item where " +  colunm  + " in "+ ids;
-
-//        String sql =  "select " + colunm + ", count(1) as total from pmc_work_item where " + colunm +" in "+ ids + "  group by " + colunm;
-        List<Map<String, Object>> workItemList = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
-        return workItemList;
-    }
 
     public void updateBatchWorkItemSprint(String oldSprintId, String newSprintId){
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();

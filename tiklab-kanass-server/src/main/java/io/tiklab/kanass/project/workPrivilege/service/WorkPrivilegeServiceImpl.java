@@ -38,16 +38,15 @@ public class WorkPrivilegeServiceImpl implements WorkPrivilegeService {
     @Override
     public String copyWorkPrivilege(@NotNull @Valid WorkPrivilege workPrivilege, String dmWorkTypeId) {
         // 查找事项类型对应的权限方案
-//        String id = workPrivilege.getId();
         String projectId = workPrivilege.getProjectId();
         String workTypeId = workPrivilege.getWorkTypeId();
-        // 复制权限方案
+
         WorkPrivilegeQuery workPrivilegeQuery = new WorkPrivilegeQuery();
         workPrivilegeQuery.setWorkTypeId(workTypeId);
         List<WorkPrivilege> workPrivilegeList = findWorkPrivilegeList(workPrivilegeQuery);
 
         String workPrivilegeId = new String();
-
+        // 复制权限方案
         if(workPrivilegeList.size() > 0){
             WorkPrivilege workPrivilege1 = workPrivilegeList.get(0);
             String id = workPrivilege1.getId();

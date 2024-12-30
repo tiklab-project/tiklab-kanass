@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 迭代状态服务
+* 迭代状态接口
 */
 @Service
 public class SprintStateServiceImpl implements SprintStateService {

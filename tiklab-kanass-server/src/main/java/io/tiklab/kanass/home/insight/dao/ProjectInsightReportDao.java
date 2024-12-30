@@ -578,6 +578,12 @@ public class ProjectInsightReportDao {
         return totalCount;
     }
 
+    /**
+     * 查找在选择的时间段完成的事项的信息
+     * @param workItemCountQuery
+     * @param dayList
+     * @return
+     */
     public List<Map<String, Object>>  statisticsProjectEndWorkItem(WorkItemCountQuery workItemCountQuery, List<String> dayList) {
         String workItemTypeCode = workItemCountQuery.getWorkItemTypeCode();
         List<String> projectIds = workItemCountQuery.getProjectIds();
@@ -728,6 +734,10 @@ public class ProjectInsightReportDao {
         return projectCount;
     }
 
+    /**
+     * 统计各个状态下的事项的数量
+     * @return
+     */
     public Map<String, Integer> statisticsWorkItemByStatus() {
         Map<String, Integer> workItemCount = new HashMap<>();
         // 未完成事项

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 事项统计服务
+ * 事项统计接口
  */
 @Service
 public class StatisticWorkItemServiceImpl implements StatisticWorkItemService {

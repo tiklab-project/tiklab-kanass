@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
-* 事项工时服务
+* 事项工时接口
 */
 @Service
 public class WorkLogServiceImpl implements WorkLogService {
@@ -51,11 +51,6 @@ public class WorkLogServiceImpl implements WorkLogService {
     public String createWorkLog(@NotNull @Valid WorkLog workLog) {
         workLog.setWorkDate(new Timestamp(System.currentTimeMillis()));
 
-        //设置工作人
-//        String createUserId = LoginContext.getLoginId();
-//        User user = userService.findUser(createUserId);
-//        workLog.setUser(user);
-//        logger.info("log add user:{}",user.getName());
         WorkLogEntity workLogEntity = BeanMapper.map(workLog, WorkLogEntity.class);
         return workLogDao.createWorkLog(workLogEntity);
     }
@@ -135,11 +130,9 @@ public class WorkLogServiceImpl implements WorkLogService {
         for (WorkLog workLog : workLogList) {
             String id = workLog.getWorkItem().getId();
             List<WorkItem> workItemList1 = workItemList.stream().filter(workItem -> workItem.getId().equals(id)).collect(Collectors.toList());
+            //设置日志的关联事项的信息
             workLog.setWorkItem(workItemList1.get(0));
         }
-
-
-
         return PaginationBuilder.build(pagination,workLogList);
     }
 
@@ -180,7 +173,12 @@ public class WorkLogServiceImpl implements WorkLogService {
         }
         return workItemManhour;
     }
-    
+
+    /**
+     * 查询成员负责的每个项目的工时
+     * @param workLogQuery
+     * @return
+     */
     @Override
     public Map<String, Object> findUserProjectLog(WorkLogQuery workLogQuery) {
         Date startTime = workLogQuery.getStartTime();  //开始时间

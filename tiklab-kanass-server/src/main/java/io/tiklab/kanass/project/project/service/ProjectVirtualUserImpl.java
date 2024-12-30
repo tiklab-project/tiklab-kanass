@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 获取项目虚拟角色的成员，用于发送消息，控制流程转换规则指定
+ */
 @Primary
 @Service
 public class ProjectVirtualUserImpl extends VRoleUserServiceImpl {

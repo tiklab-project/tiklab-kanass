@@ -48,7 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * jira 数据导入服务
+ * jira 数据导入线下9.4 版本的jira数据
  */
 @Service
 @EnableTransactionManagement

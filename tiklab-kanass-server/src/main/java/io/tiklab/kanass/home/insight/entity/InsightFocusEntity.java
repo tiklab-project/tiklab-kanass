@@ -5,7 +5,7 @@ import io.tiklab.dal.jpa.annotation.*;
 import java.io.Serializable;
 
 /**
- * 收藏项目实例
+ * 收藏仪表盘实例
  */
 
 @Entity

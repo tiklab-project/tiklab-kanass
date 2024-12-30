@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* VersionBurnDowmChartServiceImpl
+* 版本动态数据统计
 */
 @Service
 public class VersionBurnDowmChartServiceImpl implements VersionBurnDowmChartService {

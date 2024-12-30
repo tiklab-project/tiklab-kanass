@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* StageBurnDowmChartServiceImpl
+* 计划（阶段）的动态统计
 */
 @Service
 public class StageBurnDowmChartServiceImpl implements StageBurnDowmChartService {

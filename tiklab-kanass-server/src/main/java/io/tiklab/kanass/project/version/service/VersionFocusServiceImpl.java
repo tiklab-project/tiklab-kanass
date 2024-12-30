@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 收藏迭代的服务
+* 收藏版本的接口
 */
 @Service
 public class VersionFocusServiceImpl implements VersionFocusService {
@@ -60,10 +60,6 @@ public class VersionFocusServiceImpl implements VersionFocusService {
 
     @Override
     public void deleteVersionFocusByQuery(VersionFocusQuery versionFocusQuery) {
-//        List<VersionFocusEntity> versionFocusList = versionFocusDao.findVersionFocusList(versionFocusQuery);
-//        String id = versionFocusList.get(0).getId();
-//
-//        versionFocusDao.deleteVersionFocus(id);
 
         DeleteCondition deleteCondition = DeleteBuilders.createDelete(VersionFocusEntity.class)
                 .eq("masterId", versionFocusQuery.getMasterId())

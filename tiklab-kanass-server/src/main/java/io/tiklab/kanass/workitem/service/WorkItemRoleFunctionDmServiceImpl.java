@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
-* 事项优先级服务
+* 事项权限服务
 */
 @Service
 public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDmService {

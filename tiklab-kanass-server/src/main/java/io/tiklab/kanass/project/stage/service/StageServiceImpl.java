@@ -25,7 +25,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
-* 项目阶段服务
+*  阶段接口
 */
 @Service
 public class StageServiceImpl implements StageService {
@@ -52,6 +52,7 @@ public class StageServiceImpl implements StageService {
         String stageId = stageDao.createStage(stageEntity);
         stageEntity.setId(stageId);
 
+        // 设置阶段的上级节点，节点树，根节点，深度
         if(stage.getParentStage() != null && stage.getParentStage().getId() != "nullstring"){
             String id = stage.getParentStage().getId();
             Stage stageParent = findStage(id);
@@ -82,6 +83,7 @@ public class StageServiceImpl implements StageService {
         Integer deep = oldStage.getDeep();
         // 如果更新上级
         if(isChangeParent){
+            // 更新上级节点为其他阶段
             if(stage.getParentStage() != null && !stage.getParentStage().getId().equals("nullstring")){
                 String parentId = stage.getParentStage().getId();
                 Stage stageParent = findStage(parentId);
@@ -91,8 +93,8 @@ public class StageServiceImpl implements StageService {
                 Integer newDeep = stageParent.getDeep() + 1;
                 Integer distance = newDeep - deep;
                 stage.setDeep(stageParent.getDeep() + 1);
-                // 更新当前事项的所有下级
 
+                // 更新当前阶段的所有下级
                 StageQuery stageQuery = new StageQuery();
                 stageQuery.setTreePath(id);
                 List<Stage> stageList = findStageList(stageQuery);
@@ -114,7 +116,8 @@ public class StageServiceImpl implements StageService {
 
             }
 
-            if(stage.getParentStage() != null && stage.getParentStage().getId().equals("nullstring") ){
+            // 更新上级阶段为空
+            if(stage.getParentStage() == null && stage.getParentStage().getId().equals("nullstring") ){
                 stage.setTreePath("nullstring");
                 stage.setRootId(id);
                 stage.setDeep(0);
@@ -164,6 +167,11 @@ public class StageServiceImpl implements StageService {
 
 
     }
+
+    /**
+     * 根据条件删除阶段
+     * @param stageQuery
+     */
     public void deleteStageCondition(StageQuery stageQuery){
         DeleteBuilders deleteBuilders = DeleteBuilders.createDelete(StageEntity.class)
                 .eq("id", stageQuery.getId());

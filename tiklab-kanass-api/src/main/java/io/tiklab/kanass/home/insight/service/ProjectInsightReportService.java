@@ -35,11 +35,6 @@ public interface ProjectInsightReportService {
 
 
     /**
-     * 统计某段时间，以天，周，月，季，年为单位新增事项的数据
-     * @return
-     */
-    Map<String, Object> statisticsAllNewWorkItemTend();
-    /**
      * 统计某段时间，以天，周，月，季，年为单位完成事项的数据
      * @param workItemCountQuery
      * @return

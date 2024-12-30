@@ -25,6 +25,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+/**
+ * 用于设置首页的各个模块统计数据，弃用
+ * @return
+ */
 @Service
 public class SettingStaticsServiceImpl implements SettingStaticsService{
     @Autowired
@@ -81,6 +85,10 @@ public class SettingStaticsServiceImpl implements SettingStaticsService{
     @Autowired
     SystemUrlService systemUrlService;
 
+    /**
+     * 用于设置首页的各个模块统计数据，弃用
+     * @return
+     */
     @Override
     public HashMap<String, Object> findOrgaNum() {
         HashMap<String, Object> numMap = new HashMap<>();

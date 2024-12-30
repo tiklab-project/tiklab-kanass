@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
-* 图标服务
+* 洗数据
 */
 @Service
 public class UpdateMySqlServiceImpl implements UpdateMySqlService {
@@ -49,6 +49,10 @@ public class UpdateMySqlServiceImpl implements UpdateMySqlService {
         updateMySqlDao.updateId();
     }
 
+
+    /**
+     * 洗数据
+     */
     @Override
     public void updateProject() {
         String sql = "select * from pmc_project";

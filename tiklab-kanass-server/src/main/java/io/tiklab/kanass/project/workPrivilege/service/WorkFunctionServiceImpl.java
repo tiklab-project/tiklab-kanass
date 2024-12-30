@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* 事项优先级服务
+* 事项权限服务，弃用
 */
 @Service
 public class WorkFunctionServiceImpl implements WorkFunctionService {

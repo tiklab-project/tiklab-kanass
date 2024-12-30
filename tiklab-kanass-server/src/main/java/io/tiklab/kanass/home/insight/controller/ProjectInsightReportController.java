@@ -62,12 +62,6 @@ public class ProjectInsightReportController {
         return Result.ok(newWorkItemCount);
     }
 
-    @RequestMapping(path = "/statisticsAllNewWorkItemTend",method = RequestMethod.POST)
-    @ApiMethod(name  = "statisticsAllNewWorkItemTend",desc = "根据查询对象查事项新增趋势")
-    public Result<Map<String, Object>> statisticsAllNewWorkItemTend(){
-        Map<String, Object> dayCalendar = projectInsightReportService.statisticsAllNewWorkItemTend();
-        return Result.ok(dayCalendar);
-    }
 
     @RequestMapping(path="/statisticsEndWorkItemCount",method = RequestMethod.POST)
     @ApiMethod(name = "statisticsEndWorkItemCount",desc = "统计某段时间，以天，周，月，季，年为单位完成事项的数据")
@@ -185,7 +179,7 @@ public class ProjectInsightReportController {
     }
 
     @RequestMapping(path="/statisticsProjectByStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "statisticsProjectByStatus",desc = "统计某个项目下，某个成员负责的事项对比")
+    @ApiMethod(name = "statisticsProjectByStatus",desc = "统计各个状态下的项目数量")
     public Result<Map<String,Object>> statisticsProjectByStatus(){
         Map<String, Integer> projectCount = projectInsightReportService.statisticsProjectByStatus();
 
@@ -200,7 +194,7 @@ public class ProjectInsightReportController {
     }
 
     @RequestMapping(path="/statisticsTodoWorkByStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "statisticsTodoWorkByStatus",desc = "统计某个项目下，某个成员负责的事项对比")
+    @ApiMethod(name = "statisticsTodoWorkByStatus",desc = "统计全部，已逾期，完成，进行中的待办事项数量")
     public Result<Map<String,Object>> statisticsTodoWorkByStatus(@RequestBody @NotNull @Valid  HashMap<String, String> params){
         Map<String, Integer> todoCount = projectInsightReportService.statisticsTodoWorkByStatus(params);
 

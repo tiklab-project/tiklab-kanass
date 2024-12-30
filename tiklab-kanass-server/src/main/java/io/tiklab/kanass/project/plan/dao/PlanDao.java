@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 计划数据访问
+ * 计划数据访问， 弃用
  */
 @Repository
 public class PlanDao{

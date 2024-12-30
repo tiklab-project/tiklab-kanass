@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* 项目阶段事项服务
+* 项目阶段事项管理关系
 */
 @Service
 public class StageWorkItemServiceImpl implements StageWorkItemService {
@@ -84,6 +84,11 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
         return stageWorkItem;
     }
 
+    /**
+     * 查找某个阶段下的子阶段和关联事项
+     * @param stageWorkItemQuery
+     * @return
+     */
     public Map<String, Object> findStageChildWorkItemAndStage(StageWorkItemQuery stageWorkItemQuery) {
         Map<String, Object> workItemAndStage = new HashMap<String, Object>();
         StageQuery stageQuery = new StageQuery();

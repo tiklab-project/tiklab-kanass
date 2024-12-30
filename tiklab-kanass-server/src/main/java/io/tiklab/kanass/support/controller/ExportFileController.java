@@ -30,7 +30,7 @@ public class ExportFileController {
     private ExportFileService exportFileService;
 
     @RequestMapping(path="/exportWorkItemXml",method = RequestMethod.POST)
-    @ApiMethod(name = "exportWorkItemXml",desc = "返回soular地址给前端")
+    @ApiMethod(name = "exportWorkItemXml",desc = "导出事项excel")
     public void exportWorkItemXml(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

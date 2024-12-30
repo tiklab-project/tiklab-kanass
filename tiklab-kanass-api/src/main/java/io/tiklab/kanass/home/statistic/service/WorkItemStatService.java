@@ -49,7 +49,7 @@ public interface WorkItemStatService {
      * 按用户统计事项分布
      * @return
      */
-    List<Sprint> statManageSprint(String mastetId);
+    List<Sprint> statManageSprint(String projectId);
 
     /**
      * 按用户统计事项分布

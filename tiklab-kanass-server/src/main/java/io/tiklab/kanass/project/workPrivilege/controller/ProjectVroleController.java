@@ -21,11 +21,11 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 优先级控制器
+ * 项目的虚拟角色，弃用
  */
 @RestController
 @RequestMapping("/projectVrole")
-@Api(name = "ProjectVroleController",desc = "事项优先级管理")
+@Api(name = "ProjectVroleController",desc = "虚拟角色管理")
 public class ProjectVroleController {
 
     private static Logger logger = LoggerFactory.getLogger(ProjectVroleController.class);

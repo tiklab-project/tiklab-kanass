@@ -70,6 +70,7 @@ public interface WorkLogService {
      */
     Map<String,Object> findProjectUserLog(WorkLogQuery workLogQuery);
     int differentDays(Date startTime, Date endTime);
+
     /**
      * 查询成员负责的每个项目的工时
      * @param workLogQuery

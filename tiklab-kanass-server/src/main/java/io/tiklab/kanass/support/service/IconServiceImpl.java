@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 图标服务
+* 图标接口，上传图标使用
 */
 @Service
 public class IconServiceImpl implements IconService {

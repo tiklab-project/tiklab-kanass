@@ -98,15 +98,6 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
     }
 
 
-//    public List<ProjectWorkItemStat> statProjectWorkItemCount(String masterId) {
-//        List<ProjectWorkItemStat> list = workItemStatDao.statProjectWorkItemCount(masterId);
-//        for(ProjectWorkItemStat projectWorkItemStat:list){
-//            joinTemplate.joinQuery(projectWorkItemStat.getProject());
-//        }
-//
-//        return list;
-//    }
-
     @Override
     public List<ProjectWorkItemStat> statProjectWorkItemCount(Integer num) {
         List<ProjectWorkItemStat> list = new ArrayList<>();

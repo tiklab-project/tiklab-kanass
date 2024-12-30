@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 事项关联的文档接口
+ */
 @Service
 public class WikiDocumentServiceImpl implements WikiDocumentService {
     @Autowired

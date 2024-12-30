@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
-* 图标服务
+* 状态节点权限，弃用
 */
 @Service
 public class StateNodeUserFieldServiceImpl implements StateNodeUserFieldService {

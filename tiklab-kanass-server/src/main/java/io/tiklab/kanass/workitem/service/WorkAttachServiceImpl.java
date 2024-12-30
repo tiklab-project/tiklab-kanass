@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
-* 事项附件服务接口
+* 事项附件接口
 */
 @Service
 public class WorkAttachServiceImpl implements WorkAttachService {
