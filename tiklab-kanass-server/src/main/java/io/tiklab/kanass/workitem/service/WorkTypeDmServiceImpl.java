@@ -141,6 +141,11 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
     }
 
 
+    /**
+     * 复制事项类型，刷数据用
+     * @param workTypeDm
+     * @return
+     */
     @Override
     public WorkTypeDm copyWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm) {
 
