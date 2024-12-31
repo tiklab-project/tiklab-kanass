@@ -16,7 +16,7 @@ public class WorkItemFunctionEntity implements Serializable {
     @Column(name = "name",length = 64,notNull = true)
     private String name;
 
-    // 优先级描述
+
     @Column(name = "code",length = 64)
     private String code;
 

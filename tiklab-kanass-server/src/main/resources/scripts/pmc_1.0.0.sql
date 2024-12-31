@@ -364,7 +364,7 @@ CREATE TABLE pmc_insight(
         insight_name VARCHAR(64) NOT NULL,
         insight_group VARCHAR(12) NOT NULL,
         master VARCHAR(12),
-        createdTime timestamp,
+        createdtime timestamp,
         data TEXT
 );
 
