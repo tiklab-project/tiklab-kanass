@@ -3,6 +3,7 @@ package io.tiklab.kanass.support.dao;
 import io.tiklab.core.exception.ApplicationException;
 import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.dal.jpa.JpaTemplate;
+import io.tiklab.kanass.common.ErrorCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -525,7 +526,7 @@ public class UpdateMySqlDao {
                     }
 
                 }catch (Exception e){
-                    throw new ApplicationException(2000,"更新失败" + e.getMessage() + "   sql   " + findSql);
+                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"更新失败" + e.getMessage() + "   sql   " + findSql);
                 }
             }
         });

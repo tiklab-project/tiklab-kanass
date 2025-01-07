@@ -7,6 +7,7 @@ import io.tiklab.flow.flow.service.FlowModelRelationService;
 import io.tiklab.form.form.model.*;
 import io.tiklab.form.form.service.FormModelRelationService;
 import io.tiklab.form.form.service.FormService;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.rpc.annotation.Exporter;
 import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.toolkit.beans.BeanMapper;
@@ -262,7 +263,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
         int size = workItemList.size();
         if(workItemList != null && size>0){
-            throw new SystemException(3001,"类型使用中，不可删除");
+            throw new SystemException(ErrorCode.DELETE_CODE,"类型使用中，不可删除");
         }else {
             workTypeDmDao.deleteWorkTypeDm(id);
         }

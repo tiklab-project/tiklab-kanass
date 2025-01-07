@@ -9,6 +9,7 @@ import io.tiklab.form.form.model.FormModelRelation;
 import io.tiklab.form.form.model.FormModelRelationQuery;
 import io.tiklab.form.form.service.FormModelRelationService;
 import io.tiklab.ids.tenant.common.TenantHolder;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.core.exception.SystemException;
 import io.tiklab.core.page.PaginationBuilder;
@@ -146,7 +147,7 @@ public class WorkTypeServiceImpl implements WorkTypeService {
         workTypeDmQuery.setWorkTypeId(id);
         List<WorkTypeDm> workTypeDmList = workTypeDmService.findWorkTypeDmList(workTypeDmQuery);
         if(workTypeDmList != null && workTypeDmList.size()>0){
-            throw new SystemException(3001,"类型使用中，不可删除");
+            throw new SystemException(ErrorCode.DELETE_CODE,"类型使用中，不可删除");
         }else {
             workTypeDao.deleteWorkType(id);
 

@@ -3,9 +3,11 @@ package io.tiklab.kanass.support.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.tiklab.core.exception.ApplicationException;
+import io.tiklab.core.exception.ErrorCodeConstants;
 import io.tiklab.core.exception.SystemException;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
+import io.tiklab.kanass.common.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -47,7 +49,7 @@ public class HttpRequestUtil {
             boolean timedOut = Objects.requireNonNull(e.getMessage()).contains("Read timed out");
             boolean connectOut = Objects.requireNonNull(e.getMessage()).contains("Connect timed out");
             if (timedOut || connectOut){
-                throw new ApplicationException(50001,"请求超时！");
+                throw new ApplicationException(ErrorCodeConstants.TIMEOUT_EXCEPTION,"请求超时！");
             }
             throw new SystemException(e);
         }
@@ -68,7 +70,7 @@ public class HttpRequestUtil {
             boolean timedOut = Objects.requireNonNull(e.getMessage()).contains("Read timed out");
             boolean connectOut = Objects.requireNonNull(e.getMessage()).contains("Connect timed out");
             if (timedOut || connectOut){
-                throw new ApplicationException(50001,"请求超时！");
+                throw new ApplicationException(ErrorCodeConstants.TIMEOUT_EXCEPTION,"请求超时！");
             }
             throw new SystemException(e);
         }
@@ -89,7 +91,7 @@ public class HttpRequestUtil {
             boolean timedOut = Objects.requireNonNull(e.getMessage()).contains("Read timed out");
             boolean connectOut = Objects.requireNonNull(e.getMessage()).contains("Connect timed out");
             if (timedOut || connectOut){
-                throw new ApplicationException(50001,"请求超时！");
+                throw new ApplicationException(ErrorCodeConstants.TIMEOUT_EXCEPTION,"请求超时！");
             }
             throw new SystemException(e);
         }
@@ -117,7 +119,7 @@ public class HttpRequestUtil {
             boolean timedOut = Objects.requireNonNull(e.getMessage()).contains("Read timed out");
             boolean connectOut = Objects.requireNonNull(e.getMessage()).contains("Connect timed out");
             if (timedOut || connectOut){
-                throw new ApplicationException(50001,"请求超时！");
+                throw new ApplicationException(ErrorCodeConstants.TIMEOUT_EXCEPTION,"请求超时！");
             }
             throw new RuntimeException();
         }
@@ -138,7 +140,7 @@ public class HttpRequestUtil {
             boolean timedOut = Objects.requireNonNull(e.getMessage()).contains("Read timed out");
             boolean connectOut = Objects.requireNonNull(e.getMessage()).contains("Connect timed out");
             if (timedOut || connectOut){
-                throw new ApplicationException(50001,"请求超时！");
+                throw new ApplicationException(ErrorCodeConstants.TIMEOUT_EXCEPTION,"请求超时！");
             }
             throw new SystemException(e);
         }
@@ -156,7 +158,7 @@ public class HttpRequestUtil {
      */
     private <T> T findBody(JSONObject jsonObject,Class<T> tClass){
         if (Objects.isNull(jsonObject)){
-            throw new ApplicationException(50001,"获取接口返回数据为空！");
+            throw new ApplicationException(ErrorCode.OTHER_ERROR,"获取接口返回数据为空！");
         }
         Integer code = jsonObject.getInteger("code");
         if (code != 0){

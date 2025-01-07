@@ -18,6 +18,7 @@ import io.tiklab.form.field.model.SelectItem;
 import io.tiklab.form.field.model.SelectItemRelation;
 import io.tiklab.form.field.model.SelectItemRelationQuery;
 import io.tiklab.form.field.service.SelectItemRelationService;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.version.model.ProjectVersion;
 import io.tiklab.kanass.project.version.service.ProjectVersionService;
@@ -1031,7 +1032,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             WorkItem preDependWorkItem = findWorkItem(preDependWorkItemId);
             WorkItem workItem1 = findWorkItem(id);
                 if(!preDependWorkItem.getWorkStatusCode().equals("DONE") && !workItem1.getWorkStatusCode().equals("TODO")){
-                throw new SystemException(3001, "当前事项已经开始，所选择前置事项未开始，不可添加为前置事项");
+                throw new SystemException(ErrorCode.DELETE_CODE, "当前事项已经开始，所选择前置事项未开始，不可添加为前置事项");
             }
         }
 
@@ -1102,14 +1103,14 @@ public class WorkItemServiceImpl implements WorkItemService {
             // 判断是否能修改选择的事项为父级
             // 判断上级的状态
             if(parentWorkStatusCode.equals("DONE") && !workStatusCode.equals("DONE")){
-                throw new SystemException(3001, "当前事项未完成，所选择父级已完成，不可添加为父级");
+                throw new SystemException(ErrorCode.DELETE_CODE, "当前事项未完成，所选择父级已完成，不可添加为父级");
             }
 
             // 判断是否能修改选择的事项为父级
             // 判断上级的层级
             Integer childrenLevel = findChildrenLevel(id);
             if(childrenLevel.equals(2)){
-                throw new SystemException(3001, "事项限制为三级，当前事项不能添加父级");
+                throw new SystemException(ErrorCode.DELETE_CODE, "事项限制为三级，当前事项不能添加父级");
             }
             String parentTreePath = parentWorkItem.getTreePath();
             int length =0;
@@ -1119,13 +1120,13 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
             if(childrenLevel.equals(1)){
                if(length > 0){
-                   throw new SystemException(3001, "事项限制为三级，不能添加当前事项为父级");
+                   throw new SystemException(ErrorCode.DELETE_CODE, "事项限制为三级，不能添加当前事项为父级");
                }
             }
 
             if(childrenLevel.equals(0)){
                 if(length > 1){
-                    throw new SystemException(3001, "事项限制为三级，不能添加当前事项为父级");
+                    throw new SystemException(ErrorCode.DELETE_CODE, "事项限制为三级，不能添加当前事项为父级");
                 }
             }
 

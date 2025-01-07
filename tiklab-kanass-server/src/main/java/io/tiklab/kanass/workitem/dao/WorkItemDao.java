@@ -7,6 +7,7 @@ import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.dal.datasource.holder.DynamicDataSourceKeyHolder;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.ids.tenant.common.TenantHolder;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.epic.entity.EpicWorkItemEntity;
 import io.tiklab.kanass.project.plan.entity.PlanWorkItemEntity;
 import io.tiklab.kanass.workitem.entity.WorkItemEntity;
@@ -1587,14 +1588,14 @@ public class WorkItemDao{
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
-                throw new ApplicationException(2000,"批量更新事项迭代失败" + e.getMessage());
+                throw new ApplicationException(ErrorCode.CREATE_ERROR,"批量更新事项迭代失败" + e.getMessage());
             }
         }else {
             String sql = "update pmc_work_item SET sprint_id = null WHERE sprint_id = '" + oldSprintId + "' and work_status_code != 'DONE' ";
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
-                throw new ApplicationException(2000,"批量更新事项迭代失败" + e.getMessage());
+                throw new ApplicationException(ErrorCode.CREATE_ERROR,"批量更新事项迭代失败" + e.getMessage());
             }
         }
     }
@@ -1606,14 +1607,14 @@ public class WorkItemDao{
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
-                throw new ApplicationException(2000,"批量更新事项版本失败" + e.getMessage());
+                throw new ApplicationException(ErrorCode.CREATE_ERROR,"批量更新事项版本失败" + e.getMessage());
             }
         }else {
             String sql = "update pmc_work_item SET version_id = null WHERE version_id = '" + oldVersionId + "' and work_status_code != 'DONE'";
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e){
-                throw new ApplicationException(2000,"批量更新事项版本失败" + e.getMessage());
+                throw new ApplicationException(ErrorCode.CREATE_ERROR,"批量更新事项版本失败" + e.getMessage());
             }
         }
     }
