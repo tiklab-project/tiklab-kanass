@@ -1,5 +1,6 @@
 package io.tiklab.kanass.project.project.service;
 
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.project.model.ProjectQuery;
 import io.tiklab.kanass.project.project.model.ProjectType;
@@ -55,7 +56,7 @@ public class ProjectTypeServiceImpl implements ProjectTypeService {
         projectQuery.setProjectTypeId(id);
         List<Project> projectList = projectService.findProjectList(projectQuery);
         if(projectList != null && projectList.size()>0){
-            throw new SystemException(3001,"类型使用中，不可删除");
+            throw new SystemException(ErrorCode.DELETE_CODE,"类型使用中，不可删除");
         }else {
             projectTypeDao.deleteProjectType(id);
             return "删除成功";

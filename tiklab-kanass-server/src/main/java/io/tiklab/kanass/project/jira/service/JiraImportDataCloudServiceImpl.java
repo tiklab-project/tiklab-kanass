@@ -7,6 +7,7 @@ import io.tiklab.flow.flow.service.DmFlowService;
 import io.tiklab.flow.statenode.model.StateNodeFlow;
 import io.tiklab.flow.statenode.service.StateNodeFlowService;
 import io.tiklab.form.field.model.SelectItem;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.module.model.Module;
 import io.tiklab.kanass.project.module.service.ModuleService;
 import io.tiklab.kanass.project.project.model.Project;
@@ -391,7 +392,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                     element.setAttribute("newId", userId);
                     System.out.println( element.getAttribute("newId"));
                 }catch (Exception e){
-                    throw new ApplicationException(2000,"成员添加失败" + e.getMessage());
+                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"成员添加失败" + e.getMessage());
                 }
             }else {
                 User user = userList.get(0);
@@ -482,7 +483,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                 CurrentProject.put(createUserId + "project",project1);
             }catch (Exception e) {
                 Percent.put(createUserId + "status", 2);
-                throw new ApplicationException(2000, "项目添加失败" + e.getMessage());
+                throw new ApplicationException(ErrorCode.CREATE_ERROR, "项目添加失败" + e.getMessage());
             }
         }
     }
@@ -836,7 +837,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                 }
             }
         }catch (Exception e){
-            throw new ApplicationException(2000, "添加事项失败" + e.getMessage());
+            throw new ApplicationException(ErrorCode.CREATE_ERROR, "添加事项失败" + e.getMessage());
         }
     }
 
@@ -983,7 +984,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                                 try {
                                     dmUserService.createDmUserEntity(dmUser);
                                 }catch (Exception e){
-                                    throw new ApplicationException(2000,"项目成员添加失败" + e.getMessage());
+                                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目成员添加失败" + e.getMessage());
                                 }
                                 // 创建角色与项目成员的关联
                                 try{
@@ -997,7 +998,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                                         dmRoleUserService.createDmRoleUser(dmRoleUser);
                                     }
                                 }catch (Exception e){
-                                    throw new ApplicationException(2000,"项目角色成员添加失败" + e.getMessage());
+                                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目角色成员添加失败" + e.getMessage());
 
                                 }
 
@@ -1029,7 +1030,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                         try {
                             dmUserService.createDmUserEntity(dmUser);
                         }catch (Exception e){
-                            throw new ApplicationException(2000,"项目成员添加失败" + e.getMessage());
+                            throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目成员添加失败" + e.getMessage());
                         }
                         // 创建角色与项目成员的关联
                         try{
@@ -1043,7 +1044,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                                 dmRoleUserService.createDmRoleUser(dmRoleUser);
                             }
                         }catch (Exception e){
-                            throw new ApplicationException(2000,"项目角色成员添加失败" + e.getMessage());
+                            throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目角色成员添加失败" + e.getMessage());
 
                         }
 
@@ -1106,7 +1107,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                 }
             }
         }catch (Exception e){
-            throw new ApplicationException(2000,"项目角色添加失败" + e.getMessage());
+            throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目角色添加失败" + e.getMessage());
         }
 
         return roleIds;

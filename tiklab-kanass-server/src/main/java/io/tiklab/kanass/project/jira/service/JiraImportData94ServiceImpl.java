@@ -7,6 +7,7 @@ import io.tiklab.flow.flow.service.DmFlowService;
 import io.tiklab.flow.statenode.model.StateNodeFlow;
 import io.tiklab.flow.statenode.service.StateNodeFlowService;
 import io.tiklab.form.field.model.SelectItem;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.module.model.Module;
 import io.tiklab.kanass.project.module.service.ModuleService;
 import io.tiklab.kanass.project.project.model.Project;
@@ -386,7 +387,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                     }
                     System.out.println( element.getAttribute("newId"));
                 }catch (Exception e){
-                    throw new ApplicationException(2000,"成员添加失败" + e.getMessage());
+                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"成员添加失败" + e.getMessage());
                 }
             }
     }
@@ -469,7 +470,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 }
                 CurrentProject.put(createUserId + "project",project1);
             }catch (Exception e) {
-                throw new ApplicationException(2000, "项目添加失败" + e.getMessage());
+                throw new ApplicationException(ErrorCode.CREATE_ERROR, "项目添加失败" + e.getMessage());
             }
         }
     }
@@ -799,7 +800,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 }
             }
         }catch (Exception e){
-            throw new ApplicationException(2000, "添加事项失败" + e.getMessage());
+            throw new ApplicationException(ErrorCode.CREATE_ERROR, "添加事项失败" + e.getMessage());
         }
     }
 
@@ -946,7 +947,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                                 try {
                                     dmUserService.createDmUserEntity(dmUser);
                                 }catch (Exception e){
-                                    throw new ApplicationException(2000,"项目成员添加失败" + e.getMessage());
+                                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目成员添加失败" + e.getMessage());
                                 }
                                 // 创建角色与项目成员的关联
                                 try{
@@ -960,7 +961,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                                         dmRoleUserService.createDmRoleUser(dmRoleUser);
                                     }
                                 }catch (Exception e){
-                                    throw new ApplicationException(2000,"项目角色成员添加失败" + e.getMessage());
+                                    throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目角色成员添加失败" + e.getMessage());
 
                                 }
 
@@ -992,7 +993,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                         try {
                             dmUserService.createDmUserEntity(dmUser);
                         }catch (Exception e){
-                            throw new ApplicationException(2000,"项目成员添加失败" + e.getMessage());
+                            throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目成员添加失败" + e.getMessage());
                         }
                         // 创建角色与项目成员的关联
                         try{
@@ -1006,7 +1007,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                                 dmRoleUserService.createDmRoleUser(dmRoleUser);
                             }
                         }catch (Exception e){
-                            throw new ApplicationException(2000,"项目角色成员添加失败" + e.getMessage());
+                            throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目角色成员添加失败" + e.getMessage());
 
                         }
 
@@ -1069,7 +1070,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                 }
             }
         }catch (Exception e){
-            throw new ApplicationException(2000,"项目角色添加失败" + e.getMessage());
+            throw new ApplicationException(ErrorCode.CREATE_ERROR,"项目角色添加失败" + e.getMessage());
         }
 
         return roleIds;

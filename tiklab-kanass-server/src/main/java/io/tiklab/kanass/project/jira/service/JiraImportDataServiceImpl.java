@@ -3,6 +3,7 @@ package io.tiklab.kanass.project.jira.service;
 import io.tiklab.core.exception.ApplicationException;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.ids.tenant.common.TenantHolder;
+import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.jira.util.UncompressUtil;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.project.service.ProjectService;
@@ -187,7 +188,7 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
             getJdbcTemplet().update(sql1,"901237241cwe",projectId,"111111","5");
 
         }catch (Exception e){
-            throw new ApplicationException(2000,"添加失败" + e.getMessage());
+            throw new ApplicationException(ErrorCode.CREATE_ERROR,"添加失败" + e.getMessage());
         }
     }
 
