@@ -358,6 +358,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         sendMessageNotice.setBaseUrl(baseUrl);
         sendMessageNotice.setSiteData(msg);
         sendMessageNotice.setQywechatData(msg);
+        sendMessageNotice.setEmailData(msg);
         sendMessageNotice.setSendId(createUserId);
         sendMessageNotice.setAction(oldWorkItem.getTitle());
         VRoleDomain vRoleDomain = new VRoleDomain();
