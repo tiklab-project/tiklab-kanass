@@ -1,7 +1,6 @@
 #系统名称
-
 app:
-    name: tiklab-kanass
+    name: kanass
 spring:
     profiles:
         active: release
@@ -13,15 +12,11 @@ server:
     port: 8080
 
 #mac、linux
-DATA_HOME: /opt/tiklab/kanass-ce
-
-
-base:
-    url: http://kanass-ce.test.kanass.net
+DATA_HOME: /opt/tiklab/tiklab-kanass
 
 jdbc:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:8000/kanass?stringtype=unspecified
+    url: jdbc:postgresql://localhost:8000/tiklab_kanass?stringtype=unspecified
     username: postgres
     password: darth2020
 
@@ -35,12 +30,12 @@ postgresql:
         password: darth2020
         address: ${DATA_HOME}/postgresql
 
-
 #soular config
 soular:
     embbed:
         enable: true
     address: http://soular-ce.test.kanass.net
+
 #dfs config
 #dfs.service.enabled=false
 dfs:
@@ -70,24 +65,13 @@ dcs:
 licences:
     path: ${APP_HOME}/src/main/resources/licences
 
-#plugin config
-plugin:
-    path: ${DATA_HOME}/plugin
-
-#zip config
-unzip:
-    path: ${DATA_HOME}/unzip/Jira
-
-homes:
-    address: http://192.168.10.6:8070
-
-file:
-    path: http://file.dev.kanass.io
-
-
-client: web
-version: ce
+base:
+    url: http://kanass-ce.test.kanass.net
 
 backups:
     time: 0 0 2 * * ?
     dir: /data/kanass
+
+#zip config
+unzip:
+    path: ${DATA_HOME}/unzip/Jira

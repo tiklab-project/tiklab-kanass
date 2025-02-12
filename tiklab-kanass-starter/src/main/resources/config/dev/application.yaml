@@ -1,7 +1,6 @@
 #系统名称
 app:
-  name: tiklab-kanass
-
+  name: kanass
 # 环境
 spring:
   profiles:
@@ -15,27 +14,25 @@ spring:
 server:
   port: 8080
 
+DATA_HOME: ${user.home}/tiklab/tiklab-kanass
 
+#db
 jdbc:
   driverClassName: org.postgresql.Driver
   url: jdbc:postgresql://172.10.1.10:5432/tiklab_kanass?stringtype=unspecified
-#  url: jdbc:postgresql://172.13.1.17:5432/teamwire_ee?stringtype=unspecified
   username: postgres
   password: darth2020
 
-
 postgresql:
-  type: local
   embbed:
     enable: false
   database: tiklab_kanass
+  db:
+    port: 5432
+    username: postgres
+    password: darth2020
+    address: ${DATA_HOME}/postgresql
 
-# 访问地址，用于显示日志，消息，待办的图标
-base:
-  url: http://192.168.10.7:8080
-
-
-DATA_HOME: ${user.home}/tiklab/kanass
 
 #dfs config
 dfs:
@@ -59,8 +56,7 @@ dcs:
     group: g1
     database: dcs1
     expire: 7200
-#address: http://soular.local.kanass.net
-#  address: http://soular.dev.kanass.net
+
 soular:
   embbed:
     enable: true
@@ -68,41 +64,14 @@ soular:
     address: http://192.168.10.16:3010
   address: http://192.168.10.15:8080
 
-# homes 地址
-#homes:
-#  address: http://192.168.10.25:8080
-
-#plugin config
-plugin:
-  path: ${DATA_HOME}/plugin
-
-#zip config
-unzip:
-  path: ${DATA_HOME}/unzip/Jira
 
 #证书文件路径
 licences:
   path: ${APP_HOME}/licences
 
-client: web
-version: ce
-
-homes:
-  address: http://192.168.10.6:8070
-
-file:
-  path: http://file.dev.kanass.io
-
-user:
-  home: ${user.home}
-
-postin:
-  enable: false
-  scan:
-    package: io.tiklab
-  report:
-    workspaceId: b4a2fc3a3d73
-    server: http://192.168.10.3:8090
+# 访问地址，用于显示日志，消息，待办的图标
+base:
+  url: http://192.168.10.7:8080
 
 backups:
   pgsql:
@@ -112,3 +81,6 @@ backups:
   dfs:
     dir: ${DATA_HOME}/files
 
+#zip config
+unzip:
+  path: ${DATA_HOME}/unzip/Jira

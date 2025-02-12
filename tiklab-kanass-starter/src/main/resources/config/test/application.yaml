@@ -1,30 +1,26 @@
 #application config
 app:
-    name: tiklab-kanass
+    name: kanass
 spring:
     profiles:
         active: test
-
 
 #web config
 server:
     port: 8080
 
-DATA_HOME: /opt/kanass/kanass
-
-base:
-    url: http://kanass-ce.test.kanass.net
+DATA_HOME: /opt/tiklab/tiklab-kanass
 
 jdbc:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/kanass?stringtype=unspecified
+    url: jdbc:postgresql://localhost:5432/tiklab_kanass?stringtype=unspecified
     username: postgres
     password: darth2020
 
 postgresql:
     embbed:
         enable: true
-    database: kanass
+    database: tiklab_kanass
     db:
         port: 5432
         username: postgres
@@ -66,24 +62,13 @@ dcs:
 licences:
     path: ${APP_HOME}/src/main/resources/licences
 
-#plugin config
-plugin:
-    path: ${DATA_HOME}/plugin
-
-#zip config
-unzip:
-    path: ${DATA_HOME}/unzip/Jira
-
-homes:
-    address: http://192.168.10.6:8070
-
-file:
-    path: http://file.dev.kanass.io
-
-
-client: web
-version: ce
+base:
+    url: http://kanass-ce.test.kanass.net
 
 backups:
     time: 0 0 2 * * ?
     dir: /data/kanass
+
+#zip config
+unzip:
+    path: ${DATA_HOME}/unzip/Jira

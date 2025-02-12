@@ -17,7 +17,6 @@ import io.tiklab.licence.boot.starter.annotation.EnableLicenceServer;
 import io.tiklab.messsage.boot.starter.annotation.EnableMessageServer;
 import io.tiklab.openapi.boot.starter.annotation.EnableOpenApi;
 import io.tiklab.postgresql.EnablePostgresql;
-import io.tiklab.postin.client.EnablePostInClient;
 import io.tiklab.privilege.boot.starter.annotation.EnablePrivilegeServer;
 import io.tiklab.rpc.boot.starter.annotation.EnableRpc;
 import io.tiklab.security.boot.stater.annotation.EnableSecurityServer;
@@ -57,7 +56,6 @@ import org.springframework.context.annotation.Configuration;
 
 //other
 @EnableKanassServer
-@EnablePostInClient
 @EnableOpenApi
 @ComponentScan({"io.tiklab.kanass"})
 public class KanassAutoConfiguration {
