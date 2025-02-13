@@ -267,7 +267,7 @@ Kanass 支持多种项目模型，拥有强大的事项跟踪与管理功能，�
 
 * 配置MAVEN仓库地址
   
-  配置maven的setrings.xml文件的远程仓库为一下内容
+  配置maven的settings.xml文件的远程仓库为一下内容
   ```
   <mirror>
       <id>hadess</id>
