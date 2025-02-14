@@ -6,7 +6,6 @@ import io.tiklab.core.order.Order;
 import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.dal.datasource.holder.DynamicDataSourceKeyHolder;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
-import io.tiklab.ids.tenant.common.TenantHolder;
 import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.epic.entity.EpicWorkItemEntity;
 import io.tiklab.kanass.project.plan.entity.PlanWorkItemEntity;
@@ -58,7 +57,6 @@ public class WorkItemDao{
      * @param workItemEntity
      */
     public void updateWorkItem(WorkItemEntity workItemEntity){
-        logger.info("tenantId:" + TenantHolder.get());
         String dataSourceKey = DynamicDataSourceKeyHolder.getDataSourceKey();
         logger.info("dataSourceKey: " + dataSourceKey);
         jpaTemplate.update(workItemEntity);

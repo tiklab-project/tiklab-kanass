@@ -2,7 +2,6 @@ package io.tiklab.kanass.project.jira.service;
 
 import io.tiklab.core.exception.ApplicationException;
 import io.tiklab.eam.common.context.LoginContext;
-import io.tiklab.ids.tenant.common.TenantHolder;
 import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.jira.util.UncompressUtil;
 import io.tiklab.kanass.project.project.model.Project;
@@ -65,9 +64,7 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
     @Override
     public void importJiraData(InputStream inputStream) {
 //        executorService.submit(() -> {
-        String s = TenantHolder.get();
         transactionTemplate.execute((status) -> {
-            String t = TenantHolder.get();
             // 在这里执行需要在事务中的操作
             return setData(inputStream);
         });
