@@ -181,8 +181,8 @@ public class SprintServiceImpl implements SprintService {
 
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
-        Sprint sprint1 = findSprint(id);
-        sendMessageForCreatSprint(sprint1);
+//        Sprint sprint1 = findSprint(id);
+//        sendMessageForCreatSprint(sprint1);
 
         return id;
     }

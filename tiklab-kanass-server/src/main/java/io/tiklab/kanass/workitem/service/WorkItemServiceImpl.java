@@ -246,7 +246,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         List<MessageReceiver> objects = new ArrayList<>();
         MessageReceiver messageReceiver = new MessageReceiver();
         messageReceiver.setUserId(assigner.getId());
-
+        messageReceiver.setEmail(assigner.getEmail());
         objects.add(messageReceiver);
         message.setMessageReceiverList(objects);
         message.setBaseUrl(baseUrl);
@@ -259,9 +259,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         sendMessageNoticeService.sendMessage(message);
 
         message.setId(null);
-        message.setMessageSendTypeId("qywechat");
+        message.setMessageSendTypeId("email");
         sendMessageNoticeService.sendMessage(message);
 
+        message.setMessageSendTypeId("qywechat");
+        sendMessageNoticeService.sendMessage(message);
     }
 
     /**
