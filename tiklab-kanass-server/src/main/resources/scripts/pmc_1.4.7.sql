@@ -33,4 +33,8 @@ INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id",
 --INSERT INTO "pcs_mec_message_template" ("id", "msg_type_id", "msg_send_type_id", "title", "content", "link", "bgroup", "link_params") VALUES ('mailJOINPROJECT', 'KANASS_MESSAGETYPE_JOINPROJECT', 'email', '加入项目', '✨ 你加入了项目 - <font color="#409EFF">${name}</font>', '/project/${projectId}/overview', 'kanass', NULL);
 
 
+INSERT INTO "pcs_mec_message_notice" ("id", "message_type_id", "type", "bgroup", "message_send_type_id", "scope", "is_open") VALUES ('todo7741c720', 'KANASS_MESSAGETYPE_TASKTODO', 2, 'kanass', 'site', 2, 'true');
+INSERT INTO "public"."pcs_mec_message_dm_notice" ("id", "message_notice_id", "domain_id", "source_notice_id", "is_open") VALUES ('demo287a14b0', 'todo7741c720', 'f3fdc893ff25', 'KANASS_MESSAGE_SPRINTUPDATE', 'true');
 
+INSERT INTO "pcs_mec_message_notice" ("id", "message_type_id", "type", "bgroup", "message_send_type_id", "scope", "is_open") VALUES ('todo2544234', 'KANASS_MESSAGETYPE_TASKTODO', 2, 'kanass', 'site', 2, 'true');
+INSERT INTO "public"."pcs_mec_message_dm_notice" ("id", "message_notice_id", "domain_id", "source_notice_id", "is_open") VALUES ('demo12345678', 'todo2544234', '4cf6d4dec7d0', 'KANASS_MESSAGE_SPRINTUPDATE', 'true');
