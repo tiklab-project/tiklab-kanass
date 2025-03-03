@@ -41,7 +41,7 @@ public class WorkItemController {
      * @pi.path:/workItem/createWorkItem
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItem
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItem
      */
     @RequestMapping(path="/createWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "createWorkItem",desc = "创建事项")
@@ -57,7 +57,7 @@ public class WorkItemController {
      * @pi.path:/workItem/updateWorkItem
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItem
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItem
      */
     @RequestMapping(path="/updateWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "updateWorkItem",desc = "更新事项")
@@ -147,7 +147,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemList",desc = "根据查询对象查找事项列表")
@@ -163,7 +163,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findEpicSelectWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findEpicSelectWorkItemList",desc = "根据查询对象查找可被史诗添加的子事项列表")
@@ -179,7 +179,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findSelectWorkItemList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findSelectChildrenWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findSelectChildrenWorkItemList",desc = "根据查询对象查找可被添加的子事项列表")
@@ -197,7 +197,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemListTree
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemListTree",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemListTree",desc = "根据查询对象查找事项列表树")
@@ -213,7 +213,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findConditionWorkItemPage
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findConditionWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findConditionWorkItemPage",desc = "根据查询对象查找事项列表树")
@@ -229,7 +229,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemPage
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemPage",desc = "根据查询对象按分页查找事项列表")
@@ -246,7 +246,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemPageTree
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemPageTree",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemPageTree",desc = "根据查询对象按分页查找事项列表树")
@@ -262,7 +262,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemPageTreeByQuery
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemPageTreeByQuery",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemPageTreeByQuery",desc = "根据条件查找事项列表树")
@@ -283,7 +283,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkBoardList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkBoardList",desc = "根据查询对象查找事项看板列表")
@@ -299,7 +299,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findChangePageWorkBoardList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findChangePageWorkBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findChangePageWorkBoardList",desc = "根据查询对象查找事项看板列表")
@@ -315,7 +315,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkUserGroupBoardList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkUserGroupBoardList",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkUserGroupBoardList",desc = "根据查询对象查找事项看板列表")
@@ -341,7 +341,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findUnEpicWorkItemPage
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findUnEpicWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findUnEpicWorkItemPage",desc = "根据查询对象按分页查找未被史诗关联的事项列表")
@@ -357,7 +357,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findUnPlanWorkItemPage
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findUnPlanWorkItemPage",method = RequestMethod.POST)
     @ApiMethod(name = "findUnPlanWorkItemPage",desc = "根据查询对象按分页查找事项列表")
@@ -373,7 +373,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemByKeyWorks
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemByKeyWorks",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemByKeyWorks",desc = "根据查询对象按分页查找事项列表")
@@ -389,7 +389,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemNumByWorkType
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemNumByWorkType",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemNumByWorkType",desc = "根据查询对象按分页查找事项列表")
@@ -414,7 +414,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemNumByWorkStatus
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemNumByWorkStatus",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemNumByWorkStatus",desc = "根据查询事项状态查找事项数量")
@@ -430,7 +430,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemNumByQuickSearch
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemNumByQuickSearch",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemNumByQuickSearch",desc = "根据快速筛选查询事项状态查找事项数量")
@@ -446,7 +446,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findCanBeRelationParentWorkItemList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findCanBeRelationParentWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findCanBeRelationParentWorkItemList",desc = "根据查询事项状态查找可被关联的上级事项")
@@ -462,7 +462,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findCanBeRelationPerWorkItemList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findCanBeRelationPerWorkItemList",method = RequestMethod.POST)
     @ApiMethod(name = "findCanBeRelationPerWorkItemList",desc = "根据查询事项状态查找可被关联的前置事项")
@@ -478,7 +478,7 @@ public class WorkItemController {
      * @pi.path:/workItem/findWorkItemRelationModelCount
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=WorkItemQuery
+     * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemRelationModelCount",method = RequestMethod.POST)
     @ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的事项")

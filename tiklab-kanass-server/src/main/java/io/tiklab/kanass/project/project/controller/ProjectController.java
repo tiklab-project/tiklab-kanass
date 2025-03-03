@@ -41,7 +41,7 @@ public class ProjectController {
      * @pi.path:/project/createProject
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=Project
+     * @pi.param: model=io.tiklab.kanass.project.project.model.Project
      */
     @RequestMapping(path="/createProject",method = RequestMethod.POST)
     @ApiMethod(name = "createProject",desc = "创建项目")
@@ -56,7 +56,7 @@ public class ProjectController {
      * @pi.path:/project/updateProject
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=Project
+     * @pi.param: model=io.tiklab.kanass.project.project.model.Project
      */
     @RequestMapping(path="/updateProject",method = RequestMethod.POST)
     @ApiMethod(name = "updateProject",desc = "更新项目")
@@ -135,7 +135,7 @@ public class ProjectController {
      * @pi.path:/project/findProjectList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=ProjectQuery
+     * @pi.param: model=io.tiklab.kanass.project.project.model.ProjectQuery
      */
     @RequestMapping(path = "/findProjectList",method = RequestMethod.POST)
     @ApiMethod(name = "findProjectList",desc = "根据查询对象查询项目列表")
@@ -167,7 +167,7 @@ public class ProjectController {
      * @pi.path:/project/findJoinProjectList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=ProjectQuery
+     * @pi.param: model=io.tiklab.kanass.project.project.model.ProjectQuery
      */
     @RequestMapping(path = "/findJoinProjectList",method = RequestMethod.POST)
     @ApiMethod(name = "findJoinProjectList",desc = "查询我参与的项目列表")
@@ -183,7 +183,7 @@ public class ProjectController {
      * @pi.path:/project/findProjectPage
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=ProjectQuery
+     * @pi.param: model=io.tiklab.kanass.project.project.model.ProjectQuery
      */
     @RequestMapping(path = "/findProjectPage",method = RequestMethod.POST)
     @ApiMethod(name = "findProjectPage",desc = "根据查询对象按分页查询项目列表")
@@ -199,7 +199,7 @@ public class ProjectController {
      * @pi.path:/project/findRecentProjectPage
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=ProjectQuery
+     * @pi.param: model=io.tiklab.kanass.project.project.model.ProjectQuery
      */
     @RequestMapping(path = "/findRecentProjectList",method = RequestMethod.POST)
     @ApiMethod(name = "findRecentProjectList",desc = "根据查询对象查询最近的项目列表")
@@ -215,7 +215,7 @@ public class ProjectController {
      * @pi.path:/project/findFocusProjectList
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=ProjectQuery
+     * @pi.param: model=io.tiklab.kanass.project.project.model.ProjectQuery
      */
     @RequestMapping(path = "/findFocusProjectList",method = RequestMethod.POST)
     @ApiMethod(name = "findFocusProjectList",desc = "根据查询对象查询关注的项目列表")
@@ -262,7 +262,7 @@ public class ProjectController {
      * @pi.path:/project/findProjectSortRecentTime
      * @pi.methodType:post
      * @pi.request-type:json
-     * @pi.param: model=ProjectQuery
+     * @pi.param: model=io.tiklab.kanass.project.project.model.ProjectQuery
      */
     @RequestMapping(path = "/findProjectSortRecentTime",method = RequestMethod.POST)
     @ApiMethod(name = "findProjectSortRecentTime",desc = "根据传入数量查找最近点击项目，数量不够用别的项目")
