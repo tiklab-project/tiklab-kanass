@@ -196,35 +196,43 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
         List<DmRoleUser> dmRoleUserList = dmRoleUserService.findDmRoleUserList(dmRoleUserQuery);
 //        List<String> roleIds = dmRoleUserList.stream().map(dmRoleUser -> dmRoleUser.getRole().getId()).collect(Collectors.toList());
         for (DmRoleUser dmRoleUser : dmRoleUserList) {
+
             DmRole dmRole = dmRoleUser.getDmRole();
-            String id = dmRole.getRole().getId();
+            if (dmRole == null) continue;
+
+            Role roleObj = dmRole.getRole();
+            if (roleObj == null) continue;
+
+            String id = roleObj.getId();
             Role role = roleService.findRole(id);
+            if (role == null) continue;
+
             String parentId = role.getParentId();
-            if(parentId != null){
+            if (parentId != null) {
                 userVrole.add(parentId);
-            }else {
+            } else {
                 userVrole.add(role.getId());
             }
         }
-
 
         String[] userVroles = userVrole.toArray(new String[userVrole.size()]);
         workItemRoleFunctionQuery.setRoleIds(userVroles);
         workItemRoleFunctionQuery.setWorkTypeId(workItem.getWorkType().getId());
         List<WorkItemRoleFunctionDm> workItemRoleFunctionDmList = findWorkItemRoleFunctionDmList(workItemRoleFunctionQuery);
-        for (WorkItemRoleFunctionDm workItemRoleFunctionDm : workItemRoleFunctionDmList) {
-            String functionType = workItemRoleFunctionDm.getFunctionType();
-            String functionId = workItemRoleFunctionDm.getFunctionId();
-            if(functionType.equals("field")){
-                FieldEx field = fieldService.findField(functionId);
-                String code = field.getCode();
-                codes.add(code);
-            }
+        for (WorkItemRoleFunctionDm dm : workItemRoleFunctionDmList) {
+            String functionType = dm.getFunctionType();
+            String functionId = dm.getFunctionId();
 
-            if(functionType.equals("function")){
-                WorkItemFunction workItemFunction = workItemFunctionService.findWorkItemFunction(functionId);
-                String code = workItemFunction.getCode();
-                codes.add(code);
+            if ("field".equals(functionType)) {
+                FieldEx field = fieldService.findField(functionId);
+                if (field != null) {
+                    codes.add(field.getCode());
+                }
+            } else if ("function".equals(functionType)) {
+                WorkItemFunction function = workItemFunctionService.findWorkItemFunction(functionId);
+                if (function != null) {
+                    codes.add(function.getCode());
+                }
             }
         }
 
