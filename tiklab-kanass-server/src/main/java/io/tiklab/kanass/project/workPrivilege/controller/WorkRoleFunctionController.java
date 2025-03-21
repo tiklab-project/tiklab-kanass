@@ -103,7 +103,7 @@ public class WorkRoleFunctionController {
 
     @RequestMapping(path = "/findUserWorkFunction",method = RequestMethod.POST)
     @ApiMethod(name = "findUserWorkFunction",desc = "根据查询对象按分页查询优先级列表")
-    @ApiParam(name = "workRoleFunctionQuery",desc = "查询对象",required = true)
+    @ApiParam(name = "workId",desc = "查询对象",required = true)
     public Result<Set<String>> findUserWorkFunction(@NotNull String userId, @NotNull String workId){
         Set<String> userWorkFunction = workRoleFunctionService.findUserWorkFunction(userId, workId);
 

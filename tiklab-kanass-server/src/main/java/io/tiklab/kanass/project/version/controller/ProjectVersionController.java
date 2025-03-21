@@ -83,9 +83,9 @@ public class ProjectVersionController {
 
     @RequestMapping(path = "/findVersionList",method = RequestMethod.POST)
     @ApiMethod(name = "findVersionList",desc = "根据条件查找项目类型列表")
-    @ApiParam(name = "ProjectVersionQuery",desc = "项目版本搜索模型",required = true)
-    public Result<List<ProjectVersion>> findVersionList(@RequestBody @Valid @NotNull ProjectVersionQuery ProjectVersionQuery){
-        List<ProjectVersion> projectVersionList = projectVersionService.findVersionList(ProjectVersionQuery);
+    @ApiParam(name = "projectVersionQuery",desc = "项目版本搜索模型",required = true)
+    public Result<List<ProjectVersion>> findVersionList(@RequestBody @Valid @NotNull ProjectVersionQuery projectVersionQuery){
+        List<ProjectVersion> projectVersionList = projectVersionService.findVersionList(projectVersionQuery);
 
         return Result.ok(projectVersionList);
     }
@@ -93,25 +93,25 @@ public class ProjectVersionController {
 
     @RequestMapping(path = "/findVersionPage",method = RequestMethod.POST)
     @ApiMethod(name = "findVersionPage",desc = "根据条件按分页查询项目类型列表")
-    @ApiParam(name = "ProjectVersionQuery",desc = "项目版本搜索模型",required = true)
-    public Result<Pagination<ProjectVersion>> findVersionPage(@RequestBody @Valid @NotNull ProjectVersionQuery ProjectVersionQuery){
-        Pagination<ProjectVersion> pagination = projectVersionService.findVersionPage(ProjectVersionQuery);
+    @ApiParam(name = "projectVersionQuery",desc = "项目版本搜索模型",required = true)
+    public Result<Pagination<ProjectVersion>> findVersionPage(@RequestBody @Valid @NotNull ProjectVersionQuery projectVersionQuery){
+        Pagination<ProjectVersion> pagination = projectVersionService.findVersionPage(projectVersionQuery);
 
         return Result.ok(pagination);
     }
 
     @RequestMapping(path = "/findVersionFocusList",method = RequestMethod.POST)
     @ApiMethod(name = "findVersionFocusList",desc = "根据条件按分页查询项目类型列表")
-    @ApiParam(name = "ProjectVersionQuery",desc = "项目版本搜索模型",required = true)
-    public Result<List<ProjectVersion>> findVersionFocusList(@RequestBody @Valid @NotNull ProjectVersionQuery ProjectVersionQuery){
-        List<ProjectVersion> versionFocusList = projectVersionService.findVersionFocusList(ProjectVersionQuery);
+    @ApiParam(name = "projectVersionQuery",desc = "项目版本搜索模型",required = true)
+    public Result<List<ProjectVersion>> findVersionFocusList(@RequestBody @Valid @NotNull ProjectVersionQuery projectVersionQuery){
+        List<ProjectVersion> versionFocusList = projectVersionService.findVersionFocusList(projectVersionQuery);
 
         return Result.ok(versionFocusList);
     }
 
     @RequestMapping(path = "/findSelectVersionList",method = RequestMethod.POST)
     @ApiMethod(name = "findSelectVersionList",desc = "根据条件查找迭代列表")
-    @ApiParam(name = "versionQuery",desc = "迭代查询对象",required = true)
+    @ApiParam(name = "projectVersionQuery",desc = "迭代查询对象",required = true)
     public Result<List<ProjectVersion>> findSelectVersionList(@RequestBody @Valid @NotNull ProjectVersionQuery projectVersionQuery){
         List<ProjectVersion> versionList = projectVersionService.findSelectVersionList(projectVersionQuery);
 

@@ -65,7 +65,7 @@ public class WorkItemStatController {
 
     @RequestMapping(path="/statProjectWorkItemByBusStatus",method = RequestMethod.POST)
     @ApiMethod(name = "statProjectWorkItemByBusStatus",desc = "按项目，业务状态（未开始，进行中，逾期，结束）统计事项分布")
-    @ApiParam(name = "projectId",desc = "项目Id",required = true)
+    @ApiParam(name = "versionId",desc = "项目Id",required = true)
     public Result<List<WorkItemBusStatusStat>> statProjectWorkItemByBusStatus(@NotNull String projectId, String masterId, String sprintId,String versionId){
         List<WorkItemBusStatusStat> list = workItemStatService.statProjectWorkItemByBusStatus(projectId, masterId, sprintId, versionId);
 
@@ -74,7 +74,7 @@ public class WorkItemStatController {
 
     @RequestMapping(path="/statProjectWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "statProjectWorkItem",desc = "按统计事项各个状态的数量")
-    @ApiParam(name = "recentMasterId",desc = "用户Id",required = true)
+    @ApiParam(name = "num",desc = "用户Id",required = true)
     public Result<List<ProjectWorkItemStat>> statProjectWorkItemCount(@NotNull Integer num){
         List<ProjectWorkItemStat> list = workItemStatService.statProjectWorkItemCount(num);
 
@@ -92,7 +92,7 @@ public class WorkItemStatController {
 
     @RequestMapping(path="/statProjectManageSprint",method = RequestMethod.POST)
     @ApiMethod(name = "statProjectManageSprint",desc = "按照项目统计某个人复制的迭代")
-    @ApiParam(name = "masterId",desc = "用户Id",required = true)
+    @ApiParam(name = "projectId",desc = "用户Id",required = true)
     public Result<List<ProjectWorkItemStat>> statProjectManageSprint(@NotNull String masterId,@NotNull String projectId){
         List<Sprint> list = workItemStatService.statProjectManageSprint(masterId,projectId);
 
@@ -101,7 +101,7 @@ public class WorkItemStatController {
 
     @RequestMapping(path="/statSprintProcessWorkItem",method = RequestMethod.POST)
     @ApiMethod(name = "statSprintProcessWorkItem",desc = "某个迭代下某个成员管理的进行中的事项")
-    @ApiParam(name = "masterId",desc = "用户Id",required = true)
+    @ApiParam(name = "sprintId",desc = "用户Id",required = true)
     public Result<List<ProjectWorkItemStat>> statSprintProcessWorkItem(@NotNull String masterId,@NotNull String sprintId){
         List<WorkItem> list = workItemStatService.statSprintProcessWorkItem(masterId,sprintId);
 
