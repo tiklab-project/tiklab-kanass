@@ -342,12 +342,10 @@
         <dependency>
             <groupId>io.tiklab</groupId>
             <artifactId>tiklab-security-spring-boot-starter</artifactId>
-            <version>${tiklab-security.version}</version>
         </dependency>
         <dependency>
             <groupId>io.tiklab</groupId>
             <artifactId>tiklab-postin-client</artifactId>
-            <version>${tiklab-postin.version}</version>
         </dependency>
 
 

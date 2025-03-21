@@ -39,7 +39,7 @@ public class WikiDocumentController {
 
     @RequestMapping(path = "/findDocumentList",method = RequestMethod.POST)
     @ApiMethod(name = "findDocumentList",desc = "findDocumentList")
-    @ApiParam(name = "documentQuery",desc = "documentQuery",required = true)
+    @ApiParam(name = "nodeQuery",desc = "documentQuery",required = true)
     public Result<List<WikiDocument>> findDocumentList(@RequestBody @Valid @NotNull NodeQuery nodeQuery){
         List<WikiDocument> wikiDocumentList = wikiDocumentService.findDocumentList(nodeQuery);
 

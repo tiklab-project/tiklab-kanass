@@ -148,11 +148,11 @@
             <artifactId>tiklab-postin-annotation</artifactId>
             <version>${tiklab-postin.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.tiklab</groupId>
-            <artifactId>tiklab-postin-client</artifactId>
-            <version>${tiklab-postin.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.tiklab</groupId>-->
+<!--            <artifactId>tiklab-postin-client</artifactId>-->
+<!--            <version>${tiklab-postin.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.tiklab</groupId>
             <artifactId>tiklab-privilege-api</artifactId>

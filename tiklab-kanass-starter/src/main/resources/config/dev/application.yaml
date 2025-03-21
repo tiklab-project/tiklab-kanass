@@ -84,3 +84,7 @@ backups:
 #zip config
 unzip:
   path: ${DATA_HOME}/unzip/Jira
+
+postin:
+  scan:
+    package: io.tiklab.kanass
