@@ -38,10 +38,10 @@ postgresql:
 dfs:
   server:
     enabled: true
-    port: 4001
+    port: 4010
     datapath: ${DATA_HOME}/files
   client:
-    url: 127.0.0.1:4001
+    url: 127.0.0.1:4010
     group: g1
     bucket: kanass
 
@@ -49,10 +49,10 @@ dfs:
 dcs:
   server:
     enabled: true
-    port: 5001
+    port: 5010
     datapath: ${DATA_HOME}/caches
   client:
-    url: 127.0.0.1:5001
+    url: 127.0.0.1:5010
     group: g1
     database: dcs1
     expire: 7200
