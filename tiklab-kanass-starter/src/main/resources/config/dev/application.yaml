@@ -59,7 +59,7 @@ dcs:
 
 soular:
   embbed:
-    enable: false
+    enable: true
   web:
     address: http://192.168.10.16:3010
   address: http://192.168.10.15:8080
