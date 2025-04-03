@@ -28,6 +28,33 @@ public class HttpRequestUtil {
     @Autowired
     HttpRequestUtil requestUtil;
 
+    /**
+     * 发起Post请求
+     * @param headers 请求头
+     * @param requestUrl 请求地址
+     * @param param 请求参数
+     * @return 请求结果
+     * @throws ApplicationException 请求失败
+     */
+    public JSONObject sendPost(HttpHeaders headers, String requestUrl, JSONObject param){
+
+        // 创建带有头部和请求体的 HttpEntity
+        HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
+        ResponseEntity<JSONObject> response;
+        try {
+            response = restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity, JSONObject.class);
+        }catch (ResourceAccessException e){
+            boolean timedOut = Objects.requireNonNull(e.getMessage()).contains("Read timed out");
+            boolean connectOut = Objects.requireNonNull(e.getMessage()).contains("Connect timed out");
+            if (timedOut || connectOut){
+                throw new ApplicationException(ErrorCodeConstants.TIMEOUT_EXCEPTION,"请求超时！");
+            }
+            throw new SystemException(e);
+        }
+
+        JSONObject jsonObject = response.getBody();
+        return jsonObject;
+    }
 
     /**
      * 发起Post请求

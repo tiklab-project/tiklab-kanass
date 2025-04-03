@@ -20,6 +20,7 @@ import io.tiklab.form.field.model.SelectItemRelationQuery;
 import io.tiklab.form.field.service.SelectItemRelationService;
 import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.project.project.model.Project;
+import io.tiklab.kanass.project.test.service.TestRepositoryService;
 import io.tiklab.kanass.project.version.model.ProjectVersion;
 import io.tiklab.kanass.project.version.service.ProjectVersionService;
 import io.tiklab.kanass.project.worklog.model.WorkLogQuery;
@@ -187,6 +188,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    TestRepositoryService testRepositoryService;
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -719,6 +723,23 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workItemDao.updateWorkItem(workItemEntity1);
             }
         }
+
+        //特殊处理，从testhubo跳过来创建缺陷传递caseId进行回调绑定
+        if(workItem.getCaseId() != null){
+            JSONObject jsonObject = new JSONObject();
+
+            JSONObject testCase = new JSONObject();
+            testCase.put("id", workItem.getCaseId());
+
+            JSONObject workItemJson = new JSONObject();
+            workItemJson.put("id", id);
+
+            jsonObject.put("workItem", workItemJson);
+            jsonObject.put("testCase", testCase);
+
+            testRepositoryService.createTestHuboBindWorkItem(jsonObject);
+        }
+
 
         WorkItem workItem1 = findWorkItem(id);
         executorService.submit(() -> {

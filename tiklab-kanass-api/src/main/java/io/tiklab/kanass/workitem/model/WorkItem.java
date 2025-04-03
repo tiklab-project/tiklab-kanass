@@ -248,6 +248,9 @@ public class WorkItem extends BaseModel {
     )
     private Boolean isRele;
 
+    @ApiProperty(name = "特殊处理，从testhubo跳过来创建缺陷传递caseId进行回调绑定")
+    private String caseId;
+
 
     public String getId() {
         return id;
@@ -612,5 +615,12 @@ public class WorkItem extends BaseModel {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getCaseId() {
+        return caseId;
+    }
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
     }
 }

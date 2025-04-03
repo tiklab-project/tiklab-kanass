@@ -1,5 +1,6 @@
 package io.tiklab.kanass.project.test.service;
 
+import com.alibaba.fastjson.JSONObject;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.kanass.project.test.model.TestRepository;
 import io.tiklab.kanass.support.model.SystemUrl;
@@ -7,6 +8,8 @@ import io.tiklab.kanass.support.model.SystemUrlQuery;
 import io.tiklab.kanass.support.service.SystemUrlService;
 import io.tiklab.kanass.support.util.HttpRequestUtil;
 import io.tiklab.kanass.project.test.model.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +23,7 @@ import java.util.List;
  */
 @Service
 public class TestRepositoryServiceImpl implements TestRepositoryService {
+    private static Logger logger = LoggerFactory.getLogger(TestRepositoryServiceImpl.class);
 
     @Autowired
     SystemUrlService systemUrlService;
@@ -78,5 +82,20 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
             testRepositoryList.add(testRepository);
         }
         return testRepositoryList;
+    }
+
+    @Override
+    public void createTestHuboBindWorkItem(JSONObject paramJson) {
+        try{
+            HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+            String systemUrl = getSystemUrl();
+            JSONObject jsonObject = httpRequestUtil.sendPost(httpHeaders, systemUrl + "/api/workItemBind/createWorkItemBind", paramJson);
+
+            logger.info(jsonObject.toString());
+        }catch (Exception e){
+            logger.error("createTestHuboBindWorkItem error:"+e.getMessage());
+        }
+
+
     }
 }
