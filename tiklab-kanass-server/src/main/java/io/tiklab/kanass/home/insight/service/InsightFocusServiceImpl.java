@@ -44,6 +44,10 @@ public class InsightFocusServiceImpl implements InsightFocusService {
         insightFocusDao.updateInsightFocus(insightFocusEntity);
     }
 
+    /**
+     * 根据查询条件删除
+     * @param insightFocusQuery
+     */
     @Override
     public void deleteInsightFocusByQuery(@NotNull @Valid InsightFocusQuery insightFocusQuery) {
         List<InsightFocusEntity> insightFocusList = insightFocusDao.findInsightFocusList(insightFocusQuery);
@@ -69,7 +73,7 @@ public class InsightFocusServiceImpl implements InsightFocusService {
 
     @Override
     public List<InsightFocus> findList(List<String> idList) {
-        List<InsightFocusEntity> insightFocusEntityList =  insightFocusDao.findInsightFocusList(idList);
+        List<InsightFocusEntity> insightFocusEntityList =  insightFocusDao.findInsightFocusList(idList);//根据id列表查询实体对象列表
 
         List<InsightFocus> insightFocusList =  BeanMapper.mapList(insightFocusEntityList,InsightFocus.class);
         return insightFocusList;

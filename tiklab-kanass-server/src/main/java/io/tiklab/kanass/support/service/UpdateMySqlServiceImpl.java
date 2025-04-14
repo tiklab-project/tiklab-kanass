@@ -63,6 +63,7 @@ public class UpdateMySqlServiceImpl implements UpdateMySqlService {
             String id = project.getId();
             try {
                 String newId = id.substring(0, 12);
+                // 更新项目id
                 sql = "UPDATE pmc_project" + " SET id = '" + newId + "' WHERE id = '" + id + "'";
                 jdbcTemplate.execute(sql);
 

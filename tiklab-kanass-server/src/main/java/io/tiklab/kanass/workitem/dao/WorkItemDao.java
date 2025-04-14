@@ -233,7 +233,7 @@ public class WorkItemDao{
         String sql = new String();
         Object o1 = stringObjectMap.get("sql");
         Object query = stringObjectMap.get("query");
-        Integer integer = new Integer(0);
+        Integer integer = Integer.valueOf(0);
         if(!ObjectUtils.isEmpty(query)){
             sql = sql.concat( String.valueOf(o1));
             integer = this.jpaTemplate.getJdbcTemplate().queryForObject(sql, new String[]{}, Integer.class);
@@ -1028,9 +1028,13 @@ public class WorkItemDao{
 
     public HashMap<String, Integer> findWorkItemNumByWorkType(WorkItemQuery workItemQuery){
         HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        //将 workItemQuery 的 workTypeId 属性设置为 null，表示不按工作类型 ID 进行过滤
         workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
         String sql = new String();
+        //获取 stringObjectMap 中的两个值
+        //sql：表示基础 SQL 查询片段
+        //query：表示附加的查询条件
         Object o1 = stringObjectMap.get("sql");
         Object query = stringObjectMap.get("query");
         if(!ObjectUtils.isEmpty(query)){
@@ -1040,24 +1044,26 @@ public class WorkItemDao{
             sql = sql.concat( String.valueOf(o1));
             sql = sql.concat(" p.parent_id is null");
         }
+        //找到 SQL 查询片段中 where 关键字的位置
         int index = sql.indexOf("where");
+        //构造完整 SQL 查询语句，统计符合条件的工作项总数
         sql = "Select count(1) as total from pmc_work_item p " + sql.substring(index);
-
+        //统计所有工作项数量
         Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
         WorkItemCount.put("all", allNum);
-
+        //统计需求类型的工作项数量
         String sql1 =  sql.concat(" and p.work_type_code = 'demand'");
         Integer demandNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         WorkItemCount.put("demand", demandNum);
-
+        //统计需求类型的工作项数量
         String sql2 =  sql.concat(" and p.work_type_code = 'task'");
         Integer taskNum = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
         WorkItemCount.put("task", taskNum);
-
+        //统计需求类型的工作项数量
         String sql3 =  sql.concat(" and p.work_type_code = 'defect'");
         Integer defectNum = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
         WorkItemCount.put("defect", defectNum);
-
+        //统计史诗类型的工作项数量
         String sql4 =  sql.concat(" and p.work_type_code = 'epic'");
         Integer epicNum = jpaTemplate.getJdbcTemplate().queryForObject(sql4, new Object[]{}, Integer.class);
         WorkItemCount.put("epic", epicNum);
@@ -1684,7 +1690,7 @@ public class WorkItemDao{
     }
 
     public Integer findChildrenLevel(String id){
-        Integer level = new Integer(0);
+        Integer level = Integer.valueOf(0);
         String sql = "Select id from pmc_work_item where parent_id = '" + id + "'";
         List<String> workItemIdList = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         if(workItemIdList.size() > 0){

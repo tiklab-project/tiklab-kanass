@@ -82,15 +82,19 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         ProjectSet projectSet = projectSetService.findProjectSet(projectSetId);
         projectOperateMap.put("projectSet", projectSet);
         if(projectSet != null){
+            //构建项目查询条件并查询项目列表
             ProjectQuery projectQuery = new ProjectQuery();
             projectQuery.setProjectSetId(projectSetId);
             List<Project> projectList = projectService.findProjectList(projectQuery);
             List<ProjectOperateReport> projectOperateReports = new ArrayList<ProjectOperateReport>();
             if(projectList.size() > 0){
+                //遍历项目列表并统计项目数据
                 for (Project project : projectList) {
                     ProjectOperateReportQuery projectOperateReportQuery = new ProjectOperateReportQuery();
                     projectOperateReportQuery.setProjectId(project.getId());
+                    //调用 statisticsProjectOperate(projectOperateReportQuery) 方法，统计当前项目的操作报告
                     ProjectOperateReport projectOperateReport = statisticsProjectOperate(projectOperateReportQuery);
+                    //将结果添加到 projectOperateReports 列表中。
                     projectOperateReports.add(projectOperateReport);
                 }
                 projectOperateMap.put("projectOperateReportList", projectOperateReports);
@@ -111,11 +115,11 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      */
     public Map<String, Object> statisticsProjectUserCount(String projectSetId) {
         Map<String, Object> projectSetUserCount = new HashMap<>();
+        //构建项目查询条件并查询项目列表
         ProjectQuery projectQuery = new ProjectQuery();
         projectQuery.setProjectSetId(projectSetId);
-
         List<Project> projectList = projectService.findProjectList(projectQuery);
-        List<Map<String, Object>> projectUserCountList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> projectUserCountList = new ArrayList<Map<String, Object>>();//初始化项目用户数量列表
         for (Project project : projectList) {
             String id = project.getId();
             DmUserQuery dmUserQuery = new DmUserQuery();
@@ -166,12 +170,13 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             ArrayList<String> types = new ArrayList<>();
             Map<String, Object> workTypeCount = new HashMap<String, Object>();
             ArrayList<Object> integers = new ArrayList<>();
-
+            //使用流操作将 projectList 中的每个项目ID拼接成一个 SQL 风格的字符串，格式为 ('id1', 'id2', ...)，用于后续查询。
             String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
 
 
             List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemType(projectIds);
             List<WorkType> allWorkType = workTypeService.findAllWorkType();
+            //遍历所有工作项类型并统计每个项目的数量
             for (WorkType workType : allWorkType) {
                 String code = workType.getCode();
                 types.add(code);
@@ -205,20 +210,23 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      */
     @Override
     public Map<String, Object> statisticsNewWorkItemCountList(WorkItemCountQuery workItemCountQuery) {
+        //从 workItemCountQuery 中提取 projectSetId 和 projectId
         String projectSetId = workItemCountQuery.getProjectSetId();
         ProjectQuery projectQuery = new ProjectQuery();
         projectQuery.setProjectSetId(projectSetId);
 
         String projectId = workItemCountQuery.getProjectId();
         projectQuery.setProjectId(projectId);
+        //查询项目列表
         List<Project> projectList = projectService.findProjectList(projectQuery);
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
         if(projectList.size() > 0){
-            //安照统计单位（日，周，月...）计算时间点
+            //按照统计单位（日，周，月...）计算时间点列表
             List<String> daylist = getDaylist(workItemCountQuery);
             List<Object> countList = new ArrayList<>();
 
+            //遍历项目列表并统计每个项目的新工作项数量
             for (Project project : projectList) {
                 Map<String, Object> projectCount = new HashMap<String, Object>();
                 workItemCountQuery.setProjectId(project.getId());
@@ -227,9 +235,12 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
                 projectCount.put("countList", projectCountList);
                 countList.add(projectCount);
             }
+            //将时间点列表 daylist 放入 paramMap 中，键为 "dateList"
             paramMap.put("dateList", daylist);
+            //将统计结果列表 countList 放入 paramMap 中，键为 "projectCountList"
             paramMap.put("projectCountList", countList);
         }else {
+            //如果为空，将 "dateList" 和 "projectCountList" 键对应的值设置为 null 并返回 paramMap
             paramMap.put("dateList", null);
             paramMap.put("projectCountList", null);
         }
@@ -255,17 +266,23 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         Map<String, Object> paramMap = new HashMap<String, Object>();
         if(projectList.size() > 0){
             List<String> dayList = getDaylist(workItemCountQuery);
+            //获取项目ID列表并更新查询条件
             if(projectList.size() > 0){
+                //将 projectList 中所有项目的 id 提取为一个 List<String> 列表 projectIds。
                 List<String> projectIds = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
                 workItemCountQuery.setProjectIds(projectIds);
+                //查询结束工作项列表
                 List<Map<String, Object>> endWorkItemList = projectInsightReportDao.statisticsProjectEndWorkItem(workItemCountQuery, dayList);
+                //遍历项目列表并统计每个项目在每个时间段内的结束工作项数量
                 for (Project project : projectList) {
                     Map<String, Object> projectCount = new HashMap<String, Object>();
                     int size = dayList.size();
                     List<Integer> projectCountList = new ArrayList<>();
+                    //遍历 dayList 中的每一对相邻的时间点（start 和 end）
                     for (int i= 0; i< size-1; i++ ) {
                         String start= dayList.get(i);
                         String end = dayList.get(i+1);
+                        //使用流操作过滤 endWorkItemList，查找实际结束时间在当前时间段内且属于当前项目的记录，并统计其数量
                         List<Map<String, Object>> collect = endWorkItemList.stream().filter(work -> (work.get("actual_end_time").
                                         toString().compareTo(start) >= 0 && work.get("actual_end_time").toString().compareTo(end) <= 0 &&
                                         work.get("project_id").equals(project.getId())))
@@ -295,6 +312,7 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      */
     public Map<String, Object> statisticsSprintWorkItemTotalCountList(WorkItemCountQuery workItemCountQuery) {
         String sprintId = workItemCountQuery.getSprintId();
+        //调用 getDaylist(workItemCountQuery) 方法，根据查询条件计算时间点列表（如日期列表），并将其赋值给 daylist
         List<String> daylist = getDaylist(workItemCountQuery);
         Map<String, Object> sprintCount = new HashMap<String, Object>();
         workItemCountQuery.setSprintId(sprintId);
@@ -456,6 +474,8 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
     public List<Integer> statisticsProjectNewWorkItemCount(WorkItemCountQuery workItemCountQuery, List<String> dayList) {
         int size = dayList.size();
         List<Integer> countList = new ArrayList<>();
+        //遍历时间段并统计新工作项数量
+        //使用 for 循环遍历 dayList 中每一对相邻的时间点（startTime 和 endTime）
         for (int i= 0; i<size-1; i++ ) {
             String startTime = dayList.get(i);
             String endTime = dayList.get(i+1);
@@ -586,6 +606,7 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
     public List<String> getDaylist(WorkItemCountQuery workItemCountQuery){
         String startDate = workItemCountQuery.getStartDate();
         String endDate = workItemCountQuery.getEndDate();
+        //时间单位
         String cellTime = workItemCountQuery.getCellTime();
         int integer = 1;
         switch (cellTime){
@@ -604,16 +625,19 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             default:
                 break;
         }
-
+        //初始化日期格式化器和日期列表
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<String> dateList = new ArrayList<>();
         try {
+            //解析为date对象
             Date dateOne = sdf.parse(startDate);
             Date dateTwo = sdf.parse(endDate);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateOne);
             dateList.add(startDate);
-
+            //使用 while 循环遍历从 dateOne 到 dateTwo 的时间段
+            //每次循环中，将 calendar 的时间增加 interval 天
+            //将新的时间点格式化为字符串并添加到 dateList 中
             while (dateTwo.after(calendar.getTime())) {
                 calendar.add(Calendar.DAY_OF_MONTH, integer);
                 dateList.add(sdf.format(calendar.getTime()));
@@ -774,7 +798,7 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         }
 
         int size = workItemList.size();
-        float average = new Float(0.0);
+        float average = 0.0f;
         if(size > 0){
             average = allDiffDay / size;
         }
@@ -884,13 +908,17 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         Map<String, Object> projectUserCount = new HashMap<>();
         ArrayList<Map<String, Object>> userCount = new ArrayList<>();
         if(project != null){
+            //构建用户查询条件并查询用户列表
             DmUserQuery dmUserQuery = new DmUserQuery();
             dmUserQuery.setDomainId(projectId);
             List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+            //遍历用户列表并统计每个用户的工作项数量
+            //遍历 dmUserList 中的每一个 DmUser 对象
             for (DmUser dmUser : dmUserList) {
                 HashMap<String, Object> userWorkItemCount = new HashMap<>();
                 String userId = dmUser.getUser().getId();
                 Map<String, Integer> workItemTypeCount = projectInsightReportDao.statisticsUserWorkItemCount(projectId, userId);
+                //将当前用户对象和统计结果放入 userWorkItemCount 中，键分别为 "user" 和 "workItemTypeCount"
                 userWorkItemCount.put("user", dmUser.getUser());
                 userWorkItemCount.put("workItemTypeCount", workItemTypeCount);
                 userCount.add(userWorkItemCount);
@@ -930,31 +958,37 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
     public Map<String, Integer> statisticsTodoWorkByStatus(HashMap<String, String> params) {
         Map<String, Integer> todoCount = new HashMap<>();
         LinkedHashMap data = new LinkedHashMap();
-
+        //提取查询参数
         String projectId = params.get("projectId");
         String projectSetId = params.get("projectSetId");
         String sprintId = params.get("sprintId");
         String versionId = params.get("versionId");
+        //根据项目ID统计待办工作项
         if(!StringUtils.isEmpty(projectId)){
             data.put("projectId", projectId);
             todoCount = getTodoStatistics(data);
         }
+        //根据sprintID统计待办工作项
         if(!StringUtils.isEmpty(sprintId)){
             data.put("sprintId", sprintId);
             todoCount = getTodoStatistics(data);
         }
+        //根据版本ID统计待办工作项
         if(!StringUtils.isEmpty(versionId)){
             data.put("versionId", versionId);
             todoCount = getTodoStatistics(data);
         }
+        //根据项目集ID统计待办工作项
         if(!StringUtils.isEmpty(projectSetId)){
             ProjectQuery projectQuery = new ProjectQuery();
             projectQuery.setProjectSetId(projectSetId);
             List<Project> projectList = projectService.findProjectList(projectQuery);
+            //初始化四个计数器：total、progress、end 和 overdue
             int total = 0;
             int progress = 0;
             int end = 0;
             int overdue = 0;
+            //遍历 projectList 中的每一个 Project 对象
             for (Project project : projectList) {
                 String projectId1 = project.getId();
                 data.put("projectId", projectId1);
@@ -977,7 +1011,7 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             todoCount.put("end", end);
             todoCount.put("overdue", overdue);
         }
-
+        //处理无参数的情况
         if(StringUtils.isEmpty(projectSetId) && StringUtils.isEmpty(projectId)
                 && StringUtils.isEmpty(sprintId) && StringUtils.isEmpty(versionId)){
             todoCount = getTodoStatistics(data);
@@ -995,23 +1029,23 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         Map<String, Integer> todoCount = new HashMap<>();
 
         String loginId = LoginContext.getLoginId();
+        //构建任务查询条件
         TaskQuery taskQuery = new TaskQuery();
         taskQuery.setData(data);
-
         taskQuery.setBgroup("kanass");
         taskQuery.setAssignUserId(loginId);
-
+        //统计总任务数
         Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
         todoCount.put("total", taskPage.getTotalRecord());
-
+        //统计进行中的任务数, 1（表示进行中任务)
         taskQuery.setStatus(1);
         taskPage = taskService.findTaskPage(taskQuery);
         todoCount.put("progress", taskPage.getTotalRecord());
-
+        //统计已完成的任务数, 2（表示已完成任务)
         taskQuery.setStatus(2);
         taskPage = taskService.findTaskPage(taskQuery);
         todoCount.put("end", taskPage.getTotalRecord());
-
+        //统计已逾期的任务数, 1（表示进行中任务)，3（表示已逾期任务)
         taskQuery.setStatus(1);
         taskQuery.setIsExpire(3);
         taskPage = taskService.findTaskPage(taskQuery);

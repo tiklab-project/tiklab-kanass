@@ -244,10 +244,13 @@ public class StageServiceImpl implements StageService {
 
     @Override
     public Pagination<Stage> findStageListTreePage(StageQuery stageQuery) {
+        //设置查询条件
         stageQuery.setStageParentNull(true);
+        //查询一级阶段分页数据
         Pagination<Stage> stagePage = findStagePage(stageQuery);
         List<Stage> stageList = stagePage.getDataList();
         if(stageList.size() > 0){
+            //提取一级阶段的id列表
             List<String> stageIdList = stageList.stream().map(stage -> stage.getId()).collect(Collectors.toList());
             // 根据第一级阶段的ids 查找下级的所有阶段和事项
             String[] stageIds = stageIdList.toArray(new String[stageIdList.size()]);
@@ -256,6 +259,7 @@ public class StageServiceImpl implements StageService {
             List<Stage> stageListChildren = findStageList(stageQuery);
 
             if(stageListChildren.size() > 0){
+                //提取下级阶段的 id 列表，并将其合并到 stageIdList 中
                 List<String> stageListChildrenIdList = stageListChildren.stream().map(stage -> stage.getId()).collect(Collectors.toList());
                 stageIdList.addAll(stageListChildrenIdList);
 
@@ -263,7 +267,7 @@ public class StageServiceImpl implements StageService {
                 String[] allStageIds = stageIdList.toArray(new String[stageIdList.size()]);
                 workItemQuery.setStageIds(allStageIds);
                 List<WorkItem> workItemList = workItemService.findWorkItemListTree(workItemQuery);
-                //
+                //遍历一级阶段列表，调用 setStageTree 方法为每个阶段设置子阶段和子工作项
                 for (Stage stage : stageList) {
                     setStageTree(stage, stageListChildren, workItemList);
                 }

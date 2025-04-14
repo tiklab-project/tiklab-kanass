@@ -89,6 +89,7 @@ public class WorkRelateServiceImpl implements WorkRelateService {
 
     @Override
     public List<Map<String, Object>> findWorkRelateList(WorkRelateQuery workRelateQuery) {
+        //查询工作关联实体列表
         List<WorkRelateEntity> workRelateListEntity = workRelateDao.findWorkRelateList(workRelateQuery);
         List<Map<String, Object>> workRelateList = new ArrayList<Map<String, Object>>();
         if(workRelateListEntity != null){

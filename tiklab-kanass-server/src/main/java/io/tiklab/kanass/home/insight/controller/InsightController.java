@@ -80,7 +80,7 @@ public class InsightController {
     @RequestMapping(path = "/findInsightList",method = RequestMethod.POST)
     @ApiMethod(name = "findInsightList",desc = "根据条件查找仪表盘")
     @ApiParam(name = "insightQuery",desc = "仪表盘搜索条件模型",required = true)
-    public Result<List<Insight>>    findInsightList(@RequestBody @Valid @NotNull InsightQuery insightQuery){
+    public Result<List<Insight>> findInsightList(@RequestBody @Valid @NotNull InsightQuery insightQuery){
         List<Insight> insightList = insightService.findInsightList(insightQuery);
 
         return Result.ok(insightList);

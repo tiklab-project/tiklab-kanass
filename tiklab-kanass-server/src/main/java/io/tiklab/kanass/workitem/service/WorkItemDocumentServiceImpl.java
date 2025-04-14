@@ -150,16 +150,18 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public List<KanassDocument> findDocumentPageByWorkItemId(String workItemId) {
+        //构建查询条件
         WorkItemDocumentQuery workItemDocumentQuery = new WorkItemDocumentQuery();
         workItemDocumentQuery.setWorkItemId(workItemId);
-
+        //查询工作项文档列表
         List<WorkItemDocument> workItemDocumentList = findWorkItemDocumentList(workItemDocumentQuery);
 
         List<KanassDocument> list = new ArrayList<KanassDocument>();
         if (!ObjectUtils.isEmpty(workItemDocumentList)){
             for (WorkItemDocument workItemDocument:workItemDocumentList){
-
+                //初始化 HTTP 请求头 httpHeaders，指定内容类型为 application/json
                 HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+                //获取系统url地址
                 String systemUrl = getSystemUrl();
 
                 MultiValueMap param = new LinkedMultiValueMap<>();

@@ -177,6 +177,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     public ProjectSet findProjectSet(@NotNull String id) {
         ProjectSet projectSet = findOne(id);
 
+
         joinTemplate.joinQuery(projectSet);
         return projectSet;
     }
@@ -184,9 +185,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     @Override
     public List<ProjectSet> findAllProjectSet() {
         List<ProjectSetEntity> projectSetEntityList =  projectSetDao.findAllProjectSet();
-
         List<ProjectSet> projectSetList =  BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
-
         joinTemplate.joinQuery(projectSetList);
            if (projectSetList.size() > 0){
                //查询项目集下面相关的项目
@@ -194,7 +193,6 @@ public class ProjectSetServiceImpl implements ProjectSetService {
                 Integer projectNum = projectSetDao.findProjectNum(projectSet.getId());
                 //添加数量
                 projectSet.setProjectNumber(projectNum);
-
             }
         }
         return projectSetList;
@@ -370,7 +368,6 @@ public class ProjectSetServiceImpl implements ProjectSetService {
                 List<Project> collect = projectList.stream().filter(item -> item.getProjectSetId().equals(projectSet.getId())).collect(Collectors.toList());
                 projectSet.setProjectNumber(collect.size());
             }
-
         }
     }
 

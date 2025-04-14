@@ -195,19 +195,25 @@ public class RecentServiceImpl implements RecentService {
      */
     @Override
     public List<Recent> findRecentListToModel(RecentQuery recentQuery) {
+        //查询最近访问的实体列表
         List<RecentEntity> recentEntityList = recentDao.findRecentList(recentQuery);
 
         List<Recent> recentList = new ArrayList<>();
+        //使用流操作和 Collectors.groupingBy 方法，将 recentEntityList 按照模型类型（model）分组
         Map<String, List<RecentEntity>> collect = recentEntityList.stream().collect(Collectors.groupingBy(RecentEntity::getModel));
+        //获取模型类型为 "project" 的最近访问记录列表 projectRecentList
         List<RecentEntity> projectRecentList = collect.get("project");
 
         List<Project> projectList = new ArrayList<>();
         if(projectRecentList != null && projectRecentList.size() > 0){
+            //提取所有项目的 ID 列表 projectIds
             List<String> projectIds = projectRecentList.stream().map((project -> project.getModelId())).collect(Collectors.toList());
             String[] ids = new String[projectIds.size()];
+            //将 projectIds 转换为数组 ids
             ids = projectIds.toArray(ids);
             ProjectQuery projectQuery = new ProjectQuery();
             projectQuery.setProjectIds(ids);
+            //调方法，查询与这些 ID 对应的项目列表
             projectList = projectService.findProjectList(projectQuery);
         }
 

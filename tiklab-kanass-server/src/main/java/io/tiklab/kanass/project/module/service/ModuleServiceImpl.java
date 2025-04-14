@@ -123,11 +123,18 @@ public class ModuleServiceImpl implements ModuleService {
     public List<Module> findModuleListTree(ModuleQuery moduleQuery) {
         List<ModuleEntity> moduleEntityList = moduleDao.findModuleList(moduleQuery);
         List<Module> moduleList = BeanMapper.mapList(moduleEntityList,Module.class);
+        //使用流操作将 moduleList 中每个模块的 id 提取为一个字符串列表 moduleIds，用于后续判断某个模块是否为根节点
         List<String> moduleIds = moduleList.stream().map(item -> item.getId()).collect(Collectors.toList());
+        //使用流操作从 moduleList 中筛选出根节点模块列表 rootModuleList
+        //如果某个模块的 parent 属性为 null，则表示它是根节点
+        //或者，如果某个模块的父模块 ID 不在 moduleIds 列表中，也表示它是根节点
         List<Module> rootModuleList = moduleList.stream().filter(item -> (item.getParent() == null || !moduleIds.contains(item.getParent().getId())  )).collect(Collectors.toList());
         moduleList.remove(rootModuleList);
+        //调用 setChildrenModuleList 方法，递归地为每个根节点模块设置其子模块列表，从而构建完整的树形结构
         setChildrenModuleList(rootModuleList, moduleList);
+        //遍历 moduleList 中的每个模块对象，调用 joinTemplate.joinQuery(module) 方法对其进行额外的关联查询或处理
         for(Module module:moduleList){
+            // 调用 joinTemplate.joinQuery(module) 方法对 module 进行关联查询或处理
             joinTemplate.joinQuery(module);
         }
         return rootModuleList;
@@ -136,12 +143,14 @@ public class ModuleServiceImpl implements ModuleService {
     public void setChildrenModuleList(List<Module> rootModuleList, List<Module> moduleList) {
         for (Module module : rootModuleList) {
             String id = module.getId();
+            //使用流操作从 moduleList 中筛选出所有父模块 ID 等于当前模块 id 的子模块，形成 childrenList
             List<Module> childrenList = moduleList.stream().filter(item -> item.getParent() != null && item.getParent().getId().equals(id)).collect(Collectors.toList());
             if(childrenList.size() > 0){
                 module.setChildren(childrenList);
             }
 
             moduleList.remove(childrenList);
+            // 递归调用 setChildrenModuleList 方法，为每个子模块设置其子模块列表
             if(moduleList.size() > 0){
                 setChildrenModuleList(childrenList, moduleList);
             }

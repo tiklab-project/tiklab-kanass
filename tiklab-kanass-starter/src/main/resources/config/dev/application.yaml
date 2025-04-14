@@ -34,7 +34,7 @@ postgresql:
     address: ${DATA_HOME}/postgresql
 
 
-#dfs config
+#dfs config分布式
 dfs:
   server:
     enabled: true
@@ -45,7 +45,7 @@ dfs:
     group: g1
     bucket: kanass
 
-#dcs config
+#dcs config分布式缓存
 dcs:
   server:
     enabled: true
