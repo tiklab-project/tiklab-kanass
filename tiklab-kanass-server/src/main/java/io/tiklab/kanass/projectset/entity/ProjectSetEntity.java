@@ -63,6 +63,9 @@ public class ProjectSetEntity implements Serializable {
     @Column(name = "project_set_limits",length = 32,notNull = true)
     private String projectSetLimits;
 
+    @Column(name = "status",length = 8)
+    private String status;
+
     public String getId() {
         return id;
     }
@@ -156,6 +159,7 @@ public class ProjectSetEntity implements Serializable {
                 ", isDelete=" + isDelete +
                 ", creatTime=" + creatTime +
                 ", updateTime=" + updateTime +
+                ", status=" + status +
                 '}';
     }
 
@@ -181,5 +185,13 @@ public class ProjectSetEntity implements Serializable {
 
     public void setColor(Integer color) {
         this.color = color;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

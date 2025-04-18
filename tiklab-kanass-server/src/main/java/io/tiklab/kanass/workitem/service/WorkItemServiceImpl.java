@@ -2325,6 +2325,28 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     /**
+     * 查找迭代下事项的个数
+     * @param sprintId
+     * @return
+     */
+    @Override
+    public Map<String, Integer> findSprintWorkTime(String sprintId) {
+        Map<String, Integer> result = workItemDao.findSprintWorkTime(sprintId);
+        return result;
+    }
+
+    /**
+     * 查找版本下事项的个数
+     * @param versionId
+     * @return
+     */
+    @Override
+    public Map<String, Integer> findVersionWorkTime(String versionId) {
+        Map<String, Integer> result = workItemDao.findVersionWorkTime(versionId);
+        return result;
+    }
+
+    /**
      * 查找当前事项有几层下级事项
      * @param id
      * @return

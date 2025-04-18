@@ -1,6 +1,8 @@
 package io.tiklab.kanass.projectset.service;
 
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.privilege.dmRole.service.DmRoleService;
 import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.kanass.project.project.model.Project;
@@ -69,6 +71,9 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         String createUserId = LoginContext.getLoginId();
         User user = userService.findOne(createUserId);
         projectSet.setMaster(user);
+
+        // 默认状态未开始
+        projectSet.setStatus("0");
 
         // 设置项目集头像颜色
         int color = new Random().nextInt(3) + 1;
@@ -245,6 +250,19 @@ public class ProjectSetServiceImpl implements ProjectSetService {
                 dmUserQuery.setDomainId(id);
                 List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
                 project.setMember(dmUserList.size());
+
+                // 统计项目预计工时和剩余工时
+                WorkItemQuery workItemQuery = new WorkItemQuery();
+                workItemQuery.setProjectId(id);
+                List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+                int estimateTime = 0;
+                int surplusTime = 0;
+                for (WorkItem workItem : workItemList) {
+                    estimateTime = estimateTime + (workItem.getEstimateTime() == null ? 0 : workItem.getEstimateTime());
+                    surplusTime = surplusTime + (workItem.getSurplusTime() == null ? 0 : workItem.getSurplusTime());
+                }
+                project.setEstimateTime(estimateTime);
+                project.setSurplusTime(surplusTime);
             }
         }
 

@@ -99,6 +99,12 @@ public class Sprint extends BaseModel {
     @ApiProperty(name="quantityNumber",desc="完成数量")
     private Integer quantityNumber;
 
+    @ApiProperty(name="estimateTime",desc="计划工时")
+    private Integer estimateTime;
+
+    @ApiProperty(name="surplusTime",desc="剩余工时")
+    private Integer surplusTime;
+
     public java.lang.String getId() {
         return id;
     }
@@ -241,5 +247,21 @@ public class Sprint extends BaseModel {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Integer getEstimateTime() {
+        return estimateTime;
+    }
+
+    public void setEstimateTime(Integer estimateTime) {
+        this.estimateTime = estimateTime;
+    }
+
+    public Integer getSurplusTime() {
+        return surplusTime;
+    }
+
+    public void setSurplusTime(Integer surplusTime) {
+        this.surplusTime = surplusTime;
     }
 }

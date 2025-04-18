@@ -1,0 +1,1 @@
+ALTER TABLE "pmc_project_set" ADD COLUMN status VARCHAR(8) DEFAULT '0' NOT NULL;

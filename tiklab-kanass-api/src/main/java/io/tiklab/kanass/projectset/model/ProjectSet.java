@@ -78,6 +78,9 @@ public class ProjectSet extends BaseModel{
     @ApiProperty(name = "projectSetLimits", desc="可见范围")
     private String projectSetLimits;
 
+    @ApiProperty(name = "status", desc="项目集状态 0未开始 1进行中 2已结束")
+    private String status;
+
     public java.lang.String getId() {
         return id;
     }
@@ -191,5 +194,13 @@ public class ProjectSet extends BaseModel{
 
     public void setColor(Integer color) {
         this.color = color;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

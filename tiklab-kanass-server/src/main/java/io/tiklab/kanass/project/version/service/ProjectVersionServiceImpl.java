@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -102,6 +99,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             }
             // 批量更新事项的版本
             workItemService.updateBatchWorkItemVersion(versionId, newVersionId);
+
+            //设置结束时间
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formater.format(new Date());
+            projectVersion.setRelaPublishTime(format);
         }
         if(versionState != null && versionState.getId().equals("111111")){
             //设置开始时间
@@ -110,10 +112,6 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             projectVersion.setRelaStartTime(format);
         }
 
-        //设置结束时间
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String format = formater.format(new Date());
-        projectVersion.setRelaPublishTime(format);
         ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
         projectVersionDao.updateVersion(projectVersionEntity);
 
@@ -148,6 +146,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         projectVersion.setWorkNumber(versionWorkItemNum.get("all"));
         projectVersion.setWorkDoneNumber(versionWorkItemNum.get("done"));
         projectVersion.setWorkProgressNumber(versionWorkItemNum.get("progress"));
+
+        Map<String, Integer> versionWorkTime = workItemService.findVersionWorkTime(id);
+        projectVersion.setEstimateTime(versionWorkTime.get("estimateTime"));
+        projectVersion.setSurplusTime(versionWorkTime.get("surplusTime"));
+
         joinTemplate.joinQuery(projectVersion);
         return projectVersion;
     }

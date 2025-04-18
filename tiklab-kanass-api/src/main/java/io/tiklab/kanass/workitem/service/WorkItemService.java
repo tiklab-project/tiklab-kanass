@@ -230,6 +230,20 @@ public interface WorkItemService {
     HashMap<String, Integer> findVersionWorkItemNum(@NotNull String versionId);
 
     /**
+     * 查找迭代下的预计工时和剩余工时
+     * @param springId
+     * @return
+     */
+    Map<String, Integer> findSprintWorkTime(@NotNull String springId);
+
+    /**
+     * 查找版本下的预计工时和剩余工时
+     * @param versionId
+     * @return
+     */
+    Map<String, Integer> findVersionWorkTime(@NotNull String versionId);
+
+    /**
      * 查看事项有几级下级事项
      */
     Integer findChildrenLevel(@NotNull String id);

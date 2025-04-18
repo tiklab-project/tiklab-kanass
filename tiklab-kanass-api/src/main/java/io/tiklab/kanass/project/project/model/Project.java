@@ -109,13 +109,13 @@ public class Project extends BaseModel{
 
     /**
      * @pi.name: projectState
-     * @pi.value: 1: 未完成
+     * @pi.value: 1: 未完成   2:进行中   3：已结束
      */
     @ApiProperty(name="projectState",desc="项目状态")
     private java.lang.String projectState;
 
     @ApiProperty(name="percent",desc="完成率")
-    private int percent;
+    private float percent;
 
     @ApiProperty(name="workItemNumber",desc="事项数量")
     private int workItemNumber;
@@ -134,6 +134,12 @@ public class Project extends BaseModel{
 
     @ApiProperty(name="iconUrl",desc="项目类型icon")
     private java.lang.String iconUrl;
+
+    @ApiProperty(name="estimateTime",desc="计划工时")
+    private Integer estimateTime;
+
+    @ApiProperty(name="surplusTime",desc="剩余工时")
+    private Integer surplusTime;
 
     public String getId() {
         return id;
@@ -231,11 +237,11 @@ public class Project extends BaseModel{
         this.projectState = projectState;
     }
 
-    public int getPercent() {
+    public float getPercent() {
         return percent;
     }
 
-    public void setPercent(int percent) {
+    public void setPercent(float percent) {
         this.percent = percent;
     }
 
@@ -285,5 +291,21 @@ public class Project extends BaseModel{
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
+    }
+
+    public Integer getEstimateTime() {
+        return estimateTime;
+    }
+
+    public void setEstimateTime(Integer estimateTime) {
+        this.estimateTime = estimateTime;
+    }
+
+    public Integer getSurplusTime() {
+        return surplusTime;
+    }
+
+    public void setSurplusTime(Integer surplusTime) {
+        this.surplusTime = surplusTime;
     }
 }

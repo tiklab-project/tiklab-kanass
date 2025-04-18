@@ -108,6 +108,9 @@ public class KanassDsmAutoConfiguration {
         dsmConfig.newVersion("1.4.7", new String[]{
                 "pmc_1.4.7"
         });
+        dsmConfig.newVersion("1.4.8", new String[]{
+                "pmc_1.4.8"
+        });
         return dsmConfig;
     }
 }

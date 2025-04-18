@@ -96,6 +96,11 @@ public class ProjectVersion extends BaseModel {
     @JoinQuery(key = "id")
     private Project project;
 
+    @ApiProperty(name="estimateTime",desc="计划工时")
+    private Integer estimateTime;
+
+    @ApiProperty(name="surplusTime",desc="剩余工时")
+    private Integer surplusTime;
 
     public String getId() {
         return id;
@@ -224,5 +229,21 @@ public class ProjectVersion extends BaseModel {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Integer getEstimateTime() {
+        return estimateTime;
+    }
+
+    public void setEstimateTime(Integer estimateTime) {
+        this.estimateTime = estimateTime;
+    }
+
+    public Integer getSurplusTime() {
+        return surplusTime;
+    }
+
+    public void setSurplusTime(Integer surplusTime) {
+        this.surplusTime = surplusTime;
     }
 }

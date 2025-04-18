@@ -297,6 +297,10 @@ public class SprintServiceImpl implements SprintService {
             sprint.setWorkNumber(sprintWorkItemNum.get("all"));
             sprint.setWorkDoneNumber(sprintWorkItemNum.get("done"));
             sprint.setWorkProgressNumber(sprintWorkItemNum.get("progress"));
+
+            Map<String, Integer> sprintWorkTime = workItemService.findSprintWorkTime(id);
+            sprint.setEstimateTime(sprintWorkTime.get("estimateTime"));
+            sprint.setSurplusTime(sprintWorkTime.get("surplusTime"));
         }
 
 

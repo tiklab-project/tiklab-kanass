@@ -48,6 +48,8 @@ import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -444,9 +446,20 @@ public class ProjectServiceImpl implements ProjectService {
         dmUserQuery.setDomainId(id);
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
 
+        // 统计项目预计工时和剩余工时
+        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+        int estimateTime = 0;
+        int surplusTime = 0;
+        for (WorkItem workItem : workItemList) {
+            estimateTime = estimateTime + (workItem.getEstimateTime() == null ? 0 : workItem.getEstimateTime());
+            surplusTime = surplusTime + (workItem.getSurplusTime() == null ? 0 : workItem.getSurplusTime());
+        }
+
 
         project.setWorkItemNumber(workItemListCount);
         project.setMember(dmUserList.size());
+        project.setEstimateTime(estimateTime);
+        project.setSurplusTime(surplusTime);
         joinTemplate.joinQuery(project);
         return project;
     }
@@ -530,6 +543,25 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectEntity> joinProjectListEntity = projectDao.findJoinProjectList(projectQuery);
         List<Project> projectList = BeanMapper.mapList(joinProjectListEntity,Project.class);
         joinTemplate.joinQuery(projectList);
+
+        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+        List<Map<String, Object>> projectWorkItemCount = findProjectWorkItemStatus(projectIds);
+        // 计算每个项目的完成进度
+        for (Project project : projectList) {
+            String id = project.getId();
+            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                    equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+
+            long all = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id))).count();
+            if (all == 0){
+                project.setPercent(0.00f);
+            }else {
+                float percent = (doneList.size() * 1.0f / all) * 100;
+                BigDecimal bd = new BigDecimal(percent);
+                bd = bd.setScale(2, RoundingMode.HALF_UP);
+                project.setPercent(bd.floatValue());
+            }
+        }
         return projectList;
 
     }

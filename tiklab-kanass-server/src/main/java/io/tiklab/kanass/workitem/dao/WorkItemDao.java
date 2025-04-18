@@ -1689,6 +1689,41 @@ public class WorkItemDao{
         return versionWorkItemNum;
     }
 
+    public Map<String, Integer> findSprintWorkTime(String sprintId){
+        String sql = "Select sum(estimate_time) as estimateTime, sum(surplus_time) as surplusTime from pmc_work_item where sprint_id = ?";
+        Map<String, Object> map = jpaTemplate.getJdbcTemplate().queryForMap(sql, sprintId);
+        Map<String, Integer> map1 = new HashMap<>();
+        if(map.get("estimateTime") != null){
+            map1.put("estimateTime", Integer.valueOf(map.get("estimateTime").toString()));
+        }else {
+            map1.put("estimateTime", 0);
+        }
+        if(map.get("surplusTime") != null){
+            map1.put("surplusTime", Integer.valueOf(map.get("surplusTime").toString()));
+        }else {
+            map1.put("surplusTime", 0);
+        }
+        return map1;
+    }
+
+    public Map<String, Integer> findVersionWorkTime(String versionId){
+        String sql = "Select sum(wk.estimate_time) as estimateTime, sum(wk.surplus_time) as surplusTime from pmc_work_item wk LEFT JOIN pmc_work_version ws on wk.id = ws.work_item_id  where ws.version_id = ?";
+        Map<String, Object> map = jpaTemplate.getJdbcTemplate().queryForMap(sql, versionId);
+        Map<String, Integer> map1 = new HashMap<>();
+        if(map.get("estimateTime") != null){
+            map1.put("estimateTime", Integer.valueOf(map.get("estimateTime").toString()));
+        }
+        else {
+            map1.put("estimateTime", 0);
+        }
+        if(map.get("surplusTime") != null){
+            map1.put("surplusTime", Integer.valueOf(map.get("surplusTime").toString()));
+        }else {
+            map1.put("surplusTime", 0);
+        }
+        return map1;
+    }
+
     public Integer findChildrenLevel(String id){
         Integer level = Integer.valueOf(0);
         String sql = "Select id from pmc_work_item where parent_id = '" + id + "'";
