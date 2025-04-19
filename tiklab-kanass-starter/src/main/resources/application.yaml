@@ -78,4 +78,4 @@ unzip:
 
 postin:
     scan:
-        package: com.tiklab.kanass
+        package: io.tiklab.kanass
