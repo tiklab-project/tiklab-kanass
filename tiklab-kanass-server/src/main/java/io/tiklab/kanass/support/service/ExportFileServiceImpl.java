@@ -9,11 +9,11 @@ import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkItemService;
 import io.tiklab.user.user.model.User;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class ExportFileServiceImpl implements ExportFileService {
     public byte[] exportWorkItemXml(WorkItemQuery workItemQuery) {
 
         List<WorkItem> workItemList = workItemService.findConditionWorkItemList(workItemQuery);
-        Workbook sheets = new HSSFWorkbook();
+        Workbook sheets = new XSSFWorkbook();
         Sheet sheet = sheets.createSheet();
         Row row = sheet.createRow(0);
         ArrayList<String> strings = new ArrayList<>();
@@ -85,7 +85,7 @@ public class ExportFileServiceImpl implements ExportFileService {
         stringKeys.add("parentWorkItem");
         stringKeys.add("preDependWorkItem");
 
-        Integer integer = new Integer(1);
+        int integer = 1;
         for (WorkItem workItem : workItemList) {
             Row workItemRow = sheet.createRow(integer);
             integer++;
@@ -97,7 +97,7 @@ public class ExportFileServiceImpl implements ExportFileService {
 
         }
         try {
-            FileOutputStream out = new FileOutputStream(userHome + "/workbook.xls");
+            FileOutputStream out = new FileOutputStream(userHome + "/workbook.xlsx");
             sheets.write(out);
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
