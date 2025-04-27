@@ -12,7 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用户数据操作
@@ -106,9 +110,25 @@ public class WorkVersionDao {
         jpaTemplate.getJdbcTemplate().execute(sql);
     }
 
-    public List<String> findVersionWorkItemNum(String ids) {
-        String sql = "select version_id  from pmc_work_version where version_id in "+ ids;
-        List<String> versionIdList = this.jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
-        return versionIdList;
+    public List<Map<String, String>> findVersionWorkItemNum(String ids) {
+        String sql = "select version_id, work_item_id  from pmc_work_version where version_id in "+ ids;
+        List<Map<String, Object>> versionIdMap = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
+        if (versionIdMap.isEmpty()){
+            return new ArrayList<>();
+        }else {
+            List<Map<String, String>> convertedList = versionIdMap.stream()
+                    .map(rawMap -> {
+                        Map<String, String> stringMap = new HashMap<>();
+                        rawMap.forEach((k, v) ->
+                                stringMap.put(
+                                        k != null ? k.toString() : null,
+                                        v != null ? v.toString() : null
+                                )
+                        );
+                        return stringMap;
+                    })
+                    .collect(Collectors.toList());
+            return convertedList;
+        }
     }
 }

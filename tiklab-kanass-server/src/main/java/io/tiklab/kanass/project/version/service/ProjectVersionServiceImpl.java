@@ -4,6 +4,7 @@ import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.kanass.project.version.model.*;
 import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkVersionService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
@@ -13,6 +14,7 @@ import io.tiklab.kanass.project.version.dao.ProjectVersionDao;
 import io.tiklab.kanass.project.version.entity.ProjectVersionEntity;
 import io.tiklab.kanass.workitem.service.WorkItemService;
 import io.tiklab.user.user.model.User;
+import javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
 * 版本接口
@@ -175,7 +178,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             List<String> focusVersionIds = versionFocusService.findFocusVersionIds();
             String versionIds = "(" + projectVersionList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
-            List<String> versionWorkItemNum = workVersionService.findVersionWorkItemNum(versionIds);
+            List<Map<String, String>> versionWorkItemMap = workVersionService.findVersionWorkItemNum(versionIds);
 
 
             for (ProjectVersion projectVersion : projectVersionList) {
@@ -183,7 +186,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                 if(focusVersionIds.contains(id)){
                     projectVersion.setFocusIs(true);
                 }
-                List<String> countList = versionWorkItemNum.stream().filter(item -> item.equals(id)).collect(Collectors.toList());
+                List<String> countList = versionWorkItemMap.stream().filter(map -> map.get("version_id").equals(id)).map(map -> map.get("version_id")).collect(Collectors.toList());
                 projectVersion.setWorkNumber(countList.size());
             }
         }
@@ -203,7 +206,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             List<String> focusVersionIds = versionFocusService.findFocusVersionIds();
             String versionIds = "(" + projectVersionList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
-            List<String> versionWorkItemNum = workVersionService.findVersionWorkItemNum(versionIds);
+            List<Map<String, String>> versionWorkItemNum = workVersionService.findVersionWorkItemNum(versionIds);
 
 
             for (ProjectVersion projectVersion : projectVersionList) {
@@ -211,7 +214,13 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                 if(focusVersionIds.contains(id)){
                     projectVersion.setFocusIs(true);
                 }
-                List<String> countList = versionWorkItemNum.stream().filter(item -> item.equals(id)).collect(Collectors.toList());
+                List<String> countList = versionWorkItemNum.stream().filter(map -> map.get("version_id").equals(id)).map(map -> map.get("work_item_id")).collect(Collectors.toList());
+                WorkItemQuery query = new WorkItemQuery();
+                query.setIds(countList.toArray(String[]::new));
+                List<WorkItem> workItemList = workItemService.findWorkItemList(query);
+
+                projectVersion.setWorkDoneNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("DONE")).count());
+                projectVersion.setWorkProgressNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("PROGRESS")).count());
                 projectVersion.setWorkNumber(countList.size());
             }
         }

@@ -27,9 +27,6 @@ public class ProjectInsightReportDao {
     @Autowired
     JpaTemplate jpaTemplate;
 
-    @Autowired
-    ProjectService projectService;
-
     /**
      * 新增事项统计
      * @param workItemCountQuery

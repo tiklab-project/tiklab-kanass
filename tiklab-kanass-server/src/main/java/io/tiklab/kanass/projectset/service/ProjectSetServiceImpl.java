@@ -1,6 +1,7 @@
 package io.tiklab.kanass.projectset.service;
 
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.home.insight.service.ProjectInsightReportService;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.privilege.dmRole.service.DmRoleService;
@@ -65,6 +66,9 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProjectInsightReportService projectInsightReportService;
 
     @Override
     public String createProjectSet(@NotNull @Valid ProjectSet projectSet) {
@@ -363,6 +367,22 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         List<ProjectSetEntity> joinProjectSetList = projectSetDao.findJoinProjectSetList(projectSetQuery);
         List<ProjectSet> projectSetList = BeanMapper.mapList(joinProjectSetList,ProjectSet.class);
+
+
+        // 计算每个项目集的进度
+        for (ProjectSet projectSet : projectSetList) {
+            String id = projectSet.getId();
+            HashMap<String, String> param = new HashMap<>();
+            param.put("projectSetId", id);
+            Map<String, Integer> workItemCount = projectInsightReportService.statisticsTodoWorkByStatus(param);
+            int done = workItemCount.get("end");// 已完成
+            int all = workItemCount.get("total");// 所有
+            if (all != 0){
+                projectSet.setProgress(done * 100f / all);
+            }else {
+                projectSet.setProgress(0.00f);
+            }
+        }
 
         findProjectNum(projectSetList);
         joinTemplate.joinQuery(projectSetList);

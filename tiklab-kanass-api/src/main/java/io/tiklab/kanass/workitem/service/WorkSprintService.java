@@ -11,6 +11,7 @@ import io.tiklab.toolkit.join.annotation.JoinProvider;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
 * 事项状态服务接口
@@ -73,6 +74,6 @@ public interface WorkSprintService {
     */
     Pagination<WorkSprint> findWorkSprintPage(WorkSprintQuery workSprintQuery);
     List<String> findSprintWorkItemIds(@NotNull String sprintId);
-    List<String> findSprintWorkItemNum(String sprintIds);
+    List<Map<String, String>> findSprintWorkItemNum(String sprintIds);
 
 }

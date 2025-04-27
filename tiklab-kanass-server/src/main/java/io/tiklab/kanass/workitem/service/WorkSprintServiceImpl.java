@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 事项状态服务
@@ -112,8 +113,8 @@ public class WorkSprintServiceImpl implements WorkSprintService {
 
 
     @Override
-    public List<String> findSprintWorkItemNum(String sprintIds) {
-        List<String> workItemIds = workSprintDao.findSprintWorkItemNum(sprintIds);
+    public List<Map<String, String>> findSprintWorkItemNum(String sprintIds) {
+        List<Map<String, String>> workItemIds = workSprintDao.findSprintWorkItemNum(sprintIds);
         return workItemIds;
     }
 

@@ -8,6 +8,7 @@ import io.tiklab.kanass.sprint.model.Sprint;
 import io.tiklab.kanass.sprint.model.SprintQuery;
 import io.tiklab.kanass.sprint.model.SprintState;
 import io.tiklab.kanass.sprint.model.SprintStateQuery;
+import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkSprintService;
 import io.tiklab.privilege.vRole.model.VRoleDomain;
 import io.tiklab.toolkit.beans.BeanMapper;
@@ -325,11 +326,10 @@ public class SprintServiceImpl implements SprintService {
         if(sprintList.size() > 0){
             String sprintIds = "(" + sprintEntityList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
-            List<String> sprintWorkItemNum = workSprintService.findSprintWorkItemNum(sprintIds);
+            List<Map<String, String>> sprintWorkItemList = workSprintService.findSprintWorkItemNum(sprintIds);
             for (Sprint sprint : sprintList) {
                 String id = sprint.getId();
-                List<String> countList = sprintWorkItemNum.stream().filter(item -> item.equals(id))
-                        .collect(Collectors.toList());
+                List<String> countList = sprintWorkItemList.stream().filter(map -> map.get("sprint_id").equals(id)).map(map -> map.get("sprint_id")).collect(Collectors.toList());
                 sprint.setWorkNumber(countList.size());
             }
         }
@@ -362,15 +362,20 @@ public class SprintServiceImpl implements SprintService {
             String sprintIds = "(" + sprintList.stream().map(item -> "'" + item.getId() + "'").
                     collect(Collectors.joining(", ")) + ")";
             List<String> focusSprintIds = sprintFocusService.findFocusSprintIds();
-            List<String> sprintWorkItemNum = workSprintService.findSprintWorkItemNum(sprintIds);
+            List<Map<String, String>> sprintWorkItemList = workSprintService.findSprintWorkItemNum(sprintIds);
 
             for (Sprint sprint : sprintList) {
                 String id = sprint.getId();
                 if(focusSprintIds.contains(id)){
                     sprint.setFocusIs(true);
                 }
-                List<String> countList = sprintWorkItemNum.stream().filter(item -> item.equals(id))
-                        .collect(Collectors.toList());
+                List<String> countList = sprintWorkItemList.stream().filter(map -> map.get("sprint_id").equals(id)).map(map -> map.get("work_item_id")).collect(Collectors.toList());
+                WorkItemQuery query = new WorkItemQuery();
+                query.setIds(countList.toArray(String[]::new));
+                List<WorkItem> workItemList = workItemService.findWorkItemList(query);
+
+                sprint.setWorkDoneNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("DONE")).count());
+                sprint.setWorkProgressNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("PROGRESS")).count());
                 sprint.setWorkNumber(countList.size());
             }
         }

@@ -81,6 +81,9 @@ public class ProjectSet extends BaseModel{
     @ApiProperty(name = "status", desc="项目集状态 0未开始 1进行中 2已结束")
     private String status;
 
+    @ApiProperty(name = "progress", desc="项目集进度")
+    private Float progress;
+
     public java.lang.String getId() {
         return id;
     }
@@ -202,5 +205,13 @@ public class ProjectSet extends BaseModel{
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Float getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Float progress) {
+        this.progress = progress;
     }
 }

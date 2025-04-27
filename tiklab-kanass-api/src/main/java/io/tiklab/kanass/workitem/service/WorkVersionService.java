@@ -11,6 +11,7 @@ import io.tiklab.toolkit.join.annotation.JoinProvider;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
 * 事项状态服务接口
@@ -72,5 +73,5 @@ public interface WorkVersionService {
     */
     Pagination<WorkVersion> findWorkVersionPage(WorkVersionQuery workVersionQuery);
 
-    List<String> findVersionWorkItemNum(String sprintIds);
+    List<Map<String, String>> findVersionWorkItemNum(String sprintIds);
 }
