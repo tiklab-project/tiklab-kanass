@@ -4,7 +4,6 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
-import io.tiklab.kanass.project.appraised.entity.AppraisedEntity;
 import io.tiklab.kanass.project.appraised.entity.AppraisedWorkItemEntity;
 import io.tiklab.kanass.project.appraised.model.AppraisedWorkItemQuery;
 import io.tiklab.kanass.workitem.entity.WorkItemEntity;
@@ -80,7 +79,7 @@ public class AppraisedWorkItemDao {
         QueryCondition queryCondition = QueryBuilders.createQuery(AppraisedWorkItemEntity.class,"awi")
                 .leftJoin(WorkItemEntity.class, "wi", "wi.id=awi.workItemId")
 //                .leftJoin(AppraisedEntity.class, "a", "a.id=awi.appraised_id")
-                .like("wi.name", appraisedWorkItemQuery.getWorkItemName())
+                .like("wi.name", appraisedWorkItemQuery.getWorkItemTitle())
                 .eq("workItemAppraisedState", appraisedWorkItemQuery.getWorkItemAppraisedState())
                 .eq("appraisedId", appraisedWorkItemQuery.getAppraisedId())
                 .orders(appraisedWorkItemQuery.getOrderParams())
@@ -93,7 +92,7 @@ public class AppraisedWorkItemDao {
         QueryCondition queryCondition = QueryBuilders.createQuery(AppraisedWorkItemEntity.class,"awi")
                 .leftJoin(WorkItemEntity.class, "wi", "wi.id=awi.workItemId")
 //                .leftJoin(AppraisedEntity.class, "a", "a.id=awi.appraised_id")
-                .like("wi.name", appraisedWorkItemQuery.getWorkItemName())
+                .like("wi.title", appraisedWorkItemQuery.getWorkItemTitle())
                 .eq("workItemAppraisedState", appraisedWorkItemQuery.getWorkItemAppraisedState())
                 .eq("appraisedId", appraisedWorkItemQuery.getAppraisedId())
                 .orders(appraisedWorkItemQuery.getOrderParams())

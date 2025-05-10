@@ -34,7 +34,7 @@ public class AppraisedWorkItemQuery {
     private String workItemIds;
 
     @ApiProperty(name ="workItemName",desc = "事项名称")
-    private String workItemName;
+    private String workItemTitle;
 
     // 0未评审 1通过 2未通过 3建议
     @ApiProperty(name ="workItemAppraisedState",desc = "评审状态")
@@ -97,12 +97,12 @@ public class AppraisedWorkItemQuery {
         this.workItemIds = workItemIds;
     }
 
-    public String getWorkItemName() {
-        return workItemName;
+    public String getWorkItemTitle() {
+        return workItemTitle;
     }
 
-    public void setWorkItemName(String workItemName) {
-        this.workItemName = workItemName;
+    public void setWorkItemTitle(String workItemTitle) {
+        this.workItemTitle = workItemTitle;
     }
 
     public String getWorkItemAppraisedState() {

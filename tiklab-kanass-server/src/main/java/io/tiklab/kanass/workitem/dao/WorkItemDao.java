@@ -483,6 +483,17 @@ public class WorkItemDao{
 
         }
 
+        if(workItemQuery.getWorkTypeSysId() != null && workItemQuery.getWorkTypeSysId().length()>0){
+
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_type_sys_id = '" + workItemQuery.getWorkTypeSysId() + "'");
+            }else {
+                sql = sql.concat(" and p.work_type_sys_id = '" + workItemQuery.getWorkTypeSysId() + "'");
+            }
+            paramMap.put("workTypeSysId", workItemQuery.getWorkTypeSysId());
+
+        }
+
         if(workItemQuery.getId() != null && workItemQuery.getId().length()>0){
             if(paramMap.isEmpty()){
                 sql = sql.concat(" p.id = '" + workItemQuery.getId() + "'");
