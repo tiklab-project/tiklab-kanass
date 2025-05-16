@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @EnableTransactionManagement
-public class JiraImportData84ServiceImpl implements JiraImportData94Service {
+public class JiraImportData84ServiceImpl implements JiraImportData84Service {
 
     @Autowired
     JpaTemplate jpaTemplate;
