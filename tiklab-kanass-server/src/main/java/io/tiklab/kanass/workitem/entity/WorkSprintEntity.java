@@ -28,6 +28,10 @@ public class WorkSprintEntity implements Serializable {
     @Column(name = "sprint_id",length = 12,notNull = true)
     private String sprintId;
 
+    // 迭代完成后 未完成的事项迁移的目标迭代id
+    @Column(name = "target_sprint_id",length = 12)
+    private String targetSprintId;
+
     public String getId() {
         return id;
     }
@@ -50,5 +54,13 @@ public class WorkSprintEntity implements Serializable {
 
     public void setSprintId(String sprintId) {
         this.sprintId = sprintId;
+    }
+
+    public String getTargetSprintId() {
+        return targetSprintId;
+    }
+
+    public void setTargetSprintId(String targetSprintId) {
+        this.targetSprintId = targetSprintId;
     }
 }

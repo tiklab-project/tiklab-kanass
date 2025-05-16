@@ -25,6 +25,10 @@ public class WorkVersionEntity implements Serializable {
     @Column(name = "version_id",length = 12,notNull = true)
     private String versionId;
 
+    // 版本完成后 未完成的事项迁移的目标版本id
+    @Column(name = "target_version_id",length = 12)
+    private String targetVersionId;
+
     public String getId() {
         return id;
     }
@@ -47,5 +51,13 @@ public class WorkVersionEntity implements Serializable {
 
     public void setVersionId(String versionId) {
         this.versionId = versionId;
+    }
+
+    public String getTargetVersionId() {
+        return targetVersionId;
+    }
+
+    public void setTargetVersionId(String targetVersionId) {
+        this.targetVersionId = targetVersionId;
     }
 }

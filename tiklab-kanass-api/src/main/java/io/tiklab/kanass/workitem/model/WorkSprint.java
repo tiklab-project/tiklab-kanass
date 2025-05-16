@@ -28,6 +28,10 @@ public class WorkSprint extends BaseModel {
     @ApiProperty(name="sprintId",desc="版本名称",required = true)
     private String sprintId;
 
+    // null表示没有迁移   有id表示迁移的目标迭代
+    @ApiProperty(name="targetSprintId",desc="迁移的目标迭代id")
+    private String targetSprintId;
+
     public String getId() {
         return id;
     }
@@ -50,5 +54,13 @@ public class WorkSprint extends BaseModel {
 
     public void setSprintId(String sprintId) {
         this.sprintId = sprintId;
+    }
+
+    public String getTargetSprintId() {
+        return targetSprintId;
+    }
+
+    public void setTargetSprintId(String targetSprintId) {
+        this.targetSprintId = targetSprintId;
     }
 }

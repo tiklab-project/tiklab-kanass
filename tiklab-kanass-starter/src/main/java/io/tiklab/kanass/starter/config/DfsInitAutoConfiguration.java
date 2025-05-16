@@ -3,6 +3,8 @@ package io.tiklab.kanass.starter.config;
 
 
 
+import io.tiklab.dfs.client.DefaultDfsClient;
+import io.tiklab.dfs.client.DfsClient;
 import io.tiklab.dfs.init.config.model.DfsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,5 +20,10 @@ public class DfsInitAutoConfiguration {
         DfsConfig dfsConfig = new DfsConfig()
                 .newVersion("1.0.0","data_1.0.0");
         return dfsConfig;
+    }
+
+    @Bean
+    DfsClient dfsClient() {
+        return new DefaultDfsClient();
     }
 }

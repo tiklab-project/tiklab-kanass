@@ -3,8 +3,7 @@ package io.tiklab.kanass.project.version.service;
 import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.kanass.project.version.model.*;
-import io.tiklab.kanass.workitem.model.WorkItem;
-import io.tiklab.kanass.workitem.model.WorkItemQuery;
+import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.kanass.workitem.service.WorkVersionService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
@@ -22,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,6 +72,10 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
             String versionId = projectVersion.getId();
             String newVersionId = projectVersion.getNewVersionId();
             List<WorkItem> versionWorkItemList = workItemService.findVersionWorkItemList(versionId);
+            WorkVersionQuery query = new WorkVersionQuery();
+            query.setVersionId(versionId);
+            List<WorkVersion> workVersionList = workVersionService.findWorkVersionList(query);
+            Map<String, WorkVersion> workVersionMap = workVersionList.stream().collect(Collectors.toMap(WorkVersion::getWorkItemId, Function.identity()));
             if(versionWorkItemList.size() > 0){
                 String valueString = "";
                 for (WorkItem workItem : versionWorkItemList) {
@@ -82,11 +86,20 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                         workItem.setUpdateField("projectVersion");
                         // 更新待办中版本信息
                         workItemService.updateTodoTaskData(workItem);
+
+                        // 关联关系表更新迁移后的id
+                        WorkVersion workVersion = workVersionMap.get(workItem.getId());
+                        workVersion.setTargetVersionId(newVersionId);
+                        workVersionService.updateWorkVersion(workVersion);
                     }else {
                         workItem.setUpdateField("projectVersion");
                         workItem.setProjectVersion(null);
                         // 更新待办中版本信息
                         workItemService.updateTodoTaskData(workItem);
+
+                        WorkVersion workVersion = workVersionMap.get(workItem.getId());
+                        workVersion.setTargetVersionId(null);
+                        workVersionService.updateWorkVersion(workVersion);
                     }
 
                     String id = UuidGenerator.getRandomIdByUUID(12);

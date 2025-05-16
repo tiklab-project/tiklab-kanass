@@ -18,7 +18,7 @@ public class SaxParseServiceImpl extends DefaultHandler  {
     String JiraVersion = new String();
     String[] flags = {"User", "ApplicationUser", "Project", "Issue", "IssueLink", "IssueType", "UserHistoryItem", "ProjectRole",
             "ProjectRoleActor", "IssueParentAssociation", "Status",  "CustomFieldValue", "CustomField",  "Version",
-            "ChangeGroup", "Component"};
+            "ChangeGroup", "Component", "NodeAssociation", "FileAttachment"};
     String[] fields = {"Component", "Fix Version", "Sprint"};
 
     @Override

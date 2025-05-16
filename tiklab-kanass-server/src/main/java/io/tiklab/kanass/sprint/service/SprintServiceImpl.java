@@ -9,6 +9,8 @@ import io.tiklab.kanass.sprint.model.SprintQuery;
 import io.tiklab.kanass.sprint.model.SprintState;
 import io.tiklab.kanass.sprint.model.SprintStateQuery;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
+import io.tiklab.kanass.workitem.model.WorkSprint;
+import io.tiklab.kanass.workitem.model.WorkSprintQuery;
 import io.tiklab.kanass.workitem.service.WorkSprintService;
 import io.tiklab.privilege.vRole.model.VRoleDomain;
 import io.tiklab.toolkit.beans.BeanMapper;
@@ -37,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -208,6 +211,10 @@ public class SprintServiceImpl implements SprintService {
                 // 创建新的迭代与事项的记录
                 // 只查询迭代中未完成的事项
                 List<WorkItem> sprintWorkItemList = workItemService.findSprintWorkItemList(sprintId);
+                WorkSprintQuery query = new WorkSprintQuery();
+                query.setSprintId(sprintId);
+                List<WorkSprint> workSprintList = workSprintService.findWorkSprintList(query);
+                Map<String, WorkSprint> workSprintMap = workSprintList.stream().collect(Collectors.toMap(WorkSprint::getWorkItemId, Function.identity()));
                 if(sprintWorkItemList.size() > 0){
                     String valueString = "";
                     for (WorkItem workItem : sprintWorkItemList) {
@@ -218,10 +225,20 @@ public class SprintServiceImpl implements SprintService {
                             workItem.setSprint(sprint1);
                             workItem.setUpdateField("sprint");
                             workItemService.updateTodoTaskData(workItem);
+
+                            // 关联关系表更新迁移后的id
+                            WorkSprint workSprint = workSprintMap.get(workItem.getId());
+                            workSprint.setTargetSprintId(newSprintId);
+                            workSprintService.updateWorkSprint(workSprint);
                         }else {
                             workItem.setUpdateField("sprint");
                             workItem.setSprint(null);
                             workItemService.updateTodoTaskData(workItem);
+
+                            // 关联关系表更新迁移后的id
+                            WorkSprint workSprint = workSprintMap.get(workItem.getId());
+                            workSprint.setTargetSprintId(null);
+                            workSprintService.updateWorkSprint(workSprint);
                         }
 
                         String id = UuidGenerator.getRandomIdByUUID(12);

@@ -10,11 +10,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 // 自定义的事件处理类
-class SaxParseRowServiceImpl extends DefaultHandler {
+class SaxParseRow94ServiceImpl extends DefaultHandler {
 
     boolean inRow = false;
     boolean isSprint = false;
@@ -78,9 +77,9 @@ class SaxParseRowServiceImpl extends DefaultHandler {
         if (isSprintApplication) {
             String content = new String();
             if(rowNum == 0){
-                createElement();
                 content = new String(ch, start, length);
-                if (!content.isEmpty()) {
+                if (!content.isBlank()) {
+                    createElement();
                     globalElement.setAttribute("activated_date", content);
                     System.out.println(currentElement + ": " + content);
                     isIntegerTag = false;

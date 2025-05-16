@@ -75,6 +75,8 @@ backups:
 #zip config
 unzip:
     path: ${DATA_HOME}/unzip/Jira
+    # 附件在压缩包中的位置
+    attachment: ${unzip.path}/attachments
 
 postin:
     scan:

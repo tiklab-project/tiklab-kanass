@@ -31,7 +31,7 @@ public class WorkAttachEntity implements Serializable {
     @Column(name = "attachmentUrl",length = 256,notNull = true)
     private String attachmentUrl;
 
-    @Column(name = "type",length = 12,notNull = true)
+    @Column(name = "type",length = 256,notNull = true)
     private String type;
 
     // 排序

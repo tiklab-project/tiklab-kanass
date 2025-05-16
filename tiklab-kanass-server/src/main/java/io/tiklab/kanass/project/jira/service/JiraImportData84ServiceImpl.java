@@ -46,20 +46,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Element;
 
-import java.io.*;
-import java.nio.file.Path;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Date;
-import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * jira 数据导入线下9.4 版本的jira数据
+ * jira 数据导入线下8.4 版本的jira数据
  */
 @Service
 @EnableTransactionManagement
-public class JiraImportData94ServiceImpl implements JiraImportData94Service {
+public class JiraImportData84ServiceImpl implements JiraImportData94Service {
 
     @Autowired
     JpaTemplate jpaTemplate;
@@ -510,7 +509,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
             Date currentUtilDate = new Date(System.currentTimeMillis());
 
             // 转换为SQL日期
-            java.sql.Date currentSqlDate = new java.sql.Date(currentUtilDate.getTime());
+            Date currentSqlDate = new Date(currentUtilDate.getTime());
 
             project1.setStartTime(currentSqlDate);
             project1.setEndTime(currentSqlDate);
@@ -881,30 +880,37 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     }
 
     public void setWorkVersion(WorkItem workItem, Element element){
-        String id = element.getAttribute("id");
-        for (Element changeItem : this.ChangeItemElementList.get()) {
-            String field = changeItem.getAttribute("field");
-            String issue = changeItem.getAttribute("issue");
-            String newvalue = changeItem.getAttribute("newvalue");
-            if(issue.equals(id) && field.equals("Fix Version")){
+        String nowIssueId = element.getAttribute("id");
+        for (Element nodeAssociation : this.NodeAssociationList.get()) {
+            String issueId = nodeAssociation.getAttribute("sourceNodeId");
+            String versionId = nodeAssociation.getAttribute("sinkNodeId");// 注意，只有associationType是下面两个值时才表示versionId
+            if (issueId.equals(nowIssueId)){
+                if(nodeAssociation.getAttribute("associationType").equals("IssueFixVersion")) {
+                    Element versionElement = this.VersionElementList.get().stream().filter(element1 -> element1.getAttribute("id").equals(versionId)).toList().get(0);
+                    String newId = versionElement.getAttribute("newId");
+                    // 当前事项关联的版本
+                    ProjectVersion projectVersion = new ProjectVersion();
+                    projectVersion.setId(newId);
+                    workItem.setProjectVersion(projectVersion);
 
-                for (Element element1 : this.VersionElementList.get()) {
-                    String newId = element1.getAttribute("newId");
-                    String versionId = element1.getAttribute("id");
-                    if(versionId.equals(newvalue)){
-                        ProjectVersion projectVersion = new ProjectVersion();
-                        projectVersion.setId(newId);
-                        workItem.setProjectVersion(projectVersion);
+                    WorkVersion workVersion = new WorkVersion();
+                    workVersion.setVersionId(newId);
+                    String id1 = workItem.getId();
+                    workVersion.setWorkItemId(id1);
+                    workVersionService.createWorkVersion(workVersion);
 
-                        // 添加版本与事项的关联
-                        WorkVersion workVersion = new WorkVersion();
-                        workVersion.setVersionId(newId);
-                        String id1 = workItem.getId();
-                        workVersion.setWorkItemId(id1);
-                        workVersionService.createWorkVersion(workVersion);
-                    }
+                } else if (nodeAssociation.getAttribute("associationType").equals("IssueVersion")) {
+                    Element versionElement = this.VersionElementList.get().stream().filter(element1 -> element1.getAttribute("id").equals(versionId)).toList().get(0);
+                    String newId = versionElement.getAttribute("newId");
+                    // 事项关联版本的历史记录
+                    WorkVersion workVersion = new WorkVersion();
+                    workVersion.setVersionId(newId);
+                    String id1 = workItem.getId();
+                    workVersion.setWorkItemId(id1);
+                    workVersionService.createWorkVersion(workVersion);
                 }
             }
+
         }
 
     }

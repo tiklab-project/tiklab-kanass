@@ -50,7 +50,7 @@ public class JiraImportDataController {
 
 
     @RequestMapping(path="/findJiraInputSchedule",method = RequestMethod.POST)
-    @ApiMethod(name = "findJiraInputSchedule",desc = "导入jire数据")
+    @ApiMethod(name = "findJiraInputSchedule",desc = "查询导入进度")
     public Result<Map<String, Object>> findJiraInputSchedule(){
         Map<String, Object> jiraInputSchedule = jiraImportDataService.findJiraInputSchedule();
         return Result.ok(jiraInputSchedule);

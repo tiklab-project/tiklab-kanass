@@ -9,7 +9,7 @@ import java.util.Map;
 /**
 * 导入第三方数据服务接口
 */
-public interface JiraImportData94Service {
+public interface JiraImportData84Service {
 
     String writeData(List<Element> elements, Map<String, String> Steps, Map<String, Project> CurrentProject, Map<String, Integer> Percent) throws InterruptedException;
 }
