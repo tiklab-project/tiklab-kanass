@@ -17,10 +17,16 @@ server:
 DATA_HOME: ${user.home}/tiklab/tiklab-kanass
 
 #db
+#jdbc:
+#  driverClassName: org.postgresql.Driver
+#  url: jdbc:postgresql://172.10.1.10:5432/tiklab_kanass_test?stringtype=unspecified
+#  username: postgres
+#  password: darth2020
+
 jdbc:
-  driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://172.10.1.10:5432/tiklab_kanass_test?stringtype=unspecified
-  username: postgres
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://172.10.1.10:3306/tiklab_kanass?characterEncoding=utf8&useSSL=false
+  username: root
   password: darth2020
 
 postgresql:
@@ -83,9 +89,11 @@ backups:
 
 #zip config
 unzip:
-  path: ${DATA_HOME}/unzip/Jira
-  # 附件在压缩包中的位置
-  attachment: ${unzip.path}/attachments
+  jiraPath: ${DATA_HOME}/unzip/Jira
+  # jira附件在压缩包中的位置
+  jiraAttachment: ${unzip.jiraPath}/attachments
+  mantisPath: ${DATA_HOME}/unzip/Mantis
+  mantisAttachment: ${unzip.mantisPath}/attachments
 
 postin:
   scan:

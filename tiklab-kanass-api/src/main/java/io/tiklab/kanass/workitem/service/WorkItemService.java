@@ -30,7 +30,7 @@ public interface WorkItemService {
     */
     String createWorkItem(@NotNull @Valid WorkItem workItem);
 
-    String createJiraWorkItem(@NotNull @Valid WorkItem workItem);
+    String createImportWorkItem(@NotNull @Valid WorkItem workItem);
 
     /**
     * 更新事项

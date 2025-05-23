@@ -1,7 +1,7 @@
 package io.tiklab.kanass.starter.config;
 
 
-import io.tiklab.dsm.config.model.DsmConfig;
+import io.tiklab.dsm.model.DsmConfig;
 import io.tiklab.dsm.support.DsmConfigBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -125,6 +125,9 @@ public class KanassDsmAutoConfiguration {
         });
         dsmConfig.newVersion("1.5.3", new String[]{
                 "pmc_1.5.3"
+        });
+        dsmConfig.newVersion("1.5.4", new String[]{
+                "pmc_1.5.4"
         });
         return dsmConfig;
     }

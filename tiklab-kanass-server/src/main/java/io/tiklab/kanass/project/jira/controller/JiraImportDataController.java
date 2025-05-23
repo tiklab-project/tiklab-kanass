@@ -29,10 +29,10 @@ public class JiraImportDataController {
     @Autowired
     JiraImportDataService jiraImportDataService;
 
-    @RequestMapping(path="/importJireDate",method = RequestMethod.POST)
-    @ApiMethod(name = "importJireDate",desc = "导入jire数据")
+    @RequestMapping(path="/importJiraDate",method = RequestMethod.POST)
+    @ApiMethod(name = "importJiraDate",desc = "导入jire数据")
     @ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
-    public Result<Void> importJireDate(@RequestParam("uploadFile")MultipartFile uploadFile){
+    public Result<Void> importJiraDate(@RequestParam("uploadFile")MultipartFile uploadFile){
         if (uploadFile == null) {
             throw new ApplicationException("文件不能为空");
         }else {

@@ -53,7 +53,7 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
     private TransactionTemplate transactionTemplate;
 
 
-    @Value("${unzip.path}")
+    @Value("${unzip.jiraPath}")
     String unzipAddress;
 
     public final ExecutorService executorService = Executors.newCachedThreadPool();

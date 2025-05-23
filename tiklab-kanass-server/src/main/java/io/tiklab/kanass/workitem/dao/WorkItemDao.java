@@ -7,6 +7,7 @@ import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.dal.datasource.holder.DynamicDataSourceKeyHolder;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.kanass.common.ErrorCode;
+import io.tiklab.kanass.common.JdbcTypeCheckUtil;
 import io.tiklab.kanass.project.epic.entity.EpicWorkItemEntity;
 import io.tiklab.kanass.project.plan.entity.PlanWorkItemEntity;
 import io.tiklab.kanass.workitem.entity.WorkItemEntity;
@@ -22,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
@@ -42,6 +44,9 @@ public class WorkItemDao{
 
     @Autowired
     JpaTemplate jpaTemplate;
+
+    @Autowired
+    private JdbcTypeCheckUtil jdbcTypeCheckUtil;
 
     /**
      * 创建事项
@@ -1018,7 +1023,14 @@ public class WorkItemDao{
             System.out.println(orderType);
             System.out.println(name);
             if(name.equals("code")){
-                sql = sql.concat(" split_part(p.code, '-', 1) " + orderType + ", cast(split_part (p.code, '-', 2) as integer) " + orderType + ",");
+                if (jdbcTypeCheckUtil.checkType().equals("postgresql")){
+                    sql = sql.concat(" split_part(p.code, '-', 1) " + orderType + ", cast(split_part (p.code, '-', 2) as integer) " + orderType + ",");
+                }else if(jdbcTypeCheckUtil.checkType().equals("mysql")) {
+                    sql = sql.concat(
+                            " SUBSTRING_INDEX(p.code, '-', 1) " + orderType + ", " +
+                                    " CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(p.code, '-', 2), '-', -1) AS SIGNED) " + orderType + ","
+                    );
+                }
             } else if(name.equals("work_priority_id")){
                 sql = sql.concat(" priority.sort " + orderType + "," );
             } else {
@@ -1300,7 +1312,14 @@ public class WorkItemDao{
             System.out.println(orderType);
             System.out.println(name);
             if(name.equals("code")){
-                sql = sql.concat(" split_part(p.code, '-', 1) " + orderType + ", cast(split_part (p.code, '-', 2) as integer) " + orderType + ",");
+                if (jdbcTypeCheckUtil.checkType().equals("postgresql")){
+                    sql = sql.concat(" split_part(p.code, '-', 1) " + orderType + ", cast(split_part (p.code, '-', 2) as integer) " + orderType + ",");
+                }else if(jdbcTypeCheckUtil.checkType().equals("mysql")) {
+                    sql = sql.concat(
+                            " SUBSTRING_INDEX(p.code, '-', 1) " + orderType + ", " +
+                                    " CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(p.code, '-', 2), '-', -1) AS SIGNED) " + orderType + ","
+                    );
+                }
             } else if(name.equals("work_priority_id")){
                 sql = sql.concat(" priority.sort " + orderType + "," );
             } else {

@@ -26,7 +26,8 @@ public interface ProjectService {
     * @return
     */
     String createProject(@NotNull @Valid Project project);
-    String createJiraProject(@NotNull @Valid Project project);
+    // 创建从jira、mantis引入的项目
+    String createImportProject(@NotNull @Valid Project project);
     /**
     * 更新项目
     * @param project

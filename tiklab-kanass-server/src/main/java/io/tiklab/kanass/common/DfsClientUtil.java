@@ -1,12 +1,10 @@
-package io.tiklab.kanass.project.jira.util;
+package io.tiklab.kanass.common;
 
 import io.tiklab.dfs.client.DfsClient;
-import io.tiklab.dfs.common.model.object.DfsObject;
 import io.tiklab.dfs.common.model.object.DfsObjectMeta;
 import io.tiklab.dfs.common.model.object.FindRequest;
 import io.tiklab.dfs.common.model.object.PutRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;

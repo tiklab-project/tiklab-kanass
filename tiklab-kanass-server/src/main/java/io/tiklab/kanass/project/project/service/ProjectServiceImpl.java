@@ -255,7 +255,7 @@ public class ProjectServiceImpl implements ProjectService {
         dmRoleService.initPatchDmRole(projectId,patchUsers);
     }
     @Override
-    public String createJiraProject(@NotNull @Valid Project project) {
+    public String createImportProject(@NotNull @Valid Project project) {
         if (project.getId() == null) {
             String id = UuidGenerator.getRandomIdByUUID(12);
             project.setId(id);
@@ -281,6 +281,8 @@ public class ProjectServiceImpl implements ProjectService {
         }
         String id = projectDao.createProject(projectEntity);
 
+        // 创建初始人员
+        initProjectDmRole(project.getMaster().getId(), id);
         //初始事项类型
 //        List<WorkTypeDm> workTypeDmList = initWorkType(id);
 

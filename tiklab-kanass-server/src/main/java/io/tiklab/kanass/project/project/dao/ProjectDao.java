@@ -1,5 +1,6 @@
 package io.tiklab.kanass.project.project.dao;
 
+import io.tiklab.kanass.common.JdbcTypeCheckUtil;
 import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.kanass.project.project.entity.ProjectFocusEntity;
 import io.tiklab.kanass.project.project.model.ProjectQuery;
@@ -34,6 +35,9 @@ public class ProjectDao{
 
     @Autowired
     JpaTemplate jpaTemplate;
+
+    @Autowired
+    private JdbcTypeCheckUtil jdbcTypeCheckUtil;
 
     /**
      * 创建项目
@@ -449,7 +453,12 @@ public class ProjectDao{
         if(projectId != null){
             sql = sql + " and pr.id != '" + projectId + "'";
         }
-        sql = sql + " order by rc.recent_time desc NULLS LAST";
+        if (jdbcTypeCheckUtil.checkType().equals("postgresql")){
+            sql = sql + " order by rc.recent_time desc NULLS LAST";
+        }else if (jdbcTypeCheckUtil.checkType().equals("mysql")){
+            sql = sql + " ORDER BY IF(rc.recent_time IS NULL, 1, 0), rc.recent_time DESC";
+        }
+
         List<ProjectEntity> projectEntityList = jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectEntity.class));
         return projectEntityList;
     }

@@ -5,7 +5,7 @@ package io.tiklab.kanass.starter.config;
 
 import io.tiklab.dfs.client.DefaultDfsClient;
 import io.tiklab.dfs.client.DfsClient;
-import io.tiklab.dfs.init.config.model.DfsConfig;
+import io.tiklab.dfs.init.model.DfsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

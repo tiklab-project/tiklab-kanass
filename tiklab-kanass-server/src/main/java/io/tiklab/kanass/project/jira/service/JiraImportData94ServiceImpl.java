@@ -47,9 +47,7 @@ import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Element;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.sql.Date;
-import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -116,10 +114,10 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     WorkAttachService workAttachService;
 
 
-    @Value("${unzip.path}")
+    @Value("${unzip.jiraPath}")
     String unzipAddress;
 
-    @Value("${unzip.attachment}")
+    @Value("${unzip.jiraAttachment}")
     String attachmentAddress;
 
     @Autowired
@@ -516,7 +514,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
             project1.setEndTime(currentSqlDate);
 
             try {
-                String jiraProjectId = projectService.createJiraProject(project1);
+                String jiraProjectId = projectService.createImportProject(project1);
                 element.setAttribute("newId", jiraProjectId);
 
                 Map<String, String> roleIds = setProjectRole(jiraProjectId);
@@ -860,7 +858,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                             }
                         }
                     }
-                    String workId = workItemService.createJiraWorkItem(workItem);
+                    String workId = workItemService.createImportWorkItem(workItem);
                     element.setAttribute("newId", workId);
                     workItem.setId(workId);
                     workItem.setRootId(workId + ";");
@@ -1174,7 +1172,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                     roleIds.put("common", dmRole1);
                 }
 
-                if(businessType == 1){
+                if(businessType == 2){
                     roleIds.put("admin", dmRole1);
                 }
             }

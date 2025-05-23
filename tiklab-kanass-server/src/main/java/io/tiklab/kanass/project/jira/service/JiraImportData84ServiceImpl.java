@@ -115,10 +115,10 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
     WorkAttachService workAttachService;
 
 
-    @Value("${unzip.path}")
+    @Value("${unzip.jiraPath}")
     String unzipAddress;
 
-    @Value("${unzip.attachment}")
+    @Value("${unzip.jiraAttachment}")
     String attachmentAddress;
 
     @Autowired
@@ -515,7 +515,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
             project1.setEndTime(currentSqlDate);
 
             try {
-                String jiraProjectId = projectService.createJiraProject(project1);
+                String jiraProjectId = projectService.createImportProject(project1);
                 element.setAttribute("newId", jiraProjectId);
 
                 Map<String, String> roleIds = setProjectRole(jiraProjectId);
@@ -859,7 +859,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
                             }
                         }
                     }
-                    String workId = workItemService.createJiraWorkItem(workItem);
+                    String workId = workItemService.createImportWorkItem(workItem);
                     element.setAttribute("newId", workId);
                     workItem.setId(workId);
                     workItem.setRootId(workId + ";");
@@ -1180,7 +1180,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
                     roleIds.put("common", dmRole1);
                 }
 
-                if(businessType == 1){
+                if(businessType == 2){
                     roleIds.put("admin", dmRole1);
                 }
             }

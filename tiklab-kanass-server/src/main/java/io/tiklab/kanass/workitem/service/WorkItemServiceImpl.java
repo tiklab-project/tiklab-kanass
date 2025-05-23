@@ -63,6 +63,7 @@ import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -637,6 +638,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItem.setWorkTypeCode(code);
         workItem.setWorkTypeSys(workTypeDm.getWorkType());
 
+        if (workItem.getBuilder() == null || workItem.getBuilder().getId() == null){
+            User user = new User();
+            user.setId("111111");
+            workItem.setBuilder(user);
+        }
+
         //设置treePath,rootId
         if(workItem.getParentWorkItem() != null){
             if(workItem.getParentWorkItem().getId() != null && !workItem.getParentWorkItem().getId().equals("nullstring") ) {
@@ -754,12 +761,12 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     /**
-     * 用于jira导入
+     * 用于创建外部导入的事项
      * @param workItem
      * @return
      */
     @Override
-    public String createJiraWorkItem(@NotNull @Valid WorkItem workItem) {
+    public String createImportWorkItem(@NotNull @Valid WorkItem workItem) {
 
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         String workItemId = workItemDao.createWorkItem(workItemEntity);

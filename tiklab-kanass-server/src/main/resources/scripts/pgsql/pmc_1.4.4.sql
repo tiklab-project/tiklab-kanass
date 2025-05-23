@@ -1,0 +1,1 @@
+UPDATE pmc_system_url SET name = 'testhubo' WHERE name = 'teston';

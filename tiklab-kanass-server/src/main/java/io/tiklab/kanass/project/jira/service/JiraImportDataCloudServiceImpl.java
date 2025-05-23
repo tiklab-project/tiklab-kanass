@@ -107,7 +107,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
     StateNodeFlowService stateNodeFlowService;
 
 
-    @Value("${unzip.path}")
+    @Value("${unzip.jiraPath}")
     String unzipAddress;
     private ThreadLocal<ArrayList<Element>> GlobalUserElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<Element>> GlobalApplicationUserElementList = new ThreadLocal<>();
@@ -460,7 +460,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             project1.setEndTime(currentSqlDate);
 
             try {
-                String jiraProjectId = projectService.createJiraProject(project1);
+                String jiraProjectId = projectService.createImportProject(project1);
                 element.setAttribute("newId", jiraProjectId);
                 Map<String, String> roleIds = setProjectRole(jiraProjectId);
                 setProjectUser(element, roleIds);
@@ -823,7 +823,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                             }
                         }
                     }
-                    String workId = workItemService.createJiraWorkItem(workItem);
+                    String workId = workItemService.createImportWorkItem(workItem);
                     element.setAttribute("newId", workId);
                     workItem.setId(workId);
                     workItem.setRootId(workId + ";");
@@ -1102,7 +1102,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                     roleIds.put("common", dmRole1);
                 }
 
-                if(businessType == 1){
+                if(businessType == 2){
                     roleIds.put("admin", dmRole1);
                 }
             }
