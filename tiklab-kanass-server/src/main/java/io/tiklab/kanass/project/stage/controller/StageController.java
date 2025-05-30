@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/stage")
-@Api(name = "StageController",desc = "StageController")
+//@Api(name = "StageController",desc = "StageController")
 public class StageController {
 
     private static Logger logger = LoggerFactory.getLogger(StageController.class);
@@ -34,8 +34,8 @@ public class StageController {
     private StageService stageService;
 
     @RequestMapping(path="/createStage",method = RequestMethod.POST)
-    @ApiMethod(name = "createStage",desc = "创建阶段")
-    @ApiParam(name = "stage",desc = "项目阶段模型",required = true)
+    //@ApiMethod(name = "createStage",desc = "创建阶段")
+    //@ApiParam(name = "stage",desc = "项目阶段模型",required = true)
     public Result<String> createStage(@RequestBody @NotNull @Valid Stage stage){
         String id = stageService.createStage(stage);
 
@@ -43,8 +43,8 @@ public class StageController {
     }
 
     @RequestMapping(path="/updateStage",method = RequestMethod.POST)
-    @ApiMethod(name = "updateStage",desc = "更新阶段")
-    @ApiParam(name = "stage",desc = "项目阶段模型",required = true)
+    //@ApiMethod(name = "updateStage",desc = "更新阶段")
+    //@ApiParam(name = "stage",desc = "项目阶段模型",required = true)
     public Result<Void> updateStage(@RequestBody @NotNull @Valid Stage stage){
         stageService.updateStage(stage);
 
@@ -52,8 +52,8 @@ public class StageController {
     }
 
     @RequestMapping(path="/deleteStage",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteStage",desc = "根据id删除阶段")
-    @ApiParam(name = "id",desc = "阶段id",required = true)
+    //@ApiMethod(name = "deleteStage",desc = "根据id删除阶段")
+    //@ApiParam(name = "id",desc = "阶段id",required = true)
     public Result<Void> deleteStage(@NotNull String id){
         stageService.deleteStage(id);
 
@@ -61,8 +61,8 @@ public class StageController {
     }
 
     @RequestMapping(path="/findStage",method = RequestMethod.POST)
-    @ApiMethod(name = "findStage",desc = "根据id查找项目阶段")
-    @ApiParam(name = "id",desc = "阶段id",required = true)
+    //@ApiMethod(name = "findStage",desc = "根据id查找项目阶段")
+    //@ApiParam(name = "id",desc = "阶段id",required = true)
     public Result<Stage> findStage(@NotNull String id){
         Stage stage = stageService.findStage(id);
 
@@ -70,7 +70,7 @@ public class StageController {
     }
 
     @RequestMapping(path="/findAllStage",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllStage",desc = "查找所有阶段")
+    //@ApiMethod(name = "findAllStage",desc = "查找所有阶段")
     public Result<List<Stage>> findAllStage(){
         List<Stage> stageList = stageService.findAllStage();
 
@@ -78,8 +78,8 @@ public class StageController {
     }
 
     @RequestMapping(path = "/findStageList",method = RequestMethod.POST)
-    @ApiMethod(name = "findStageList",desc = "根据条件查找阶段列表")
-    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    //@ApiMethod(name = "findStageList",desc = "根据条件查找阶段列表")
+    //@ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
     public Result<List<Stage>> findStageList(@RequestBody @Valid @NotNull StageQuery stageQuery){
         List<Stage> stageList = stageService.findStageList(stageQuery);
 
@@ -87,8 +87,8 @@ public class StageController {
     }
 
     @RequestMapping(path = "/findStagePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findStagePage",desc = "根据条件按分页查询阶段列表")
-    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    //@ApiMethod(name = "findStagePage",desc = "根据条件按分页查询阶段列表")
+    //@ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
     public Result<Pagination<Stage>> findStagePage(@RequestBody @Valid @NotNull StageQuery stageQuery){
         Pagination<Stage> pagination = stageService.findStagePage(stageQuery);
 
@@ -96,8 +96,8 @@ public class StageController {
     }
 
     @RequestMapping(path = "/findStageListTreePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findStageListTreePage",desc = "根据条件查找阶段树形列表")
-    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    //@ApiMethod(name = "findStageListTreePage",desc = "根据条件查找阶段树形列表")
+    //@ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
     public Result<Pagination<Stage>> findStageListTreePage(@RequestBody @Valid @NotNull StageQuery stageQuery){
         Pagination<Stage> stageListTreePage = stageService.findStageListTreePage(stageQuery);
 
@@ -106,8 +106,8 @@ public class StageController {
 
 
     @RequestMapping(path = "/findStageListTree",method = RequestMethod.POST)
-    @ApiMethod(name = "findStageListTree",desc = "根据条件查找阶段树形列表")
-    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    //@ApiMethod(name = "findStageListTree",desc = "根据条件查找阶段树形列表")
+    //@ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
     public Result<List<Stage>> findStageListTree(@RequestBody @Valid @NotNull StageQuery stageQuery){
         List<Stage> stageList = stageService.findStageListTree(stageQuery);
 
@@ -115,8 +115,8 @@ public class StageController {
     }
 
     @RequestMapping(path = "/findParentStageList",method = RequestMethod.POST)
-    @ApiMethod(name = "findParentStageList",desc = "根据条件查找阶段树形列表")
-    @ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
+    //@ApiMethod(name = "findParentStageList",desc = "根据条件查找阶段树形列表")
+    //@ApiParam(name = "stageQuery",desc = "项目阶段查找参数模型",required = true)
     public Result<Pagination<Stage>> findParentStageList(@RequestBody @Valid @NotNull StageQuery stageQuery){
         Pagination<Stage> stageList = stageService.findParentStageList(stageQuery);
 

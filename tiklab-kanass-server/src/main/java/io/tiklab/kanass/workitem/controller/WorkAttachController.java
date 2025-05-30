@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workAttach")
-@Api(name = "WorkAttachController",desc = "事项附件管理")
+//@Api(name = "WorkAttachController",desc = "事项附件管理")
 public class WorkAttachController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkAttachController.class);
@@ -35,8 +35,8 @@ public class WorkAttachController {
     private WorkAttachService workAttachService;
 
     @RequestMapping(path="/createWorkAttach",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkAttach",desc = "创建事项附件")
-    @ApiParam(name = "workAttach",desc = "事项附件模型",required = true)
+    //@ApiMethod(name = "createWorkAttach",desc = "创建事项附件")
+    //@ApiParam(name = "workAttach",desc = "事项附件模型",required = true)
     public Result<String> createWorkAttach(@RequestBody @NotNull @Valid WorkAttach workAttach){
         String id = workAttachService.createWorkAttach(workAttach);
 
@@ -44,8 +44,8 @@ public class WorkAttachController {
     }
 
     @RequestMapping(path="/updateWorkAttach",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkAttach",desc = "更新事项附件")
-    @ApiParam(name = "workAttach",desc = "事项附件模型",required = true)
+    //@ApiMethod(name = "updateWorkAttach",desc = "更新事项附件")
+    //@ApiParam(name = "workAttach",desc = "事项附件模型",required = true)
     public Result<Void> updateWorkAttach(@RequestBody @NotNull @Valid WorkAttach workAttach){
         workAttachService.updateWorkAttach(workAttach);
 
@@ -53,8 +53,8 @@ public class WorkAttachController {
     }
 
     @RequestMapping(path="/deleteWorkAttach",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkAttach",desc = "根据id删除事项附件")
-    @ApiParam(name = "id",desc = "事项附件id",required = true)
+    //@ApiMethod(name = "deleteWorkAttach",desc = "根据id删除事项附件")
+    //@ApiParam(name = "id",desc = "事项附件id",required = true)
     public Result<Void> deleteWorkAttach(@NotNull String id){
         workAttachService.deleteWorkAttach(id);
 
@@ -62,8 +62,8 @@ public class WorkAttachController {
     }
 
     @RequestMapping(path="/findWorkAttach",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkAttach",desc = "根据id查找事项附件")
-    @ApiParam(name = "id",desc = "事项附件id",required = true)
+    //@ApiMethod(name = "findWorkAttach",desc = "根据id查找事项附件")
+    //@ApiParam(name = "id",desc = "事项附件id",required = true)
     public Result<WorkAttach> findWorkAttach(@NotNull String id){
         WorkAttach workAttach = workAttachService.findWorkAttach(id);
 
@@ -71,7 +71,7 @@ public class WorkAttachController {
     }
 
     @RequestMapping(path="/findAllWorkAttach",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkAttach",desc = "查找所有事项附件")
+    //@ApiMethod(name = "findAllWorkAttach",desc = "查找所有事项附件")
     public Result<List<WorkAttach>> findAllWorkAttach(){
         List<WorkAttach> workAttachList = workAttachService.findAllWorkAttach();
 
@@ -80,8 +80,8 @@ public class WorkAttachController {
 
 
     @RequestMapping(path = "/findWorkAttachList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkAttachList",desc = "根据条件查询事项附件列表")
-    @ApiParam(name = "workAttachQuery",desc = "事项附件查询参数模型",required = true)
+    //@ApiMethod(name = "findWorkAttachList",desc = "根据条件查询事项附件列表")
+    //@ApiParam(name = "workAttachQuery",desc = "事项附件查询参数模型",required = true)
     public Result<List<WorkAttach>> findWorkAttachList(@RequestBody @Valid @NotNull WorkAttachQuery workAttachQuery){
         List<WorkAttach> workAttachList = workAttachService.findWorkAttachList(workAttachQuery);
 
@@ -90,8 +90,8 @@ public class WorkAttachController {
 
 
     @RequestMapping(path = "/findWorkAttachPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkAttachPage",desc = "根据条件按分页查询事项附件")
-    @ApiParam(name = "workAttachQuery",desc = "事项附件查询参数模型",required = true)
+    //@ApiMethod(name = "findWorkAttachPage",desc = "根据条件按分页查询事项附件")
+    //@ApiParam(name = "workAttachQuery",desc = "事项附件查询参数模型",required = true)
     public Result<Pagination<WorkAttach>> findWorkAttachPage(@RequestBody @Valid @NotNull WorkAttachQuery workAttachQuery){
         Pagination<WorkAttach> pagination = workAttachService.findWorkAttachPage(workAttachQuery);
 

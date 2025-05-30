@@ -20,6 +20,7 @@ import io.tiklab.privilege.dmRole.model.DmRoleUserQuery;
 import io.tiklab.privilege.dmRole.service.DmRoleUserService;
 import io.tiklab.privilege.role.model.Role;
 import io.tiklab.privilege.role.service.RoleService;
+import io.tiklab.rpc.annotation.Exporter;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.user.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import java.util.concurrent.Executors;
 * 事项权限服务
 */
 @Service
+@Exporter
 public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDmService {
     public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired

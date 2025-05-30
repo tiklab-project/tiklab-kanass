@@ -21,14 +21,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/statistic")
-@Api(name = "StatisticWorkItemController",desc = "事项统计")
+//@Api(name = "StatisticWorkItemController",desc = "事项统计")
 public class StatisticWorkItemController {
     @Autowired
     private StatisticWorkItemService statisticWorkItemService;
 
     @RequestMapping(path="/statisticWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "statisticWorkItem",desc = "按事项字段统计事项分布")
-    @ApiParam(name = "statisticWorkItemQuery",desc = "统计参数 (项目集ID, 项目ID, 迭代ID, 统计时长, 统计时间单位, 统计字段, 统计类型)",required = true)
+    //@ApiMethod(name = "statisticWorkItem",desc = "按事项字段统计事项分布")
+    //@ApiParam(name = "statisticWorkItemQuery",desc = "统计参数 (项目集ID, 项目ID, 迭代ID, 统计时长, 统计时间单位, 统计字段, 统计类型)",required = true)
     public Result<List<WorkItemStatistic>> statisticWorkItem(@RequestBody StatisticWorkItemQuery statisticWorkItemQuery){
         List<WorkItemStatistic> list = statisticWorkItemService.statisticWorkItem(statisticWorkItemQuery);
 
@@ -36,8 +36,8 @@ public class StatisticWorkItemController {
     }
 
     @RequestMapping(path="/statisticBuildAndEndWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "statisticBuildAndEndWorkItem",desc = "统计事项的创建与解决")
-    @ApiParam(name = "statisticWorkItemQuery",desc = "统计参数 (项目集ID, 项目ID, 迭代ID, 统计时长, 统计时间单位, 统计字段, 统计类型)",required = true)
+    //@ApiMethod(name = "statisticBuildAndEndWorkItem",desc = "统计事项的创建与解决")
+    //@ApiParam(name = "statisticWorkItemQuery",desc = "统计参数 (项目集ID, 项目ID, 迭代ID, 统计时长, 统计时间单位, 统计字段, 统计类型)",required = true)
     public Result<List<WorkItemBuildAndEndStatistic>> statisticBuildAndEndWorkItem(@RequestBody StatisticWorkItemQuery statisticWorkItemQuery){
         List<WorkItemBuildAndEndStatistic> list = statisticWorkItemService.statisticBuildAndEndWorkItem(statisticWorkItemQuery);
 

@@ -37,6 +37,7 @@ public class HttpRequestUtil {
      * @throws ApplicationException 请求失败
      */
     public JSONObject sendPost(HttpHeaders headers, String requestUrl, JSONObject param){
+        headers.set("accessToken", "dGlrbGFi");
 
         // 创建带有头部和请求体的 HttpEntity
         HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
@@ -66,7 +67,7 @@ public class HttpRequestUtil {
      * @throws ApplicationException 请求失败
      */
     public <T> T requestPost(HttpHeaders headers, String requestUrl, Object param, Class<T> tClass){
-
+        headers.set("accessToken", "dGlrbGFi");
         // 创建带有头部和请求体的 HttpEntity
         HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
         ResponseEntity<JSONObject> response;
@@ -86,7 +87,7 @@ public class HttpRequestUtil {
     }
 
     public <T> List<T> requestPostList(HttpHeaders headers, String requestUrl, Object param, Class<T> tClass){
-
+        headers.set("accessToken", "dGlrbGFi");
         // 创建带有头部和请求体的 HttpEntity
         HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
 
@@ -107,7 +108,7 @@ public class HttpRequestUtil {
 
 
     public <T> Pagination<T> requestPostPage(HttpHeaders headers, String requestUrl, Object param, Class<T> tClass){
-
+        headers.set("accessToken", "dGlrbGFi");
         // 创建带有头部和请求体的 HttpEntity
         HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
 
@@ -135,7 +136,7 @@ public class HttpRequestUtil {
      * @throws ApplicationException 请求失败
      */
     public <T> T requestGet(HttpHeaders headers, String requestUrl, Object param, Class<T> tClass){
-
+        headers.set("accessToken", "dGlrbGFi");
         // 创建带有头部和请求体的 HttpEntity
         HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
 
@@ -156,7 +157,7 @@ public class HttpRequestUtil {
     }
 
     public <T> List<T> requestGetList(HttpHeaders headers, String requestUrl, Object param, Class<T> tClass){
-
+        headers.set("accessToken", "dGlrbGFi");
         // 创建带有头部和请求体的 HttpEntity
         HttpEntity<Object> requestEntity = new HttpEntity<>(param, headers);
 

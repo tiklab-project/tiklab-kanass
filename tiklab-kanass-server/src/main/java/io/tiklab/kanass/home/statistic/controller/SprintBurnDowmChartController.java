@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sprintBurnDowmChart")
-@Api(name = "SprintBurnDowmChartController",desc = "SprintBurnDowmChartController")
+//@Api(name = "SprintBurnDowmChartController",desc = "SprintBurnDowmChartController")
 public class SprintBurnDowmChartController {
 
     private static Logger logger = LoggerFactory.getLogger(SprintBurnDowmChartController.class);
@@ -34,8 +34,8 @@ public class SprintBurnDowmChartController {
     private SprintBurnDowmChartService sprintBurnDowmChartService;
 
     @RequestMapping(path="/createSprintBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "createSprintBurnDowmChart",desc = "创建迭代下事项数据动态记录")
-    @ApiParam(name = "sprintBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
+    //@ApiMethod(name = "createSprintBurnDowmChart",desc = "创建迭代下事项数据动态记录")
+    //@ApiParam(name = "sprintBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
     public Result<String> createSprintBurnDowmChart(@RequestBody @NotNull @Valid SprintBurnDowmChart sprintBurnDowmChart){
         String id = sprintBurnDowmChartService.createSprintBurnDowmChart(sprintBurnDowmChart);
 
@@ -43,8 +43,8 @@ public class SprintBurnDowmChartController {
     }
 
     @RequestMapping(path="/updateSprintBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "updateSprintBurnDowmChart",desc = "更新迭代下事项数据动态记录")
-    @ApiParam(name = "sprintBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
+    //@ApiMethod(name = "updateSprintBurnDowmChart",desc = "更新迭代下事项数据动态记录")
+    //@ApiParam(name = "sprintBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
     public Result<Void> updateSprintBurnDowmChart(@RequestBody @NotNull @Valid SprintBurnDowmChart sprintBurnDowmChart){
         sprintBurnDowmChartService.updateSprintBurnDowmChart(sprintBurnDowmChart);
 
@@ -52,8 +52,8 @@ public class SprintBurnDowmChartController {
     }
 
     @RequestMapping(path="/deleteSprintBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteSprintBurnDowmChart",desc = "删除迭代下事项数据动态记录")
-    @ApiParam(name = "id",desc = "记录id",required = true)
+    //@ApiMethod(name = "deleteSprintBurnDowmChart",desc = "删除迭代下事项数据动态记录")
+    //@ApiParam(name = "id",desc = "记录id",required = true)
     public Result<Void> deleteSprintBurnDowmChart(@NotNull String id){
         sprintBurnDowmChartService.deleteSprintBurnDowmChart(id);
 
@@ -61,8 +61,8 @@ public class SprintBurnDowmChartController {
     }
 
     @RequestMapping(path="/findSprintBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintBurnDowmChart",desc = "根据id查找迭代下事项数据动态记录")
-    @ApiParam(name = "id",desc = "记录id",required = true)
+    //@ApiMethod(name = "findSprintBurnDowmChart",desc = "根据id查找迭代下事项数据动态记录")
+    //@ApiParam(name = "id",desc = "记录id",required = true)
     public Result<SprintBurnDowmChart> findSprintBurnDowmChart(@NotNull String id){
         SprintBurnDowmChart sprintBurnDowmChart = sprintBurnDowmChartService.findSprintBurnDowmChart(id);
 
@@ -70,7 +70,7 @@ public class SprintBurnDowmChartController {
     }
 
     @RequestMapping(path="/findAllSprintBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllSprintBurnDowmChart",desc = "查找所有迭代下事项数据动态记录列表")
+    //@ApiMethod(name = "findAllSprintBurnDowmChart",desc = "查找所有迭代下事项数据动态记录列表")
     public Result<List<SprintBurnDowmChart>> findAllSprintBurnDowmChart(){
         List<SprintBurnDowmChart> sprintBurnDowmChartList = sprintBurnDowmChartService.findAllSprintBurnDowmChart();
 
@@ -78,8 +78,8 @@ public class SprintBurnDowmChartController {
     }
 
     @RequestMapping(path = "/findSprintBurnDowmChartList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintBurnDowmChartList",desc = "根据迭代数据统计搜索条件查询列表")
-    @ApiParam(name = "sprintBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
+    //@ApiMethod(name = "findSprintBurnDowmChartList",desc = "根据迭代数据统计搜索条件查询列表")
+    //@ApiParam(name = "sprintBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
     public Result<List<SprintBurnDowmChart>> findSprintBurnDowmChartList(@RequestBody @Valid @NotNull SprintBurnDowmChartQuery sprintBurnDowmChartQuery){
         List<SprintBurnDowmChart> sprintBurnDowmChartList = sprintBurnDowmChartService.findSprintBurnDowmChartList(sprintBurnDowmChartQuery);
 
@@ -87,8 +87,8 @@ public class SprintBurnDowmChartController {
     }
 
     @RequestMapping(path = "/findSprintBurnDowmChartPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintBurnDowmChartPage",desc = "根据搜索条件按分页查询迭代的事项数据动态记录列表")
-    @ApiParam(name = "sprintBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
+    //@ApiMethod(name = "findSprintBurnDowmChartPage",desc = "根据搜索条件按分页查询迭代的事项数据动态记录列表")
+    //@ApiParam(name = "sprintBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
     public Result<Pagination<SprintBurnDowmChart>> findSprintBurnDowmChartPage(@RequestBody @Valid @NotNull SprintBurnDowmChartQuery sprintBurnDowmChartQuery){
         Pagination<SprintBurnDowmChart> pagination = sprintBurnDowmChartService.findSprintBurnDowmChartPage(sprintBurnDowmChartQuery);
 

@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wikidocument")
-@Api(name = "DocumentController",desc = "文档管理")
+//@Api(name = "DocumentController",desc = "文档管理")
 public class WikiDocumentController {
 
     private static Logger logger = LoggerFactory.getLogger(WikiDocumentController.class);
@@ -38,8 +38,8 @@ public class WikiDocumentController {
 
 
     @RequestMapping(path = "/findDocumentList",method = RequestMethod.POST)
-    @ApiMethod(name = "findDocumentList",desc = "findDocumentList")
-    @ApiParam(name = "nodeQuery",desc = "documentQuery",required = true)
+    //@ApiMethod(name = "findDocumentList",desc = "findDocumentList")
+    //@ApiParam(name = "nodeQuery",desc = "documentQuery",required = true)
     public Result<List<WikiDocument>> findDocumentList(@RequestBody @Valid @NotNull NodeQuery nodeQuery){
         List<WikiDocument> wikiDocumentList = wikiDocumentService.findDocumentList(nodeQuery);
 
@@ -49,8 +49,8 @@ public class WikiDocumentController {
 
 
     @RequestMapping(path="/findUnRelationWorkDocumentList",method = RequestMethod.POST)
-    @ApiMethod(name = "findUnRelationWorkDocumentList",desc = "通过id查询")
-    @ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
+    //@ApiMethod(name = "findUnRelationWorkDocumentList",desc = "通过id查询")
+    //@ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
     public Result<KanassDocument> findUnRelationWorkDocumentList(@RequestBody @Valid @NotNull WorkItemDocumentQuery workItemDocumentQuery){
         Pagination<KanassDocument> unRelationWorkDocumentList = wikiDocumentService.findUnRelationWorkDocumentList(workItemDocumentQuery);
 

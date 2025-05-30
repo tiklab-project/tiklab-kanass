@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/setting")
-@Api(name = "SettingStaticsController",desc = "SettingStaticsController")
+//@Api(name = "SettingStaticsController",desc = "SettingStaticsController")
 public class SettingStaticsController {
     private static Logger logger = LoggerFactory.getLogger(SettingStaticsController.class);
 
@@ -23,7 +23,7 @@ public class SettingStaticsController {
     private SettingStaticsService settingStaticsService;
 
     @RequestMapping(path="/findOrgaNum",method = RequestMethod.POST)
-    @ApiMethod(name = "findOrgaNum",desc = "用于设置首页的各个模块统计数据，弃用")
+    //@ApiMethod(name = "findOrgaNum",desc = "用于设置首页的各个模块统计数据，弃用")
     public Result<HashMap<String, Object>> findOrgaNum(){
         HashMap<String, Object> orgaNum = settingStaticsService.findOrgaNum();
 

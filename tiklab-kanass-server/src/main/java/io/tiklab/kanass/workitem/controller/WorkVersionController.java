@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workVersion")
-@Api(name = "WorkVersionController",desc = "事项状态管理")
+//@Api(name = "WorkVersionController",desc = "事项状态管理")
 public class WorkVersionController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkVersionController.class);
@@ -38,8 +38,8 @@ public class WorkVersionController {
     SortProcessor sortService;
 
     @RequestMapping(path="/createWorkVersion",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkVersion",desc = "创建事项状态")
-    @ApiParam(name = "workVersion",desc = "事项状态DTO",required = true)
+    //@ApiMethod(name = "createWorkVersion",desc = "创建事项状态")
+    //@ApiParam(name = "workVersion",desc = "事项状态DTO",required = true)
     public Result<String> createWorkVersion(@RequestBody @NotNull @Valid WorkVersion workVersion){
         String id = workVersionService.createWorkVersion(workVersion);
 
@@ -47,8 +47,8 @@ public class WorkVersionController {
     }
 
     @RequestMapping(path="/updateWorkVersion",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkVersion",desc = "更新事项状态")
-    @ApiParam(name = "workVersion",desc = "事项状态DTO",required = true)
+    //@ApiMethod(name = "updateWorkVersion",desc = "更新事项状态")
+    //@ApiParam(name = "workVersion",desc = "事项状态DTO",required = true)
     public Result<Void> updateWorkVersion(@RequestBody @NotNull @Valid WorkVersion workVersion){
         workVersionService.updateWorkVersion(workVersion);
 
@@ -56,8 +56,8 @@ public class WorkVersionController {
     }
 
     @RequestMapping(path="/deleteWorkVersion",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkVersion",desc = "根据状态ID删除事项状态")
-    @ApiParam(name = "id",desc = "事项状态ID",required = true)
+    //@ApiMethod(name = "deleteWorkVersion",desc = "根据状态ID删除事项状态")
+    //@ApiParam(name = "id",desc = "事项状态ID",required = true)
     public Result<Void> deleteWorkVersion(@NotNull String id){
         workVersionService.deleteWorkVersion(id);
 
@@ -65,8 +65,8 @@ public class WorkVersionController {
     }
 
     @RequestMapping(path="/findWorkVersion",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkVersion",desc = "根据事项状态ID查找事项状态")
-    @ApiParam(name = "id",desc = "事项状态ID",required = true)
+    //@ApiMethod(name = "findWorkVersion",desc = "根据事项状态ID查找事项状态")
+    //@ApiParam(name = "id",desc = "事项状态ID",required = true)
     public Result<WorkVersion> findWorkVersion(@NotNull String id){
         WorkVersion workVersion = workVersionService.findWorkVersion(id);
 
@@ -74,7 +74,7 @@ public class WorkVersionController {
     }
 
     @RequestMapping(path="/findAllWorkVersion",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkVersion",desc = "查找所有事项状态列表")
+    //@ApiMethod(name = "findAllWorkVersion",desc = "查找所有事项状态列表")
     public Result<List<WorkVersion>> findAllWorkVersion(){
         List<WorkVersion> workVersionList = workVersionService.findAllWorkVersion();
 
@@ -83,8 +83,8 @@ public class WorkVersionController {
 
 
     @RequestMapping(path = "/findWorkVersionList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkVersionList",desc = "根据查询对象查找事项状态列表")
-    @ApiParam(name = "workVersionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkVersionList",desc = "根据查询对象查找事项状态列表")
+    //@ApiParam(name = "workVersionQuery",desc = "查询对象",required = true)
     public Result<List<WorkVersion>> findWorkVersionList(@RequestBody @Valid @NotNull WorkVersionQuery workVersionQuery){
         List<WorkVersion> workVersionList = workVersionService.findWorkVersionList(workVersionQuery);
 
@@ -92,8 +92,8 @@ public class WorkVersionController {
     }
 
     @RequestMapping(path = "/findWorkVersionPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkVersionPage",desc = "根据查询对象按分页查找事项状态列表")
-    @ApiParam(name = "workVersionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkVersionPage",desc = "根据查询对象按分页查找事项状态列表")
+    //@ApiParam(name = "workVersionQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkVersion>> findWorkVersionPage(@RequestBody @Valid @NotNull WorkVersionQuery workVersionQuery){
         Pagination<WorkVersion> pagination = workVersionService.findWorkVersionPage(workVersionQuery);
 

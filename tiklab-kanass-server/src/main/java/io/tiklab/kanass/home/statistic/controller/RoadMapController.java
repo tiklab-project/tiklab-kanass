@@ -21,30 +21,30 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/roadMap")
-@Api(name = "RoadMapController",desc = "路线图")
+//@Api(name = "RoadMapController",desc = "路线图")
 public class RoadMapController {
     @Autowired
     RoadMapService roadMapService;
 
     @RequestMapping(path="/findSprintRoadMap",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintRoadMap",desc = "迭代路线图")
-    @ApiParam(name = "projectId",desc = "项目id",required = true)
+    //@ApiMethod(name = "findSprintRoadMap",desc = "迭代路线图")
+    //@ApiParam(name = "projectId",desc = "项目id",required = true)
     public Result<List<Sprint>> findSprintRoadMap(@NotNull String projectId){
       List<Sprint> springList = roadMapService.findSprintRoadMap(projectId);
       return Result.ok(springList);
     }
 
     @RequestMapping(path="/findVersionRoadMap",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionRoadMap",desc = "版本路线图")
-    @ApiParam(name = "projectId",desc = "项目id",required = true)
+    //@ApiMethod(name = "findVersionRoadMap",desc = "版本路线图")
+    //@ApiParam(name = "projectId",desc = "项目id",required = true)
     public Result<List<ProjectVersion>> findVersionRoadMap(@NotNull String projectId){
         List<ProjectVersion> projectVersionList = roadMapService.findVersionRoadMap(projectId);
         return Result.ok(projectVersionList);
     }
 
     @RequestMapping(path="/findEpicRoadMap",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpicRoadMap",desc = "史诗路线图， 弃用")
-    @ApiParam(name = "projectId",desc = "项目id",required = true)
+    //@ApiMethod(name = "findEpicRoadMap",desc = "史诗路线图， 弃用")
+    //@ApiParam(name = "projectId",desc = "项目id",required = true)
     public Result<List<Epic>> findEpicRoadMap(@NotNull String projectId){
         List<Epic> epicList = roadMapService.findEpicRoadMap(projectId);
         return Result.ok(epicList);

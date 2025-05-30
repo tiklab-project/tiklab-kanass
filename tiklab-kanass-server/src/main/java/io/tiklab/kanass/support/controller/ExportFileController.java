@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/exportfile")
-@Api(name = "ExportFileController",desc = "ExportFileController")
+//@Api(name = "ExportFileController",desc = "ExportFileController")
 public class ExportFileController {
 
     private static Logger logger = LoggerFactory.getLogger(ExportFileController.class);
@@ -30,7 +30,7 @@ public class ExportFileController {
     private ExportFileService exportFileService;
 
     @RequestMapping(path="/exportWorkItemXml",method = RequestMethod.POST)
-    @ApiMethod(name = "exportWorkItemXml",desc = "导出事项excel")
+    //@ApiMethod(name = "exportWorkItemXml",desc = "导出事项excel")
     public void exportWorkItemXml(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

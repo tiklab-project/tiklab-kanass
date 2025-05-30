@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workStatus")
-@Api(name = "WorkStatusController",desc = "事项状态管理")
+//@Api(name = "WorkStatusController",desc = "事项状态管理")
 public class WorkStatusController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkStatusController.class);
@@ -39,8 +39,8 @@ public class WorkStatusController {
     SortProcessor sortService;
 
     @RequestMapping(path="/createWorkStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkStatus",desc = "创建事项状态")
-    @ApiParam(name = "workStatus",desc = "事项状态DTO",required = true)
+    //@ApiMethod(name = "createWorkStatus",desc = "创建事项状态")
+    //@ApiParam(name = "workStatus",desc = "事项状态DTO",required = true)
     public Result<String> createWorkStatus(@RequestBody @NotNull @Valid WorkStatus workStatus){
         String id = workStatusService.createWorkStatus(workStatus);
 
@@ -48,8 +48,8 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path="/updateWorkStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkStatus",desc = "更新事项状态")
-    @ApiParam(name = "workStatus",desc = "事项状态DTO",required = true)
+    //@ApiMethod(name = "updateWorkStatus",desc = "更新事项状态")
+    //@ApiParam(name = "workStatus",desc = "事项状态DTO",required = true)
     public Result<Void> updateWorkStatus(@RequestBody @NotNull @Valid WorkStatus workStatus){
         workStatusService.updateWorkStatus(workStatus);
 
@@ -57,8 +57,8 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path="/deleteWorkStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkStatus",desc = "根据状态ID删除事项状态")
-    @ApiParam(name = "id",desc = "事项状态ID",required = true)
+    //@ApiMethod(name = "deleteWorkStatus",desc = "根据状态ID删除事项状态")
+    //@ApiParam(name = "id",desc = "事项状态ID",required = true)
     public Result<Void> deleteWorkStatus(@NotNull String id){
         workStatusService.deleteWorkStatus(id);
 
@@ -66,8 +66,8 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path="/findWorkStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkStatus",desc = "根据事项状态ID查找事项状态")
-    @ApiParam(name = "id",desc = "事项状态ID",required = true)
+    //@ApiMethod(name = "findWorkStatus",desc = "根据事项状态ID查找事项状态")
+    //@ApiParam(name = "id",desc = "事项状态ID",required = true)
     public Result<WorkStatus> findWorkStatus(@NotNull String id){
         WorkStatus workStatus = workStatusService.findWorkStatus(id);
 
@@ -75,7 +75,7 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path="/findAllWorkStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkStatus",desc = "查找所有事项状态列表")
+    //@ApiMethod(name = "findAllWorkStatus",desc = "查找所有事项状态列表")
     public Result<List<WorkStatus>> findAllWorkStatus(){
         List<WorkStatus> workStatusList = workStatusService.findAllWorkStatus();
 
@@ -84,8 +84,8 @@ public class WorkStatusController {
 
 
     @RequestMapping(path = "/findWorkStatusList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkStatusList",desc = "根据查询对象查找事项状态列表")
-    @ApiParam(name = "workStatusQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkStatusList",desc = "根据查询对象查找事项状态列表")
+    //@ApiParam(name = "workStatusQuery",desc = "查询对象",required = true)
     public Result<List<WorkStatus>> findWorkStatusList(@RequestBody @Valid @NotNull WorkStatusQuery workStatusQuery){
         List<WorkStatus> workStatusList = workStatusService.findWorkStatusList(workStatusQuery);
 
@@ -93,8 +93,8 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path = "/findWorkStatusListBySorts",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkStatusListBySorts",desc = "根据查询对象查找事项状态列表")
-    @ApiParam(name = "workStatusQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkStatusListBySorts",desc = "根据查询对象查找事项状态列表")
+    //@ApiParam(name = "workStatusQuery",desc = "查询对象",required = true)
     public Result<List<WorkStatus>> findWorkStatusListBySorts(@RequestBody @Valid @NotNull WorkStatusQuery workStatusQuery){
         List<WorkStatus> workStatusList = workStatusService.findWorkStatusListBySorts(workStatusQuery);
 
@@ -102,8 +102,8 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path = "/findWorkStatusPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkStatusPage",desc = "根据查询对象按分页查找事项状态列表")
-    @ApiParam(name = "workStatusQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkStatusPage",desc = "根据查询对象按分页查找事项状态列表")
+    //@ApiParam(name = "workStatusQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkStatus>> findWorkStatusPage(@RequestBody @Valid @NotNull WorkStatusQuery workStatusQuery){
         Pagination<WorkStatus> pagination = workStatusService.findWorkStatusPage(workStatusQuery);
 
@@ -111,8 +111,8 @@ public class WorkStatusController {
     }
 
     @RequestMapping(path="/exchange",method = RequestMethod.POST)
-    @ApiMethod(name = "exchange",desc = "交换排序")
-    @ApiParam(name = "exchange",desc = "交换排序DTO",required = true)
+    //@ApiMethod(name = "exchange",desc = "交换排序")
+    //@ApiParam(name = "exchange",desc = "交换排序DTO",required = true)
     public Result<Void> exchange(@RequestBody @Valid @NotNull Sort exchange){
         sortService.sort("pmc_work_status","id","sort",exchange);
 

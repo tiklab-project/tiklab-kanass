@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/projectFocus")
-@Api(name = "ProjectFocusController",desc = "ProjectFocusController")
+//@Api(name = "ProjectFocusController",desc = "ProjectFocusController")
 public class ProjectFocusController {
 
     private static Logger logger = LoggerFactory.getLogger(ProjectFocusController.class);
@@ -34,8 +34,8 @@ public class ProjectFocusController {
     private ProjectFocusService projectFocusService;
 
     @RequestMapping(path="/createProjectFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "createProjectFocus",desc = "添加收藏项目")
-    @ApiParam(name = "projectFocus",desc = "项目收藏模型",required = true)
+    //@ApiMethod(name = "createProjectFocus",desc = "添加收藏项目")
+    //@ApiParam(name = "projectFocus",desc = "项目收藏模型",required = true)
     public Result<String> createProjectFocus(@RequestBody @NotNull @Valid ProjectFocus projectFocus){
         String id = projectFocusService.createProjectFocus(projectFocus);
 
@@ -43,8 +43,8 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path="/updateProjectFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "updateProjectFocus",desc = "更新收藏项目")
-    @ApiParam(name = "projectFocus",desc = "项目收藏模型",required = true)
+    //@ApiMethod(name = "updateProjectFocus",desc = "更新收藏项目")
+    //@ApiParam(name = "projectFocus",desc = "项目收藏模型",required = true)
     public Result<Void> updateProjectFocus(@RequestBody @NotNull @Valid ProjectFocus projectFocus){
         projectFocusService.updateProjectFocus(projectFocus);
 
@@ -52,8 +52,8 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path="/deleteProjectFocusByQuery",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteProjectFocusByQuery",desc = "根据收藏者和项目id删除收藏的项目")
-    @ApiParam(name = "projectFocusQuery",desc = "项目收藏模型",required = true)
+    //@ApiMethod(name = "deleteProjectFocusByQuery",desc = "根据收藏者和项目id删除收藏的项目")
+    //@ApiParam(name = "projectFocusQuery",desc = "项目收藏模型",required = true)
     public Result<Void> deleteProjectFocusByQuery(@RequestBody @NotNull @Valid ProjectFocusQuery projectFocusQuery){
         projectFocusService.deleteProjectFocusByQuery(projectFocusQuery);
 
@@ -61,8 +61,8 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path="/deleteProjectFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteProjectFocus",desc = "根据id 删除收藏的项目")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "deleteProjectFocus",desc = "根据id 删除收藏的项目")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<Void> deleteProjectFocus(@NotNull String id){
         projectFocusService.deleteProjectFocus(id);
 
@@ -70,8 +70,8 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path="/findProjectFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "findProjectFocus",desc = "根据id 查找收藏的项目")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "findProjectFocus",desc = "根据id 查找收藏的项目")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<ProjectFocus> findProjectFocus(@NotNull String id){
         ProjectFocus projectFocus = projectFocusService.findProjectFocus(id);
 
@@ -79,7 +79,7 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path="/findAllProjectFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllProjectFocus",desc = "查找所有收藏的项目")
+    //@ApiMethod(name = "findAllProjectFocus",desc = "查找所有收藏的项目")
     public Result<List<ProjectFocus>> findAllProjectFocus(){
         List<ProjectFocus> projectFocusList = projectFocusService.findAllProjectFocus();
 
@@ -87,8 +87,8 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path = "/findProjectFocusList",method = RequestMethod.POST)
-    @ApiMethod(name = "findProjectFocusList",desc = "根据条件查询项目收藏列表")
-    @ApiParam(name = "projectFocusQuery",desc = "项目收藏模型",required = true)
+    //@ApiMethod(name = "findProjectFocusList",desc = "根据条件查询项目收藏列表")
+    //@ApiParam(name = "projectFocusQuery",desc = "项目收藏模型",required = true)
     public Result<List<ProjectFocus>> findProjectFocusList(@RequestBody @Valid @NotNull ProjectFocusQuery projectFocusQuery){
         List<ProjectFocus> projectFocusList = projectFocusService.findProjectFocusList(projectFocusQuery);
 
@@ -96,8 +96,8 @@ public class ProjectFocusController {
     }
 
     @RequestMapping(path = "/findProjectFocusPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findProjectFocusPage",desc = "根据条件按分页查询项目的收藏列表")
-    @ApiParam(name = "projectFocusQuery",desc = "项目收藏模型",required = true)
+    //@ApiMethod(name = "findProjectFocusPage",desc = "根据条件按分页查询项目的收藏列表")
+    //@ApiParam(name = "projectFocusQuery",desc = "项目收藏模型",required = true)
     public Result<Pagination<ProjectFocus>> findProjectFocusPage(@RequestBody @Valid @NotNull ProjectFocusQuery projectFocusQuery){
         Pagination<ProjectFocus> pagination = projectFocusService.findProjectFocusPage(projectFocusQuery);
 

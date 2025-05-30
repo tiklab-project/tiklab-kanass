@@ -545,13 +545,16 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
                 if (description != null && !description.isBlank()){
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"描述：\"}]},");
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ description + "\"}]}");
-                } else if (stepsToReproduce != null && !stepsToReproduce.isBlank()) {
+                }
+                if (stepsToReproduce != null && !stepsToReproduce.isBlank()) {
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"步骤：\"}]},");
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ stepsToReproduce + "\"}]}");
-                } else if (additionalInformation != null && !additionalInformation.isBlank()) {
+                }
+                if (additionalInformation != null && !additionalInformation.isBlank()) {
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"附加信息：\"}]}");
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ additionalInformation + "\"}]}");
-                }else {
+                }
+                if (descBuffer.equals("[")){
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}");
                 }
                 descBuffer.append("]");

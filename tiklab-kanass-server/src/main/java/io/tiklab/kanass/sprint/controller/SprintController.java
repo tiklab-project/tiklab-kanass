@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sprint")
-@Api(name = "SprintController",desc = "迭代管理")
+//@Api(name = "SprintController",desc = "迭代管理")
 public class SprintController {
 
     private static Logger logger = LoggerFactory.getLogger(SprintController.class);
@@ -35,9 +35,9 @@ public class SprintController {
 
 
     @RequestMapping(path="/createSprint",method = RequestMethod.POST)
-    @ApiMethod(name = "createSprint",desc = "创建迭代")
-    @ApiParam(name = "sprint",desc = "迭代DTO",required = true)
-    public Result<String> createSprint(@RequestBody @NotNull @Valid @ApiParam Sprint sprint){
+    //@ApiMethod(name = "createSprint",desc = "创建迭代")
+    //@ApiParam(name = "sprint",desc = "迭代DTO",required = true)
+    public Result<String> createSprint(@RequestBody @NotNull @Valid Sprint sprint){
         String id = sprintService.createSprint(sprint);
 
         return Result.ok(id);
@@ -45,9 +45,9 @@ public class SprintController {
 
 
     @RequestMapping(path="/updateSprint",method = RequestMethod.POST)
-    @ApiMethod(name = "updateSprint",desc = "更新迭代")
-    @ApiParam(name = "sprint",desc = "迭代DTO",required = true)
-    public Result<Void> updateSprint(@RequestBody @NotNull @Valid @ApiParam Sprint sprint){
+    //@ApiMethod(name = "updateSprint",desc = "更新迭代")
+    //@ApiParam(name = "sprint",desc = "迭代DTO",required = true)
+    public Result<Void> updateSprint(@RequestBody @NotNull @Valid Sprint sprint){
         sprintService.updateSprint(sprint);
 
         return Result.ok();
@@ -55,8 +55,8 @@ public class SprintController {
 
 
     @RequestMapping(path="/deleteSprint",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteSprint",desc = "根据ID删除迭代")
-    @ApiParam(name = "id",desc = "迭代ID",required = true)
+    //@ApiMethod(name = "deleteSprint",desc = "根据ID删除迭代")
+    //@ApiParam(name = "id",desc = "迭代ID",required = true)
     public Result<Void> deleteSprint(@NotNull String id){
         sprintService.deleteSprint(id);
 
@@ -65,8 +65,8 @@ public class SprintController {
 
 
     @RequestMapping(path="/findSprint",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprint",desc = "根据id查找迭代列表")
-    @ApiParam(name = "id",desc = "迭代ID",required = true)
+    //@ApiMethod(name = "findSprint",desc = "根据id查找迭代列表")
+    //@ApiParam(name = "id",desc = "迭代ID",required = true)
     public Result<Sprint> findSprint(@NotNull String id){
         Sprint sprint = sprintService.findSprint(id);
 
@@ -74,7 +74,7 @@ public class SprintController {
     }
 
     @RequestMapping(path="/findAllSprint",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllSprint",desc = "查找所有迭代列表")
+    //@ApiMethod(name = "findAllSprint",desc = "查找所有迭代列表")
     public Result<List<Sprint>> findAllSprint(){
         List<Sprint> sprintList = sprintService.findAllSprint();
 
@@ -83,8 +83,8 @@ public class SprintController {
 
 
     @RequestMapping(path = "/findSprintList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintList",desc = "根据条件查找迭代列表")
-    @ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
+    //@ApiMethod(name = "findSprintList",desc = "根据条件查找迭代列表")
+    //@ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
     public Result<List<Sprint>> findSprintList(@RequestBody @Valid @NotNull SprintQuery sprintQuery){
         List<Sprint> sprintList = sprintService.findSprintList(sprintQuery);
 
@@ -92,8 +92,8 @@ public class SprintController {
     }
 
     @RequestMapping(path = "/findSelectSprintList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSelectSprintList",desc = "根据条件查找迭代列表")
-    @ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
+    //@ApiMethod(name = "findSelectSprintList",desc = "根据条件查找迭代列表")
+    //@ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
     public Result<List<Sprint>> findSelectSprintList(@RequestBody @Valid @NotNull SprintQuery sprintQuery){
         List<Sprint> sprintList = sprintService.findSelectSprintList(sprintQuery);
 
@@ -102,16 +102,16 @@ public class SprintController {
 
 
     @RequestMapping(path = "/findSprintPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintPage",desc = "根据条件按照分页查找迭代")
-    @ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
+    //@ApiMethod(name = "findSprintPage",desc = "根据条件按照分页查找迭代")
+    //@ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
     public Result<Pagination<Sprint>> findSprintPage(@RequestBody @Valid @NotNull SprintQuery sprintQuery){
         Pagination<Sprint> pagination = sprintService.findSprintPage(sprintQuery);
 
         return Result.ok(pagination);
     }
     @RequestMapping(path = "/findFocusSprintList",method = RequestMethod.POST)
-    @ApiMethod(name = "findFocusSprintList",desc = "根据条件查找我收藏的迭代")
-    @ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
+    //@ApiMethod(name = "findFocusSprintList",desc = "根据条件查找我收藏的迭代")
+    //@ApiParam(name = "sprintQuery",desc = "迭代查询对象",required = true)
     public Result<Pagination<Sprint>> findFocusSprintList(@RequestBody @Valid @NotNull SprintQuery sprintQuery){
         List<Sprint> sprintList = sprintService.findFocusSprintList(sprintQuery);
 
@@ -119,7 +119,7 @@ public class SprintController {
     }
 
     @RequestMapping(path = "/findWorkSprintList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkSprintList",desc = "根据条件查找我收藏的迭代")
+    //@ApiMethod(name = "findWorkSprintList",desc = "根据条件查找我收藏的迭代")
     public Result<Pagination<Sprint>> findWorkSprintList(@NotNull String workId){
         List<Sprint> sprintList = sprintService.findWorkSprintList(workId);
 

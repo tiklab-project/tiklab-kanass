@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workItemFunction")
-@Api(name = "WorkItemFunctionController",desc = "事项优先级管理")
+//@Api(name = "WorkItemFunctionController",desc = "事项优先级管理")
 public class WorkItemFunctionController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkItemFunctionController.class);
@@ -34,8 +34,8 @@ public class WorkItemFunctionController {
     private WorkItemFunctionService workItemFunctionService;
 
     @RequestMapping(path="/createWorkItemFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkItemFunction",desc = "创建优先级")
-    @ApiParam(name = "workItemFunction",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "createWorkItemFunction",desc = "创建优先级")
+    //@ApiParam(name = "workItemFunction",desc = "优先级DTO",required = true)
     public Result<String> createWorkItemFunction(@RequestBody @NotNull @Valid WorkItemFunction workItemFunction){
         String id = workItemFunctionService.createWorkItemFunction(workItemFunction);
 
@@ -43,8 +43,8 @@ public class WorkItemFunctionController {
     }
 
     @RequestMapping(path="/updateWorkItemFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkItemFunction",desc = "更新优先级")
-    @ApiParam(name = "workItemFunction",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "updateWorkItemFunction",desc = "更新优先级")
+    //@ApiParam(name = "workItemFunction",desc = "优先级DTO",required = true)
     public Result<Void> updateWorkItemFunction(@RequestBody @NotNull @Valid WorkItemFunction workItemFunction){
         workItemFunctionService.updateWorkItemFunction(workItemFunction);
 
@@ -52,8 +52,8 @@ public class WorkItemFunctionController {
     }
 
     @RequestMapping(path="/deleteWorkItemFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkItemFunction",desc = "根据优先级ID删除优先级")
-    @ApiParam(name = "id",desc = "优先级ID",required = true)
+    //@ApiMethod(name = "deleteWorkItemFunction",desc = "根据优先级ID删除优先级")
+    //@ApiParam(name = "id",desc = "优先级ID",required = true)
     public Result<Void> deleteWorkItemFunction(@NotNull String id){
         workItemFunctionService.deleteWorkItemFunction(id);
 
@@ -61,8 +61,8 @@ public class WorkItemFunctionController {
     }
 
     @RequestMapping(path="/findWorkItemFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemFunction",desc = "根据优先级ID查找优先级")
-    @ApiParam(name = "id",desc = "优先级ID",required = true)
+    //@ApiMethod(name = "findWorkItemFunction",desc = "根据优先级ID查找优先级")
+    //@ApiParam(name = "id",desc = "优先级ID",required = true)
     public Result<WorkItemFunction> findWorkItemFunction(@NotNull String id){
         WorkItemFunction workItemFunction = workItemFunctionService.findWorkItemFunction(id);
 
@@ -70,7 +70,7 @@ public class WorkItemFunctionController {
     }
 
     @RequestMapping(path="/findAllWorkItemFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkItemFunction",desc = "查找所有优先级")
+    //@ApiMethod(name = "findAllWorkItemFunction",desc = "查找所有优先级")
     public Result<List<WorkItemFunction>> findAllWorkItemFunction(){
         List<WorkItemFunction> workItemFunctionList = workItemFunctionService.findAllWorkItemFunction();
 
@@ -79,8 +79,8 @@ public class WorkItemFunctionController {
 
 
     @RequestMapping(path = "/findWorkItemFunctionList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemFunctionList",desc = "根据查询对象查找优先级列表")
-    @ApiParam(name = "workItemFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemFunctionList",desc = "根据查询对象查找优先级列表")
+    //@ApiParam(name = "workItemFunctionQuery",desc = "查询对象",required = true)
     public Result<List<WorkItemFunction>> findWorkItemFunctionList(@RequestBody @Valid @NotNull WorkItemFunctionQuery workItemFunctionQuery){
         List<WorkItemFunction> workItemFunctionList = workItemFunctionService.findWorkItemFunctionList(workItemFunctionQuery);
 
@@ -89,8 +89,8 @@ public class WorkItemFunctionController {
 
 
     @RequestMapping(path = "/findWorkItemFunctionPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemFunctionPage",desc = "根据查询对象按分页查询优先级列表")
-    @ApiParam(name = "workItemFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemFunctionPage",desc = "根据查询对象按分页查询优先级列表")
+    //@ApiParam(name = "workItemFunctionQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItemFunction>> findWorkItemFunctionPage(@RequestBody @Valid @NotNull WorkItemFunctionQuery workItemFunctionQuery){
         Pagination<WorkItemFunction> pagination = workItemFunctionService.findWorkItemFunctionPage(workItemFunctionQuery);
 

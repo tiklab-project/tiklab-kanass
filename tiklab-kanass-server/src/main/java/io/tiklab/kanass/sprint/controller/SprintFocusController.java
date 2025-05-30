@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sprintFocus")
-@Api(name = "SprintFocusController",desc = "SprintFocusController")
+//@Api(name = "SprintFocusController",desc = "SprintFocusController")
 public class SprintFocusController {
 
     private static Logger logger = LoggerFactory.getLogger(SprintFocusController.class);
@@ -34,8 +34,8 @@ public class SprintFocusController {
     private SprintFocusService sprintFocusService;
 
     @RequestMapping(path="/createSprintFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "createSprintFocus",desc = "创建迭代收藏")
-    @ApiParam(name = "sprintFocus",desc = "收藏的迭代模型",required = true)
+    //@ApiMethod(name = "createSprintFocus",desc = "创建迭代收藏")
+    //@ApiParam(name = "sprintFocus",desc = "收藏的迭代模型",required = true)
     public Result<String> createSprintFocus(@RequestBody @NotNull @Valid SprintFocus sprintFocus){
         String id = sprintFocusService.createSprintFocus(sprintFocus);
 
@@ -43,8 +43,8 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path="/updateSprintFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "updateSprintFocus",desc = "更新收藏的迭代")
-    @ApiParam(name = "sprintFocus",desc = "收藏的迭代模型",required = true)
+    //@ApiMethod(name = "updateSprintFocus",desc = "更新收藏的迭代")
+    //@ApiParam(name = "sprintFocus",desc = "收藏的迭代模型",required = true)
     public Result<Void> updateSprintFocus(@RequestBody @NotNull @Valid SprintFocus sprintFocus){
         sprintFocusService.updateSprintFocus(sprintFocus);
 
@@ -52,8 +52,8 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path="/deleteSprintFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteSprintFocus",desc = "删除收藏的迭代")
-    @ApiParam(name = "id",desc = "迭代id",required = true)
+    //@ApiMethod(name = "deleteSprintFocus",desc = "删除收藏的迭代")
+    //@ApiParam(name = "id",desc = "迭代id",required = true)
     public Result<Void> deleteSprintFocus(@NotNull String id){
         sprintFocusService.deleteSprintFocus(id);
 
@@ -61,8 +61,8 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path="/deleteSprintFocusByQuery",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteSprintFocus",desc = "根据添加删除收藏的迭代")
-    @ApiParam(name = "sprintFocusQuery",desc = "迭代id",required = true)
+    //@ApiMethod(name = "deleteSprintFocus",desc = "根据添加删除收藏的迭代")
+    //@ApiParam(name = "sprintFocusQuery",desc = "迭代id",required = true)
     public Result<Void> deleteSprintFocusByQuery(@RequestBody @Valid @NotNull SprintFocusQuery sprintFocusQuery){
         sprintFocusService.deleteSprintFocusByQuery(sprintFocusQuery);
 
@@ -70,8 +70,8 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path="/findSprintFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintFocus",desc = "根据id查找迭代收藏")
-    @ApiParam(name = "id",desc = "迭代id",required = true)
+    //@ApiMethod(name = "findSprintFocus",desc = "根据id查找迭代收藏")
+    //@ApiParam(name = "id",desc = "迭代id",required = true)
     public Result<SprintFocus> findSprintFocus(@NotNull String id){
         SprintFocus sprintFocus = sprintFocusService.findSprintFocus(id);
 
@@ -79,7 +79,7 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path="/findAllSprintFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllSprintFocus",desc = "查找所有收藏迭代")
+    //@ApiMethod(name = "findAllSprintFocus",desc = "查找所有收藏迭代")
     public Result<List<SprintFocus>> findAllSprintFocus(){
         List<SprintFocus> sprintFocusList = sprintFocusService.findAllSprintFocus();
 
@@ -87,8 +87,8 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path = "/findSprintFocusList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintFocusList",desc = "根据条件查询收藏的迭代列表")
-    @ApiParam(name = "sprintFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
+    //@ApiMethod(name = "findSprintFocusList",desc = "根据条件查询收藏的迭代列表")
+    //@ApiParam(name = "sprintFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
     public Result<List<SprintFocus>> findSprintFocusList(@RequestBody @Valid @NotNull SprintFocusQuery sprintFocusQuery){
         List<SprintFocus> sprintFocusList = sprintFocusService.findSprintFocusList(sprintFocusQuery);
 
@@ -96,8 +96,8 @@ public class SprintFocusController {
     }
 
     @RequestMapping(path = "/findSprintFocusPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintFocusPage",desc = "根据条件按分页查询收藏的迭代列表")
-    @ApiParam(name = "sprintFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
+    //@ApiMethod(name = "findSprintFocusPage",desc = "根据条件按分页查询收藏的迭代列表")
+    //@ApiParam(name = "sprintFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
     public Result<Pagination<SprintFocus>> findSprintFocusPage(@RequestBody @Valid @NotNull SprintFocusQuery sprintFocusQuery){
         Pagination<SprintFocus> pagination = sprintFocusService.findSprintFocusPage(sprintFocusQuery);
 

@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/versionFocus")
-@Api(name = "VersionFocusController",desc = "VersionFocusController")
+//@Api(name = "VersionFocusController",desc = "VersionFocusController")
 public class VersionFocusController {
 
     private static Logger logger = LoggerFactory.getLogger(VersionFocusController.class);
@@ -34,8 +34,8 @@ public class VersionFocusController {
     private VersionFocusService versionFocusService;
 
     @RequestMapping(path="/createVersionFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "createVersionFocus",desc = "创建迭代收藏")
-    @ApiParam(name = "versionFocus",desc = "收藏的迭代模型",required = true)
+    //@ApiMethod(name = "createVersionFocus",desc = "创建迭代收藏")
+    //@ApiParam(name = "versionFocus",desc = "收藏的迭代模型",required = true)
     public Result<String> createVersionFocus(@RequestBody @NotNull @Valid VersionFocus versionFocus){
         String id = versionFocusService.createVersionFocus(versionFocus);
 
@@ -43,8 +43,8 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path="/updateVersionFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "updateVersionFocus",desc = "更新收藏的迭代")
-    @ApiParam(name = "versionFocus",desc = "收藏的迭代模型",required = true)
+    //@ApiMethod(name = "updateVersionFocus",desc = "更新收藏的迭代")
+    //@ApiParam(name = "versionFocus",desc = "收藏的迭代模型",required = true)
     public Result<Void> updateVersionFocus(@RequestBody @NotNull @Valid VersionFocus versionFocus){
         versionFocusService.updateVersionFocus(versionFocus);
 
@@ -52,8 +52,8 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path="/deleteVersionFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteVersionFocus",desc = "删除收藏的迭代")
-    @ApiParam(name = "id",desc = "迭代id",required = true)
+    //@ApiMethod(name = "deleteVersionFocus",desc = "删除收藏的迭代")
+    //@ApiParam(name = "id",desc = "迭代id",required = true)
     public Result<Void> deleteVersionFocus(@NotNull String id){
         versionFocusService.deleteVersionFocus(id);
 
@@ -61,8 +61,8 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path="/deleteVersionFocusByQuery",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteVersionFocus",desc = "根据添加删除收藏的迭代")
-    @ApiParam(name = "versionFocusQuery",desc = "迭代id",required = true)
+    //@ApiMethod(name = "deleteVersionFocus",desc = "根据添加删除收藏的迭代")
+    //@ApiParam(name = "versionFocusQuery",desc = "迭代id",required = true)
     public Result<Void> deleteVersionFocusByQuery(@RequestBody @Valid @NotNull VersionFocusQuery versionFocusQuery){
         versionFocusService.deleteVersionFocusByQuery(versionFocusQuery);
 
@@ -70,8 +70,8 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path="/findVersionFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionFocus",desc = "根据id查找迭代收藏")
-    @ApiParam(name = "id",desc = "迭代id",required = true)
+    //@ApiMethod(name = "findVersionFocus",desc = "根据id查找迭代收藏")
+    //@ApiParam(name = "id",desc = "迭代id",required = true)
     public Result<VersionFocus> findVersionFocus(@NotNull String id){
         VersionFocus versionFocus = versionFocusService.findVersionFocus(id);
 
@@ -79,7 +79,7 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path="/findAllVersionFocus",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllVersionFocus",desc = "查找所有收藏迭代")
+    //@ApiMethod(name = "findAllVersionFocus",desc = "查找所有收藏迭代")
     public Result<List<VersionFocus>> findAllVersionFocus(){
         List<VersionFocus> versionFocusList = versionFocusService.findAllVersionFocus();
 
@@ -87,8 +87,8 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path = "/findVersionFocusList",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionFocusList",desc = "根据条件查询收藏的迭代列表")
-    @ApiParam(name = "versionFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
+    //@ApiMethod(name = "findVersionFocusList",desc = "根据条件查询收藏的迭代列表")
+    //@ApiParam(name = "versionFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
     public Result<List<VersionFocus>> findVersionFocusList(@RequestBody @Valid @NotNull VersionFocusQuery versionFocusQuery){
         List<VersionFocus> versionFocusList = versionFocusService.findVersionFocusList(versionFocusQuery);
 
@@ -96,8 +96,8 @@ public class VersionFocusController {
     }
 
     @RequestMapping(path = "/findVersionFocusPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionFocusPage",desc = "根据条件按分页查询收藏的迭代列表")
-    @ApiParam(name = "versionFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
+    //@ApiMethod(name = "findVersionFocusPage",desc = "根据条件按分页查询收藏的迭代列表")
+    //@ApiParam(name = "versionFocusQuery",desc = "收藏的迭代查找条件模型",required = true)
     public Result<Pagination<VersionFocus>> findVersionFocusPage(@RequestBody @Valid @NotNull VersionFocusQuery versionFocusQuery){
         Pagination<VersionFocus> pagination = versionFocusService.findVersionFocusPage(versionFocusQuery);
 

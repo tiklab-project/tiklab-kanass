@@ -1,5 +1,6 @@
 package io.tiklab.kanass.workitem.model;
 
+import io.tiklab.core.BaseModel;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.core.page.Page;
@@ -12,7 +13,7 @@ import java.util.List;
  * 事项附件查询参数模型
  */
 @ApiModel
-public class WorkAttachQuery {
+public class WorkAttachQuery extends BaseModel {
 
     @ApiProperty(name ="workItemId",desc = "事项ID，精确匹配")
     private String workItemId;

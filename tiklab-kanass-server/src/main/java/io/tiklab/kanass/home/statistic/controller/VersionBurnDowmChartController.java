@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/versionBurnDowmChart")
-@Api(name = "VersionBurnDowmChartController",desc = "VersionBurnDowmChartController")
+//@Api(name = "VersionBurnDowmChartController",desc = "VersionBurnDowmChartController")
 public class VersionBurnDowmChartController {
 
     private static Logger logger = LoggerFactory.getLogger(VersionBurnDowmChartController.class);
@@ -34,8 +34,8 @@ public class VersionBurnDowmChartController {
     private VersionBurnDowmChartService versionBurnDowmChartService;
 
     @RequestMapping(path="/createVersionBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "createVersionBurnDowmChart",desc = "创建迭代下事项数据动态记录")
-    @ApiParam(name = "versionBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
+    //@ApiMethod(name = "createVersionBurnDowmChart",desc = "创建迭代下事项数据动态记录")
+    //@ApiParam(name = "versionBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
     public Result<String> createVersionBurnDowmChart(@RequestBody @NotNull @Valid VersionBurnDowmChart versionBurnDowmChart){
         String id = versionBurnDowmChartService.createVersionBurnDowmChart(versionBurnDowmChart);
 
@@ -43,8 +43,8 @@ public class VersionBurnDowmChartController {
     }
 
     @RequestMapping(path="/updateVersionBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "updateVersionBurnDowmChart",desc = "更新迭代下事项数据动态记录")
-    @ApiParam(name = "versionBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
+    //@ApiMethod(name = "updateVersionBurnDowmChart",desc = "更新迭代下事项数据动态记录")
+    //@ApiParam(name = "versionBurnDowmChart",desc = "迭代事项数据动态统计模型",required = true)
     public Result<Void> updateVersionBurnDowmChart(@RequestBody @NotNull @Valid VersionBurnDowmChart versionBurnDowmChart){
         versionBurnDowmChartService.updateVersionBurnDowmChart(versionBurnDowmChart);
 
@@ -52,8 +52,8 @@ public class VersionBurnDowmChartController {
     }
 
     @RequestMapping(path="/deleteVersionBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteVersionBurnDowmChart",desc = "删除迭代下事项数据动态记录")
-    @ApiParam(name = "id",desc = "记录id",required = true)
+    //@ApiMethod(name = "deleteVersionBurnDowmChart",desc = "删除迭代下事项数据动态记录")
+    //@ApiParam(name = "id",desc = "记录id",required = true)
     public Result<Void> deleteVersionBurnDowmChart(@NotNull String id){
         versionBurnDowmChartService.deleteVersionBurnDowmChart(id);
 
@@ -61,8 +61,8 @@ public class VersionBurnDowmChartController {
     }
 
     @RequestMapping(path="/findVersionBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionBurnDowmChart",desc = "根据id查找迭代下事项数据动态记录")
-    @ApiParam(name = "id",desc = "记录id",required = true)
+    //@ApiMethod(name = "findVersionBurnDowmChart",desc = "根据id查找迭代下事项数据动态记录")
+    //@ApiParam(name = "id",desc = "记录id",required = true)
     public Result<VersionBurnDowmChart> findVersionBurnDowmChart(@NotNull String id){
         VersionBurnDowmChart versionBurnDowmChart = versionBurnDowmChartService.findVersionBurnDowmChart(id);
 
@@ -70,7 +70,7 @@ public class VersionBurnDowmChartController {
     }
 
     @RequestMapping(path="/findAllVersionBurnDowmChart",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllVersionBurnDowmChart",desc = "查找所有迭代下事项数据动态记录列表")
+    //@ApiMethod(name = "findAllVersionBurnDowmChart",desc = "查找所有迭代下事项数据动态记录列表")
     public Result<List<VersionBurnDowmChart>> findAllVersionBurnDowmChart(){
         List<VersionBurnDowmChart> versionBurnDowmChartList = versionBurnDowmChartService.findAllVersionBurnDowmChart();
 
@@ -78,8 +78,8 @@ public class VersionBurnDowmChartController {
     }
 
     @RequestMapping(path = "/findVersionBurnDowmChartList",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionBurnDowmChartList",desc = "根据迭代数据统计搜索条件查询列表")
-    @ApiParam(name = "versionBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
+    //@ApiMethod(name = "findVersionBurnDowmChartList",desc = "根据迭代数据统计搜索条件查询列表")
+    //@ApiParam(name = "versionBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
     public Result<List<VersionBurnDowmChart>> findVersionBurnDowmChartList(@RequestBody @Valid @NotNull VersionBurnDowmChartQuery versionBurnDowmChartQuery){
         List<VersionBurnDowmChart> versionBurnDowmChartList = versionBurnDowmChartService.findVersionBurnDowmChartList(versionBurnDowmChartQuery);
 
@@ -87,8 +87,8 @@ public class VersionBurnDowmChartController {
     }
 
     @RequestMapping(path = "/findVersionBurnDowmChartPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionBurnDowmChartPage",desc = "根据搜索条件按分页查询迭代的事项数据动态记录列表")
-    @ApiParam(name = "versionBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
+    //@ApiMethod(name = "findVersionBurnDowmChartPage",desc = "根据搜索条件按分页查询迭代的事项数据动态记录列表")
+    //@ApiParam(name = "versionBurnDowmChartQuery",desc = "迭代数据统计搜索模型",required = true)
     public Result<Pagination<VersionBurnDowmChart>> findVersionBurnDowmChartPage(@RequestBody @Valid @NotNull VersionBurnDowmChartQuery versionBurnDowmChartQuery){
         Pagination<VersionBurnDowmChart> pagination = versionBurnDowmChartService.findVersionBurnDowmChartPage(versionBurnDowmChartQuery);
 

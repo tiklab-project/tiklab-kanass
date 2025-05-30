@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/workLog")
-@Api(name = "WorkLogController",desc = "工作日志管理")
+//@Api(name = "WorkLogController",desc = "工作日志管理")
 public class WorkLogController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkLogController.class);
@@ -36,8 +36,8 @@ public class WorkLogController {
     private WorkLogService workLogService;
 
     @RequestMapping(path="/createWorkLog",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkLog",desc = "创建日志")
-    @ApiParam(name = "workLog",desc = "日志DTO",required = true)
+    //@ApiMethod(name = "createWorkLog",desc = "创建日志")
+    //@ApiParam(name = "workLog",desc = "日志DTO",required = true)
     public Result<String> createWorkLog(@RequestBody @NotNull @Valid WorkLog workLog){
         String id = workLogService.createWorkLog(workLog);
 
@@ -45,8 +45,8 @@ public class WorkLogController {
     }
 
     @RequestMapping(path="/updateWorkLog",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkLog",desc = "更新日志")
-    @ApiParam(name = "workLog",desc = "日志DTO",required = true)
+    //@ApiMethod(name = "updateWorkLog",desc = "更新日志")
+    //@ApiParam(name = "workLog",desc = "日志DTO",required = true)
     public Result<Void> updateWorkLog(@RequestBody @NotNull @Valid WorkLog workLog){
         workLogService.updateWorkLog(workLog);
 
@@ -54,8 +54,8 @@ public class WorkLogController {
     }
 
     @RequestMapping(path="/deleteWorkLog",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkLog",desc = "根据ID删除日志")
-    @ApiParam(name = "id",desc = "日志ID",required = true)
+    //@ApiMethod(name = "deleteWorkLog",desc = "根据ID删除日志")
+    //@ApiParam(name = "id",desc = "日志ID",required = true)
     public Result<Void> deleteWorkLog(@NotNull String id){
         workLogService.deleteWorkLog(id);
 
@@ -63,8 +63,8 @@ public class WorkLogController {
     }
 
     @RequestMapping(path="/findWorkLog",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkLog",desc = "根据ID查找日志")
-    @ApiParam(name = "id",desc = "日志ID",required = true)
+    //@ApiMethod(name = "findWorkLog",desc = "根据ID查找日志")
+    //@ApiParam(name = "id",desc = "日志ID",required = true)
     public Result<WorkLog> findWorkLog(@NotNull String id){
         WorkLog workLog = workLogService.findWorkLog(id);
 
@@ -72,7 +72,7 @@ public class WorkLogController {
     }
 
     @RequestMapping(path="/findAllWorkLog",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkLog",desc = "查找所有日志")
+    //@ApiMethod(name = "findAllWorkLog",desc = "查找所有日志")
     public Result<List<WorkLog>> findAllWorkLog(){
         List<WorkLog> workLogList = workLogService.findAllWorkLog();
 
@@ -81,8 +81,8 @@ public class WorkLogController {
 
 
     @RequestMapping(path = "/findWorkLogList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkLogList",desc = "根据查询条件查找日志列表")
-    @ApiParam(name = "workLogQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkLogList",desc = "根据查询条件查找日志列表")
+    //@ApiParam(name = "workLogQuery",desc = "查询对象",required = true)
     public Result<List<WorkLog>> findWorkLogList(@RequestBody @Valid @NotNull WorkLogQuery workLogQuery){
         List<WorkLog> workLogList = workLogService.findWorkLogList(workLogQuery);
 
@@ -91,8 +91,8 @@ public class WorkLogController {
 
 
     @RequestMapping(path = "/findWorkLogPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkLogPage",desc = "根据查询条件按分页查找日志列表")
-    @ApiParam(name = "workLogQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkLogPage",desc = "根据查询条件按分页查找日志列表")
+    //@ApiParam(name = "workLogQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkLog>> findWorkLogPage(@RequestBody @Valid @NotNull WorkLogQuery workLogQuery){
         Pagination<WorkLog> pagination = workLogService.findWorkLogPage(workLogQuery);
 
@@ -100,27 +100,27 @@ public class WorkLogController {
     }
 
     @RequestMapping(path="/findProjectUserLog",method = RequestMethod.POST)
-    @ApiMethod(name = "findProjectUserLog",desc = "查询所有人员工时")
-    @ApiParam(name = "workLogQuery",desc = "工时查询对象",required = true)
-    public Result<Map<String,Object>> findProjectUserLog(@RequestBody  @Valid @ApiParam WorkLogQuery workLogQuery){
+    //@ApiMethod(name = "findProjectUserLog",desc = "查询所有人员工时")
+    //@ApiParam(name = "workLogQuery",desc = "工时查询对象",required = true)
+    public Result<Map<String,Object>> findProjectUserLog(@RequestBody  @Valid WorkLogQuery workLogQuery){
         Map<String, Object> stringObjectMap = workLogService.findProjectUserLog(workLogQuery);
 
         return Result.ok(stringObjectMap);
     }
 
     @RequestMapping(path="/findUserProjectLog",method = RequestMethod.POST)
-    @ApiMethod(name = "findUserProjectLog",desc = "查询事项工时视图")
-    @ApiParam(name = "workLogQuery",desc = "事项工时查询对象",required = true)
-    public Result<Map<String, Object>>  findUserProjectLog(@RequestBody @NotNull @Valid @ApiParam WorkLogQuery workLogQuery){
+    //@ApiMethod(name = "findUserProjectLog",desc = "查询事项工时视图")
+    //@ApiParam(name = "workLogQuery",desc = "事项工时查询对象",required = true)
+    public Result<Map<String, Object>>  findUserProjectLog(@RequestBody @NotNull @Valid WorkLogQuery workLogQuery){
         Map<String, Object> stringObjectMap=  workLogService.findUserProjectLog(workLogQuery);
 
         return Result.ok(stringObjectMap);
     }
 
     @RequestMapping(path="/findProjectWorkItemLog",method = RequestMethod.POST)
-    @ApiMethod(name = "findProjectWorkItemLog",desc = "查询事项工时视图")
-    @ApiParam(name = "workLogQuery",desc = "事项工时查询对象",required = true)
-    public Result<Map<String, Object>>  findProjectWorkItemLog(@RequestBody @NotNull @Valid @ApiParam WorkLogQuery workLogQuery){
+    //@ApiMethod(name = "findProjectWorkItemLog",desc = "查询事项工时视图")
+    //@ApiParam(name = "workLogQuery",desc = "事项工时查询对象",required = true)
+    public Result<Map<String, Object>>  findProjectWorkItemLog(@RequestBody @NotNull @Valid WorkLogQuery workLogQuery){
         Map<String, Object> stringObjectMap=  workLogService.findProjectWorkItemLog(workLogQuery);
 
         return Result.ok(stringObjectMap);

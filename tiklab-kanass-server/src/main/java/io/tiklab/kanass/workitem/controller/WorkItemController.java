@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workItem")
-@Api(name = "WorkItemController",desc = "事项管理")
+@Api(name = "事项管理",desc = "事项管理")
 public class WorkItemController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkItemController.class);
@@ -44,8 +44,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItem
      */
     @RequestMapping(path="/createWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkItem",desc = "创建事项")
-    @ApiParam(name = "workItem",desc = "事项DTO",required = true)
+    //@ApiMethod(name = "createWorkItem",desc = "创建事项")
+    //@ApiParam(name = "workItem",desc = "事项DTO",required = true)
     public Result<String> createWorkItem(@RequestBody @NotNull @Valid WorkItem workItem){
         String id = workItemService.createWorkItem(workItem);
 
@@ -60,8 +60,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItem
      */
     @RequestMapping(path="/updateWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkItem",desc = "更新事项")
-    @ApiParam(name = "workItem",desc = "事项DTO",required = true)
+    //@ApiMethod(name = "updateWorkItem",desc = "更新事项")
+    //@ApiParam(name = "workItem",desc = "事项DTO",required = true)
     public Result<Void> updateWorkItem(@RequestBody @NotNull WorkItem workItem){
         workItemService.updateWorkItem(workItem);
 
@@ -76,8 +76,8 @@ public class WorkItemController {
      * @pi.param: name=id;dataType=string;value=id;
      */
     @RequestMapping(path="/deleteWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkItem",desc = "根据事项ID删除事项")
-    @ApiParam(name = "id",desc = "事项ID",required = true)
+    //@ApiMethod(name = "deleteWorkItem",desc = "根据事项ID删除事项")
+    //@ApiParam(name = "id",desc = "事项ID",required = true)
     public Result<Void> deleteWorkItem(@NotNull String id){
         workItemService.deleteWorkItem(id);
 
@@ -85,8 +85,8 @@ public class WorkItemController {
     }
 
     @RequestMapping(path="/deleteWorkItemAndChildren",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkItemAndChildren",desc = "根据事项ID删除事项")
-    @ApiParam(name = "id",desc = "事项ID",required = true)
+    //@ApiMethod(name = "deleteWorkItemAndChildren",desc = "根据事项ID删除事项")
+    //@ApiParam(name = "id",desc = "事项ID",required = true)
     public Result<Void> deleteWorkItemAndChildren(@NotNull String id){
         workItemService.deleteWorkItemAndChildren(id);
 
@@ -102,8 +102,8 @@ public class WorkItemController {
      * @pi.param: name=id;dataType=string;value=id;
      */
     @RequestMapping(path="/findWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItem",desc = "根据事项ID查找事项")
-    @ApiParam(name = "id",desc = "事项ID",required = true)
+    @ApiMethod(name = "根据事项ID查找事项",desc = "根据事项ID查找事项")
+//    @ApiParam(name = "事项ID",desc = "事项ID",required = true)
     public Result<WorkItem> findWorkItem(@NotNull String id){
         WorkItem workItem = workItemService.findWorkItem(id);
 
@@ -111,8 +111,8 @@ public class WorkItemController {
     }
 
     @RequestMapping(path="/findWorkItemAndSprintVersion",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemAndSprintVersion",desc = "根据事项ID查找事项")
-    @ApiParam(name = "id",desc = "事项ID",required = true)
+    //@ApiMethod(name = "findWorkItemAndSprintVersion",desc = "根据事项ID查找事项")
+    //@ApiParam(name = "id",desc = "事项ID",required = true)
     public Result<WorkItem> findWorkItemAndSprintVersion(@NotNull String id){
         WorkItem workItem = workItemService.findWorkItemAndSprintVersion(id);
 
@@ -120,8 +120,8 @@ public class WorkItemController {
     }
 
     @RequestMapping(path="/findWorkItemAndUsedTime",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemAndUsedTime",desc = "根据事项ID查找事项和事项所用时间")
-    @ApiParam(name = "id",desc = "事项ID",required = true)
+    //@ApiMethod(name = "findWorkItemAndUsedTime",desc = "根据事项ID查找事项和事项所用时间")
+    //@ApiParam(name = "id",desc = "事项ID",required = true)
     public Result<WorkItem> findWorkItemAndUsedTime(@NotNull String id){
         WorkItem workItem = workItemService.findWorkItemAndUsedTime(id);
 
@@ -135,7 +135,7 @@ public class WorkItemController {
      * @pi.request-type:none
      */
     @RequestMapping(path="/findAllWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkItem",desc = "查找所有事项")
+    //@ApiMethod(name = "findAllWorkItem",desc = "查找所有事项")
     public Result<List<WorkItem>> findAllWorkItem(){
         List<WorkItem> workItemList = workItemService.findAllWorkItem();
 
@@ -150,8 +150,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemList",desc = "根据查询对象查找事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemList",desc = "根据查询对象查找事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<List<WorkItem>> findWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
 
@@ -166,8 +166,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findEpicSelectWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpicSelectWorkItemList",desc = "根据查询对象查找可被史诗添加的子事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findEpicSelectWorkItemList",desc = "根据查询对象查找可被史诗添加的子事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findEpicSelectWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> workItemList = workItemService.findEpicSelectWorkItemList(workItemQuery);
 
@@ -182,8 +182,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findSelectChildrenWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSelectChildrenWorkItemList",desc = "根据查询对象查找可被添加的子事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findSelectChildrenWorkItemList",desc = "根据查询对象查找可被添加的子事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findSelectChildrenWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> workItemList = workItemService.findSelectChildrenWorkItemList(workItemQuery);
 
@@ -200,8 +200,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemListTree",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemListTree",desc = "根据查询对象查找事项列表树")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemListTree",desc = "根据查询对象查找事项列表树")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<List<WorkItem>> findWorkItemListTree(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         List<WorkItem> workItemList = workItemService.findWorkItemListTree(workItemQuery);
 
@@ -216,7 +216,7 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findConditionWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findConditionWorkItemPage",desc = "根据查询对象查找事项列表树")
+    @ApiMethod(name = "根据查询对象查找事项列表页",desc = "根据查询对象查找事项列表页")
     @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findConditionWorkItemPage(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> workItemList = workItemService.findConditionWorkItemPage(workItemQuery);
@@ -232,8 +232,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemPage",desc = "根据查询对象按分页查找事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemPage",desc = "根据查询对象按分页查找事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findWorkItemPage(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> pagination = workItemService.findWorkItemPage(workItemQuery);
 
@@ -249,8 +249,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemPageTree",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemPageTree",desc = "根据查询对象按分页查找事项列表树")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemPageTree",desc = "根据查询对象按分页查找事项列表树")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findWorkItemPageTree(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> pagination = workItemService.findWorkItemPageTree(workItemQuery);
 
@@ -265,8 +265,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemPageTreeByQuery",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemPageTreeByQuery",desc = "根据条件查找事项列表树")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemPageTreeByQuery",desc = "根据条件查找事项列表树")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findWorkItemPageTreeByQuery(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         long aTime1 = System.currentTimeMillis();
         Pagination<WorkItem> workItemList = workItemService.findWorkItemPageTreeByQuery(workItemQuery);
@@ -286,8 +286,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkBoardList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkBoardList",desc = "根据查询对象查找事项看板列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkBoardList",desc = "根据查询对象查找事项看板列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<List<WorkBoard>> findWorkBoardList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         List<WorkBoard> workBoardList = workItemService.findWorkBoardList(workItemQuery);
 
@@ -302,8 +302,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findChangePageWorkBoardList",method = RequestMethod.POST)
-    @ApiMethod(name = "findChangePageWorkBoardList",desc = "根据查询对象查找事项看板列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findChangePageWorkBoardList",desc = "根据查询对象查找事项看板列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<WorkBoard> findChangePageWorkBoardList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         WorkBoard changePageWorkBoardList = workItemService.findChangePageWorkBoardList(workItemQuery);
 
@@ -318,8 +318,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkUserGroupBoardList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkUserGroupBoardList",desc = "根据查询对象查找事项看板列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkUserGroupBoardList",desc = "根据查询对象查找事项看板列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<List<WorkUserGroupBoard>> findWorkUserGroupBoardList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         List<WorkUserGroupBoard> workUserGroupBoardList = workItemService.findWorkUserGroupBoardList(workItemQuery);
 
@@ -328,8 +328,8 @@ public class WorkItemController {
 
 
 //    @RequestMapping(path = "/findWorkBoard",method = RequestMethod.POST)
-//    @ApiMethod(name = "findWorkBoard",desc = "根据查询对象查找事项看板")
-//    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+//    //@ApiMethod(name = "findWorkBoard",desc = "根据查询对象查找事项看板")
+//    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
 //    public Result<WorkBoard> findWorkBoard(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
 //        WorkBoard workBoard = workItemService.findWorkBoard(workItemQuery);
 //
@@ -344,8 +344,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findUnEpicWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findUnEpicWorkItemPage",desc = "根据查询对象按分页查找未被史诗关联的事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findUnEpicWorkItemPage",desc = "根据查询对象按分页查找未被史诗关联的事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findUnEpicWorkItemPage(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> pagination = workItemService.findUnEpicWorkItemPage(workItemQuery);
 
@@ -360,8 +360,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findUnPlanWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findUnPlanWorkItemPage",desc = "根据查询对象按分页查找事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findUnPlanWorkItemPage",desc = "根据查询对象按分页查找事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findUnPlanWorkItemPage(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> pagination = workItemService.findUnPlanWorkItemPage(workItemQuery);
 
@@ -376,8 +376,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemByKeyWorks",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemByKeyWorks",desc = "根据查询对象按分页查找事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemByKeyWorks",desc = "根据查询对象按分页查找事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findWorkItemByKeyWorks(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> pagination = workItemService.findWorkItemByKeyWorks(workItemQuery);
 
@@ -392,8 +392,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemNumByWorkType",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemNumByWorkType",desc = "根据查询对象按分页查找事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemNumByWorkType",desc = "根据查询对象按分页查找事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findWorkItemNumByWorkType(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByWorkType(workItemQuery);
 
@@ -401,8 +401,8 @@ public class WorkItemController {
     }
 
     @RequestMapping(path = "/findWorkItemListNumByWorkType",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemListNumByWorkType",desc = "根据查询对象按分页查找事项列表")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemListNumByWorkType",desc = "根据查询对象按分页查找事项列表")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findWorkItemListNumByWorkType(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemListNumByWorkType(workItemQuery);
 
@@ -417,8 +417,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemNumByWorkStatus",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemNumByWorkStatus",desc = "根据查询事项状态查找事项数量")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemNumByWorkStatus",desc = "根据查询事项状态查找事项数量")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<HashMap<String, Integer>> findWorkItemNumByWorkStatus(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByWorkStatus(workItemQuery);
 
@@ -433,8 +433,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemNumByQuickSearch",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemNumByQuickSearch",desc = "根据快速筛选查询事项状态查找事项数量")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkItemNumByQuickSearch",desc = "根据快速筛选查询事项状态查找事项数量")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<HashMap<String, Integer>> findWorkItemNumByQuickSearch(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         HashMap<String, Integer> workItemNumByWorkType = workItemService.findWorkItemNumByQuickSearch(workItemQuery);
 
@@ -449,8 +449,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findCanBeRelationParentWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findCanBeRelationParentWorkItemList",desc = "根据查询事项状态查找可被关联的上级事项")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findCanBeRelationParentWorkItemList",desc = "根据查询事项状态查找可被关联的上级事项")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findCanBeRelationParentWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> canBeRelationParentWorkItemList = workItemService.findCanBeRelationParentWorkItemList(workItemQuery);
 
@@ -465,8 +465,8 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findCanBeRelationPerWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findCanBeRelationPerWorkItemList",desc = "根据查询事项状态查找可被关联的前置事项")
-    @ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findCanBeRelationPerWorkItemList",desc = "根据查询事项状态查找可被关联的前置事项")
+    //@ApiParam(name = "workItemQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkItem>> findCanBeRelationPerWorkItemList(@RequestBody @Valid @NotNull WorkItemQuery workItemQuery){
         Pagination<WorkItem> canBeRelationPerWorkItemList = workItemService.findCanBeRelationPerWorkItemList(workItemQuery);
 
@@ -481,7 +481,7 @@ public class WorkItemController {
      * @pi.param: model=io.tiklab.kanass.workitem.model.WorkItemQuery
      */
     @RequestMapping(path = "/findWorkItemRelationModelCount",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的事项")
+    //@ApiMethod(name = "findWorkItemRelationModelCount",desc = "根据查询事项状态查找可被关联的事项")
     public Result<HashMap<String, Integer>> findWorkItemRelationModelCount(@NotNull String workItemId, @NotNull String workTypeCode){
         HashMap<String, Integer> workItemRelationModelCount = workItemService.findWorkItemRelationModelCount(workItemId, workTypeCode);
 
@@ -489,7 +489,7 @@ public class WorkItemController {
     }
 
     @RequestMapping(path = "/updateBatchWorkItemSprint",method = RequestMethod.POST)
-    @ApiMethod(name = "updateBatchWorkItemSprint",desc = "批量更新事项迭代")
+    //@ApiMethod(name = "updateBatchWorkItemSprint",desc = "批量更新事项迭代")
     public Result<Void> updateBatchWorkItemSprint(@NotNull String oldSprintId, String newSprintId){
         workItemService.updateBatchWorkItemSprint(oldSprintId, newSprintId);
 
@@ -497,7 +497,7 @@ public class WorkItemController {
     }
 
     @RequestMapping(path = "/findSprintWorkItemNum",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintWorkItemNum",desc = "查找迭代下不同状态的事项个数")
+    //@ApiMethod(name = "findSprintWorkItemNum",desc = "查找迭代下不同状态的事项个数")
     public Result<Void> findSprintWorkItemNum(@NotNull String sprintId){
         HashMap<String, Integer> sprintWorkItemNum = workItemService.findSprintWorkItemNum(sprintId);
 
@@ -505,14 +505,14 @@ public class WorkItemController {
     }
 
     @RequestMapping(path = "/findChildrenLevel",method = RequestMethod.POST)
-    @ApiMethod(name = "findChildrenLevel",desc = "查看事项有几级下级事项")
+    //@ApiMethod(name = "findChildrenLevel",desc = "查看事项有几级下级事项")
     public Result<Void> findChildrenLevel(@NotNull String id){
         Integer childrenLevel = workItemService.findChildrenLevel(id);
 
         return Result.ok(childrenLevel);
     }
     @RequestMapping(path = "/findWorkItemAndChidren",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemAndChidren",desc = "查看事项有几级下级事项")
+    //@ApiMethod(name = "findWorkItemAndChidren",desc = "查看事项有几级下级事项")
     public Result<WorkItem> findWorkItemAndChidren(@NotNull String id){
         WorkItem workItemAndChidren = workItemService.findWorkItemAndChidren(id);
 
@@ -520,7 +520,7 @@ public class WorkItemController {
     }
 
     @RequestMapping(path = "/haveChildren",method = RequestMethod.POST)
-    @ApiMethod(name = "haveChildren",desc = "查看事项有几级下级事项")
+    //@ApiMethod(name = "haveChildren",desc = "查看事项有几级下级事项")
     public Result<Boolean> haveChildren(@NotNull String id){
         boolean isHave = workItemService.haveChildren(id);
 
@@ -528,7 +528,7 @@ public class WorkItemController {
     }
 
     @RequestMapping(path = "/findWorkItemAndChildrenIds",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemAndChildrenIds",desc = "查看事项所有下级的id, 包括下级的下级，当前事项")
+    //@ApiMethod(name = "findWorkItemAndChildrenIds",desc = "查看事项所有下级的id, 包括下级的下级，当前事项")
     public Result<List<String>> findWorkItemAndChildrenIds(@NotNull String id){
         List<String> workItemAndChildrenIds = workItemService.findWorkItemAndChildrenIds(id);
 

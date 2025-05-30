@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/workRelate")
-@Api(name = "WorkRelateController",desc = "事项关联管理")
+//@Api(name = "WorkRelateController",desc = "事项关联管理")
 public class WorkRelateController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkRelateController.class);
@@ -36,8 +36,8 @@ public class WorkRelateController {
     private WorkRelateService workRelateService;
 
     @RequestMapping(path="/createWorkRelate",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkRelate",desc = "创建关联事项")
-    @ApiParam(name = "workRelate",desc = "关联事项模型",required = true)
+    //@ApiMethod(name = "createWorkRelate",desc = "创建关联事项")
+    //@ApiParam(name = "workRelate",desc = "关联事项模型",required = true)
     public Result<String> createWorkRelate(@RequestBody @NotNull @Valid WorkRelate workRelate){
         String id = workRelateService.createWorkRelate(workRelate);
 
@@ -45,8 +45,8 @@ public class WorkRelateController {
     }
 
     @RequestMapping(path="/updateWorkRelate",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkRelate",desc = "更新关联事项")
-    @ApiParam(name = "workRelate",desc = "关联事项模型",required = true)
+    //@ApiMethod(name = "updateWorkRelate",desc = "更新关联事项")
+    //@ApiParam(name = "workRelate",desc = "关联事项模型",required = true)
     public Result<Void> updateWorkRelate(@RequestBody @NotNull @Valid WorkRelate workRelate){
         workRelateService.updateWorkRelate(workRelate);
 
@@ -54,8 +54,8 @@ public class WorkRelateController {
     }
 
     @RequestMapping(path="/deleteWorkRelate",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkRelate",desc = "删除关联事项")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "deleteWorkRelate",desc = "删除关联事项")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<Void> deleteWorkRelate(@NotNull String id){
         workRelateService.deleteWorkRelate(id);
 
@@ -63,8 +63,8 @@ public class WorkRelateController {
     }
 
     @RequestMapping(path="/findWorkRelate",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkRelate",desc = "根据id查找关联事项")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "findWorkRelate",desc = "根据id查找关联事项")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<WorkRelate> findWorkRelate(@NotNull String id){
         WorkRelate workRelate = workRelateService.findWorkRelate(id);
 
@@ -72,7 +72,7 @@ public class WorkRelateController {
     }
 
     @RequestMapping(path="/findAllWorkRelate",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkRelate",desc = "查找所有关联事项")
+    //@ApiMethod(name = "findAllWorkRelate",desc = "查找所有关联事项")
     public Result<List<WorkRelate>> findAllWorkRelate(){
         List<WorkRelate> workRelateList = workRelateService.findAllWorkRelate();
 
@@ -81,8 +81,8 @@ public class WorkRelateController {
 
 
     @RequestMapping(path = "/findWorkRelateList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkRelateList",desc = "查询关联事项列表")
-    @ApiParam(name = "workRelateQuery",desc = "关联事项搜索条件模型",required = true)
+    //@ApiMethod(name = "findWorkRelateList",desc = "查询关联事项列表")
+    //@ApiParam(name = "workRelateQuery",desc = "关联事项搜索条件模型",required = true)
     public Result<List<Map<String, Object>>> findWorkRelateList(@RequestBody @Valid @NotNull WorkRelateQuery workRelateQuery){
         List<Map<String, Object>> workRelateList = workRelateService.findWorkRelateList(workRelateQuery);
 
@@ -91,8 +91,8 @@ public class WorkRelateController {
 
 
     @RequestMapping(path = "/findWorkRelatePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkRelatePage",desc = "按分页查询关联事项列表")
-    @ApiParam(name = "workRelateQuery",desc = "关联事项搜索条件模型",required = true)
+    //@ApiMethod(name = "findWorkRelatePage",desc = "按分页查询关联事项列表")
+    //@ApiParam(name = "workRelateQuery",desc = "关联事项搜索条件模型",required = true)
     public Result<Pagination<WorkRelate>> findWorkRelatePage(@RequestBody @Valid @NotNull WorkRelateQuery workRelateQuery){
         Pagination<WorkRelate> pagination = workRelateService.findWorkRelatePage(workRelateQuery);
 

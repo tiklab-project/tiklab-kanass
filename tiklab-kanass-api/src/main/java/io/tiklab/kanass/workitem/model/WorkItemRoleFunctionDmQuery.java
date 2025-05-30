@@ -6,13 +6,14 @@ import io.tiklab.core.page.Page;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 事项评论搜索条件模型
  */
 @ApiModel
-public class WorkItemRoleFunctionDmQuery {
+public class WorkItemRoleFunctionDmQuery implements Serializable {
 
         @ApiProperty(name="domainId",desc="domainId")
         private String domainId;

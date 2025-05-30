@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workFunction")
-@Api(name = "WorkFunctionController",desc = "事项权限管理")
+//@Api(name = "WorkFunctionController",desc = "事项权限管理")
 public class WorkFunctionController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkFunctionController.class);
@@ -34,8 +34,8 @@ public class WorkFunctionController {
     private WorkFunctionService workFunctionService;
 
     @RequestMapping(path="/createWorkFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkFunction",desc = "创建权限")
-    @ApiParam(name = "workFunction",desc = "权限DTO",required = true)
+    //@ApiMethod(name = "createWorkFunction",desc = "创建权限")
+    //@ApiParam(name = "workFunction",desc = "权限DTO",required = true)
     public Result<String> createWorkFunction(@RequestBody @NotNull @Valid WorkFunction workFunction){
         String id = workFunctionService.createWorkFunction(workFunction);
 
@@ -43,8 +43,8 @@ public class WorkFunctionController {
     }
 
     @RequestMapping(path="/updateWorkFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkFunction",desc = "更新权限")
-    @ApiParam(name = "workFunction",desc = "权限DTO",required = true)
+    //@ApiMethod(name = "updateWorkFunction",desc = "更新权限")
+    //@ApiParam(name = "workFunction",desc = "权限DTO",required = true)
     public Result<Void> updateWorkFunction(@RequestBody @NotNull @Valid WorkFunction workFunction){
         workFunctionService.updateWorkFunction(workFunction);
 
@@ -52,8 +52,8 @@ public class WorkFunctionController {
     }
 
     @RequestMapping(path="/deleteWorkFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkFunction",desc = "根据权限ID删除权限")
-    @ApiParam(name = "id",desc = "权限ID",required = true)
+    //@ApiMethod(name = "deleteWorkFunction",desc = "根据权限ID删除权限")
+    //@ApiParam(name = "id",desc = "权限ID",required = true)
     public Result<Void> deleteWorkFunction(@NotNull String id){
         workFunctionService.deleteWorkFunction(id);
 
@@ -61,8 +61,8 @@ public class WorkFunctionController {
     }
 
     @RequestMapping(path="/findWorkFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkFunction",desc = "根据权限ID查找权限")
-    @ApiParam(name = "id",desc = "权限ID",required = true)
+    //@ApiMethod(name = "findWorkFunction",desc = "根据权限ID查找权限")
+    //@ApiParam(name = "id",desc = "权限ID",required = true)
     public Result<WorkFunction> findWorkFunction(@NotNull String id){
         WorkFunction workFunction = workFunctionService.findWorkFunction(id);
 
@@ -70,7 +70,7 @@ public class WorkFunctionController {
     }
 
     @RequestMapping(path="/findAllWorkFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkFunction",desc = "查找所有权限")
+    //@ApiMethod(name = "findAllWorkFunction",desc = "查找所有权限")
     public Result<List<WorkFunction>> findAllWorkFunction(){
         List<WorkFunction> workFunctionList = workFunctionService.findAllWorkFunction();
 
@@ -79,8 +79,8 @@ public class WorkFunctionController {
 
 
     @RequestMapping(path = "/findWorkFunctionList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkFunctionList",desc = "根据查询对象查找权限列表")
-    @ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkFunctionList",desc = "根据查询对象查找权限列表")
+    //@ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
     public Result<List<WorkFunction>> findWorkFunctionList(@RequestBody @Valid @NotNull WorkFunctionQuery workFunctionQuery){
         List<WorkFunction> workFunctionList = workFunctionService.findWorkFunctionList(workFunctionQuery);
 
@@ -89,8 +89,8 @@ public class WorkFunctionController {
 
 
     @RequestMapping(path = "/findWorkFunctionPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkFunctionPage",desc = "根据查询对象按分页查询权限列表")
-    @ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkFunctionPage",desc = "根据查询对象按分页查询权限列表")
+    //@ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkFunction>> findWorkFunctionPage(@RequestBody @Valid @NotNull WorkFunctionQuery workFunctionQuery){
         Pagination<WorkFunction> pagination = workFunctionService.findWorkFunctionPage(workFunctionQuery);
 
@@ -98,8 +98,8 @@ public class WorkFunctionController {
     }
 
     @RequestMapping(path = "/findWorkFunctionTreeList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkFunctionTreeList",desc = "根据查询对象按分页查询权限列表")
-    @ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkFunctionTreeList",desc = "根据查询对象按分页查询权限列表")
+    //@ApiParam(name = "workFunctionQuery",desc = "查询对象",required = true)
     public Result<List<WorkFunction>> findWorkFunctionTreeList(@RequestBody @Valid @NotNull WorkFunctionQuery workFunctionQuery){
         List<WorkFunction> workFunctionTreeList = workFunctionService.findWorkFunctionTreeList(workFunctionQuery);
 

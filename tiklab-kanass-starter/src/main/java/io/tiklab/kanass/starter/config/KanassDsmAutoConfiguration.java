@@ -17,6 +17,7 @@ public class KanassDsmAutoConfiguration {
         DsmConfig dsmConfig = DsmConfigBuilder.instance();
         //1.0.0
         dsmConfig.newVersion("1.0.0", new String[]{
+                "openapi_1.0.0",
                 "privilege_1.0.0",
                 //UserDsm
                 "user_1.0.0",

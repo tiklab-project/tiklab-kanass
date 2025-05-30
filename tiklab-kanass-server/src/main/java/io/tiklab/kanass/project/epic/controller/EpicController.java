@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/epic")
-@Api(name = "EpicController",desc = "EpicController")
+//@Api(name = "EpicController",desc = "EpicController")
 public class EpicController {
 
     private static Logger logger = LoggerFactory.getLogger(EpicController.class);
@@ -34,17 +34,17 @@ public class EpicController {
     private EpicService epicService;
 
     @RequestMapping(path="/createEpic",method = RequestMethod.POST)
-    @ApiMethod(name = "createEpic",desc = "创建史诗")
-    @ApiParam(name = "epic",desc = "史诗模型",required = true)
-    public Result<String> createEpic(@RequestBody @NotNull @Valid @ApiParam Epic epic){
+    //@ApiMethod(name = "createEpic",desc = "创建史诗")
+    //@ApiParam(name = "epic",desc = "史诗模型",required = true)
+    public Result<String> createEpic(@RequestBody @NotNull @Valid Epic epic){
         String id = epicService.createEpic(epic);
 
         return Result.ok(id);
     }
 
     @RequestMapping(path="/updateEpic",method = RequestMethod.POST)
-    @ApiMethod(name = "updateEpic",desc = "更新史诗")
-    @ApiParam(name = "epic",desc = "史诗模型",required = true)
+    //@ApiMethod(name = "updateEpic",desc = "更新史诗")
+    //@ApiParam(name = "epic",desc = "史诗模型",required = true)
     public Result<Void> updateEpic(@RequestBody @NotNull @Valid Epic epic){
         epicService.updateEpic(epic);
 
@@ -52,8 +52,8 @@ public class EpicController {
     }
 
     @RequestMapping(path="/deleteEpic",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteEpic",desc = "删除史诗")
-    @ApiParam(name = "id",desc = "史诗id",required = true)
+    //@ApiMethod(name = "deleteEpic",desc = "删除史诗")
+    //@ApiParam(name = "id",desc = "史诗id",required = true)
     public Result<Void> deleteEpic(@NotNull String id){
         epicService.deleteEpic(id);
 
@@ -61,8 +61,8 @@ public class EpicController {
     }
 
     @RequestMapping(path="/findEpic",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpic",desc = "根据id 查找史诗")
-    @ApiParam(name = "id",desc = "史诗id",required = true)
+    //@ApiMethod(name = "findEpic",desc = "根据id 查找史诗")
+    //@ApiParam(name = "id",desc = "史诗id",required = true)
     public Result<Epic> findEpic(@NotNull String id){
         Epic epic = epicService.findEpic(id);
 
@@ -70,7 +70,7 @@ public class EpicController {
     }
 
     @RequestMapping(path="/findAllEpic",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllEpic",desc = "查找全部史诗")
+    //@ApiMethod(name = "findAllEpic",desc = "查找全部史诗")
     public Result<List<Epic>> findAllEpic(){
         List<Epic> epicList = epicService.findAllEpic();
 
@@ -78,8 +78,8 @@ public class EpicController {
     }
 
     @RequestMapping(path = "/findEpicList",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpicList",desc = "根据搜索条件查找史诗列表")
-    @ApiParam(name = "epicQuery",desc = "史诗搜索条件模型",required = true)
+    //@ApiMethod(name = "findEpicList",desc = "根据搜索条件查找史诗列表")
+    //@ApiParam(name = "epicQuery",desc = "史诗搜索条件模型",required = true)
     public Result<List<Epic>> findEpicList(@RequestBody @Valid @NotNull EpicQuery epicQuery){
         List<Epic> epicList = epicService.findEpicList(epicQuery);
 
@@ -87,8 +87,8 @@ public class EpicController {
     }
 
     @RequestMapping(path = "/findEpicListTree",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpicListTree",desc = "根据搜索条件按分页查找史诗树形列表")
-    @ApiParam(name = "epicQuery",desc = "根据搜索条件按分页查找史诗列表",required = true)
+    //@ApiMethod(name = "findEpicListTree",desc = "根据搜索条件按分页查找史诗树形列表")
+    //@ApiParam(name = "epicQuery",desc = "根据搜索条件按分页查找史诗列表",required = true)
     public Result<List<Epic>> findEpicListTree(@RequestBody @Valid @NotNull EpicQuery epicQuery){
         List<Epic> epicList = epicService.findEpicListTree(epicQuery);
 
@@ -96,8 +96,8 @@ public class EpicController {
     }
 
     @RequestMapping(path = "/findEpicPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findEpicPage",desc = "根据搜索条件按分页查找史诗列表")
-    @ApiParam(name = "epicQuery",desc = "根据搜索条件按分页查找史诗列表",required = true)
+    //@ApiMethod(name = "findEpicPage",desc = "根据搜索条件按分页查找史诗列表")
+    //@ApiParam(name = "epicQuery",desc = "根据搜索条件按分页查找史诗列表",required = true)
     public Result<Pagination<Epic>> findEpicPage(@RequestBody @Valid @NotNull EpicQuery epicQuery){
         Pagination<Epic> pagination = epicService.findEpicPage(epicQuery);
 

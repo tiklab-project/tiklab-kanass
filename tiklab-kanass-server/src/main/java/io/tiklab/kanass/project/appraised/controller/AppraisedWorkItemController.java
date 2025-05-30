@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/appraisedWorkItem")
-@Api(name = "AppraisedWorkItemController",desc = "项目评审关联表控制器")
+//@Api(name = "AppraisedWorkItemController",desc = "项目评审关联表控制器")
 public class AppraisedWorkItemController {
     private static Logger logger = LoggerFactory.getLogger(AppraisedWorkItemController.class);
 
@@ -34,8 +34,8 @@ public class AppraisedWorkItemController {
     private AppraisedWorkItemService appraisedWorkItemService;
 
     @RequestMapping(path="/createAppraisedWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "createAppraisedWorkItem",desc = "创建项目评审")
-    @ApiParam(name = "appraisedWorkItem",desc = "项目评审模型",required = true)
+    //@ApiMethod(name = "createAppraisedWorkItem",desc = "创建项目评审")
+    //@ApiParam(name = "appraisedWorkItem",desc = "项目评审模型",required = true)
     public Result<String> createAppraisedWorkItem(@RequestBody @NotNull @Valid AppraisedWorkItem appraisedWorkItem){
         String id = appraisedWorkItemService.createAppraisedWorkItem(appraisedWorkItem);
 
@@ -43,8 +43,8 @@ public class AppraisedWorkItemController {
     }
 
     @RequestMapping(path="/updateAppraisedWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "updateAppraisedWorkItem",desc = "更新项目评审")
-    @ApiParam(name = "appraisedWorkItem",desc = "项目评审模型",required = true)
+    //@ApiMethod(name = "updateAppraisedWorkItem",desc = "更新项目评审")
+    //@ApiParam(name = "appraisedWorkItem",desc = "项目评审模型",required = true)
     public Result<Void> updateAppraisedWorkItem(@RequestBody @NotNull @Valid AppraisedWorkItem appraisedWorkItem){
         appraisedWorkItemService.updateAppraisedWorkItem(appraisedWorkItem);
 
@@ -52,8 +52,8 @@ public class AppraisedWorkItemController {
     }
 
     @RequestMapping(path="/deleteAppraisedWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteAppraisedWorkItem",desc = "删除项目评审")
-    @ApiParam(name = "id",desc = "评审id",required = true)
+    //@ApiMethod(name = "deleteAppraisedWorkItem",desc = "删除项目评审")
+    //@ApiParam(name = "id",desc = "评审id",required = true)
     public Result<Void> deleteAppraisedWorkItem(@NotNull String id){
         appraisedWorkItemService.deleteAppraisedWorkItem(id);
 
@@ -61,8 +61,8 @@ public class AppraisedWorkItemController {
     }
 
     @RequestMapping(path="/findAppraisedWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "findAppraisedWorkItem",desc = "根据id查找项目评审")
-    @ApiParam(name = "id",desc = "评审id",required = true)
+    //@ApiMethod(name = "findAppraisedWorkItem",desc = "根据id查找项目评审")
+    //@ApiParam(name = "id",desc = "评审id",required = true)
     public Result<AppraisedWorkItem> findAppraisedWorkItem(@NotNull String id){
         AppraisedWorkItem appraisedWorkItem = appraisedWorkItemService.findAppraisedWorkItem(id);
 
@@ -70,7 +70,7 @@ public class AppraisedWorkItemController {
     }
 
     @RequestMapping(path="/findAllAppraisedWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllAppraisedWorkItem",desc = "查找所有项目评审")
+    //@ApiMethod(name = "findAllAppraisedWorkItem",desc = "查找所有项目评审")
     public Result<List<AppraisedWorkItem>> findAllAppraisedWorkItem(){
         List<AppraisedWorkItem> appraisedWorkItemList = appraisedWorkItemService.findAll();
 
@@ -79,8 +79,8 @@ public class AppraisedWorkItemController {
 
 
     @RequestMapping(path = "/findAppraisedWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findAppraisedWorkItemList",desc = "根据条件查找项目类型列表")
-    @ApiParam(name = "appraisedWorkItemQuery",desc = "项目评审搜索模型",required = true)
+    //@ApiMethod(name = "findAppraisedWorkItemList",desc = "根据条件查找项目类型列表")
+    //@ApiParam(name = "appraisedWorkItemQuery",desc = "项目评审搜索模型",required = true)
     public Result<List<AppraisedWorkItem>> findAppraisedWorkItemList(@RequestBody @Valid @NotNull AppraisedWorkItemQuery appraisedWorkItemQuery){
         List<AppraisedWorkItem> appraisedWorkItemList = appraisedWorkItemService.findAppraisedWorkItemList(appraisedWorkItemQuery);
 
@@ -89,8 +89,8 @@ public class AppraisedWorkItemController {
 
 
     @RequestMapping(path = "/findAppraisedWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findAppraisedWorkItemPage",desc = "根据条件按分页查询项目类型列表")
-    @ApiParam(name = "appraisedWorkItemQuery",desc = "项目评审搜索模型",required = true)
+    //@ApiMethod(name = "findAppraisedWorkItemPage",desc = "根据条件按分页查询项目类型列表")
+    //@ApiParam(name = "appraisedWorkItemQuery",desc = "项目评审搜索模型",required = true)
     public Result<Pagination<AppraisedWorkItem>> findAppraisedWorkItemPage(@RequestBody @Valid @NotNull AppraisedWorkItemQuery appraisedWorkItemQuery){
         Pagination<AppraisedWorkItem> pagination = appraisedWorkItemService.findAppraisedWorkItemPage(appraisedWorkItemQuery);
 
@@ -98,8 +98,8 @@ public class AppraisedWorkItemController {
     }
 
     @RequestMapping(path = "/findCanConnectWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findCanConnectWorkItemPage",desc = "根据条件按分页查询项目类型列表")
-    @ApiParam(name = "appraisedWorkItemQuery",desc = "项目评审搜索模型",required = true)
+    //@ApiMethod(name = "findCanConnectWorkItemPage",desc = "根据条件按分页查询项目类型列表")
+    //@ApiParam(name = "appraisedWorkItemQuery",desc = "项目评审搜索模型",required = true)
     public Result<Pagination<WorkItem>> findCanConnectWorkItemPage(@RequestBody @Valid @NotNull AppraisedWorkItemQuery appraisedWorkItemQuery){
         Pagination<WorkItem> pagination = appraisedWorkItemService.findCanConnectWorkItemPage(appraisedWorkItemQuery);
 

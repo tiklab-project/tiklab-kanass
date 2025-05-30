@@ -18,6 +18,10 @@ public class KanassOpenApiAutoConfiguration {
     @Value("${soular.embbed.enable:false}")
     Boolean enableEam;
 
+    @Value("${server.port}")
+    Integer port;
+
+
     //路由
     @Bean("routerForOpenApi")
     Router router(@Qualifier("routerConfigForOpenApi") RouterConfig routerConfig){
@@ -27,13 +31,16 @@ public class KanassOpenApiAutoConfiguration {
     //路由配置
     @Bean("routerConfigForOpenApi")
     RouterConfig routerConfig(){
-        String[] s =  new String[]{};
+        String[] s =  new String[]{
+                "/project/findProject",
+                "/project/findAllProject",
+                "/workItem/findConditionWorkItemPage",
+                "/workItem/findWorkItem"
+        };
 
-        if (enableEam){
-            s = new String[]{};
-        }
         return RouterConfigBuilder.instance()
                 .preRoute(s, authAddress)
+                .route(s, "http://localhost:"+port)
                 .get();
     }
 }

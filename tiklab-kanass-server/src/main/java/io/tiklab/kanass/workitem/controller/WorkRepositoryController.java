@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wikirepository")
-@Api(name = "WikiDocumentController",desc = "事项和文档关联管理")
+//@Api(name = "WikiDocumentController",desc = "事项和文档关联管理")
 public class WorkRepositoryController {
     private static Logger logger = LoggerFactory.getLogger(WikiDocumentController.class);
 
@@ -32,7 +32,7 @@ public class WorkRepositoryController {
     private WorkRepositoryService workRepositoryService;
 
     @RequestMapping(path="/findAllRepository",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllRepository",desc = "findAllRepository")
+    //@ApiMethod(name = "findAllRepository",desc = "findAllRepository")
     public Result<List<KanassRepository>> findAllRepository(){
         List<KanassRepository> wikiRepositoryList = workRepositoryService.findAllRepository();
 
@@ -40,7 +40,7 @@ public class WorkRepositoryController {
     }
 
     @RequestMapping(path="/findRepositoryUserList",method = RequestMethod.POST)
-    @ApiMethod(name = "findRepository",desc = "findRepository")
+    //@ApiMethod(name = "findRepository",desc = "findRepository")
     public Result<List<DmUser>> findRepositoryUserList(@RequestBody @NotNull @Valid DmUserQuery dmUserQuery){
         List<DmUser> repositoryUserList = workRepositoryService.findRepositoryUserList(dmUserQuery);
 

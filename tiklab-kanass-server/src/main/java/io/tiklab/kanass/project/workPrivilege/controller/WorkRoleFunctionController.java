@@ -26,7 +26,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/workRoleFunction")
-@Api(name = "WorkRoleFunctionController",desc = "事项优先级管理")
+//@Api(name = "WorkRoleFunctionController",desc = "事项优先级管理")
 public class WorkRoleFunctionController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkRoleFunctionController.class);
@@ -35,8 +35,8 @@ public class WorkRoleFunctionController {
     private WorkRoleFunctionService workRoleFunctionService;
 
     @RequestMapping(path="/createWorkRoleFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkRoleFunction",desc = "创建优先级")
-    @ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "createWorkRoleFunction",desc = "创建优先级")
+    //@ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
     public Result<String> createWorkRoleFunction(@RequestBody @NotNull @Valid WorkRoleFunction workRoleFunction){
         String id = workRoleFunctionService.createWorkRoleFunction(workRoleFunction);
 
@@ -44,8 +44,8 @@ public class WorkRoleFunctionController {
     }
 
     @RequestMapping(path="/updateWorkRoleFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkRoleFunction",desc = "更新优先级")
-    @ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "updateWorkRoleFunction",desc = "更新优先级")
+    //@ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
     public Result<Void> updateWorkRoleFunction(@RequestBody @NotNull @Valid WorkRoleFunction workRoleFunction){
         workRoleFunctionService.updateWorkRoleFunction(workRoleFunction);
 
@@ -53,8 +53,8 @@ public class WorkRoleFunctionController {
     }
 
     @RequestMapping(path="/updateWorkRoleAllFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkRoleAllFunction",desc = "更新优先级")
-    @ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "updateWorkRoleAllFunction",desc = "更新优先级")
+    //@ApiParam(name = "workRoleFunction",desc = "优先级DTO",required = true)
     public Result<Void> updateWorkRoleAllFunction(@RequestBody @NotNull @Valid WorkRoleFunction workRoleFunction){
         workRoleFunctionService.updateWorkRoleAllFunction(workRoleFunction);
 
@@ -62,8 +62,8 @@ public class WorkRoleFunctionController {
     }
 
     @RequestMapping(path="/deleteWorkRoleFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkRoleFunction",desc = "根据优先级ID删除优先级")
-    @ApiParam(name = "id",desc = "优先级ID",required = true)
+    //@ApiMethod(name = "deleteWorkRoleFunction",desc = "根据优先级ID删除优先级")
+    //@ApiParam(name = "id",desc = "优先级ID",required = true)
     public Result<Void> deleteWorkRoleFunction(@NotNull String id){
         workRoleFunctionService.deleteWorkRoleFunction(id);
 
@@ -71,8 +71,8 @@ public class WorkRoleFunctionController {
     }
 
     @RequestMapping(path="/findWorkRoleFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkRoleFunction",desc = "根据优先级ID查找优先级")
-    @ApiParam(name = "id",desc = "优先级ID",required = true)
+    //@ApiMethod(name = "findWorkRoleFunction",desc = "根据优先级ID查找优先级")
+    //@ApiParam(name = "id",desc = "优先级ID",required = true)
     public Result<WorkRoleFunction> findWorkRoleFunction(@NotNull String id){
         WorkRoleFunction workRoleFunction = workRoleFunctionService.findWorkRoleFunction(id);
 
@@ -83,8 +83,8 @@ public class WorkRoleFunctionController {
 
 
     @RequestMapping(path = "/findWorkRoleFunctionList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkRoleFunctionList",desc = "根据查询对象查找优先级列表")
-    @ApiParam(name = "workRoleFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkRoleFunctionList",desc = "根据查询对象查找优先级列表")
+    //@ApiParam(name = "workRoleFunctionQuery",desc = "查询对象",required = true)
     public Result<List<WorkRoleFunction>> findWorkRoleFunctionList(@RequestBody @Valid @NotNull WorkRoleFunctionQuery workRoleFunctionQuery){
         List<WorkRoleFunction> workRoleFunctionList = workRoleFunctionService.findWorkRoleFunctionList(workRoleFunctionQuery);
 
@@ -93,8 +93,8 @@ public class WorkRoleFunctionController {
 
 
     @RequestMapping(path = "/findWorkRoleFunctionPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkRoleFunctionPage",desc = "根据查询对象按分页查询优先级列表")
-    @ApiParam(name = "workRoleFunctionQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkRoleFunctionPage",desc = "根据查询对象按分页查询优先级列表")
+    //@ApiParam(name = "workRoleFunctionQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkRoleFunction>> findWorkRoleFunctionPage(@RequestBody @Valid @NotNull WorkRoleFunctionQuery workRoleFunctionQuery){
         Pagination<WorkRoleFunction> pagination = workRoleFunctionService.findWorkRoleFunctionPage(workRoleFunctionQuery);
 
@@ -102,8 +102,8 @@ public class WorkRoleFunctionController {
     }
 
     @RequestMapping(path = "/findUserWorkFunction",method = RequestMethod.POST)
-    @ApiMethod(name = "findUserWorkFunction",desc = "根据查询对象按分页查询优先级列表")
-    @ApiParam(name = "workId",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findUserWorkFunction",desc = "根据查询对象按分页查询优先级列表")
+    //@ApiParam(name = "workId",desc = "查询对象",required = true)
     public Result<Set<String>> findUserWorkFunction(@NotNull String userId, @NotNull String workId){
         Set<String> userWorkFunction = workRoleFunctionService.findUserWorkFunction(userId, workId);
 

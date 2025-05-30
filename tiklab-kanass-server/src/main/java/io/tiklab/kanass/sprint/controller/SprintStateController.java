@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sprintState")
-@Api(name = "SprintStateController",desc = "SprintStateController")
+//@Api(name = "SprintStateController",desc = "SprintStateController")
 public class SprintStateController {
 
     private static Logger logger = LoggerFactory.getLogger(SprintStateController.class);
@@ -36,8 +36,8 @@ public class SprintStateController {
 
 
     @RequestMapping(path="/createSprintState",method = RequestMethod.POST)
-    @ApiMethod(name = "createSprintState",desc = "创建迭代状态")
-    @ApiParam(name = "sprintState",desc = "迭代状态模板",required = true)
+    //@ApiMethod(name = "createSprintState",desc = "创建迭代状态")
+    //@ApiParam(name = "sprintState",desc = "迭代状态模板",required = true)
     public Result<String> createSprintState(@RequestBody @NotNull @Valid SprintState sprintState){
         String id = sprintStateService.createSprintState(sprintState);
 
@@ -46,8 +46,8 @@ public class SprintStateController {
 
 
     @RequestMapping(path="/updateSprintState",method = RequestMethod.POST)
-    @ApiMethod(name = "updateSprintState",desc = "更新迭代状态")
-    @ApiParam(name = "sprintState",desc = "迭代状态模板",required = true)
+    //@ApiMethod(name = "updateSprintState",desc = "更新迭代状态")
+    //@ApiParam(name = "sprintState",desc = "迭代状态模板",required = true)
     public Result<Void> updateSprintState(@RequestBody @NotNull @Valid SprintState sprintState){
         sprintStateService.updateSprintState(sprintState);
 
@@ -56,8 +56,8 @@ public class SprintStateController {
 
 
     @RequestMapping(path="/deleteSprintState",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteSprintState",desc = "删除迭代状态")
-    @ApiParam(name = "id",desc = "迭代状态id",required = true)
+    //@ApiMethod(name = "deleteSprintState",desc = "删除迭代状态")
+    //@ApiParam(name = "id",desc = "迭代状态id",required = true)
     public Result<Void> deleteSprintState(@NotNull String id){
         sprintStateService.deleteSprintState(id);
 
@@ -66,8 +66,8 @@ public class SprintStateController {
 
 
     @RequestMapping(path="/findSprintState",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintState",desc = "根据id查找迭代状态")
-    @ApiParam(name = "id",desc = "迭代状态id",required = true)
+    //@ApiMethod(name = "findSprintState",desc = "根据id查找迭代状态")
+    //@ApiParam(name = "id",desc = "迭代状态id",required = true)
     public Result<SprintState> findSprintState(@NotNull String id){
         SprintState sprintState = sprintStateService.findSprintState(id);
 
@@ -75,7 +75,7 @@ public class SprintStateController {
     }
 
     @RequestMapping(path="/findAllSprintState",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllSprintState",desc = "查找所有迭代状态")
+    //@ApiMethod(name = "findAllSprintState",desc = "查找所有迭代状态")
     public Result<List<SprintState>> findAllSprintState(){
         List<SprintState> sprintStateList = sprintStateService.findAllSprintState();
 
@@ -84,8 +84,8 @@ public class SprintStateController {
 
 
     @RequestMapping(path = "/findSprintStateList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintStateList",desc = "根据条件查询迭代状态列表")
-    @ApiParam(name = "sprintStateQuery",desc = "迭代状态搜索模型",required = true)
+    //@ApiMethod(name = "findSprintStateList",desc = "根据条件查询迭代状态列表")
+    //@ApiParam(name = "sprintStateQuery",desc = "迭代状态搜索模型",required = true)
     public Result<List<SprintState>> findSprintStateList(@RequestBody @Valid @NotNull SprintStateQuery sprintStateQuery){
         List<SprintState> sprintStateList = sprintStateService.findSprintStateList(sprintStateQuery);
 
@@ -94,8 +94,8 @@ public class SprintStateController {
 
 
     @RequestMapping(path = "/findSprintStatePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findSprintStatePage",desc = "根据条件按分页查询迭代状态列表")
-    @ApiParam(name = "sprintStateQuery",desc = "迭代状态搜索模型",required = true)
+    //@ApiMethod(name = "findSprintStatePage",desc = "根据条件按分页查询迭代状态列表")
+    //@ApiParam(name = "sprintStateQuery",desc = "迭代状态搜索模型",required = true)
     public Result<Pagination<SprintState>> findSprintStatePage(@RequestBody @Valid @NotNull SprintStateQuery sprintStateQuery){
         Pagination<SprintState> pagination = sprintStateService.findSprintStatePage(sprintStateQuery);
 

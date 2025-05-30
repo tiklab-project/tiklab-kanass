@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workTypeDm")
-@Api(name = "WorkTypeDmController",desc = "WorkTypeDmController")
+//@Api(name = "WorkTypeDmController",desc = "WorkTypeDmController")
 public class WorkTypeDmController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkTypeDmController.class);
@@ -34,8 +34,8 @@ public class WorkTypeDmController {
     private WorkTypeDmService workTypeDmService;
 
     @RequestMapping(path="/createWorkTypeDm",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkTypeDm",desc = "创建事项类型")
-    @ApiParam(name = "workTypeDm",desc = "项目下事项类型模型",required = true)
+    //@ApiMethod(name = "createWorkTypeDm",desc = "创建事项类型")
+    //@ApiParam(name = "workTypeDm",desc = "项目下事项类型模型",required = true)
     public Result<WorkTypeDm> createWorkTypeDm(@RequestBody @NotNull @Valid WorkTypeDm workTypeDm){
         WorkTypeDm id = workTypeDmService.createWorkTypeDm(workTypeDm);
 
@@ -43,8 +43,8 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path="/updateWorkTypeDm",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkTypeDm",desc = "更新事项类型")
-    @ApiParam(name = "workTypeDm",desc = "项目下事项类型模型",required = true)
+    //@ApiMethod(name = "updateWorkTypeDm",desc = "更新事项类型")
+    //@ApiParam(name = "workTypeDm",desc = "项目下事项类型模型",required = true)
     public Result<Void> updateWorkTypeDm(@RequestBody @NotNull @Valid WorkTypeDm workTypeDm){
         workTypeDmService.updateWorkTypeDm(workTypeDm);
 
@@ -52,8 +52,8 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path="/deleteWorkTypeDm",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkTypeDm",desc = "删除事项类型")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "deleteWorkTypeDm",desc = "删除事项类型")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<Void> deleteWorkTypeDm(@NotNull String id){
         workTypeDmService.deleteWorkTypeDm(id);
 
@@ -61,8 +61,8 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path="/findWorkTypeDm",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTypeDm",desc = "根据id查找事项类型")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "findWorkTypeDm",desc = "根据id查找事项类型")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<WorkTypeDm> findWorkTypeDm(@NotNull String id){
         WorkTypeDm workTypeDm = workTypeDmService.findWorkTypeDm(id);
 
@@ -70,7 +70,7 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path="/findAllWorkTypeDm",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkTypeDm",desc = "查找所有事项类型列表")
+    //@ApiMethod(name = "findAllWorkTypeDm",desc = "查找所有事项类型列表")
     public Result<List<WorkTypeDm>> findAllWorkTypeDm(){
         List<WorkTypeDm> workTypeDmList = workTypeDmService.findAllWorkTypeDm();
 
@@ -78,8 +78,8 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path = "/findWorkTypeDmList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTypeDmList",desc = "根据条件查询事项类型列表")
-    @ApiParam(name = "workTypeDmQuery",desc = "项目下事项类型搜索条件模型",required = true)
+    //@ApiMethod(name = "findWorkTypeDmList",desc = "根据条件查询事项类型列表")
+    //@ApiParam(name = "workTypeDmQuery",desc = "项目下事项类型搜索条件模型",required = true)
     public Result<List<WorkTypeDm>> findWorkTypeDmList(@RequestBody @Valid @NotNull WorkTypeDmQuery workTypeDmQuery){
         List<WorkTypeDm> workTypeDmList = workTypeDmService.findWorkTypeDmListNoRepeat(workTypeDmQuery);
 
@@ -87,8 +87,8 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path = "/findWorkTypeDmPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTypeDmPage",desc = "根据条件按分页查询事项类型列表")
-    @ApiParam(name = "workTypeDmQuery",desc = "项目下事项类型搜索条件模型",required = true)
+    //@ApiMethod(name = "findWorkTypeDmPage",desc = "根据条件按分页查询事项类型列表")
+    //@ApiParam(name = "workTypeDmQuery",desc = "项目下事项类型搜索条件模型",required = true)
     public Result<Pagination<WorkTypeDm>> findWorkTypeDmPage(@RequestBody @Valid @NotNull WorkTypeDmQuery workTypeDmQuery){
         Pagination<WorkTypeDm> pagination = workTypeDmService.findWorkTypeDmPage(workTypeDmQuery);
 
@@ -96,8 +96,8 @@ public class WorkTypeDmController {
     }
 
     @RequestMapping(path = "/findDmWorkTypeByCode",method = RequestMethod.POST)
-    @ApiMethod(name = "findDmWorkTypeByCode",desc = "根据编码，项目id 查找事项类型")
-    @ApiParam(name = "code",desc = "项目id",required = true)
+    //@ApiMethod(name = "findDmWorkTypeByCode",desc = "根据编码，项目id 查找事项类型")
+    //@ApiParam(name = "code",desc = "项目id",required = true)
     public Result<WorkTypeDm> findDmWorkTypeByCode(@NotNull String projectId, @NotNull String code){
         WorkTypeDm workTypeDm = workTypeDmService.findDmWorkTypeByCode(projectId, code);
 

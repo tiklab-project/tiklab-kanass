@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workTestCase")
-@Api(name = "WorkTestCaseController",desc = "事项和文档关联管理")
+//@Api(name = "WorkTestCaseController",desc = "事项和文档关联管理")
 public class WorkTestCaseController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkTestCaseController.class);
@@ -39,8 +39,8 @@ public class WorkTestCaseController {
 
 
     @RequestMapping(path="/createWorkTestCase",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkTestCase",desc = "创建事项和文档关联")
-    @ApiParam(name = "workTestCaseList",desc = "workTestCaseList",required = true)
+    //@ApiMethod(name = "createWorkTestCase",desc = "创建事项和文档关联")
+    //@ApiParam(name = "workTestCaseList",desc = "workTestCaseList",required = true)
     public Result<String> createWorkTestCase(@NotNull @RequestBody List<WorkTestCase> workTestCaseList){
         String id = workTestCaseService.createWorkTestCase(workTestCaseList);
 
@@ -48,8 +48,8 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path="/updateWorkTestCase",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkTestCase",desc = "updateWorkTestCase")
-    @ApiParam(name = "workTestCase",desc = "workTestCase",required = true)
+    //@ApiMethod(name = "updateWorkTestCase",desc = "updateWorkTestCase")
+    //@ApiParam(name = "workTestCase",desc = "workTestCase",required = true)
     public Result<Void> updateWorkTestCase(@RequestBody @NotNull @Valid WorkTestCase workTestCase){
         workTestCaseService.updateWorkTestCase(workTestCase);
 
@@ -57,8 +57,8 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path="/deleteWorkTestCase",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkTestCase",desc = "删除事项和文档关联")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "deleteWorkTestCase",desc = "删除事项和文档关联")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<Void> deleteWorkTestCase(@NotNull String id){
         workTestCaseService.deleteWorkTestCase(id);
 
@@ -66,8 +66,8 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path="/findWorkTestCase",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTestCase",desc = "findWorkTestCase")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "findWorkTestCase",desc = "findWorkTestCase")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<WorkTestCase> findWorkTestCase(@NotNull String id){
         WorkTestCase workTestCase = workTestCaseService.findWorkTestCase(id);
 
@@ -75,7 +75,7 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path="/findAllWorkTestCase",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkTestCase",desc = "findAllWorkTestCase")
+    //@ApiMethod(name = "findAllWorkTestCase",desc = "findAllWorkTestCase")
     public Result<List<WorkTestCase>> findAllWorkTestCase(){
         List<WorkTestCase> workTestCaseList = workTestCaseService.findAllWorkTestCase();
 
@@ -83,16 +83,16 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path = "/findWorkTestCaseList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTestCaseList",desc = "findWorkTestCaseList")
-    @ApiParam(name = "workTestCaseQuery",desc = "workTestCaseQuery",required = true)
+    //@ApiMethod(name = "findWorkTestCaseList",desc = "findWorkTestCaseList")
+    //@ApiParam(name = "workTestCaseQuery",desc = "workTestCaseQuery",required = true)
     public Result<List<WorkTestCase>> findWorkTestCaseList(@RequestBody @Valid @NotNull WorkTestCaseQuery workTestCaseQuery){
         List<WorkTestCase> workTestCaseList = workTestCaseService.findWorkTestCaseList(workTestCaseQuery);
         return Result.ok(workTestCaseList);
     }
 
     @RequestMapping(path = "/findWorkTestCasePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkTestCasePage",desc = "findWorkTestCasePage")
-    @ApiParam(name = "workTestCaseQuery",desc = "workTestCaseQuery",required = true)
+    //@ApiMethod(name = "findWorkTestCasePage",desc = "findWorkTestCasePage")
+    //@ApiParam(name = "workTestCaseQuery",desc = "workTestCaseQuery",required = true)
     public Result<Pagination<WorkTestCase>> findWorkTestCasePage(@RequestBody @Valid @NotNull WorkTestCaseQuery workTestCaseQuery){
         Pagination<WorkTestCase> pagination = workTestCaseService.findWorkTestCasePage(workTestCaseQuery);
 
@@ -100,8 +100,8 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path = "/findTestCasePageByWorkItemId",method = RequestMethod.POST)
-    @ApiMethod(name = "findTestCasePageByItemId",desc = "查询事项下面关联的文档")
-    @ApiParam(name = "workItemId",desc = "workItemId",required = true)
+    //@ApiMethod(name = "findTestCasePageByItemId",desc = "查询事项下面关联的文档")
+    //@ApiParam(name = "workItemId",desc = "workItemId",required = true)
     public Result<List<ProjectTestCase>> findTestCasePageByWorkItemId(@NotNull String workItemId){
         List<ProjectTestCase> documentPageByWorkItemId = workTestCaseService.findTestCasePageByWorkItemId(workItemId);
 
@@ -110,8 +110,8 @@ public class WorkTestCaseController {
 
 
     @RequestMapping(path="/deleteWorkTestCaseList",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkTestCaseList",desc = "通过文档id 和事项id 删除")
-    @ApiParam(name = "workTestCaseQuery",desc = "传参数文档id 和事项id",required = true)
+    //@ApiMethod(name = "deleteWorkTestCaseList",desc = "通过文档id 和事项id 删除")
+    //@ApiParam(name = "workTestCaseQuery",desc = "传参数文档id 和事项id",required = true)
     public Result<Void> deleteWorkTestCaseRele(@RequestBody @NotNull @Valid WorkTestCaseQuery workTestCaseQuery){
         workTestCaseService.deleteWorkTestCaseList(workTestCaseQuery);
 
@@ -119,8 +119,8 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path="/findUnRelationWorkTestCaseList",method = RequestMethod.POST)
-    @ApiMethod(name = "findUnRelationWorkTestCaseList",desc = "未关联用例")
-    @ApiParam(name = "workTestCaseQuery",desc = "传参数文档id 和事项id",required = true)
+    //@ApiMethod(name = "findUnRelationWorkTestCaseList",desc = "未关联用例")
+    //@ApiParam(name = "workTestCaseQuery",desc = "传参数文档id 和事项id",required = true)
     public Result<Pagination<ProjectTestCase>> findUnRelationWorkTestCaseList(@RequestBody @NotNull @Valid WorkTestCaseQuery workTestCaseQuery){
         Pagination<ProjectTestCase> unRelationWorkTestCaseList = workTestCaseService.findUnRelationWorkTestCaseList(workTestCaseQuery);
 
@@ -128,7 +128,7 @@ public class WorkTestCaseController {
     }
 
     @RequestMapping(path="/findTestOnRepositoryUserList",method = RequestMethod.POST)
-    @ApiMethod(name = "findTestOnRepositoryUserList",desc = "findTestOnRepositoryUserList")
+    //@ApiMethod(name = "findTestOnRepositoryUserList",desc = "findTestOnRepositoryUserList")
     public Result<List<User>> findTestOnRepositoryUserList(String[] repositoryIds){
         List<User> repositoryUserList = workTestCaseService.findTestOnRepositoryUserList(repositoryIds);
 

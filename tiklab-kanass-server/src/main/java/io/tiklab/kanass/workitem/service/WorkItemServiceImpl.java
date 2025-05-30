@@ -1713,19 +1713,38 @@ public class WorkItemServiceImpl implements WorkItemService {
      */
     @Override
     public WorkItem findWorkItemAndSprintVersion(@NotNull String id) {
+        long time1 = System.currentTimeMillis();
+        logger.info("------------开始------------");
         WorkItem workItem = findWorkItem(id);
+        long time2 = System.currentTimeMillis();
+        logger.info("findWorkItem 花费时间:{}----------------",time2-time1);
+
         this.handleDefaultNodeWorkItem(Stream.of(workItem).collect(Collectors.toList()));
+
+        long time12 = System.currentTimeMillis();
+        logger.info("findWorkItem 花费时间:{}----------------",time12-time2);
         String projectId = workItem.getProject().getId();
         Project project = projectService.findProject(projectId);
         workItem.setProject(project);
 
+        long time13 = System.currentTimeMillis();
+        logger.info("findWorkItem 花费时间:{}----------------",time13-time12);
+
         List<Sprint> workSprintList = sprintService.findWorkSprintList(id);
         workItem.setSprintList(workSprintList);
+
+        long time3 = System.currentTimeMillis();
+        logger.info("findWorkSprintList 花费时间:{}----------------",time3-time2);
 
         List<ProjectVersion> workVersionList = projectVersionService.findWorkVersionList(id);
         workItem.setProjectVersionList(workVersionList);
 
+        long time4 = System.currentTimeMillis();
+        logger.info("findWorkVersionList 花费时间:{}----------------",time4-time3);
+
         Integer workItemUsedTime = workLogService.findWorkItemUsedTime(id);
+        long time5 = System.currentTimeMillis();
+        logger.info("findWorkItemUsedTime 花费时间:{}----------------",time5-time4);
         if(workItemUsedTime != null){
             workItem.setUsedTime(workItemUsedTime);
         }else {

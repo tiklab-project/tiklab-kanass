@@ -19,15 +19,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/importDate")
-@Api(name = "MantisImportDataController",desc = "MantisImportDataController")
+//@Api(name = "MantisImportDataController",desc = "MantisImportDataController")
 public class MantisImportDataController {
 
     @Autowired
     private MantisImportDataService mantisImportDataService;
 
     @RequestMapping(path="/importMantisDate",method = RequestMethod.POST)
-    @ApiMethod(name = "importMantisDate",desc = "导入Mantis数据")
-    @ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
+    //@ApiMethod(name = "importMantisDate",desc = "导入Mantis数据")
+    //@ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
     public Result<Void> importMantisDate(@RequestParam("uploadFile") MultipartFile uploadFile){
         if (uploadFile == null) {
             throw new ApplicationException("文件不能为空");
@@ -43,7 +43,7 @@ public class MantisImportDataController {
     }
 
     @RequestMapping(path="/findMantisInputSchedule",method = RequestMethod.POST)
-    @ApiMethod(name = "findMantisInputSchedule",desc = "查询导入进度")
+    //@ApiMethod(name = "findMantisInputSchedule",desc = "查询导入进度")
     public Result<Map<String, Object>> findMantisInputSchedule(){
         Map<String, Object> mantisInputSchedule = mantisImportDataService.findMantisInputSchedule();
         return Result.ok(mantisInputSchedule);

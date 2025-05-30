@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/module")
-@Api(name = "ModuleController",desc = "模块管理")
+//@Api(name = "ModuleController",desc = "模块管理")
 public class ModuleController {
 
     private static Logger logger = LoggerFactory.getLogger(ModuleController.class);
@@ -36,9 +36,9 @@ public class ModuleController {
 
 
     @RequestMapping(path="/createModule",method = RequestMethod.POST)
-    @ApiMethod(name = "createModule",desc = "创建模块")
-    @ApiParam(name = "module",desc = "模块DTO",required = true)
-    public Result<String> createModule(@RequestBody @NotNull @Valid @ApiParam Module module){
+    //@ApiMethod(name = "createModule",desc = "创建模块")
+    //@ApiParam(name = "module",desc = "模块DTO",required = true)
+    public Result<String> createModule(@RequestBody @NotNull @Valid Module module){
         String id = moduleService.createModule(module);
 
         return Result.ok(id);
@@ -46,9 +46,9 @@ public class ModuleController {
 
 
     @RequestMapping(path="/updateModule",method = RequestMethod.POST)
-    @ApiMethod(name = "updateModule",desc = "更新模块")
-    @ApiParam(name = "module",desc = "模块DTO",required = true)
-    public Result<Void> updateModule(@RequestBody @NotNull @Valid @ApiParam Module module){
+    //@ApiMethod(name = "updateModule",desc = "更新模块")
+    //@ApiParam(name = "module",desc = "模块DTO",required = true)
+    public Result<Void> updateModule(@RequestBody @NotNull @Valid Module module){
         moduleService.updateModule(module);
 
         return Result.ok();
@@ -56,8 +56,8 @@ public class ModuleController {
 
 
     @RequestMapping(path="/deleteModule",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteModule",desc = "根据模块ID删除模块")
-    @ApiParam(name = "id",desc = "模块ID",required = true)
+    //@ApiMethod(name = "deleteModule",desc = "根据模块ID删除模块")
+    //@ApiParam(name = "id",desc = "模块ID",required = true)
     public Result<Void> deleteModule(@NotNull String id){
         moduleService.deleteModule(id);
 
@@ -66,8 +66,8 @@ public class ModuleController {
 
 
     @RequestMapping(path="/findModule",method = RequestMethod.POST)
-    @ApiMethod(name = "findModule",desc = "根据模块ID查找模块")
-    @ApiParam(name = "id",desc = "模块ID",required = true)
+    //@ApiMethod(name = "findModule",desc = "根据模块ID查找模块")
+    //@ApiParam(name = "id",desc = "模块ID",required = true)
     public Result<Module> findModule(@NotNull String id){
         Module module = moduleService.findModule(id);
 
@@ -75,7 +75,7 @@ public class ModuleController {
     }
 
     @RequestMapping(path="/findAllModule",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllModule",desc = "查找所有模块")
+    //@ApiMethod(name = "findAllModule",desc = "查找所有模块")
     public Result<List<Module>> findAllModule(){
         List<Module> moduleList = moduleService.findAllModule();
 
@@ -84,8 +84,8 @@ public class ModuleController {
 
 
     @RequestMapping(path = "/findModuleList",method = RequestMethod.POST)
-    @ApiMethod(name = "findModuleList",desc = "根据查询对象查询模块列表")
-    @ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
+    //@ApiMethod(name = "findModuleList",desc = "根据查询对象查询模块列表")
+    //@ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
     public Result<List<Module>> findModuleList(@RequestBody @Valid @NotNull ModuleQuery moduleQuery){
         List<Module> moduleList = moduleService.findModuleList(moduleQuery);
 
@@ -93,8 +93,8 @@ public class ModuleController {
     }
 
     @RequestMapping(path = "/findSeleteParentModuleList",method = RequestMethod.POST)
-    @ApiMethod(name = "findSeleteParentModuleList",desc = "根据查询对象查询模块列表")
-    @ApiParam(name = "id",desc = "模块查询对象",required = true)
+    //@ApiMethod(name = "findSeleteParentModuleList",desc = "根据查询对象查询模块列表")
+    //@ApiParam(name = "id",desc = "模块查询对象",required = true)
     public Result<List<Module>> findSeleteParentModuleList(@NotNull String id){
         List<Module> moduleList = moduleService.findSeleteParentModuleList(id);
 
@@ -102,8 +102,8 @@ public class ModuleController {
     }
 
     @RequestMapping(path = "/findModuleListTree",method = RequestMethod.POST)
-    @ApiMethod(name = "findModuleListTree",desc = "根据查询对象查询模块列表")
-    @ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
+    //@ApiMethod(name = "findModuleListTree",desc = "根据查询对象查询模块列表")
+    //@ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
     public Result<List<Module>> findModuleListTree(@RequestBody @Valid @NotNull ModuleQuery moduleQuery){
         List<Module> moduleList = moduleService.findModuleListTree(moduleQuery);
 
@@ -111,8 +111,8 @@ public class ModuleController {
     }
 
     @RequestMapping(path = "/findModulePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findModulePage",desc = "根据查询对象按分页查询模块列表")
-    @ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
+    //@ApiMethod(name = "findModulePage",desc = "根据查询对象按分页查询模块列表")
+    //@ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
     public Result<Pagination<Module>> findModulePage(@RequestBody @Valid @NotNull ModuleQuery moduleQuery){
         Pagination<Module> pagination = moduleService.findModulePage(moduleQuery);
 

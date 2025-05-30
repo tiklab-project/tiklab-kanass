@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/plan")
-@Api(name = "PlanController",desc = "PlanController")
+//@Api(name = "PlanController",desc = "PlanController")
 public class PlanController {
 
     private static Logger logger = LoggerFactory.getLogger(PlanController.class);
@@ -34,8 +34,8 @@ public class PlanController {
     private PlanService planService;
 
     @RequestMapping(path="/createPlan",method = RequestMethod.POST)
-    @ApiMethod(name = "createPlan",desc = "创建计划")
-    @ApiParam(name = "plan",desc = "plan",required = true)
+    //@ApiMethod(name = "createPlan",desc = "创建计划")
+    //@ApiParam(name = "plan",desc = "plan",required = true)
     public Result<String> createPlan(@RequestBody @NotNull @Valid Plan plan){
         String id = planService.createPlan(plan);
 
@@ -43,8 +43,8 @@ public class PlanController {
     }
 
     @RequestMapping(path="/updatePlan",method = RequestMethod.POST)
-    @ApiMethod(name = "updatePlan",desc = "更新计划")
-    @ApiParam(name = "plan",desc = "plan",required = true)
+    //@ApiMethod(name = "updatePlan",desc = "更新计划")
+    //@ApiParam(name = "plan",desc = "plan",required = true)
     public Result<Void> updatePlan(@RequestBody @NotNull @Valid Plan plan){
         planService.updatePlan(plan);
 
@@ -52,8 +52,8 @@ public class PlanController {
     }
 
     @RequestMapping(path="/deletePlan",method = RequestMethod.POST)
-    @ApiMethod(name = "deletePlan",desc = "删除计划")
-    @ApiParam(name = "id",desc = "计划id",required = true)
+    //@ApiMethod(name = "deletePlan",desc = "删除计划")
+    //@ApiParam(name = "id",desc = "计划id",required = true)
     public Result<Void> deletePlan(@NotNull String id){
         planService.deletePlan(id);
 
@@ -61,8 +61,8 @@ public class PlanController {
     }
 
     @RequestMapping(path="/findPlan",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlan",desc = "根据id查找计划")
-    @ApiParam(name = "id",desc = "计划id",required = true)
+    //@ApiMethod(name = "findPlan",desc = "根据id查找计划")
+    //@ApiParam(name = "id",desc = "计划id",required = true)
     public Result<Plan> findPlan(@NotNull String id){
         Plan plan = planService.findPlan(id);
 
@@ -70,7 +70,7 @@ public class PlanController {
     }
 
     @RequestMapping(path="/findAllPlan",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllPlan",desc = "查找所有计划")
+    //@ApiMethod(name = "findAllPlan",desc = "查找所有计划")
     public Result<List<Plan>> findAllPlan(){
         List<Plan> planList = planService.findAllPlan();
 
@@ -78,8 +78,8 @@ public class PlanController {
     }
 
     @RequestMapping(path = "/findPlanList",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlanList",desc = "根据条件查找计划列表")
-    @ApiParam(name = "planQuery",desc = "计划搜索参数模型",required = true)
+    //@ApiMethod(name = "findPlanList",desc = "根据条件查找计划列表")
+    //@ApiParam(name = "planQuery",desc = "计划搜索参数模型",required = true)
     public Result<List<Plan>> findPlanList(@RequestBody @Valid @NotNull PlanQuery planQuery){
         List<Plan> planList = planService.findPlanList(planQuery);
 
@@ -87,8 +87,8 @@ public class PlanController {
     }
 
     @RequestMapping(path = "/findPlanPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlanPage",desc = "根据条件按分页查找计划列表")
-    @ApiParam(name = "planQuery",desc = "计划搜索参数模型",required = true)
+    //@ApiMethod(name = "findPlanPage",desc = "根据条件按分页查找计划列表")
+    //@ApiParam(name = "planQuery",desc = "计划搜索参数模型",required = true)
     public Result<Pagination<Plan>> findPlanPage(@RequestBody @Valid @NotNull PlanQuery planQuery){
         Pagination<Plan> pagination = planService.findPlanPage(planQuery);
 
@@ -96,8 +96,8 @@ public class PlanController {
     }
 
     @RequestMapping(path = "/findPlanPageTree",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlanPageTree",desc = "根据条件按分页查找树形计划列表")
-    @ApiParam(name = "planQuery",desc = "计划搜索参数模型",required = true)
+    //@ApiMethod(name = "findPlanPageTree",desc = "根据条件按分页查找树形计划列表")
+    //@ApiParam(name = "planQuery",desc = "计划搜索参数模型",required = true)
     public Result<Pagination<Plan>> findPlanPageTree(@RequestBody @Valid @NotNull PlanQuery planQuery){
         Pagination<Plan> pagination = planService.findPlanPageTree(planQuery);
 

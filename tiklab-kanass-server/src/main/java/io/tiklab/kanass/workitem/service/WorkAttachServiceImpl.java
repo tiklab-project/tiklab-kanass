@@ -4,6 +4,7 @@ import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.tiklab.kanass.workitem.model.WorkAttach;
 import io.tiklab.kanass.workitem.model.WorkAttachQuery;
+import io.tiklab.rpc.annotation.Exporter;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
@@ -22,6 +23,7 @@ import java.util.List;
 * 事项附件接口
 */
 @Service
+@Exporter
 public class WorkAttachServiceImpl implements WorkAttachService {
 
     @Autowired

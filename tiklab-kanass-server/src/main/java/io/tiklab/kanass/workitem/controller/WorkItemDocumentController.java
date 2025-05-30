@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workItemDocument")
-@Api(name = "WorkItemDocumentController",desc = "事项和文档关联管理")
+//@Api(name = "WorkItemDocumentController",desc = "事项和文档关联管理")
 public class WorkItemDocumentController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkItemDocumentController.class);
@@ -39,8 +39,8 @@ public class WorkItemDocumentController {
 
 
     @RequestMapping(path="/createWorkItemDocument",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkItemDocument",desc = "创建事项和文档关联")
-    @ApiParam(name = "workItemDocumentList",desc = "workItemDocumentList",required = true)
+    //@ApiMethod(name = "createWorkItemDocument",desc = "创建事项和文档关联")
+    //@ApiParam(name = "workItemDocumentList",desc = "workItemDocumentList",required = true)
     public Result<String> createWorkItemDocument(@NotNull @RequestBody List<WorkItemDocument> workItemDocumentList){
         String id = workItemDocumentService.createWorkItemDocument(workItemDocumentList);
 
@@ -48,8 +48,8 @@ public class WorkItemDocumentController {
     }
 
     @RequestMapping(path="/updateWorkItemDocument",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkItemDocument",desc = "updateWorkItemDocument")
-    @ApiParam(name = "workItemDocument",desc = "workItemDocument",required = true)
+    //@ApiMethod(name = "updateWorkItemDocument",desc = "updateWorkItemDocument")
+    //@ApiParam(name = "workItemDocument",desc = "workItemDocument",required = true)
     public Result<Void> updateWorkItemDocument(@RequestBody @NotNull @Valid WorkItemDocument workItemDocument){
         workItemDocumentService.updateWorkItemDocument(workItemDocument);
 
@@ -57,8 +57,8 @@ public class WorkItemDocumentController {
     }
 
     @RequestMapping(path="/deleteWorkItemDocument",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkItemDocument",desc = "删除事项和文档关联")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "deleteWorkItemDocument",desc = "删除事项和文档关联")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<Void> deleteWorkItemDocument(@NotNull String id){
         workItemDocumentService.deleteWorkItemDocument(id);
 
@@ -66,8 +66,8 @@ public class WorkItemDocumentController {
     }
 
     @RequestMapping(path="/findWorkItemDocument",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemDocument",desc = "findWorkItemDocument")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "findWorkItemDocument",desc = "findWorkItemDocument")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<WorkItemDocument> findWorkItemDocument(@NotNull String id){
         WorkItemDocument workItemDocument = workItemDocumentService.findWorkItemDocument(id);
 
@@ -75,7 +75,7 @@ public class WorkItemDocumentController {
     }
 
     @RequestMapping(path="/findAllWorkItemDocument",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkItemDocument",desc = "findAllWorkItemDocument")
+    //@ApiMethod(name = "findAllWorkItemDocument",desc = "findAllWorkItemDocument")
     public Result<List<WorkItemDocument>> findAllWorkItemDocument(){
         List<WorkItemDocument> workItemDocumentList = workItemDocumentService.findAllWorkItemDocument();
 
@@ -83,16 +83,16 @@ public class WorkItemDocumentController {
     }
 
     @RequestMapping(path = "/findWorkItemDocumentList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemDocumentList",desc = "findWorkItemDocumentList")
-    @ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
+    //@ApiMethod(name = "findWorkItemDocumentList",desc = "findWorkItemDocumentList")
+    //@ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
     public Result<List<WorkItemDocument>> findWorkItemDocumentList(@RequestBody @Valid @NotNull WorkItemDocumentQuery workItemDocumentQuery){
         List<WorkItemDocument> workItemDocumentList = workItemDocumentService.findWorkItemDocumentList(workItemDocumentQuery);
         return Result.ok(workItemDocumentList);
     }
 
     @RequestMapping(path = "/findWorkItemDocumentPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkItemDocumentPage",desc = "findWorkItemDocumentPage")
-    @ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
+    //@ApiMethod(name = "findWorkItemDocumentPage",desc = "findWorkItemDocumentPage")
+    //@ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
     public Result<Pagination<WorkItemDocument>> findWorkItemDocumentPage(@RequestBody @Valid @NotNull WorkItemDocumentQuery workItemDocumentQuery){
         Pagination<WorkItemDocument> pagination = workItemDocumentService.findWorkItemDocumentPage(workItemDocumentQuery);
 
@@ -100,8 +100,8 @@ public class WorkItemDocumentController {
     }
 
     @RequestMapping(path = "/findDocumentPageByWorkItemId",method = RequestMethod.POST)
-    @ApiMethod(name = "findDocumentPageByItemId",desc = "查询事项下面关联的文档")
-    @ApiParam(name = "workItemId",desc = "workItemId",required = true)
+    //@ApiMethod(name = "findDocumentPageByItemId",desc = "查询事项下面关联的文档")
+    //@ApiParam(name = "workItemId",desc = "workItemId",required = true)
     public Result<List<KanassDocument>> findDocumentPageByWorkItemId(@NotNull String workItemId){
         List<KanassDocument> documentPageByWorkItemId = workItemDocumentService.findDocumentPageByWorkItemId(workItemId);
 
@@ -111,8 +111,8 @@ public class WorkItemDocumentController {
 
 
     @RequestMapping(path="/deleteWorkItemDocumentRele",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkItemDocumentRele",desc = "通过文档id 和事项id 删除")
-    @ApiParam(name = "workItemDocumentQuery",desc = "传参数文档id 和事项id",required = true)
+    //@ApiMethod(name = "deleteWorkItemDocumentRele",desc = "通过文档id 和事项id 删除")
+    //@ApiParam(name = "workItemDocumentQuery",desc = "传参数文档id 和事项id",required = true)
     public Result<Void> deleteWorkItemDocumentRele(@RequestBody @NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery){
         workItemDocumentService.deleteWorkItemDocumentRele( workItemDocumentQuery);
 

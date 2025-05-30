@@ -23,15 +23,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/importDate")
-@Api(name = "JiraImportDataController",desc = "JiraImportDataController")
+//@Api(name = "JiraImportDataController",desc = "JiraImportDataController")
 public class JiraImportDataController {
 
     @Autowired
     JiraImportDataService jiraImportDataService;
 
     @RequestMapping(path="/importJiraDate",method = RequestMethod.POST)
-    @ApiMethod(name = "importJiraDate",desc = "导入jire数据")
-    @ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
+    //@ApiMethod(name = "importJiraDate",desc = "导入jire数据")
+    //@ApiParam(name = "uploadFile",desc = "压缩包文件",required = true)
     public Result<Void> importJiraDate(@RequestParam("uploadFile")MultipartFile uploadFile){
         if (uploadFile == null) {
             throw new ApplicationException("文件不能为空");
@@ -50,14 +50,14 @@ public class JiraImportDataController {
 
 
     @RequestMapping(path="/findJiraInputSchedule",method = RequestMethod.POST)
-    @ApiMethod(name = "findJiraInputSchedule",desc = "查询导入进度")
+    //@ApiMethod(name = "findJiraInputSchedule",desc = "查询导入进度")
     public Result<Map<String, Object>> findJiraInputSchedule(){
         Map<String, Object> jiraInputSchedule = jiraImportDataService.findJiraInputSchedule();
         return Result.ok(jiraInputSchedule);
     }
 
     @RequestMapping(path="/testBack",method = RequestMethod.POST)
-    @ApiMethod(name = "testBack",desc = "导入jire数据")
+    //@ApiMethod(name = "testBack",desc = "导入jire数据")
     public void testBack(){
         jiraImportDataService.testBack();
     }

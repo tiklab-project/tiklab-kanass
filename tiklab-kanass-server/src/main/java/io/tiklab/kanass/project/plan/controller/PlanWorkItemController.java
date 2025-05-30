@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/planWorkItem")
-@Api(name = "PlanWorkItemController",desc = "PlanWorkItemController")
+//@Api(name = "PlanWorkItemController",desc = "PlanWorkItemController")
 public class PlanWorkItemController {
 
     private static Logger logger = LoggerFactory.getLogger(PlanWorkItemController.class);
@@ -34,8 +34,8 @@ public class PlanWorkItemController {
     private PlanWorkItemService planWorkItemService;
 
     @RequestMapping(path="/createPlanWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "createPlanWorkItem",desc = "创建计划事项关联数据")
-    @ApiParam(name = "planWorkItem",desc = "计划事项关联模型",required = true)
+    //@ApiMethod(name = "createPlanWorkItem",desc = "创建计划事项关联数据")
+    //@ApiParam(name = "planWorkItem",desc = "计划事项关联模型",required = true)
     public Result<String> createPlanWorkItem(@RequestBody @NotNull @Valid PlanWorkItem planWorkItem){
         String id = planWorkItemService.createPlanWorkItem(planWorkItem);
 
@@ -43,8 +43,8 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path="/updatePlanWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "updatePlanWorkItem",desc = "更新计划数据关联关系")
-    @ApiParam(name = "planWorkItem",desc = "计划事项关联模型",required = true)
+    //@ApiMethod(name = "updatePlanWorkItem",desc = "更新计划数据关联关系")
+    //@ApiParam(name = "planWorkItem",desc = "计划事项关联模型",required = true)
     public Result<Void> updatePlanWorkItem(@RequestBody @NotNull @Valid PlanWorkItem planWorkItem){
         planWorkItemService.updatePlanWorkItem(planWorkItem);
 
@@ -52,8 +52,8 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path="/deletePlanWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "deletePlanWorkItem",desc = "删除计划关联关系")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "deletePlanWorkItem",desc = "删除计划关联关系")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<Void> deletePlanWorkItem(@NotNull String id){
         planWorkItemService.deletePlanWorkItem(id);
 
@@ -61,8 +61,8 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path="/deletePlanWorkItemCondition",method = RequestMethod.POST)
-    @ApiMethod(name = "deletePlanWorkItemCondition",desc = "根据条件删除关联关系")
-    @ApiParam(name = "planWorkItem",desc = "删除条件",required = true)
+    //@ApiMethod(name = "deletePlanWorkItemCondition",desc = "根据条件删除关联关系")
+    //@ApiParam(name = "planWorkItem",desc = "删除条件",required = true)
     public Result<Void> deletePlanWorkItemCondition(@RequestBody @NotNull PlanWorkItem planWorkItem){
         planWorkItemService.deletePlanWorkItem(planWorkItem);
 
@@ -70,8 +70,8 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path="/findPlanWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlanWorkItem",desc = "根据id查找关联数据")
-    @ApiParam(name = "id",desc = "id",required = true)
+    //@ApiMethod(name = "findPlanWorkItem",desc = "根据id查找关联数据")
+    //@ApiParam(name = "id",desc = "id",required = true)
     public Result<PlanWorkItem> findPlanWorkItem(@NotNull String id){
         PlanWorkItem planWorkItem = planWorkItemService.findPlanWorkItem(id);
 
@@ -79,7 +79,7 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path="/findAllPlanWorkItem",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllPlanWorkItem",desc = "查找所有计划事项关联关系")
+    //@ApiMethod(name = "findAllPlanWorkItem",desc = "查找所有计划事项关联关系")
     public Result<List<PlanWorkItem>> findAllPlanWorkItem(){
         List<PlanWorkItem> planWorkItemList = planWorkItemService.findAllPlanWorkItem();
 
@@ -87,8 +87,8 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path = "/findPlanWorkItemList",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlanWorkItemList",desc = "根据条件计划事项查询关联列表")
-    @ApiParam(name = "planWorkItemQuery",desc = "计划关联事项搜索参数模型",required = true)
+    //@ApiMethod(name = "findPlanWorkItemList",desc = "根据条件计划事项查询关联列表")
+    //@ApiParam(name = "planWorkItemQuery",desc = "计划关联事项搜索参数模型",required = true)
     public Result<List<PlanWorkItem>> findPlanWorkItemList(@RequestBody @Valid @NotNull PlanWorkItemQuery planWorkItemQuery){
         List<PlanWorkItem> planWorkItemList = planWorkItemService.findPlanWorkItemList(planWorkItemQuery);
 
@@ -96,8 +96,8 @@ public class PlanWorkItemController {
     }
 
     @RequestMapping(path = "/findPlanWorkItemPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findPlanWorkItemPage",desc = "根据条件按分页查询关联关系")
-    @ApiParam(name = "planWorkItemQuery",desc = "计划关联事项搜索参数模型",required = true)
+    //@ApiMethod(name = "findPlanWorkItemPage",desc = "根据条件按分页查询关联关系")
+    //@ApiParam(name = "planWorkItemQuery",desc = "计划关联事项搜索参数模型",required = true)
     public Result<Pagination<PlanWorkItem>> findPlanWorkItemPage(@RequestBody @Valid @NotNull PlanWorkItemQuery planWorkItemQuery){
         Pagination<PlanWorkItem> pagination = planWorkItemService.findPlanWorkItemPage(planWorkItemQuery);
 

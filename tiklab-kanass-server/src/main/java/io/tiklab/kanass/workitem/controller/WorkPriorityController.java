@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/workPriority")
-@Api(name = "WorkPriorityController",desc = "事项优先级管理")
+//@Api(name = "WorkPriorityController",desc = "事项优先级管理")
 public class WorkPriorityController {
 
     private static Logger logger = LoggerFactory.getLogger(WorkPriorityController.class);
@@ -35,8 +35,8 @@ public class WorkPriorityController {
     private WorkPriorityService workPriorityService;
 
     @RequestMapping(path="/createWorkPriority",method = RequestMethod.POST)
-    @ApiMethod(name = "createWorkPriority",desc = "创建优先级")
-    @ApiParam(name = "workPriority",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "createWorkPriority",desc = "创建优先级")
+    //@ApiParam(name = "workPriority",desc = "优先级DTO",required = true)
     public Result<String> createWorkPriority(@RequestBody @NotNull @Valid WorkPriority workPriority){
         String id = workPriorityService.createWorkPriority(workPriority);
 
@@ -44,8 +44,8 @@ public class WorkPriorityController {
     }
 
     @RequestMapping(path="/updateWorkPriority",method = RequestMethod.POST)
-    @ApiMethod(name = "updateWorkPriority",desc = "更新优先级")
-    @ApiParam(name = "workPriority",desc = "优先级DTO",required = true)
+    //@ApiMethod(name = "updateWorkPriority",desc = "更新优先级")
+    //@ApiParam(name = "workPriority",desc = "优先级DTO",required = true)
     public Result<Void> updateWorkPriority(@RequestBody @NotNull @Valid WorkPriority workPriority){
         workPriorityService.updateWorkPriority(workPriority);
 
@@ -53,8 +53,8 @@ public class WorkPriorityController {
     }
 
     @RequestMapping(path="/deleteWorkPriority",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteWorkPriority",desc = "根据优先级ID删除优先级")
-    @ApiParam(name = "id",desc = "优先级ID",required = true)
+    //@ApiMethod(name = "deleteWorkPriority",desc = "根据优先级ID删除优先级")
+    //@ApiParam(name = "id",desc = "优先级ID",required = true)
     public Result<Void> deleteWorkPriority(@NotNull String id){
         workPriorityService.deleteWorkPriority(id);
 
@@ -62,8 +62,8 @@ public class WorkPriorityController {
     }
 
     @RequestMapping(path="/findWorkPriority",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkPriority",desc = "根据优先级ID查找优先级")
-    @ApiParam(name = "id",desc = "优先级ID",required = true)
+    //@ApiMethod(name = "findWorkPriority",desc = "根据优先级ID查找优先级")
+    //@ApiParam(name = "id",desc = "优先级ID",required = true)
     public Result<WorkPriority> findWorkPriority(@NotNull String id){
         WorkPriority workPriority = workPriorityService.findWorkPriority(id);
 
@@ -71,7 +71,7 @@ public class WorkPriorityController {
     }
 
     @RequestMapping(path="/findAllWorkPriority",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllWorkPriority",desc = "查找所有优先级")
+    //@ApiMethod(name = "findAllWorkPriority",desc = "查找所有优先级")
     public Result<List<WorkPriority>> findAllWorkPriority(){
         List<WorkPriority> workPriorityList = workPriorityService.findAllWorkPriority();
 
@@ -80,8 +80,8 @@ public class WorkPriorityController {
 
 
     @RequestMapping(path = "/findWorkPriorityList",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkPriorityList",desc = "根据查询对象查找优先级列表")
-    @ApiParam(name = "workPriorityQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkPriorityList",desc = "根据查询对象查找优先级列表")
+    //@ApiParam(name = "workPriorityQuery",desc = "查询对象",required = true)
     public Result<List<WorkPriority>> findWorkPriorityList(@RequestBody @Valid @NotNull WorkPriorityQuery workPriorityQuery){
         List<WorkPriority> workPriorityList = workPriorityService.findWorkPriorityList(workPriorityQuery);
 
@@ -90,8 +90,8 @@ public class WorkPriorityController {
 
 
     @RequestMapping(path = "/findWorkPriorityPage",method = RequestMethod.POST)
-    @ApiMethod(name = "findWorkPriorityPage",desc = "根据查询对象按分页查询优先级列表")
-    @ApiParam(name = "workPriorityQuery",desc = "查询对象",required = true)
+    //@ApiMethod(name = "findWorkPriorityPage",desc = "根据查询对象按分页查询优先级列表")
+    //@ApiParam(name = "workPriorityQuery",desc = "查询对象",required = true)
     public Result<Pagination<WorkPriority>> findWorkPriorityPage(@RequestBody @Valid @NotNull WorkPriorityQuery workPriorityQuery){
         Pagination<WorkPriority> pagination = workPriorityService.findWorkPriorityPage(workPriorityQuery);
 

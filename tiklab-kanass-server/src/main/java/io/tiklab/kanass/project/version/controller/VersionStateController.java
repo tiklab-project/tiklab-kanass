@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/versionState")
-@Api(name = "VersionStateController",desc = "VersionStateController")
+//@Api(name = "VersionStateController",desc = "VersionStateController")
 public class VersionStateController {
 
     private static Logger logger = LoggerFactory.getLogger(VersionStateController.class);
@@ -35,8 +35,8 @@ public class VersionStateController {
 
 
     @RequestMapping(path="/createVersionState",method = RequestMethod.POST)
-    @ApiMethod(name = "createVersionState",desc = "创建迭代状态")
-    @ApiParam(name = "versionState",desc = "迭代状态模板",required = true)
+    //@ApiMethod(name = "createVersionState",desc = "创建迭代状态")
+    //@ApiParam(name = "versionState",desc = "迭代状态模板",required = true)
     public Result<String> createVersionState(@RequestBody @NotNull @Valid VersionState versionState){
         String id = versionStateService.createVersionState(versionState);
 
@@ -45,8 +45,8 @@ public class VersionStateController {
 
 
     @RequestMapping(path="/updateVersionState",method = RequestMethod.POST)
-    @ApiMethod(name = "updateVersionState",desc = "更新迭代状态")
-    @ApiParam(name = "versionState",desc = "迭代状态模板",required = true)
+    //@ApiMethod(name = "updateVersionState",desc = "更新迭代状态")
+    //@ApiParam(name = "versionState",desc = "迭代状态模板",required = true)
     public Result<Void> updateVersionState(@RequestBody @NotNull @Valid VersionState versionState){
         versionStateService.updateVersionState(versionState);
 
@@ -55,8 +55,8 @@ public class VersionStateController {
 
 
     @RequestMapping(path="/deleteVersionState",method = RequestMethod.POST)
-    @ApiMethod(name = "deleteVersionState",desc = "删除迭代状态")
-    @ApiParam(name = "id",desc = "迭代状态id",required = true)
+    //@ApiMethod(name = "deleteVersionState",desc = "删除迭代状态")
+    //@ApiParam(name = "id",desc = "迭代状态id",required = true)
     public Result<Void> deleteVersionState(@NotNull String id){
         versionStateService.deleteVersionState(id);
 
@@ -65,8 +65,8 @@ public class VersionStateController {
 
 
     @RequestMapping(path="/findVersionState",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionState",desc = "根据id查找迭代状态")
-    @ApiParam(name = "id",desc = "迭代状态id",required = true)
+    //@ApiMethod(name = "findVersionState",desc = "根据id查找迭代状态")
+    //@ApiParam(name = "id",desc = "迭代状态id",required = true)
     public Result<VersionState> findVersionState(@NotNull String id){
         VersionState versionState = versionStateService.findVersionState(id);
 
@@ -74,7 +74,7 @@ public class VersionStateController {
     }
 
     @RequestMapping(path="/findAllVersionState",method = RequestMethod.POST)
-    @ApiMethod(name = "findAllVersionState",desc = "查找所有迭代状态")
+    //@ApiMethod(name = "findAllVersionState",desc = "查找所有迭代状态")
     public Result<List<VersionState>> findAllVersionState(){
         List<VersionState> versionStateList = versionStateService.findAllVersionState();
 
@@ -83,8 +83,8 @@ public class VersionStateController {
 
 
     @RequestMapping(path = "/findVersionStateList",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionStateList",desc = "根据条件查询迭代状态列表")
-    @ApiParam(name = "versionStateQuery",desc = "迭代状态搜索模型",required = true)
+    //@ApiMethod(name = "findVersionStateList",desc = "根据条件查询迭代状态列表")
+    //@ApiParam(name = "versionStateQuery",desc = "迭代状态搜索模型",required = true)
     public Result<List<VersionState>> findVersionStateList(@RequestBody @Valid @NotNull VersionStateQuery versionStateQuery){
         List<VersionState> versionStateList = versionStateService.findVersionStateList(versionStateQuery);
 
@@ -93,8 +93,8 @@ public class VersionStateController {
 
 
     @RequestMapping(path = "/findVersionStatePage",method = RequestMethod.POST)
-    @ApiMethod(name = "findVersionStatePage",desc = "根据条件按分页查询迭代状态列表")
-    @ApiParam(name = "versionStateQuery",desc = "迭代状态搜索模型",required = true)
+    //@ApiMethod(name = "findVersionStatePage",desc = "根据条件按分页查询迭代状态列表")
+    //@ApiParam(name = "versionStateQuery",desc = "迭代状态搜索模型",required = true)
     public Result<Pagination<VersionState>> findVersionStatePage(@RequestBody @Valid @NotNull VersionStateQuery versionStateQuery){
         Pagination<VersionState> pagination = versionStateService.findVersionStatePage(versionStateQuery);
 
