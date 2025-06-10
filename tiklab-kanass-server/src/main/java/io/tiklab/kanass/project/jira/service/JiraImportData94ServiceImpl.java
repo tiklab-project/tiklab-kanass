@@ -547,7 +547,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         String newId = element.getAttribute("newId");//本系统的id
         ArrayList<Element> nodeAssociationList = this.NodeAssociationList.get();
         // 事项与版本的关联关系，
-        List<Element> versionInfoList = nodeAssociationList.stream().filter(item -> item.getAttribute("sinkNodeEntity").equals("Version")).toList();
+        List<Element> versionInfoList = nodeAssociationList.stream().filter(item -> item.getAttribute("sinkNodeEntity").equals("Version")).collect(Collectors.toList());
         // 根据事项Id分组，一个事项可能对应多个版本，associationType="IssueFixVersion"的表示当前所在版本，associationType="IssueVersion"表示历史所在版本
         Map<String, List<Element>> issueVersionMap = versionInfoList.stream().collect(Collectors.groupingBy(item -> item.getAttribute("sourceNodeId")));
         for (Element versionElement : this.VersionElementList.get()) {
@@ -913,7 +913,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
         String issueId = element.getAttribute("id");
         String filePath  = attachmentAddress + "/" + projectCode + "/" + "10000" + "/" + workItemCode + "/";
         ArrayList<Element> fileAttachmentList = this.FileAttachmentList.get();
-        List<Element> workItemAttachment = fileAttachmentList.stream().filter(fileAttachment -> fileAttachment.getAttribute("issue").equals(issueId)).toList();
+        List<Element> workItemAttachment = fileAttachmentList.stream().filter(fileAttachment -> fileAttachment.getAttribute("issue").equals(issueId)).collect(Collectors.toList());
         for (Element attachmentElement : workItemAttachment) {
             String pathName = attachmentElement.getAttribute("id");// 路径中的名字
             String filename = attachmentElement.getAttribute("filename");// 原本的名字

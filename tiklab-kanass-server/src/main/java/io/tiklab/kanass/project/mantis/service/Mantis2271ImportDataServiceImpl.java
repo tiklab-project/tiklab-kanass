@@ -208,7 +208,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
 
     // 设置项目role
     public Map<String, String> setProjectRole(String oldProjectId){
-        MantisProject mantisProject = MantisProjectSet.get().stream().filter(item -> item.getId().equals(oldProjectId)).toList().get(0);
+        MantisProject mantisProject = MantisProjectSet.get().stream().filter(item -> item.getId().equals(oldProjectId)).collect(Collectors.toList()).get(0);
         String projectId = mantisProject.getNewID();
         //查找项目级角色
         Map<String, String> roleIds = new HashMap<>();
@@ -254,7 +254,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
 
     // 设置项目user
     public void setProjectUser(String oldProjectId, Set<MantisUser> users, Map<String, String> roleIds){
-        MantisProject mantisProject = this.MantisProjectSet.get().stream().filter(item -> item.getId().equals(oldProjectId)).toList().get(0);
+        MantisProject mantisProject = this.MantisProjectSet.get().stream().filter(item -> item.getId().equals(oldProjectId)).collect(Collectors.toList()).get(0);
         String projectId = mantisProject.getNewID();
 
         String admin = roleIds.get("admin");
@@ -461,10 +461,10 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
             for (MantisIssue issue : mantisIssueList) {
                 // 获取事项类型，mantis导入的都是缺陷
                 List<WorkTypeDm> workTypeDmList = ProjectWorkTypeDmMap.get().get(issue.getProjectId());
-                WorkTypeDm workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).toList().get(0);
+                WorkTypeDm workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).collect(Collectors.toList()).get(0);
                 // 获取版本、项目信息
-                MantisProject mantisProject = mantisProjects.stream().filter(item -> item.getId().equals(issue.getProjectId())).toList().get(0);
-                List<MantisVersion> mantisVersionList = mantisVersions.stream().filter(version -> version.getProjectId().equals(mantisProject.getId())).toList();
+                MantisProject mantisProject = mantisProjects.stream().filter(item -> item.getId().equals(issue.getProjectId())).collect(Collectors.toList()).get(0);
+                List<MantisVersion> mantisVersionList = mantisVersions.stream().filter(version -> version.getProjectId().equals(mantisProject.getId())).collect(Collectors.toList());
 
                 WorkItem workItem = new WorkItem();
                 workItem.setId(issue.getId());
@@ -658,17 +658,17 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
         String targetVersionName = issue.getTargetVersion();
 
         if (!versionName.isBlank()){
-            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(versionName)).toList().get(0);
+            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(versionName)).collect(Collectors.toList()).get(0);
             ProjectVersion projectVersion = new ProjectVersion();
             projectVersion.setId(version.getNewID());
             workItem.setProjectVersion(projectVersion);
         }else if (!fixVersionName.isBlank()){
-            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(fixVersionName)).toList().get(0);
+            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(fixVersionName)).collect(Collectors.toList()).get(0);
             ProjectVersion projectVersion = new ProjectVersion();
             projectVersion.setId(version.getNewID());
             workItem.setProjectVersion(projectVersion);
         } else if (!targetVersionName.isBlank()) {
-            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(targetVersionName)).toList().get(0);
+            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(targetVersionName)).collect(Collectors.toList()).get(0);
             ProjectVersion projectVersion = new ProjectVersion();
             projectVersion.setId(version.getNewID());
             workItem.setProjectVersion(projectVersion);
@@ -678,7 +678,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
 
         if (issue.getVersion() != null && !versionName.isBlank()){
             // 添加版本与事项的关联
-            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(versionName)).toList().get(0);
+            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(versionName)).collect(Collectors.toList()).get(0);
             WorkVersion workVersion = new WorkVersion();
             workVersion.setVersionId(version.getNewID());
             String id1 = workItem.getId();
@@ -686,7 +686,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
             workVersionService.createWorkVersion(workVersion);
         }
         if (issue.getFixVersion() != null && !fixVersionName.isBlank()){
-            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(fixVersionName)).toList().get(0);
+            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(fixVersionName)).collect(Collectors.toList()).get(0);
             WorkVersion workVersion = new WorkVersion();
             workVersion.setVersionId(version.getNewID());
             String id1 = workItem.getId();
@@ -694,7 +694,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
             workVersionService.createWorkVersion(workVersion);
         }
         if (issue.getTargetVersion() != null && !targetVersionName.isBlank()){
-            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(targetVersionName)).toList().get(0);
+            MantisVersion version = mantisVersionList.stream().filter(mantisVersion -> mantisVersion.getVersionName().equals(targetVersionName)).collect(Collectors.toList()).get(0);
             WorkVersion workVersion = new WorkVersion();
             workVersion.setVersionId(version.getNewID());
             String id1 = workItem.getId();

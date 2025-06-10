@@ -548,7 +548,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
         String newId = element.getAttribute("newId");//本系统的id
         ArrayList<Element> nodeAssociationList = this.NodeAssociationList.get();
         // 事项与版本的关联关系，
-        List<Element> versionInfoList = nodeAssociationList.stream().filter(item -> item.getAttribute("sinkNodeEntity").equals("Version")).toList();
+        List<Element> versionInfoList = nodeAssociationList.stream().filter(item -> item.getAttribute("sinkNodeEntity").equals("Version")).collect(Collectors.toList());
         // 根据事项Id分组，一个事项可能对应多个版本，associationType="IssueFixVersion"的表示当前所在版本，associationType="IssueVersion"表示历史所在版本
         Map<String, List<Element>> issueVersionMap = versionInfoList.stream().collect(Collectors.groupingBy(item -> item.getAttribute("sourceNodeId")));
         for (Element versionElement : this.VersionElementList.get()) {
@@ -886,7 +886,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
             String versionId = nodeAssociation.getAttribute("sinkNodeId");// 注意，只有associationType是下面两个值时才表示versionId
             if (issueId.equals(nowIssueId)){
                 if(nodeAssociation.getAttribute("associationType").equals("IssueFixVersion")) {
-                    Element versionElement = this.VersionElementList.get().stream().filter(element1 -> element1.getAttribute("id").equals(versionId)).toList().get(0);
+                    Element versionElement = this.VersionElementList.get().stream().filter(element1 -> element1.getAttribute("id").equals(versionId)).collect(Collectors.toList()).get(0);
                     String newId = versionElement.getAttribute("newId");
                     // 当前事项关联的版本
                     ProjectVersion projectVersion = new ProjectVersion();
@@ -900,7 +900,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
                     workVersionService.createWorkVersion(workVersion);
 
                 } else if (nodeAssociation.getAttribute("associationType").equals("IssueVersion")) {
-                    Element versionElement = this.VersionElementList.get().stream().filter(element1 -> element1.getAttribute("id").equals(versionId)).toList().get(0);
+                    Element versionElement = this.VersionElementList.get().stream().filter(element1 -> element1.getAttribute("id").equals(versionId)).collect(Collectors.toList()).get(0);
                     String newId = versionElement.getAttribute("newId");
                     // 事项关联版本的历史记录
                     WorkVersion workVersion = new WorkVersion();
@@ -921,7 +921,7 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
         String issueId = element.getAttribute("id");
         String filePath  = attachmentAddress + "/" + projectCode + "/" + "10000" + "/" + workItemCode + "/";
         ArrayList<Element> fileAttachmentList = this.FileAttachmentList.get();
-        List<Element> workItemAttachment = fileAttachmentList.stream().filter(fileAttachment -> fileAttachment.getAttribute("issue").equals(issueId)).toList();
+        List<Element> workItemAttachment = fileAttachmentList.stream().filter(fileAttachment -> fileAttachment.getAttribute("issue").equals(issueId)).collect(Collectors.toList());
         for (Element attachmentElement : workItemAttachment) {
             String pathName = attachmentElement.getAttribute("id");// 路径中的名字
             String filename = attachmentElement.getAttribute("filename");// 原本的名字

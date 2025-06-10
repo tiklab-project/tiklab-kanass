@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 @Exporter
@@ -117,21 +118,21 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
         List<WorkTypeDm> workTypeDmList = workTypeDmService.findWorkTypeDmList(workTypeDmQuery);
         WorkTypeDm workTypeDm;
         if (query.getFieldCode().contains("bugType")){
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).toList().get(0);
+            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).collect(Collectors.toList()).get(0);
             String formId = workTypeDm.getForm().getId();
             Form formConfig = workTypeService.findFormConfig(formId);
             result.setForm(formConfig);
 
             result.setWorkTypeDm(workTypeDm);
         } else if (query.getFieldCode().contains("demandType")) {
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("demand")).toList().get(0);
+            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("demand")).collect(Collectors.toList()).get(0);
             String formId = workTypeDm.getForm().getId();
             Form formConfig = workTypeService.findFormConfig(formId);
             result.setForm(formConfig);
 
             result.setWorkTypeDm(workTypeDm);
         }else if (query.getFieldCode().contains("taskType")){
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("task")).toList().get(0);
+            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("task")).collect(Collectors.toList()).get(0);
             String formId = workTypeDm.getForm().getId();
             Form formConfig = workTypeService.findFormConfig(formId);
             result.setForm(formConfig);
@@ -245,11 +246,11 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
 
         WorkTypeDm workTypeDm = new WorkTypeDm();
         if (workItem.getWorkTypeCode().equals("defect")){
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).toList().get(0);
+            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).collect(Collectors.toList()).get(0);
         } else if (workItem.getWorkTypeCode().equals("demand")) {
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("demand")).toList().get(0);
+            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("demand")).collect(Collectors.toList()).get(0);
         }else if (workItem.getWorkTypeCode().equals("task")){
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("task")).toList().get(0);
+            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("task")).collect(Collectors.toList()).get(0);
         }
         // 表单
         WorkTypeDm finalWorkTypeDm = workTypeDm;

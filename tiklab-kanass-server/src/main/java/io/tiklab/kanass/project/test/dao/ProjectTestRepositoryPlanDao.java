@@ -97,6 +97,9 @@ public class ProjectTestRepositoryPlanDao {
      */
     public Pagination<ProjectTestRepositoryPlanEntity> findProjectTestRepositoryPlanPage(ProjectTestRepositoryPlanQuery projectTestRepositoryPlanQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectTestRepositoryPlanEntity.class)
+                .eq("projectId", projectTestRepositoryPlanQuery.getProjectId())
+                .eq("test_repositoryId", projectTestRepositoryPlanQuery.getTestRepositoryId())
+                .eq("planId", projectTestRepositoryPlanQuery.getPlanId())
                 .get();
         return jpaTemplate.findPage(queryCondition, ProjectTestRepositoryPlanEntity.class);
     }

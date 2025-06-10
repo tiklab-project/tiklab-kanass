@@ -1751,7 +1751,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             workItem.setUsedTime(0);
         }
         // 计算进度
-        if (workItem.getEstimateTime() != 0 || workItem.getSurplusTime() != 0 ){
+        if (workItem.getEstimateTime() != 0 && workItem.getSurplusTime() != 0 ){
             workItem.setPercent((workItem.getEstimateTime()-workItem.getSurplusTime()) * 100 / workItem.getEstimateTime());
         }else {
             workItem.setPercent(0);

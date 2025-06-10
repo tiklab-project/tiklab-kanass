@@ -51,10 +51,14 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
 
         List<KanassRepository> kanassRepositoryList = new ArrayList<KanassRepository>();
         for (WikiRepository wikiRepository : allRepository) {
+            if (wikiRepository.getLimits().equals("1")){
+                // 私密知识库不关联
+                continue;
+            }
             KanassRepository kanassRepository = new KanassRepository();
             kanassRepository.setId(wikiRepository.getId());
             kanassRepository.setKanassRepositoryName(wikiRepository.getName());
-            kanassRepository.setUserName(wikiRepository.getMaster().getName());
+            kanassRepository.setUserName(wikiRepository.getMaster().getNickname());
             kanassRepository.setCreateTime(wikiRepository.getCreateTime());
 
             kanassRepositoryList.add(kanassRepository);

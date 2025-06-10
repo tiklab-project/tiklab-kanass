@@ -1,9 +1,9 @@
 package io.tiklab.kanass.starter.config;
 
-import io.tiklab.openapi.router.Router;
-import io.tiklab.openapi.router.RouterBuilder;
-import io.tiklab.openapi.router.config.RouterConfig;
-import io.tiklab.openapi.router.config.RouterConfigBuilder;
+
+import io.tiklab.openapi.config.AllowConfig;
+import io.tiklab.openapi.config.AllowConfigBuilder;
+import io.tiklab.openapi.config.OpenApiConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,13 +24,16 @@ public class KanassOpenApiAutoConfiguration {
 
     //路由
     @Bean("routerForOpenApi")
-    Router router(@Qualifier("routerConfigForOpenApi") RouterConfig routerConfig){
-        return RouterBuilder.newRouter(routerConfig);
+    OpenApiConfig router(@Qualifier("routerConfigForOpenApi") AllowConfig allowConfig){
+        OpenApiConfig openApiConfig = new OpenApiConfig();
+        openApiConfig.setAllowConfig(allowConfig);
+
+        return openApiConfig;
     }
 
     //路由配置
     @Bean("routerConfigForOpenApi")
-    RouterConfig routerConfig(){
+    AllowConfig routerConfig(){
         String[] s =  new String[]{
                 "/project/findProject",
                 "/project/findAllProject",
@@ -38,9 +41,8 @@ public class KanassOpenApiAutoConfiguration {
                 "/workItem/findWorkItem"
         };
 
-        return RouterConfigBuilder.instance()
-                .preRoute(s, authAddress)
-                .route(s, "http://localhost:"+port)
+        return AllowConfigBuilder.instance()
+                .allowUrls(s)
                 .get();
     }
 }

@@ -20,7 +20,7 @@ public class KanassRepository {
     private String iconUrl;
 
     @ApiProperty(name="createTime",desc="createTime")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JSONField(format = "yyyy-MM-dd")
     private Date createTime;
 
