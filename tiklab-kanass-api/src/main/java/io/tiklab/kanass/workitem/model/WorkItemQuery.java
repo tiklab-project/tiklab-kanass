@@ -45,6 +45,9 @@ public class WorkItemQuery implements Serializable {
     @ApiProperty(name ="overdue",desc = "是否逾期")
     private Boolean overdue;
 
+    @ApiProperty(name ="workStatus",desc = "事项状态 0待办  1进行中  2已完成")
+    private Integer workStatus;
+
     @ApiProperty(name ="leftJoinPlanWorkItemEntity",desc = "文档id，精确匹配")
     private String leftJoinPlanWorkItemEntity;
 

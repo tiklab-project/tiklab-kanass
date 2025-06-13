@@ -36,10 +36,10 @@ postgresql:
         address: ${DATA_HOME}/postgresql
 
 #soular config
-soular:
-    embbed:
-        enable: true
-    address: http://soular-ce.test.kanass.net
+auth:
+    type: soular
+    soular:
+        address: http://soular-ce.test.kanass.net
 
 #dfs config
 #dfs.service.enabled=false
@@ -66,16 +66,8 @@ dcs:
         database: dcs1
         expire: 7200
 
-#license
-licences:
-    path: ${APP_HOME}/src/main/resources/licences
-
-base:
+external:
     url: http://kanass-ce.test.kanass.net
-
-backups:
-    time: 0 0 2 * * ?
-    dir: /data/kanass
 
 #zip config
 unzip:
@@ -85,6 +77,3 @@ unzip:
     mantisPath: ${DATA_HOME}/unzip/Mantis
     mantisAttachment: ${unzip.mantisPath}/attachments
 
-postin:
-    scan:
-        package: io.tiklab.kanass

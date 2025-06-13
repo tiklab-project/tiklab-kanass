@@ -1,5 +1,6 @@
 package io.tiklab.kanass.projectset.controller;
 
+import io.tiklab.core.page.Pagination;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.project.model.ProjectQuery;
 import io.tiklab.kanass.projectset.model.ProjectSet;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,6 +124,13 @@ public class ProjectSetController {
         return Result.ok(projectList);
     }
 
+    @RequestMapping(path = "/findProjectPage",method = RequestMethod.POST)
+    public Result<Pagination<Project>> findProjectSetDetailPage(@RequestBody @Valid @NotNull ProjectQuery projectQuery){
+        Pagination<Project> projectPage = projectSetService.findProjectSetDetailPage(projectQuery);
+
+        return Result.ok(projectPage);
+    }
+
 //    @RequestMapping(path = "/findProjectSetLogList",method = RequestMethod.POST)
 //    //@ApiMethod(name = "findProjectSetLogList",desc = "查询项目集所有动态")
 //    //@ApiParam(name = "id",desc = "项目集id",required = true)
@@ -157,11 +166,27 @@ public class ProjectSetController {
         return Result.ok(joinProjectSetList);
     }
 
+    @RequestMapping(path = "/findProjectSetPage",method = RequestMethod.POST)
+    public Result<Pagination<ProjectSet>> findProjectSetPage(@RequestBody @NotNull @Valid ProjectSetQuery projectSetQuery){
+        Pagination<ProjectSet> joinProjectSetList = projectSetService.findProjectSetPage(projectSetQuery);
+        return Result.ok(joinProjectSetList);
+    }
+
     @RequestMapping(path = "/findProjectSetSortRecentTime",method = RequestMethod.POST)
     //@ApiMethod(name = "findProjectSetSortRecentTime",desc = "查找用户能查看的所有项目集")
     //@ApiParam(name = "projectSetQuery",desc = "查询参数",required = true)
     public Result<List<ProjectSet>> findProjectSetSortRecentTime(@RequestBody @NotNull @Valid ProjectSetQuery projectSetQuery){
         List<ProjectSet> joinProjectSetList = projectSetService.findProjectSetSortRecentTime(projectSetQuery);
         return Result.ok(joinProjectSetList);
+    }
+
+    /**
+     * 查询项目集数量 包括 所有 我收藏的 我创建的
+     * @return
+     */
+    @RequestMapping(path = "/findProjectSetCount",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findProjectSetCount(@RequestBody ProjectSetQuery projectSetQuery){
+        Map<String, Integer> projectSetCount = projectSetService.findProjectSetCount(projectSetQuery);
+        return Result.ok(projectSetCount);
     }
 }

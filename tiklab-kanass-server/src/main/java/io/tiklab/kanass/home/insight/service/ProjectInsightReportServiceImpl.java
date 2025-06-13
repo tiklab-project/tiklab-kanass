@@ -1026,32 +1026,55 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
      * @return
      */
     public Map<String, Integer> getTodoStatistics(LinkedHashMap data){
-        Map<String, Integer> todoCount = new HashMap<>();
+        Map<String, Integer> countMap = new HashMap<>();
+
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        if (data.get("projectId") != null){
+            workItemQuery.setProjectId(data.get("projectId").toString());
+        }
+        if (data.get("sprintId") != null){
+            workItemQuery.setSprintId(data.get("sprintId").toString());
+        }
+        if (data.get("versionId") != null){
+            workItemQuery.setVersionId(data.get("versionId").toString());
+        }
+
 
         String loginId = LoginContext.getLoginId();
-        //构建任务查询条件
-        TaskQuery taskQuery = new TaskQuery();
-        taskQuery.setData(data);
-        taskQuery.setBgroup("kanass");
-        taskQuery.setAssignUserId(loginId);
+        workItemQuery.setAssignerId(loginId);
+//        //构建任务查询条件
+//        TaskQuery taskQuery = new TaskQuery();
+//        taskQuery.setData(data);
+//        taskQuery.setBgroup("kanass");
+//        taskQuery.setAssignUserId(loginId);
         //统计总任务数
-        Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
-        todoCount.put("total", taskPage.getTotalRecord());
+        workItemQuery.setWorkStatusCode("TODO");
+        Integer todoCount = workItemService.findWorkItemListCount(workItemQuery);
+//        Pagination<Task> taskPage = taskService.findTaskPage(taskQuery);
+        countMap.put("total", todoCount);
         //统计进行中的任务数, 1（表示进行中任务)
-        taskQuery.setStatus(1);
-        taskPage = taskService.findTaskPage(taskQuery);
-        todoCount.put("progress", taskPage.getTotalRecord());
+        workItemQuery.setWorkStatusCode("PROGRESS");
+        Integer progressCount = workItemService.findWorkItemListCount(workItemQuery);
+//        taskQuery.setStatus(1);
+//        taskPage = taskService.findTaskPage(taskQuery);
+        countMap.put("progress", progressCount);
         //统计已完成的任务数, 2（表示已完成任务)
-        taskQuery.setStatus(2);
-        taskPage = taskService.findTaskPage(taskQuery);
-        todoCount.put("end", taskPage.getTotalRecord());
+        workItemQuery.setWorkStatusCode("DONE");
+        Integer doneCount = workItemService.findWorkItemListCount(workItemQuery);
+//        taskQuery.setStatus(2);
+//        taskPage = taskService.findTaskPage(taskQuery);
+        countMap.put("end", doneCount);
         //统计已逾期的任务数, 1（表示进行中任务)，3（表示已逾期任务)
-        taskQuery.setStatus(1);
-        taskQuery.setIsExpire(3);
-        taskPage = taskService.findTaskPage(taskQuery);
-        todoCount.put("overdue", taskPage.getTotalRecord());
+        workItemQuery.setWorkStatusCode(null);
+        workItemQuery.setWorkStatusCodes(Arrays.asList("TODO", "PROGRESS"));
+        workItemQuery.setOverdue(true);
+        Integer overdueCount = workItemService.findWorkItemListCount(workItemQuery);
+//        taskQuery.setStatus(1);
+//        taskQuery.setIsExpire(3);
+//        taskPage = taskService.findTaskPage(taskQuery);
+        countMap.put("overdue", overdueCount);
 
-        return todoCount;
+        return countMap;
     }
 
 }

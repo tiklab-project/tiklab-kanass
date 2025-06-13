@@ -434,4 +434,11 @@ public class SprintServiceImpl implements SprintService {
         joinTemplate.joinQuery(sprintList);
         return sprintList;
     }
+
+    @Override
+    public Map<String, Integer> findSprintCount(SprintQuery sprintQuery) {
+        sprintQuery.setBuilderId(LoginContext.getLoginId());
+        Map<String, Integer> sprintCount = sprintDao.findSprintCount(sprintQuery);
+        return sprintCount;
+    }
 }

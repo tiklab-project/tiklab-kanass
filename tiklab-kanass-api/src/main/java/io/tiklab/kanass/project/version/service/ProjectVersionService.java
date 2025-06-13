@@ -8,10 +8,12 @@ import io.tiklab.toolkit.join.annotation.FindAll;
 import io.tiklab.toolkit.join.annotation.FindOne;
 import io.tiklab.kanass.project.version.model.ProjectVersion;
 import io.tiklab.kanass.project.version.model.ProjectVersionQuery;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
 * 项目版本服务接口
@@ -76,4 +78,6 @@ public interface ProjectVersionService {
     List<ProjectVersion> findSelectVersionList(ProjectVersionQuery projectVersionQuery);
 
     List<ProjectVersion> findWorkVersionList(@NotNull String workId);
+
+    Map<String, Integer> findVersionCount(ProjectVersionQuery projectVersionQuery);
 }

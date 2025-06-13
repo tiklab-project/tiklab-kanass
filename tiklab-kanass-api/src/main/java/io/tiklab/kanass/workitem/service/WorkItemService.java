@@ -256,4 +256,11 @@ public interface WorkItemService {
     boolean haveChildren(@NotNull String id);
 
     List<String> findWorkItemAndChildrenIds(String workItemId);
+
+    /**
+     * 查询首页、项目等概览页面待办事项数量
+     * @param workItemQuery
+     * @return
+     */
+    Map<String, Integer> findTodoPageWorkItemNum(WorkItemQuery workItemQuery);
 }

@@ -52,6 +52,9 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
 //        List<Repository> allRepository = repositoryServiceRpc().findAllRepository();
         List<TestRepository> testRepositoryList = new ArrayList<>();
         for (Repository repository : allRepository) {
+            if (repository == null){
+                continue;
+            }
             TestRepository testRepository = new TestRepository();
             testRepository.setId(repository.getId());
             testRepository.setUser(repository.getUser().getNickname());
@@ -74,6 +77,9 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
         joinTemplate.joinQuery(list);
         List<TestRepository> testRepositoryList = new ArrayList<>();
         for (Repository repository : list) {
+            if (repository == null){
+                continue;
+            }
             TestRepository testRepository = new TestRepository();
             testRepository.setId(repository.getId());
             testRepository.setUser(repository.getUser().getNickname());

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @pi.protocol: http
@@ -278,5 +279,15 @@ public class ProjectController {
        projectService.batchCreateProject();
 
         return Result.ok();
+    }
+
+    /**
+     * 查询项目数量 包括所有、我收藏的、我创建的
+     * @return
+     */
+    @RequestMapping(path = "/findProjectCount",method = RequestMethod.POST)
+    public Result<Map<String,Integer>> findProjectCount(@RequestBody ProjectQuery projectQuery){
+        Map<String,Integer> projectCount = projectService.findProjectCount(projectQuery);
+        return Result.ok(projectCount);
     }
 }

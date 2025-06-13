@@ -63,20 +63,15 @@ dcs:
     database: dcs1
     expire: 7200
 
-soular:
-  embbed:
-    enable: true
-  web:
-    address: http://192.168.10.16:3010
-  address: http://192.168.10.15:8080
-
-
-#证书文件路径
-licences:
-  path: ${APP_HOME}/licences
+auth:
+  type: local
+  soular:
+    address: http://192.168.10.15:8080
+    web:
+      address: http://192.168.10.16:3010
 
 # 访问地址，用于显示日志，消息，待办的图标
-base:
+external:
   url: http://192.168.10.7:8080
 
 backups:
@@ -94,7 +89,3 @@ unzip:
   jiraAttachment: ${unzip.jiraPath}/attachments
   mantisPath: ${DATA_HOME}/unzip/Mantis
   mantisAttachment: ${unzip.mantisPath}/attachments
-
-postin:
-  scan:
-    package: io.tiklab.kanass

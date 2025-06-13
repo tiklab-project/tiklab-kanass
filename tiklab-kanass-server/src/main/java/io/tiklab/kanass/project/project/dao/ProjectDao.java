@@ -3,6 +3,8 @@ package io.tiklab.kanass.project.project.dao;
 import io.tiklab.kanass.common.JdbcTypeCheckUtil;
 import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.kanass.project.project.entity.ProjectFocusEntity;
+import io.tiklab.kanass.project.project.model.Project;
+import io.tiklab.kanass.project.project.model.ProjectFocusQuery;
 import io.tiklab.kanass.project.project.model.ProjectQuery;
 import io.tiklab.kanass.support.entity.RecentEntity;
 import io.tiklab.core.page.Pagination;
@@ -12,6 +14,7 @@ import io.tiklab.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.dal.jpa.JpaTemplate;
 import net.sourceforge.pinyin4j.PinyinHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -398,19 +401,74 @@ public class ProjectDao{
      * @return
      */
     public Pagination<ProjectEntity> findProjectPage(ProjectQuery projectQuery){
-        QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectEntity.class, "rs");
-        OrQueryCondition orQueryBuildCondition = OrQueryBuilders.instance()
-                .eq("projectLimits",0)
-                .in("id",projectQuery.getProjectIds())
-                .get();
-        QueryCondition queryCondition = queryBuilders.or(orQueryBuildCondition)
-                .like("projectName", projectQuery.getProjectName())
-                .eq("projectSetId", projectQuery.getProjectSetId())
-                .eq("master", projectQuery.getMaster())
-                .orders(projectQuery.getOrderParams())
-                .pagination(projectQuery.getPageParam())
-                .get();
-        return jpaTemplate.findPage(queryCondition, ProjectEntity.class);
+        String sql = "select p.* from pmc_project p " +
+                " left join pmc_project_focus ppf on ppf.project_id = p.id " +
+                " where 1=1 ";
+        List<Object> objects = new ArrayList<>();
+        if (projectQuery.getProjectIds() != null){
+            String[] projectIds = projectQuery.getProjectIds();
+            String s = new String();
+            s =  "(";
+            for(String id: projectIds){
+                s = s.concat("'" + id + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s= s.concat(")");
+            sql = sql.concat(" and p.id in " + s);
+//            sql = sql.concat(" and p.id in ? ");
+//            objects.add(s);
+        }
+        if (projectQuery.getProjectName() != null){
+            sql = sql.concat(" and p.project_name like '%" + projectQuery.getProjectName() + "%' ");
+//            sql = sql.concat(" and p.project_name like '?' ");
+//            objects.add(projectQuery.getProjectName());
+        }
+        if (projectQuery.getProjectSetId() != null){
+            sql = sql.concat(" and p.project_set_id = '" + projectQuery.getProjectSetId() + "'");
+//            sql = sql.concat(" and p.project_set_id = '?'");
+//            objects.add(projectQuery.getProjectSetId());
+        }
+        if (projectQuery.getOverdue() != null && projectQuery.getOverdue()){
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = simpleDateFormat.format(date);
+            sql = sql.concat(" and p.end_time < '" + currentTime + "' and project_state != '3'");
+//            sql = sql.concat(" and p.end_time < '?' and project_state != '3'");
+//            objects.add(currentTime);
+        }
+        if (projectQuery.getProjectStates() != null && projectQuery.getProjectStates().length > 0){
+            String[] projectStates = projectQuery.getProjectStates();
+            String s = new String();
+            s =  "(";
+            for(String projectState: projectStates){
+                s = s.concat("'" + projectState + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s = s.concat(")");
+            sql  = sql.concat(" and p.project_state in " + s);
+//            sql  = sql.concat(" and p.project_state in ? " );
+//            objects.add(s);
+        }
+        if (projectQuery.getCreator() != null){
+            sql = sql.concat(" and p.creator = '" + projectQuery.getCreator() + "'");
+//            sql = sql.concat(" and p.creator = '?'");
+//            objects.add(projectQuery.getCreator());
+        }
+        if (projectQuery.getFocusUser() != null){
+            sql = sql.concat(" and ppf.master_id = '" + projectQuery.getFocusUser() + "'");
+//            sql = sql.concat(" and ppf.master_id = '?'");
+//            objects.add(projectQuery.getFocusUser());
+        }
+
+        int size = objects.size();
+        Object[] objects1 = new Object[size];
+        Object[] objects2 = objects.toArray(objects1);
+        return jpaTemplate.getJdbcTemplate().findPage(
+                sql,
+                objects2,
+                projectQuery.getPageParam(),
+                new BeanPropertyRowMapper(ProjectEntity.class)
+        );
     }
 
     /**
@@ -751,5 +809,69 @@ public class ProjectDao{
         }
 
 
+    }
+
+    public HashMap<String, Integer> findProjectCount(ProjectQuery projectQuery){
+        String userId = projectQuery.getCreator();
+        String[] projectIds = projectQuery.getProjectIds();
+        String s = new String();
+        s =  "(";
+        for(String projectId:projectIds){
+            s = s.concat("'" + projectId + "',");
+        }
+        s= s.substring(0, s.length() - 1);
+        s = s.concat(")");
+
+        HashMap<String, Integer> projectCount = new HashMap<>();
+        String sql1 = "SELECT count(1) as total from pmc_project where ( project_limits = '0' or id in " + s + ") ";
+        if (StringUtils.isNotBlank(projectQuery.getProjectName())){
+            sql1 = sql1.concat(" and project_name like'%" + projectQuery.getProjectName() + "%'") ;
+        }
+        if (projectQuery.getProjectStates() != null && projectQuery.getProjectStates().length != 0){
+            sql1 = sql1.concat(" and project_state in ('" + StringUtils.join(projectQuery.getProjectStates(), "','") + "')");
+        }
+        if (projectQuery.getOverdue() != null && projectQuery.getOverdue()){
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = simpleDateFormat.format(date);
+            sql1 = sql1.concat(" and end_time <= '"+ currentTime + "' and project_state != '3'");
+        }
+
+        Integer total = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        projectCount.put("total", total);
+
+        String sql2 = "SELECT count(1) as total from pmc_project where creator = '" + userId + "'";
+        if (StringUtils.isNotBlank(projectQuery.getProjectName())){
+            sql2 = sql2.concat(" and project_name like '%" + projectQuery.getProjectName() + "%'");
+        }
+        if (projectQuery.getProjectStates() != null && projectQuery.getProjectStates().length != 0){
+            sql2 = sql2.concat(" and project_state in ('" + StringUtils.join(projectQuery.getProjectStates(), "','") + "')");
+        }
+        if (projectQuery.getOverdue() != null && projectQuery.getOverdue()){
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = simpleDateFormat.format(date);
+            sql2 = sql2.concat(" and end_time <= '"+ currentTime + "' and project_state != '3'");
+        }
+        Integer myCreated = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        projectCount.put("myCreated", myCreated);
+
+        String sql3 = "SELECT count(1) as total from pmc_project_focus pf left join pmc_project p on pf.project_id = p.id " +
+                "where pf.master_id = '" + userId + "'";
+        if (StringUtils.isNotBlank(projectQuery.getProjectName())){
+            sql3 = sql3.concat(" and p.project_name like '%" + projectQuery.getProjectName() + "%'");
+        }
+        if (projectQuery.getProjectStates() != null && projectQuery.getProjectStates().length != 0){
+            sql3 = sql3.concat(" and p.project_state in ('" + StringUtils.join(projectQuery.getProjectStates(), "','") + "')");
+        }
+        if (projectQuery.getOverdue() != null && projectQuery.getOverdue()){
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentTime = simpleDateFormat.format(date);
+            sql3 = sql3.concat(" and p.end_time <= '"+ currentTime + "' and p.project_state != '3'");
+        }
+        Integer myFocus = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        projectCount.put("myFocus", myFocus);
+        return projectCount;
     }
 }

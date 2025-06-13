@@ -220,10 +220,36 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
     @Override
     public Pagination<ProjectSet> findProjectSetPage(ProjectSetQuery projectSetQuery) {
+        // 查找我所参与的私有项目
+        DmUserQuery dmUserQuery = new DmUserQuery();
+        String createUserId = LoginContext.getLoginId();
+        dmUserQuery.setUserId(createUserId);
+        List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+        List<String> privateProjectSetIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+
+        String[] ids = privateProjectSetIds.toArray(new String[privateProjectSetIds.size()]);
+        projectSetQuery.setProjectSetIds(ids);
 
         Pagination<ProjectSetEntity>  pagination = projectSetDao.findProjectSetPage(projectSetQuery);
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(pagination.getDataList(),ProjectSet.class);
+
+        // 计算每个项目集的进度
+        for (ProjectSet projectSet : projectSetList) {
+            String id = projectSet.getId();
+            HashMap<String, String> param = new HashMap<>();
+            param.put("projectSetId", id);
+            Map<String, Integer> workItemCount = projectInsightReportService.statisticsTodoWorkByStatus(param);
+            int done = workItemCount.get("end");// 已完成
+            int all = workItemCount.get("total");// 所有
+            if (all != 0){
+                projectSet.setProgress(done * 100f / all);
+            }else {
+                projectSet.setProgress(0.00f);
+            }
+        }
+
+        findProjectNum(projectSetList);
 
         joinTemplate.joinQuery(projectSetList);
 
@@ -271,6 +297,44 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         }
 
         return projectList;
+    }
+
+    @Override
+    public Pagination<Project> findProjectSetDetailPage(ProjectQuery projectQuery) {
+        Pagination<Project> projectPage = projectService.findProjectPage(projectQuery);
+        if(!projectPage.getDataList().isEmpty()){
+            String projectIds = "(" + projectPage.getDataList().stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> projectWorkItemCount = projectService.findProjectWorkItemStatus(projectIds);
+            for (Project project : projectPage.getDataList()) {
+                String id = project.getId();
+                List<Map<String, Object>> allList = projectWorkItemCount.stream().filter(workItem -> workItem.get("project_id").equals(id)).collect(Collectors.toList());
+                int size = allList.size();
+                project.setWorkItemNumber(size);
+
+                List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+                project.setEndWorkItemNumber(doneList.size());
+
+                DmUserQuery dmUserQuery = new DmUserQuery();
+                dmUserQuery.setDomainId(id);
+                List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+                project.setMember(dmUserList.size());
+
+                // 统计项目预计工时和剩余工时
+                WorkItemQuery workItemQuery = new WorkItemQuery();
+                workItemQuery.setProjectId(id);
+                List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+                int estimateTime = 0;
+                int surplusTime = 0;
+                for (WorkItem workItem : workItemList) {
+                    estimateTime = estimateTime + (workItem.getEstimateTime() == null ? 0 : workItem.getEstimateTime());
+                    surplusTime = surplusTime + (workItem.getSurplusTime() == null ? 0 : workItem.getSurplusTime());
+                }
+                project.setEstimateTime(estimateTime);
+                project.setSurplusTime(surplusTime);
+            }
+        }
+
+        return projectPage;
     }
 
 
@@ -446,6 +510,28 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         }
 
         return recentProjectSetList;
+    }
+
+    /**
+     * 查询项目集数量 包括 所有 我收藏的 我创建的
+     * @return
+     */
+    @Override
+    public Map<String, Integer> findProjectSetCount(ProjectSetQuery projectSetQuery) {
+//        ProjectSetQuery  projectSetQuery = new ProjectSetQuery();
+        // 查找我所参与的私有项目
+        DmUserQuery dmUserQuery = new DmUserQuery();
+        String createUserId = LoginContext.getLoginId();
+        dmUserQuery.setUserId(createUserId);
+        List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+        List<String> privateProjectSetIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+
+        String[] ids = privateProjectSetIds.toArray(new String[privateProjectSetIds.size()]);
+        projectSetQuery.setProjectSetIds(ids);
+        projectSetQuery.setCreator(createUserId);
+
+        Map<String, Integer> projectSetCount = projectSetDao.findProjectSetCount(projectSetQuery);
+        return projectSetCount;
     }
 
 }

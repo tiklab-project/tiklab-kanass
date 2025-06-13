@@ -245,13 +245,7 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
         log.info("findWorkTypeDmList 花费时间:{}----------------",time4-time3);
 
         WorkTypeDm workTypeDm = new WorkTypeDm();
-        if (workItem.getWorkTypeCode().equals("defect")){
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("defect")).collect(Collectors.toList()).get(0);
-        } else if (workItem.getWorkTypeCode().equals("demand")) {
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("demand")).collect(Collectors.toList()).get(0);
-        }else if (workItem.getWorkTypeCode().equals("task")){
-            workTypeDm = workTypeDmList.stream().filter(item -> item.getWorkType().getCode().equals("task")).collect(Collectors.toList()).get(0);
-        }
+        workTypeDm = workTypeDmList.stream().filter(item -> item.getId().equals(workItem.getWorkType().getId())).collect(Collectors.toList()).get(0);
         // 表单
         WorkTypeDm finalWorkTypeDm = workTypeDm;
         CompletableFuture<Form> formFuture = CompletableFuture.supplyAsync(() -> {

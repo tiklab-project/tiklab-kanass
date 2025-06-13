@@ -682,6 +682,15 @@ public class WorkItemDao{
             paramMap.put("workStatusIds", workItemQuery.getWorkStatusIds());
         }
 
+        if(workItemQuery.getWorkStatusCode() != null && workItemQuery.getWorkStatusCode().length()>0 ){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_status_code = '" + workItemQuery.getWorkStatusCode() + "'");
+            }else {
+                sql = sql.concat(" and p.work_status_code = '" +  workItemQuery.getWorkStatusCode() + "'");
+            }
+            paramMap.put("work_status_code", workItemQuery.getWorkStatusCode());
+        }
+
         if(workItemQuery.getWorkStatusCodes() != null && workItemQuery.getWorkStatusCodes().size()>0){
             List<String> workStatusCodes = workItemQuery.getWorkStatusCodes();
 

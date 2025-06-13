@@ -81,7 +81,7 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
                 KanassRepository kanassRepository = new KanassRepository();
                 kanassRepository.setId(wikiRepository.getId());
                 kanassRepository.setKanassRepositoryName(wikiRepository.getName());
-                kanassRepository.setUserName(wikiRepository.getMaster().getName());
+                kanassRepository.setUserName(wikiRepository.getMaster().getNickname());
                 kanassRepository.setCreateTime(wikiRepository.getCreateTime());
                 kanassRepository.setIconUrl(wikiRepository.getIconUrl());
                 kanassRepositoryList.add(kanassRepository);

@@ -2,6 +2,7 @@ package io.tiklab.kanass.projectset.dao;
 
 import io.tiklab.dal.jpa.criterial.condition.OrQueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
+import io.tiklab.kanass.project.project.model.ProjectQuery;
 import io.tiklab.kanass.projectset.entity.ProjectSetEntity;
 import io.tiklab.kanass.projectset.entity.ProjectSetFocusEntity;
 import io.tiklab.kanass.projectset.model.ProjectSetQuery;
@@ -12,6 +13,7 @@ import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.dal.jpa.JpaTemplate;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +138,7 @@ public class ProjectSetDao{
      */
     public Pagination<ProjectSetEntity> findProjectSetPage(ProjectSetQuery projectSetQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectSetEntity.class)
+                .eq("projectSetLimits", "0")
                 .like("name", projectSetQuery.getName())
                 .eq("master", projectSetQuery.getMaster())
                 .orders(projectSetQuery.getOrderParams())
@@ -217,6 +220,44 @@ public class ProjectSetDao{
         NamedParameterJdbcTemplate jdbc = new NamedParameterJdbcTemplate(getJdbcTemplate());
         List query = jdbc.query(sql, paramMap, new BeanPropertyRowMapper(WorkItem.class));
         return query;
+    }
+
+    public Map<String, Integer> findProjectSetCount(ProjectSetQuery projectSetQuery){
+        Map<String, Integer> projectSetCount = new HashMap<>();
+        String userId = projectSetQuery.getCreator();
+        String[] projectSetIds = projectSetQuery.getProjectSetIds();
+        String s = new String();
+        s =  "(";
+        for(String projectSetId:projectSetIds){
+            s = s.concat("'" + projectSetId + "',");
+        }
+        s= s.substring(0, s.length() - 1);
+        s = s.concat(")");
+        String sql1 = "";
+        if(StringUtils.isNotBlank(projectSetQuery.getName())){
+            sql1 = "select count(id) as total from pmc_project_set where ( project_set_limits = '0' or id in " + s + ") and name like '%" + projectSetQuery.getName() + "%'";
+        }else {
+            sql1 = "select count(id) as total from pmc_project_set where ( project_set_limits = '0' or id in " + s + ")";
+        }
+        Integer total = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        projectSetCount.put("total", total);
+
+        String sql2 = "SELECT count(1) as total from pmc_project_set where creator = '" + userId + "'";
+        if (StringUtils.isNotBlank(projectSetQuery.getName())){
+            sql2 = sql2.concat(" and name like '%" + projectSetQuery.getName() + "%'");
+        }
+        Integer myCreated = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        projectSetCount.put("myCreated", myCreated);
+
+        String sql3 = "SELECT count(1) as total from pmc_project_set_focus psf left join pmc_project_set ps on ps.id = psf.project_set_id " +
+                "where psf.master_id = '" + userId + "'";
+        if (StringUtils.isNotBlank(projectSetQuery.getName())){
+            sql3 = sql3.concat(" and ps.name like '%" + projectSetQuery.getName() + "%'");
+        }
+        Integer myFocus = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        projectSetCount.put("myFocus", myFocus);
+        return projectSetCount;
+
     }
 
 

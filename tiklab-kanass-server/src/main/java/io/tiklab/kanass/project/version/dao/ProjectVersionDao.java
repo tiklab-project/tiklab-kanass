@@ -7,13 +7,16 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.dal.jpa.JpaTemplate;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目版本数据访问
@@ -142,6 +145,46 @@ public class ProjectVersionDao {
                 "on ve.id = wv.version_id WHERE wv.work_item_id = '" + workId  + "'";
         List<ProjectVersionEntity> projectVersionEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ProjectVersionEntity.class));
         return  projectVersionEntityList;
+    }
+
+
+    public Map<String, Integer> findVersionCount(ProjectVersionQuery projectVersionQuery) {
+        String userId = projectVersionQuery.getBuilderId();
+        String projectId = projectVersionQuery.getProjectId();
+        Map<String, Integer>  countMap = new HashMap<>();
+
+        String sql1 = "select count(*) as count from pmc_version where project_id = '" + projectId + "' ";
+        if (StringUtils.isNotBlank(projectVersionQuery.getName())){
+            sql1 = sql1.concat(" and name like '%" + projectVersionQuery.getName() + "%'");
+        }
+        if (projectVersionQuery.getVersionStates() != null && projectVersionQuery.getVersionStates().length != 0){
+            sql1 = sql1.concat(" and version_state in ('" + StringUtils.join(projectVersionQuery.getVersionStates(), "','") + "')");
+        }
+        Integer total = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        countMap.put("total", total);
+
+        String sql2 = "select count(*) as count from pmc_version where project_id = '" + projectId + "' and builder = '" + userId + "' ";
+        if (StringUtils.isNotBlank(projectVersionQuery.getName())){
+            sql2 = sql2.concat(" and name like '%" + projectVersionQuery.getName() + "%'");
+        }
+        if (projectVersionQuery.getVersionStates() != null && projectVersionQuery.getVersionStates().length != 0){
+            sql2 = sql2.concat(" and version_state in ('" + StringUtils.join(projectVersionQuery.getVersionStates(), "','") + "')");
+        }
+        Integer myCreated = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        countMap.put("myCreated", myCreated);
+
+        String sql3 = "select count(*) as count from pmc_version_focus pvf left join pmc_version pv on pv.id = pvf.version_id " +
+                " where pv.project_id = '" + projectId + "' and pv.builder = '" + userId + "' ";
+        if (StringUtils.isNotBlank(projectVersionQuery.getName())){
+            sql2 = sql2.concat(" and pv.name like '%" + projectVersionQuery.getName() + "%'");
+        }
+        if (projectVersionQuery.getVersionStates() != null && projectVersionQuery.getVersionStates().length != 0){
+            sql2 = sql2.concat(" and pv.version_state in ('" + StringUtils.join(projectVersionQuery.getVersionStates(), "','") + "')");
+        }
+        Integer myFocus = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        countMap.put("myFocus", myFocus);
+
+        return countMap;
     }
 
 }

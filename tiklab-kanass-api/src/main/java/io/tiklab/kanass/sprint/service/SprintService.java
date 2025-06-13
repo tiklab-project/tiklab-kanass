@@ -7,10 +7,12 @@ import io.tiklab.toolkit.join.annotation.FindAll;
 import io.tiklab.toolkit.join.annotation.FindOne;
 import io.tiklab.kanass.sprint.model.Sprint;
 import io.tiklab.kanass.sprint.model.SprintQuery;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
 * 迭代服务接口
@@ -103,5 +105,12 @@ public interface SprintService {
      * @param workId
      */
     List<Sprint> findWorkSprintList(@NotNull String workId);
+
+    /**
+     * 查询迭代个数
+     * @param sprintQuery
+     * @return
+     */
+    Map<String, Integer> findSprintCount(SprintQuery sprintQuery);
 
 }

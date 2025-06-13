@@ -10,6 +10,7 @@ import io.tiklab.kanass.projectset.model.ProjectSetQuery;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +86,8 @@ public interface ProjectSetService {
      */
     List<Project> findProjectSetDetailList(ProjectQuery projectQuery);
 
+    Pagination<Project> findProjectSetDetailPage(ProjectQuery projectQuery);
+
     /**
      * 查询所有关联项目集项目和未关联项目
      * @param
@@ -117,5 +120,9 @@ public interface ProjectSetService {
 
     List<ProjectSet> findProjectSetSortRecentTime(ProjectSetQuery projectSetQuery);
 
-//    List<Logging> findProjectSetLogList
+    /**
+     * 查询项目集数量 包括 所有 我收藏的 我创建的
+     * @return
+     */
+    Map<String, Integer> findProjectSetCount(ProjectSetQuery projectSetQuery);
 }

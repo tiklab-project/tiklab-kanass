@@ -5,13 +5,11 @@ import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.project.project.model.*;
 import io.tiklab.kanass.project.workPrivilege.service.WorkPrivilegeService;
 import io.tiklab.message.message.model.MessageNoticePatch;
 import io.tiklab.message.message.service.MessageDmNoticeService;
 import io.tiklab.privilege.role.model.PatchUser;
-import io.tiklab.kanass.project.project.model.Project;
-import io.tiklab.kanass.project.project.model.ProjectQuery;
-import io.tiklab.kanass.project.project.model.ProjectType;
 import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.kanass.workitem.service.WorkTypeDmService;
 import io.tiklab.kanass.workitem.service.WorkTypeService;
@@ -44,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
@@ -123,6 +122,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     VRoleService vRoleService;
+
+    @Autowired
+    ProjectFocusService projectFocusService;
 
 
 
@@ -546,22 +548,24 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projectList = BeanMapper.mapList(joinProjectListEntity,Project.class);
         joinTemplate.joinQuery(projectList);
 
-        String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
-        List<Map<String, Object>> projectWorkItemCount = findProjectWorkItemStatus(projectIds);
-        // 计算每个项目的完成进度
-        for (Project project : projectList) {
-            String id = project.getId();
-            List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
-                    equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(projectList)){
+            String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> projectWorkItemCount = findProjectWorkItemStatus(projectIds);
+            // 计算每个项目的完成进度
+            for (Project project : projectList) {
+                String id = project.getId();
+                List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                        equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
 
-            long all = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id))).count();
-            if (all == 0){
-                project.setPercent(0.00f);
-            }else {
-                float percent = (doneList.size() * 1.0f / all) * 100;
-                BigDecimal bd = new BigDecimal(percent);
-                bd = bd.setScale(2, RoundingMode.HALF_UP);
-                project.setPercent(bd.floatValue());
+                long all = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id))).count();
+                if (all == 0){
+                    project.setPercent(0.00f);
+                }else {
+                    float percent = (doneList.size() * 1.0f / all) * 100;
+                    BigDecimal bd = new BigDecimal(percent);
+                    bd = bd.setScale(2, RoundingMode.HALF_UP);
+                    project.setPercent(bd.floatValue());
+                }
             }
         }
         return projectList;
@@ -589,6 +593,27 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projectList = BeanMapper.mapList(pagination.getDataList(),Project.class);
 
         joinTemplate.joinQuery(projectList);
+
+        if (!CollectionUtils.isEmpty(projectList)){
+            String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
+            List<Map<String, Object>> projectWorkItemCount = findProjectWorkItemStatus(projectIds);
+            // 计算每个项目的完成进度
+            for (Project project : projectList) {
+                String id = project.getId();
+                List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").
+                        equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
+
+                long all = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id))).count();
+                if (all == 0){
+                    project.setPercent(0.00f);
+                }else {
+                    float percent = (doneList.size() * 1.0f / all) * 100;
+                    BigDecimal bd = new BigDecimal(percent);
+                    bd = bd.setScale(2, RoundingMode.HALF_UP);
+                    project.setPercent(bd.floatValue());
+                }
+            }
+        }
 
         return PaginationBuilder.build(pagination,projectList);
     }
@@ -754,5 +779,26 @@ public class ProjectServiceImpl implements ProjectService {
             // 处理异常，例如回滚事务（如果在一个事务中）
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 查询项目数量 包括所有、我收藏的、我创建的
+     * @return
+     */
+    @Override
+    public Map<String, Integer> findProjectCount(ProjectQuery projectQuery) {
+        // 查找我所参与的私有项目
+        DmUserQuery dmUserQuery = new DmUserQuery();
+        String createUserId = LoginContext.getLoginId();
+        dmUserQuery.setUserId(createUserId);
+        List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+        List<String> privateProjectIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+
+        String[] allProjectIds = privateProjectIds.toArray(new String[privateProjectIds.size()]);
+        projectQuery.setProjectIds(allProjectIds);
+        projectQuery.setCreator(createUserId);
+
+        HashMap<String, Integer> projectCount = projectDao.findProjectCount(projectQuery);
+        return projectCount;
     }
 }

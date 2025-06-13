@@ -1665,6 +1665,9 @@ public class WorkItemServiceImpl implements WorkItemService {
 //        Map<String, List<StateNodeFlow>> nodeFlowMap = stateNodeFlowList.stream()
 //                .collect(Collectors.groupingBy(item -> item.getFlow().getId()));
         for (WorkItem workItem : list) {
+            if (workItem == null){
+                continue;
+            }
             if (!(workItem.getWorkStatus().getId().equals("default") || workItem.getWorkStatusNode().getId().equals("default"))){
                 continue;
             }
@@ -2510,4 +2513,30 @@ public class WorkItemServiceImpl implements WorkItemService {
        List<String> workItemAndChildrenIds = workItemDao.findWorkItemAndChildrenIds(workItemId);
        return  workItemAndChildrenIds;
    }
+
+    @Override
+    public Map<String, Integer> findTodoPageWorkItemNum(WorkItemQuery workItemQuery) {
+//        // 负责人id
+//        String assignerId = workItemQuery.getAssignerId();
+//        if (workItemQuery.getProjectId() == null
+//                && workItemQuery.getCurrentVersionId() == null
+//                && workItemQuery.getCurrentSprintId() == null){
+//            // 查询所有
+//            findWorkItemListCount(workItemQuery)
+//
+//        }
+//        if (workItemQuery.getProjectId() != null){
+//            // 查询项目下
+//
+//        }
+//        if (workItemQuery.getCurrentVersionId() != null){
+//            // 查询版本下
+//
+//        }
+//        if (workItemQuery.getCurrentSprintId() != null){
+//            // 查询迭代下
+//
+//        }
+        return Map.of();
+    }
 }

@@ -12,11 +12,12 @@ import io.tiklab.eam.boot.starter.annotation.EnableEamServer;
 import io.tiklab.flow.starter.EnableFlowServer;
 import io.tiklab.form.starter.EnableFormServer;
 import io.tiklab.gateway.boot.starter.annotation.EnableGateway;
+import io.tiklab.install.spring.boot.starter.EnableInstallServer;
 import io.tiklab.kanass.EnableKanassServer;
 import io.tiklab.licence.boot.starter.annotation.EnableLicenceServer;
 import io.tiklab.messsage.boot.starter.annotation.EnableMessageServer;
 import io.tiklab.openapi.boot.starter.annotation.EnableOpenApi;
-import io.tiklab.postgresql.EnablePostgresql;
+import io.tiklab.postgresql.spring.boot.starter.EnablePostgresql;
 import io.tiklab.postin.client.EnablePostInClient;
 import io.tiklab.privilege.boot.starter.annotation.EnablePrivilegeServer;
 import io.tiklab.rpc.boot.starter.annotation.EnableRpc;
@@ -43,6 +44,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableRpc
 @EnableGateway
 @EnablePostgresql
+@EnableInstallServer
 //pcs
 @EnableUserClient
 @EnableUserServer

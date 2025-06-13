@@ -248,7 +248,8 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         testCaseQuery.setInList(repositoryIds);
         testCaseQuery.setName(workTestCaseQuery.getName());
         testCaseQuery.setCreateUser(workTestCaseQuery.getCreatUserId());
-        testCaseQuery.getPageParam().setCurrentPage(workTestCaseQuery.getPageParam().getCurrentPage());
+//        testCaseQuery.getPageParam().setCurrentPage(workTestCaseQuery.getPageParam().getCurrentPage());
+        testCaseQuery.setPageParam(workTestCaseQuery.getPageParam());
 
         HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
         String systemUrl = getSystemUrl();

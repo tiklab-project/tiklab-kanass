@@ -7,13 +7,17 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.dal.jpa.JpaTemplate;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 迭代数据访问
@@ -199,5 +203,44 @@ public class SprintDao{
                 "ws on sr.id = ws.sprint_id WHERE ws.work_item_id = '" + workId  + "'";
         List SprintEntityList = this.jpaTemplate.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(SprintEntity.class));
         return  SprintEntityList;
+    }
+
+    public Map<String, Integer> findSprintCount(SprintQuery sprintQuery) {
+        String userId = sprintQuery.getBuilderId();
+        String projectId = sprintQuery.getProjectId();
+        Map<String, Integer>  countMap = new HashMap<>();
+
+        String sql1 = "select count(*) as count from pmc_sprint where project_id = '" + projectId + "' ";
+        if (StringUtils.isNotBlank(sprintQuery.getSprintName())){
+            sql1 = sql1.concat(" and sprint_name like '%" + sprintQuery.getSprintName() + "%'");
+        }
+        if (sprintQuery.getSprintStateIds() != null && sprintQuery.getSprintStateIds().length != 0){
+            sql1 = sql1.concat(" and sprint_state_id in ('" + StringUtils.join(sprintQuery.getSprintStateIds(), "','") + "')");
+        }
+        Integer total = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        countMap.put("total", total);
+
+        String sql2 = "select count(*) as count from pmc_sprint where project_id = '" + projectId + "' and builder = '" + userId + "' ";
+        if (StringUtils.isNotBlank(sprintQuery.getSprintName())){
+            sql2 = sql2.concat(" and sprint_name like '%" + sprintQuery.getSprintName() + "%'");
+        }
+        if (sprintQuery.getSprintStateIds() != null && sprintQuery.getSprintStateIds().length != 0){
+            sql2 = sql2.concat(" and sprint_state_id in ('" + StringUtils.join(sprintQuery.getSprintStateIds(), "','") + "')");
+        }
+        Integer myCreated = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
+        countMap.put("myCreated", myCreated);
+
+        String sql3 = "select count(*) as count from pmc_sprint_focus psf left join pmc_sprint ps on ps.id = psf.sprint_id " +
+                " where ps.project_id = '" + projectId + "' and ps.builder = '" + userId + "' ";
+        if (StringUtils.isNotBlank(sprintQuery.getSprintName())){
+            sql2 = sql2.concat(" and ps.sprint_name like '%" + sprintQuery.getSprintName() + "%'");
+        }
+        if (sprintQuery.getSprintStateIds() != null && sprintQuery.getSprintStateIds().length != 0){
+            sql2 = sql2.concat(" and ps.sprint_state_id in ('" + StringUtils.join(sprintQuery.getSprintStateIds(), "','") + "')");
+        }
+        Integer myFocus = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
+        countMap.put("myFocus", myFocus);
+
+        return countMap;
     }
 }

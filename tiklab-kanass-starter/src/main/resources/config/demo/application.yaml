@@ -34,10 +34,11 @@ postgresql:
         address: ${DATA_HOME}/postgresql
 
 #soular config
-soular:
-    embbed:
-        enable: false
-    address: http://soular-ce.demoee.tiklab.net
+auth:
+    type: soular
+    soular:
+        address: http://soular-ce.demoee.tiklab.net
+
 #dfs config
 #dfs.service.enabled=false
 dfs:
@@ -61,18 +62,9 @@ dcs:
         database: dcs1
         expire: 7200
 
-#license
-licences:
-    path: ${APP_HOME}/licences
 
-base:
+external:
     url: http://kanass-ce.demoee.tiklab.net
-
-backups:
-    time: 0 0 2 * * ?
-    dir: /data/kanass
-    dfs:
-        dir: ${DATA_HOME}/files
 
 #zip config
 unzip:

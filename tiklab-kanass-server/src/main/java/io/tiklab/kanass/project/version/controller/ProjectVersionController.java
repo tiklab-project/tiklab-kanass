@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目版本控制器
@@ -124,6 +125,12 @@ public class ProjectVersionController {
     public Result<List<ProjectVersion>> findWorkVersionList(@NotNull String workId){
         List<ProjectVersion> versionList = projectVersionService.findWorkVersionList(workId);
         return Result.ok(versionList);
+    }
+
+    @RequestMapping(path = "/findVersionCount",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findVersionCount(@RequestBody ProjectVersionQuery projectVersionQuery){
+        Map<String, Integer> versionCount = projectVersionService.findVersionCount(projectVersionQuery);
+        return Result.ok(versionCount);
     }
 
 }

@@ -276,5 +276,12 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         return projectVersionList;
     }
 
+    @Override
+    public Map<String, Integer> findVersionCount(ProjectVersionQuery projectVersionQuery) {
+        projectVersionQuery.setBuilderId(LoginContext.getLoginId());
+        Map<String, Integer> versionCount = projectVersionDao.findVersionCount(projectVersionQuery);
+        return versionCount;
+    }
+
 
 }

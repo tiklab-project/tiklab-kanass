@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @pi.protocol: http
@@ -533,6 +534,13 @@ public class WorkItemController {
         List<String> workItemAndChildrenIds = workItemService.findWorkItemAndChildrenIds(id);
 
         return Result.ok(workItemAndChildrenIds);
+    }
+
+    @RequestMapping(path = "/findTodoWorkItemNum",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findTodoWorkItemNum(WorkItemQuery workItemQuery){
+//        Map<String, Integer> todoWorkItemNum = workItemService.findTodoWorkItemNum(userId);
+
+        return Result.ok(Map.of());
     }
 
 }

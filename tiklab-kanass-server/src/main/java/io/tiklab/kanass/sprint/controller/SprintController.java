@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 迭代控制器
@@ -126,4 +127,9 @@ public class SprintController {
         return Result.ok(sprintList);
     }
 
+    @RequestMapping(path = "/findSprintCount",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findSprintCount(@RequestBody SprintQuery sprintQuery){
+        Map<String, Integer> sprintCount = sprintService.findSprintCount(sprintQuery);
+        return Result.ok(sprintCount);
+    }
 }
