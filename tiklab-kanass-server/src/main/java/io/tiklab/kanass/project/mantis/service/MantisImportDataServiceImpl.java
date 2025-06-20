@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.xml.sax.InputSource;
 
+import javax.annotation.PostConstruct;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +38,15 @@ public class MantisImportDataServiceImpl implements MantisImportDataService{
     @Value("${DATA_HOME}")
     String dataHome;
 
-    String unzipAddress = dataHome + "/unzip/Mantis";
+    String unzipAddress;
 
-    private String attachmentPath = unzipAddress + "/attachments";
+    private String attachmentPath;
+
+    @PostConstruct
+    public void init(){
+        this.unzipAddress = Paths.get(dataHome, "unzip", "Mantis").toString();
+        this.attachmentPath = Paths.get(unzipAddress, "attachments").toString();
+    }
     @Override
     public void importMantisData(InputStream inputStream) {
         transactionTemplate.execute((status) -> {

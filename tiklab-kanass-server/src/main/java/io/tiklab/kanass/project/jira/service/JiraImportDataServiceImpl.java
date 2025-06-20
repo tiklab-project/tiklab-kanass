@@ -19,9 +19,11 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import javax.annotation.PostConstruct;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +58,12 @@ public class JiraImportDataServiceImpl implements JiraImportDataService {
     @Value("${DATA_HOME}")
     String dataHome;
 
-    String unzipAddress = dataHome + "/unzip/Jira";
+    String unzipAddress;
+
+    @PostConstruct
+    public void init(){
+        this.unzipAddress = Paths.get(dataHome,"unzip", "Jira").toString();
+    }
 
     public final ExecutorService executorService = Executors.newCachedThreadPool();
 

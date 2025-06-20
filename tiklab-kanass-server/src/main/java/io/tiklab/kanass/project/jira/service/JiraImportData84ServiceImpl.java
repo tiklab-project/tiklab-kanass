@@ -46,8 +46,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Element;
 
+import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -117,9 +119,15 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
     @Value("${DATA_HOME}")
     String dataHome;
 
-    String unzipAddress = dataHome + "/unzip/Jira";
+    String unzipAddress;
 
-    String attachmentAddress = unzipAddress + "/attachments";
+    String attachmentAddress;
+
+    @PostConstruct
+    public void init(){
+        this.unzipAddress = Paths.get(dataHome, "unzip", "Jira").toString();
+        this.attachmentAddress = Paths.get(unzipAddress, "attachments").toString();
+    }
 
     @Autowired
     private DfsClient dfsClient;

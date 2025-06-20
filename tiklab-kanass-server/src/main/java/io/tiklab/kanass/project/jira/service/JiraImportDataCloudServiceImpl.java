@@ -44,6 +44,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Element;
 
+import javax.annotation.PostConstruct;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -110,7 +112,12 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
     @Value("${DATA_HOME}")
     String dataHome;
 
-    String unzipAddress = dataHome + "/unzip/Jira";
+    String unzipAddress;
+
+    @PostConstruct
+    public void init(){
+        this.unzipAddress = Paths.get(dataHome,"unzip", "Jira").toString();
+    }
 
     private ThreadLocal<ArrayList<Element>> GlobalUserElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<Element>> GlobalApplicationUserElementList = new ThreadLocal<>();

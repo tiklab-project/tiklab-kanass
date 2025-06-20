@@ -42,8 +42,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -100,9 +102,16 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
     @Value("${DATA_HOME}")
     String dataHome;
 
-    String unzipAddress = dataHome + "/unzip/Mantis";
+    String unzipAddress;
 
-    private String attachmentPath = unzipAddress + "/attachments";
+    private String attachmentPath;
+
+    @PostConstruct
+    public void init(){
+        this.unzipAddress = Paths.get(dataHome,"unzip", "Mantis").toString();
+        this.attachmentPath = Paths.get(unzipAddress + "attachments").toString();
+    }
+
     @Override
     public String writeData(List<MantisIssue> mantisIssueList, Map<String, String> Steps, Map<String, Integer> Percent) throws InterruptedException {
         this.MantisUserSet.remove();
