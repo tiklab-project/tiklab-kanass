@@ -114,12 +114,12 @@ public class JiraImportData84ServiceImpl implements JiraImportData84Service {
     @Autowired
     WorkAttachService workAttachService;
 
+    @Value("${DATA_HOME}")
+    String dataHome;
 
-    @Value("${unzip.jiraPath}")
-    String unzipAddress;
+    String unzipAddress = dataHome + "/unzip/Jira";
 
-    @Value("${unzip.jiraAttachment}")
-    String attachmentAddress;
+    String attachmentAddress = unzipAddress + "/attachments";
 
     @Autowired
     private DfsClient dfsClient;

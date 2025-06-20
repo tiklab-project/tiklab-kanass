@@ -107,8 +107,11 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
     StateNodeFlowService stateNodeFlowService;
 
 
-    @Value("${unzip.jiraPath}")
-    String unzipAddress;
+    @Value("${DATA_HOME}")
+    String dataHome;
+
+    String unzipAddress = dataHome + "/unzip/Jira";
+
     private ThreadLocal<ArrayList<Element>> GlobalUserElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<Element>> GlobalApplicationUserElementList = new ThreadLocal<>();
     private ThreadLocal<ArrayList<Element>> UserHistoryItemElementList = new ThreadLocal<ArrayList<Element>>();

@@ -32,11 +32,12 @@ public class MantisImportDataServiceImpl implements MantisImportDataService{
 
     public static Map<String, String> Step = new HashMap<>();
 
-    @Value("${unzip.mantisPath}")
-    String unzipAddress;
+    @Value("${DATA_HOME}")
+    String dataHome;
 
-    @Value("${unzip.mantisAttachment}")
-    String attachmentPath;
+    String unzipAddress = dataHome + "/unzip/Mantis";
+
+    private String attachmentPath = unzipAddress + "/attachments";
     @Override
     public void importMantisData(InputStream inputStream) {
         transactionTemplate.execute((status) -> {

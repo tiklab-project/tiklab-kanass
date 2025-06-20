@@ -73,19 +73,3 @@ auth:
 # 访问地址，用于显示日志，消息，待办的图标
 external:
   url: http://192.168.10.7:8080
-
-backups:
-  pgsql:
-    dir: /opt/homebrew/opt/postgresql@15/bin
-  time: 0 0 2 * * ?
-  dir: ${DATA_HOME}
-  dfs:
-    dir: ${DATA_HOME}/files
-
-#zip config
-unzip:
-  jiraPath: ${DATA_HOME}/unzip/Jira
-  # jira附件在压缩包中的位置
-  jiraAttachment: ${unzip.jiraPath}/attachments
-  mantisPath: ${DATA_HOME}/unzip/Mantis
-  mantisAttachment: ${unzip.mantisPath}/attachments

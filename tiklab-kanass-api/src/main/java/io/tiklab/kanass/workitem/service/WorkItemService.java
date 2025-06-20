@@ -81,6 +81,8 @@ public interface WorkItemService {
     * @return
     */
     List<WorkItem> findWorkItemList(WorkItemQuery workItemQuery);
+
+    List<WorkItem> findWorkItemListNoJoinQuery(WorkItemQuery workItemQuery);
     Integer findWorkItemListCount(WorkItemQuery workItemQuery);
     /**
      * 查询可被史诗关联事项列表

@@ -1804,6 +1804,15 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     @Override
+    public List<WorkItem> findWorkItemListNoJoinQuery(WorkItemQuery workItemQuery) {
+        List<WorkItemEntity> workItemEntityList = workItemDao.findWorkItemList(workItemQuery);
+
+        List<WorkItem> workItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
+        this.handleDefaultNodeWorkItem(workItemList);
+        return workItemList;
+    }
+
+    @Override
     public Integer findWorkItemListCount(WorkItemQuery workItemQuery) {
         workItemQuery.setStatisticsNum(true);
         Integer size = workItemDao.findWorkItemListCount(workItemQuery);
@@ -2136,22 +2145,26 @@ public class WorkItemServiceImpl implements WorkItemService {
     public List<WorkBoard> findWorkBoardList(WorkItemQuery workItemQuery) {
         List<WorkBoard> workBoardList = new ArrayList<>();
         String projectId = workItemQuery.getProjectId();
-        DmFlowQuery dmFlowQuery = new DmFlowQuery();
+        WorkTypeDmQuery workTypeDmQuery = new WorkTypeDmQuery();
+
         if(!StringUtils.isEmpty(projectId) ){
-            dmFlowQuery.setDomainId(projectId);
+            workTypeDmQuery.setProjectId(projectId);
         }
         if(!ObjectUtils.isEmpty(workItemQuery.getProjectIds())){
             List<String> projectIds = workItemQuery.getProjectIds();
             String[] projectIdsString = projectIds.toArray(new String[projectIds.size()]);
-            dmFlowQuery.setDomainIds(projectIdsString);
+            workTypeDmQuery.setProjectIds(projectIdsString);
         }
-        //查找项目下所有的流程
-        List<DmFlow> dmFlowList = dmFlowService.findDmFlowList(dmFlowQuery);
+        if (!StringUtils.isEmpty(workItemQuery.getWorkTypeId())){
+            workTypeDmQuery.setWorkTypeId(workItemQuery.getWorkTypeId());
+        }
+        //查找项目下需要的流程
+        List<WorkTypeDm> workTypeDmListNoRepeat = workTypeDmService.findWorkTypeDmListNoRepeat(workTypeDmQuery);
+        List<Flow> needFlowList = workTypeDmListNoRepeat.stream().map(dm -> dm.getFlow()).collect(Collectors.toList());
         List<StateNodeFlow> stateNodeFlows = new ArrayList<>();
 
         //循环流程查找所有的节点
-        for (DmFlow dmFlow : dmFlowList) {
-            Flow flow = dmFlow.getFlow();
+        for (Flow flow : needFlowList) {
             StateNodeFlowQuery stateNodeFlowQuery = new StateNodeFlowQuery();
             stateNodeFlowQuery.setFlowId(flow.getId());
             List<StateNodeFlow> stateNodeFlowList = stateNodeflowService.findStateNodeFlowList(stateNodeFlowQuery);
@@ -2183,6 +2196,8 @@ public class WorkItemServiceImpl implements WorkItemService {
                 }
             }
         }
+        // 排序  待办在最前  完成在最后
+        workBoardList.sort(Comparator.comparing((WorkBoard workBoard) -> workBoard.getState().getStatus()).reversed());
         return workBoardList;
     }
 

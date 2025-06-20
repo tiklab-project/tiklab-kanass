@@ -16,52 +16,63 @@ import java.util.List;
 @ApiModel
 public class WorkTypeDmQuery implements Serializable{
 
-        @ApiProperty(name ="projectId",desc = "项目id，精准匹配")
-        private String projectId;
+    @ApiProperty(name ="projectId",desc = "项目id，精准匹配")
+    private String projectId;
 
-        @ApiProperty(name ="workTypeId",desc = "事项类型id，精准匹配")
-        private String workTypeId;
+    @ApiProperty(name ="projectIds",desc = "项目ids，精准匹配")
+    private String[] projectIds;
 
-        @ApiProperty(name ="code",desc = "事项类型id，精准匹配")
-        private String code;
+    @ApiProperty(name ="workTypeId",desc = "事项类型id，精准匹配")
+    private String workTypeId;
+
+    @ApiProperty(name ="code",desc = "事项类型id，精准匹配")
+    private String code;
 
 
 
-        @ApiProperty(name ="codes",desc = "事项类型id，精准匹配")
-        private String[] codes;
+    @ApiProperty(name ="codes",desc = "事项类型id，精准匹配")
+    private String[] codes;
 
-        @ApiProperty(name ="grouper",desc = "类型分组，系统system，自定义custom")
-        private String grouper;
+    @ApiProperty(name ="grouper",desc = "类型分组，系统system，自定义custom")
+    private String grouper;
 
-        @ApiProperty(name ="orderParams",desc = "排序参数")
-        private List<Order> orderParams = OrderBuilders.instance().asc("code").get();
+    @ApiProperty(name ="orderParams",desc = "排序参数")
+    private List<Order> orderParams = OrderBuilders.instance().asc("code").get();
 
-        @ApiProperty(name ="pageParam",desc = "分页参数")
-        private Page pageParam = new Page();
+    @ApiProperty(name ="pageParam",desc = "分页参数")
+    private Page pageParam = new Page();
 
-        public List<Order> getOrderParams() {
-            return orderParams;
-        }
+    public List<Order> getOrderParams() {
+        return orderParams;
+    }
 
-        public void setOrderParams(List<Order> orderParams) {
-            this.orderParams = orderParams;
-        }
+    public void setOrderParams(List<Order> orderParams) {
+        this.orderParams = orderParams;
+    }
 
-        public Page getPageParam() {
-            return pageParam;
-        }
+    public Page getPageParam() {
+        return pageParam;
+    }
 
-        public void setPageParam(Page pageParam) {
-            this.pageParam = pageParam;
-        }
+    public void setPageParam(Page pageParam) {
+        this.pageParam = pageParam;
+    }
 
-        public String getProjectId() {
-            return projectId;
-        }
+    public String getProjectId() {
+        return projectId;
+    }
 
-        public void setProjectId(String projectId) {
-            this.projectId = projectId;
-        }
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public String[] getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(String[] projectIds) {
+        this.projectIds = projectIds;
+    }
 
     public String getWorkTypeId() {
         return workTypeId;

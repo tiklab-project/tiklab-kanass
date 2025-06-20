@@ -227,13 +227,10 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                 if(focusVersionIds.contains(id)){
                     projectVersion.setFocusIs(true);
                 }
-                List<String> countList = versionWorkItemNum.stream().filter(map -> map.get("version_id").equals(id)).map(map -> map.get("work_item_id")).collect(Collectors.toList());
-                WorkItemQuery query = new WorkItemQuery();
-                query.setIds(countList.toArray(String[]::new));
-                List<WorkItem> workItemList = workItemService.findWorkItemList(query);
+                List<Map<String, String>> countList = versionWorkItemNum.stream().filter(map -> map.get("version_id").equals(id)).collect(Collectors.toList());
 
-                projectVersion.setWorkDoneNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("DONE")).count());
-                projectVersion.setWorkProgressNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("PROGRESS")).count());
+                projectVersion.setWorkDoneNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("DONE")).count());
+                projectVersion.setWorkProgressNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("PROGRESS")).count());
                 projectVersion.setWorkNumber(countList.size());
             }
         }

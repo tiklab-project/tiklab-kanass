@@ -85,6 +85,7 @@ public class WorkTypeDmDao{
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkTypeDmEntity.class, "wd")
                 .leftJoin( WorkTypeEntity.class, "wt","wd.workTypeId=wt.id")
                 .eq("wd.projectId",workTypeDmQuery.getProjectId())
+                .in("wd.projectId", workTypeDmQuery.getProjectIds())
                 .eq("wd.workTypeId",workTypeDmQuery.getWorkTypeId())
                 .eq("wt.grouper", workTypeDmQuery.getGrouper())
                 .eq("wt.code", workTypeDmQuery.getCode())

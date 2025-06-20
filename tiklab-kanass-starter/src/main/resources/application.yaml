@@ -69,11 +69,5 @@ dcs:
 external:
     url: http://kanass-ce.test.kanass.net
 
-#zip config
-unzip:
-    jiraPath: ${DATA_HOME}/unzip/Jira
-    # jira附件在压缩包中的位置
-    jiraAttachment: ${unzip.jiraPath}/attachments
-    mantisPath: ${DATA_HOME}/unzip/Mantis
-    mantisAttachment: ${unzip.mantisPath}/attachments
+
 

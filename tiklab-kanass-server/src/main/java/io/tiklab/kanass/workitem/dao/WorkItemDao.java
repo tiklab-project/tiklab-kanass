@@ -756,6 +756,15 @@ public class WorkItemDao{
             paramMap.put("builderId", workItemQuery.getBuilderIds());
         }
 
+        if(workItemQuery.getAssignerId() != null && workItemQuery.getAssignerId().length()>0){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.assigner_id = '" + workItemQuery.getAssignerId() + "'");
+            }else {
+                sql = sql.concat(" and p.assigner_id = '" + workItemQuery.getAssignerId() + "'");
+            }
+            paramMap.put("assignerId", workItemQuery.getAssignerId());
+        }
+
         if(workItemQuery.getAssignerIds() != null && workItemQuery.getAssignerIds().size()>0){
             List<String> assignerIds = workItemQuery.getAssignerIds();
             String s = new String("(");
@@ -770,7 +779,7 @@ public class WorkItemDao{
             }else {
                 sql = sql.concat(" and p.assigner_id in " + s);
             }
-            paramMap.put("assignerId", workItemQuery.getAssignerIds());
+            paramMap.put("assignerIds", workItemQuery.getAssignerIds());
         }
 
         if(workItemQuery.getIdNotIn() != null && workItemQuery.getIdNotIn().length > 0){

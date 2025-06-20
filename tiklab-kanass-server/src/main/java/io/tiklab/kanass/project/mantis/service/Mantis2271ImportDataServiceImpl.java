@@ -97,8 +97,12 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
     private ThreadLocal<Set<MantisUser>> MantisUserSet = new ThreadLocal<>();
     private ThreadLocal<Set<MantisProject>> MantisProjectSet = new ThreadLocal<>();
 
-    @Value("${unzip.mantisAttachment}")
-    private String attachmentPath;
+    @Value("${DATA_HOME}")
+    String dataHome;
+
+    String unzipAddress = dataHome + "/unzip/Mantis";
+
+    private String attachmentPath = unzipAddress + "/attachments";
     @Override
     public String writeData(List<MantisIssue> mantisIssueList, Map<String, String> Steps, Map<String, Integer> Percent) throws InterruptedException {
         this.MantisUserSet.remove();

@@ -29,6 +29,8 @@ import io.tiklab.message.message.service.SendMessageNoticeService;
 import io.tiklab.message.setting.model.MessageType;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,7 @@ import java.util.stream.Collectors;
 */
 @Service
 public class SprintServiceImpl implements SprintService {
+    private static final Logger log = LoggerFactory.getLogger(SprintServiceImpl.class);
     public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     SprintDao sprintDao;
@@ -386,13 +389,10 @@ public class SprintServiceImpl implements SprintService {
                 if(focusSprintIds.contains(id)){
                     sprint.setFocusIs(true);
                 }
-                List<String> countList = sprintWorkItemList.stream().filter(map -> map.get("sprint_id").equals(id)).map(map -> map.get("work_item_id")).collect(Collectors.toList());
-                WorkItemQuery query = new WorkItemQuery();
-                query.setIds(countList.toArray(String[]::new));
-                List<WorkItem> workItemList = workItemService.findWorkItemList(query);
+                List<Map<String, String>> countList = sprintWorkItemList.stream().filter(map -> map.get("sprint_id").equals(id)).collect(Collectors.toList());
 
-                sprint.setWorkDoneNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("DONE")).count());
-                sprint.setWorkProgressNumber( (int) workItemList.stream().filter(workItem -> workItem.getWorkStatusCode().equals("PROGRESS")).count());
+                sprint.setWorkDoneNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("DONE")).count());
+                sprint.setWorkProgressNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("PROGRESS")).count());
                 sprint.setWorkNumber(countList.size());
             }
         }

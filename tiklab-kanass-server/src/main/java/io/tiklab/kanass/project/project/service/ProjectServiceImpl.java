@@ -451,7 +451,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
 
         // 统计项目预计工时和剩余工时
-        List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+        List<WorkItem> workItemList = workItemService.findWorkItemListNoJoinQuery(workItemQuery);
         int estimateTime = 0;
         int surplusTime = 0;
         for (WorkItem workItem : workItemList) {

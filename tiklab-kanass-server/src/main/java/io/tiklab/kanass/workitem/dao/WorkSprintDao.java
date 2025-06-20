@@ -118,7 +118,7 @@ public class WorkSprintDao {
     }
 
     public List<Map<String, String>> findSprintWorkItemNum(String ids) {
-        String sql = "select sprint_id, work_item_id  from pmc_work_sprint where sprint_id in "+ ids;
+        String sql = "select pws.sprint_id, pws.work_item_id, pwi.work_status_code  from pmc_work_sprint pws left join pmc_work_item pwi on pwi.id = pws.work_item_id where pws.sprint_id in "+ ids;
         List<Map<String, Object>> sprintIdMap = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
         if (sprintIdMap.isEmpty()){
             return new ArrayList<>();
