@@ -49,8 +49,7 @@ public class KanassDsmAutoConfiguration {
                 "oplog_1.0.1",
                 //TodoTaskDsm
                 "todotask_1.0.1",
-                "apply-auth_1.0.1",
-                "privilege_1.0.1"
+                "apply-auth_1.0.1"
         });
         dsmConfig.newVersion("1.0.2", new String[]{
                 "message_1.0.2",
