@@ -111,7 +111,7 @@ public class WorkVersionDao {
     }
 
     public List<Map<String, String>> findVersionWorkItemNum(String ids) {
-        String sql = "select pwv.version_id, pwv.work_item_id, pwi.work_status_code from pmc_work_version pwv left join pmc_work_item pwi on pwi.id = pwv.work_item_id where pwv.version_id in "+ ids;
+        String sql = "select pwv.version_id, pwv.work_item_id, pwi.work_status_code from pmc_work_version pwv left join pmc_work_item pwi on pwi.id = pwv.work_item_id where pwi.work_status_code is not null and pwv.version_id in "+ ids;
         List<Map<String, Object>> versionIdMap = this.jpaTemplate.getJdbcTemplate().queryForList(sql);
         if (versionIdMap.isEmpty()){
             return new ArrayList<>();

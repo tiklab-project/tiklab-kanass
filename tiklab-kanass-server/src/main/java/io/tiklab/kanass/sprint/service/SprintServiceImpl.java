@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -390,6 +391,13 @@ public class SprintServiceImpl implements SprintService {
                     sprint.setFocusIs(true);
                 }
                 List<Map<String, String>> countList = sprintWorkItemList.stream().filter(map -> map.get("sprint_id").equals(id)).collect(Collectors.toList());
+
+                if (CollectionUtils.isEmpty(countList)){
+                    sprint.setWorkDoneNumber(0);
+                    sprint.setWorkProgressNumber(0);
+                    sprint.setWorkNumber(0);
+                    continue;
+                }
 
                 sprint.setWorkDoneNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("DONE")).count());
                 sprint.setWorkProgressNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("PROGRESS")).count());

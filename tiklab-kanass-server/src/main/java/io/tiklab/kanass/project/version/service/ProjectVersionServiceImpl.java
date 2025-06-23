@@ -16,6 +16,7 @@ import io.tiklab.user.user.model.User;
 import javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -228,6 +229,13 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
                     projectVersion.setFocusIs(true);
                 }
                 List<Map<String, String>> countList = versionWorkItemNum.stream().filter(map -> map.get("version_id").equals(id)).collect(Collectors.toList());
+
+                if (CollectionUtils.isEmpty(countList)){
+                    projectVersion.setWorkDoneNumber(0);
+                    projectVersion.setWorkProgressNumber(0);
+                    projectVersion.setWorkNumber(0);
+                    continue;
+                }
 
                 projectVersion.setWorkDoneNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("DONE")).count());
                 projectVersion.setWorkProgressNumber( (int) countList.stream().filter(workItem -> workItem.get("work_status_code").equals("PROGRESS")).count());
