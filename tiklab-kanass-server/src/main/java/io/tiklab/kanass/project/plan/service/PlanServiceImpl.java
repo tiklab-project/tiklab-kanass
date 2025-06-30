@@ -75,7 +75,7 @@ public class PlanServiceImpl implements PlanService {
     public Plan findPlan(@NotNull String id) {
         Plan plan = findOne(id);
 
-        joinTemplate.joinQuery(plan);
+        joinTemplate.joinQuery(plan, new String[]{"parentPlan", "project", "master"});
 
         return plan;
     }
@@ -86,7 +86,7 @@ public class PlanServiceImpl implements PlanService {
 
         List<Plan> planList =  BeanMapper.mapList(planEntityList,Plan.class);
 
-        joinTemplate.joinQuery(planList);
+        joinTemplate.joinQuery(planList, new String[]{"parentPlan", "project", "master"});
 
         return planList;
     }
@@ -97,7 +97,7 @@ public class PlanServiceImpl implements PlanService {
 
         List<Plan> planList = BeanMapper.mapList(planEntityList,Plan.class);
 
-        joinTemplate.joinQuery(planList);
+        joinTemplate.joinQuery(planList, new String[]{"parentPlan", "project", "master"});
 
         return planList;
     }
@@ -110,7 +110,7 @@ public class PlanServiceImpl implements PlanService {
 
 
         if(isJoinQuery){
-            joinTemplate.joinQuery(planList);
+            joinTemplate.joinQuery(planList, new String[]{"parentPlan", "project", "master"});
         }
         return planList;
     }
@@ -121,7 +121,7 @@ public class PlanServiceImpl implements PlanService {
 
         List<Plan> planList = BeanMapper.mapList(pagination.getDataList(),Plan.class);
 
-        joinTemplate.joinQuery(planList);
+        joinTemplate.joinQuery(planList, new String[]{"parentPlan", "project", "master"});
 
         return PaginationBuilder.build(pagination,planList);
     }

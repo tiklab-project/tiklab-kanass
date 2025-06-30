@@ -127,7 +127,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
     public WorkTestCase findWorkTestCase(@NotNull String id) {
         WorkTestCase workTestCase = findOne(id);
 
-        joinTemplate.joinQuery(workTestCase);
+        joinTemplate.joinQuery(workTestCase, new String[]{"workItem"});
         return workTestCase;
     }
 
@@ -137,7 +137,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
         List<WorkTestCase> workTestCaseList =  BeanMapper.mapList(workTestCaseEntityList,WorkTestCase.class);
 
-        joinTemplate.joinQuery(workTestCaseList);
+        joinTemplate.joinQuery(workTestCaseList, new String[]{"workItem"});
         return workTestCaseList;
     }
 
@@ -147,7 +147,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
         List<WorkTestCase> workTestCaseList = BeanMapper.mapList(workTestCaseEntityList,WorkTestCase.class);
 
-        joinTemplate.joinQuery(workTestCaseList);
+        joinTemplate.joinQuery(workTestCaseList, new String[]{"workItem"});
 
         return workTestCaseList;
     }
@@ -198,7 +198,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
         List<WorkTestCase> workTestCaseList = BeanMapper.mapList(pagination.getDataList(),WorkTestCase.class);
 
-        joinTemplate.joinQuery(workTestCaseList);
+        joinTemplate.joinQuery(workTestCaseList, new String[]{"workItem"});
 
         if (!ObjectUtils.isEmpty(workTestCaseList)){
             for (WorkTestCase workTestCase:workTestCaseList){

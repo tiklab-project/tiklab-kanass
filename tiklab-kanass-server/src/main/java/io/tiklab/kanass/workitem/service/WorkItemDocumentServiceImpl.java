@@ -123,7 +123,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
     public WorkItemDocument findWorkItemDocument(@NotNull String id) {
         WorkItemDocument workItemDocument = findOne(id);
 
-        joinTemplate.joinQuery(workItemDocument);
+        joinTemplate.joinQuery(workItemDocument, new String[]{"workItem"});
         return workItemDocument;
     }
 
@@ -133,7 +133,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
         List<WorkItemDocument> workItemDocumentList =  BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
 
-        joinTemplate.joinQuery(workItemDocumentList);
+        joinTemplate.joinQuery(workItemDocumentList, new String[]{"workItem"});
         return workItemDocumentList;
     }
 
@@ -143,7 +143,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
         List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(workItemDocumentEntityList,WorkItemDocument.class);
 
-        joinTemplate.joinQuery(workItemDocumentList);
+        joinTemplate.joinQuery(workItemDocumentList, new String[]{"workItem"});
 
         return workItemDocumentList;
     }
@@ -228,7 +228,7 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
             }
         }
 
-        joinTemplate.joinQuery(workItemDocumentList);
+        joinTemplate.joinQuery(workItemDocumentList, new String[]{"workItem"});
 
         return PaginationBuilder.build(pagination,workItemDocumentList);
     }

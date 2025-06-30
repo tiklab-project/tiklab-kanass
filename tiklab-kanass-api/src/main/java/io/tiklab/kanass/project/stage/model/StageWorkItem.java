@@ -5,7 +5,7 @@ import io.tiklab.toolkit.beans.annotation.Mapper;
 import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 
@@ -26,7 +26,7 @@ public class StageWorkItem extends BaseModel {
     @Mappings({
             @Mapping(source = "workItem.id",target = "workItemId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WorkItem workItem;
 
     @NotNull

@@ -3,7 +3,7 @@ package io.tiklab.kanass.project.test.model;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 
 public class ProjectTestCase {
     @ApiProperty(name="id",desc="id")
@@ -25,7 +25,7 @@ public class ProjectTestCase {
     @Mappings({
             @Mapping(source = "repository.id",target = "repositoryId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Repository repository;
 
     @ApiProperty(name="isExist",desc="类型")

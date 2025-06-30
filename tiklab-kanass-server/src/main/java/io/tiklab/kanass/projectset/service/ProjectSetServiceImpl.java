@@ -187,7 +187,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         ProjectSet projectSet = findOne(id);
 
 
-        joinTemplate.joinQuery(projectSet);
+        joinTemplate.joinQuery(projectSet, new String[]{"master"});
         return projectSet;
     }
 
@@ -195,7 +195,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     public List<ProjectSet> findAllProjectSet() {
         List<ProjectSetEntity> projectSetEntityList =  projectSetDao.findAllProjectSet();
         List<ProjectSet> projectSetList =  BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
-        joinTemplate.joinQuery(projectSetList);
+        joinTemplate.joinQuery(projectSetList, new String[]{"master"});
            if (projectSetList.size() > 0){
                //查询项目集下面相关的项目
             for (ProjectSet projectSet:projectSetList){
@@ -213,7 +213,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
         findProjectNum(projectSetList);
-        joinTemplate.joinQuery(projectSetList);
+        joinTemplate.joinQuery(projectSetList, new String[]{"master"});
 
         return projectSetList;
     }
@@ -251,7 +251,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         findProjectNum(projectSetList);
 
-        joinTemplate.joinQuery(projectSetList);
+        joinTemplate.joinQuery(projectSetList, new String[]{"master"});
 
         return PaginationBuilder.build(pagination,projectSetList);
     }
@@ -390,7 +390,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
         findProjectNum(projectSetList);
-        joinTemplate.joinQuery(projectSetList);
+        joinTemplate.joinQuery(projectSetList, new String[]{"master"});
 
         return projectSetList;
     }
@@ -409,7 +409,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         List<ProjectSet> projectSetList = BeanMapper.mapList(projectSetEntityList,ProjectSet.class);
         findProjectNum(projectSetList);
-        joinTemplate.joinQuery(projectSetList);
+        joinTemplate.joinQuery(projectSetList, new String[]{"master"});
 
         return projectSetList;
     }
@@ -449,7 +449,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         }
 
         findProjectNum(projectSetList);
-        joinTemplate.joinQuery(projectSetList);
+        joinTemplate.joinQuery(projectSetList, new String[]{"master"});
         return projectSetList;
 
     }

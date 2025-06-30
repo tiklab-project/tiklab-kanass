@@ -434,7 +434,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findProject(@NotNull String id) {
         Project project = findOne(id);
-        joinTemplate.joinQuery(project);
+        joinTemplate.joinQuery(project, new String[]{"projectType", "master"});
         return project;
     }
 
@@ -464,7 +464,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setMember(dmUserList.size());
         project.setEstimateTime(estimateTime);
         project.setSurplusTime(surplusTime);
-        joinTemplate.joinQuery(project);
+        joinTemplate.joinQuery(project, new String[]{"projectType", "master"});
         return project;
     }
 
@@ -479,7 +479,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
         return projectList;
     }
 
@@ -495,7 +495,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
 
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
         return projectList;
     }
 
@@ -514,7 +514,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         return projectList;
     }
@@ -546,7 +546,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<ProjectEntity> joinProjectListEntity = projectDao.findJoinProjectList(projectQuery);
         List<Project> projectList = BeanMapper.mapList(joinProjectListEntity,Project.class);
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         if (!CollectionUtils.isEmpty(projectList)){
             String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
@@ -592,7 +592,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projectList = BeanMapper.mapList(pagination.getDataList(),Project.class);
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         if (!CollectionUtils.isEmpty(projectList)){
             String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
@@ -627,7 +627,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         return projectList;
     }
@@ -643,7 +643,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<ProjectEntity> projectEntityList =  projectDao.findAllRecentProjectList(projectQuery);
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         return projectList;
     }
@@ -680,7 +680,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         return projectList;
     }
@@ -691,7 +691,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projectList = BeanMapper.mapList(projectEntityList,Project.class);
 
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         return null;
     }
@@ -710,7 +710,7 @@ public class ProjectServiceImpl implements ProjectService {
         // 查找最近项目
         List<ProjectEntity> projectSortRecentTime = projectDao.findProjectSortRecentTime(projectQuery);
         List<Project> projectList = BeanMapper.mapList(projectSortRecentTime,Project.class);
-        joinTemplate.joinQuery(projectList);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         int size = projectList.size();
         if(size < 5){

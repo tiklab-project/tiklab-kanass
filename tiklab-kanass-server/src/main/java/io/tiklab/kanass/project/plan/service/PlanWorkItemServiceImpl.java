@@ -79,7 +79,7 @@ public class PlanWorkItemServiceImpl implements PlanWorkItemService {
     public PlanWorkItem findPlanWorkItem(@NotNull String id) {
         PlanWorkItem planWorkItem = findOne(id);
 
-        joinTemplate.joinQuery(planWorkItem);
+        joinTemplate.joinQuery(planWorkItem, new String[]{"workItem"});
 
         return planWorkItem;
     }
@@ -90,7 +90,7 @@ public class PlanWorkItemServiceImpl implements PlanWorkItemService {
 
         List<PlanWorkItem> planWorkItemList =  BeanMapper.mapList(planWorkItemEntityList,PlanWorkItem.class);
 
-        joinTemplate.joinQuery(planWorkItemList);
+        joinTemplate.joinQuery(planWorkItemList, new String[]{"workItem"});
 
         return planWorkItemList;
     }
@@ -101,7 +101,7 @@ public class PlanWorkItemServiceImpl implements PlanWorkItemService {
 
         List<PlanWorkItem> planWorkItemList = BeanMapper.mapList(planWorkItemEntityList,PlanWorkItem.class);
 
-        joinTemplate.joinQuery(planWorkItemList);
+        joinTemplate.joinQuery(planWorkItemList, new String[]{"workItem"});
 
         return planWorkItemList;
     }
@@ -112,7 +112,7 @@ public class PlanWorkItemServiceImpl implements PlanWorkItemService {
 
         List<PlanWorkItem> planWorkItemList = BeanMapper.mapList(pagination.getDataList(),PlanWorkItem.class);
 
-        joinTemplate.joinQuery(planWorkItemList);
+        joinTemplate.joinQuery(planWorkItemList, new String[]{"workItem"});
 
         return PaginationBuilder.build(pagination,planWorkItemList);
     }

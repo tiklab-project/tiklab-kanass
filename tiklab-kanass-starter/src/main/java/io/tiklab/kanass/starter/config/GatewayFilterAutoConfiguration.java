@@ -14,26 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GatewayFilterAutoConfiguration{
 
-    @Value("${soular.address:null}")
-    String EasAuthAddress;
-
-    @Value("${soular.embbed.enable:false}")
-    Boolean enableEam;
-//    @Bean
-//    GatewayConfig router(RouterConfig routerConfig){
-//        return RouterBuilder.newRouter(routerConfig);
-//    }
-
-//    //路由配置
-//    @Bean
-//    RouterConfig routerConfig(){
-//        String[] s = {};
-//
-//        return RouterConfigBuilder.instance()
-//                .preRoute(s, EasAuthAddress)
-//                .get();
-//    }
-
     //认证filter
     @Bean
     AuthorHandler authorFilter(Authenticator authenticator, IgnoreConfig ignoreConfig){

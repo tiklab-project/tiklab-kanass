@@ -168,7 +168,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         projectVersion.setEstimateTime(versionWorkTime.get("estimateTime"));
         projectVersion.setSurplusTime(versionWorkTime.get("surplusTime"));
 
-        joinTemplate.joinQuery(projectVersion);
+        joinTemplate.joinQuery(projectVersion, new String[]{"master", "builder", "versionState", "project"});
         return projectVersion;
     }
 
@@ -178,7 +178,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
 
         List<ProjectVersion> projectVersionList =  BeanMapper.mapList(projectVersionEntityList, ProjectVersion.class);
 
-        joinTemplate.joinQuery(projectVersionList);
+        joinTemplate.joinQuery(projectVersionList, new String[]{"master", "builder", "versionState", "project"});
 
         return projectVersionList;
     }
@@ -206,7 +206,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         }
         // 查找版本的事项数量
 
-        joinTemplate.joinQuery(projectVersionList);
+        joinTemplate.joinQuery(projectVersionList, new String[]{"master", "builder", "versionState", "project"});
 
         return projectVersionList;
     }
@@ -244,7 +244,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         }
         // 查找版本的事项数量
 
-        joinTemplate.joinQuery(projectVersionList);
+        joinTemplate.joinQuery(projectVersionList, new String[]{"master", "builder", "versionState", "project"});
 
         return PaginationBuilder.build(pagination, projectVersionList);
     }
@@ -260,7 +260,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         }
 
 
-        joinTemplate.joinQuery(projectVersionList);
+        joinTemplate.joinQuery(projectVersionList, new String[]{"master", "builder", "versionState", "project"});
 
         return projectVersionList;
     }
@@ -269,7 +269,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     public List<ProjectVersion> findSelectVersionList(ProjectVersionQuery projectVersionQuery) {
         List<ProjectVersionEntity> selectVersionList = projectVersionDao.findSelectVersionList(projectVersionQuery);
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(selectVersionList, ProjectVersion.class);
-        joinTemplate.joinQuery(projectVersionList);
+        joinTemplate.joinQuery(projectVersionList, new String[]{"master", "builder", "versionState", "project"});
         return projectVersionList;
     }
 
@@ -277,7 +277,7 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     public List<ProjectVersion> findWorkVersionList(@NotNull String workId){
         List<ProjectVersionEntity> projectVersionEntityList = projectVersionDao.findWorkVersionList(workId);
         List<ProjectVersion> projectVersionList = BeanMapper.mapList(projectVersionEntityList, ProjectVersion.class);
-        joinTemplate.joinQuery(projectVersionList);
+        joinTemplate.joinQuery(projectVersionList, new String[]{"master", "builder", "versionState", "project"});
         return projectVersionList;
     }
 

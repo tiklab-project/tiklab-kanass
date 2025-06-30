@@ -133,7 +133,7 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
     public StageWorkItem findStageWorkItem(@NotNull String id) {
         StageWorkItem stageWorkItem = findOne(id);
 
-        joinTemplate.joinQuery(stageWorkItem);
+        joinTemplate.joinQuery(stageWorkItem, new String[]{"workItem"});
 
         return stageWorkItem;
     }
@@ -144,7 +144,7 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
 
         List<StageWorkItem> stageWorkItemList =  BeanMapper.mapList(stageWorkItemEntityList,StageWorkItem.class);
 
-        joinTemplate.joinQuery(stageWorkItemList);
+        joinTemplate.joinQuery(stageWorkItemList, new String[]{"workItem"});
 
         return stageWorkItemList;
     }
@@ -155,7 +155,7 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
 
         List<StageWorkItem> stageWorkItemList = BeanMapper.mapList(stageWorkItemEntityList,StageWorkItem.class);
 
-        joinTemplate.joinQuery(stageWorkItemList);
+        joinTemplate.joinQuery(stageWorkItemList, new String[]{"workItem"});
 
         return stageWorkItemList;
     }
@@ -166,7 +166,7 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
 
         List<StageWorkItem> stageWorkItemList = BeanMapper.mapList(pagination.getDataList(),StageWorkItem.class);
 
-        joinTemplate.joinQuery(stageWorkItemList);
+        joinTemplate.joinQuery(stageWorkItemList, new String[]{"workItem"});
 
         return PaginationBuilder.build(pagination,stageWorkItemList);
     }
@@ -177,7 +177,7 @@ public class StageWorkItemServiceImpl implements StageWorkItemService {
 
         List<WorkItem> stageWorkItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
 
-        joinTemplate.joinQuery(stageWorkItemList);
+        joinTemplate.joinQuery(stageWorkItemList, new String[]{"workItem"});
 
         if(stageWorkItemList == null || stageWorkItemList.size() == 0){
             return stageWorkItemList;

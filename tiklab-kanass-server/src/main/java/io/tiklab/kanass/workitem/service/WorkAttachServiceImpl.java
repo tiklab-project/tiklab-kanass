@@ -75,7 +75,7 @@ public class WorkAttachServiceImpl implements WorkAttachService {
 
         WorkAttach workAttach = BeanMapper.map(workAttachEntity, WorkAttach.class);
 
-        joinTemplate.joinQuery(workAttach);
+        joinTemplate.joinQuery(workAttach, new String[]{"workItem"});
 
         return workAttach;
     }
@@ -86,7 +86,7 @@ public class WorkAttachServiceImpl implements WorkAttachService {
 
         List<WorkAttach> workAttachList = BeanMapper.mapList(workAttachEntityList,WorkAttach.class);
 
-        joinTemplate.joinQuery(workAttachList);
+        joinTemplate.joinQuery(workAttachList, new String[]{"workItem"});
 
         return workAttachList;
     }
@@ -97,7 +97,7 @@ public class WorkAttachServiceImpl implements WorkAttachService {
 
         List<WorkAttach> workAttachList = BeanMapper.mapList(workAttachEntityList,WorkAttach.class);
 
-        joinTemplate.joinQuery(workAttachList);
+        joinTemplate.joinQuery(workAttachList, new String[]{"workItem"});
 
         return workAttachList;
     }
@@ -109,7 +109,7 @@ public class WorkAttachServiceImpl implements WorkAttachService {
 
         List<WorkAttach> workAttachList = BeanMapper.mapList(pagination.getDataList(),WorkAttach.class);
 
-        joinTemplate.joinQuery(workAttachList);
+        joinTemplate.joinQuery(workAttachList, new String[]{"workItem"});
 
         return PaginationBuilder.build(pagination,workAttachList);
     }

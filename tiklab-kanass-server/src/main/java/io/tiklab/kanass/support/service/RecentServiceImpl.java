@@ -164,7 +164,7 @@ public class RecentServiceImpl implements RecentService {
     public Recent findRecent(@NotNull String id) {
         Recent recent = findOne(id);
 
-        joinTemplate.joinQuery(recent);
+        joinTemplate.joinQuery(recent, new String[]{"project", "projectType"});
 
         return recent;
     }
@@ -175,7 +175,7 @@ public class RecentServiceImpl implements RecentService {
 
         List<Recent> recentList =  BeanMapper.mapList(recentEntityList,Recent.class);
 
-        joinTemplate.joinQuery(recentList);
+        joinTemplate.joinQuery(recentList, new String[]{"project", "projectType"});
 
         return recentList;
     }
@@ -183,7 +183,7 @@ public class RecentServiceImpl implements RecentService {
     public List<Recent> findRecentList(RecentQuery recentQuery) {
         List<RecentEntity> recentEntityList = recentDao.findRecentList(recentQuery);
         List<Recent> recentList =  BeanMapper.mapList(recentEntityList,Recent.class);
-        joinTemplate.joinQuery(recentList);
+        joinTemplate.joinQuery(recentList, new String[]{"project", "projectType"});
 
         return recentList;
     }
@@ -265,7 +265,7 @@ public class RecentServiceImpl implements RecentService {
 
         List<Recent> recentList = BeanMapper.mapList(pagination.getDataList(),Recent.class);
 
-        joinTemplate.joinQuery(recentList);
+        joinTemplate.joinQuery(recentList, new String[]{"project", "projectType"});
 
         return PaginationBuilder.build(pagination,recentList);
     }

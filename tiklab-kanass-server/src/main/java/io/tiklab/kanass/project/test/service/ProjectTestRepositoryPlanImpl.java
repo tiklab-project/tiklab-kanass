@@ -77,7 +77,7 @@ public class ProjectTestRepositoryPlanImpl implements ProjectTestRepositoryPlanS
     @Override
     public ProjectTestRepositoryPlan findProjectTestRepositoryPlan(String id) {
         ProjectTestRepositoryPlan one = findOne(id);
-        joinTemplate.joinQuery(one);
+        joinTemplate.joinQuery(one, new String[]{"testRepository", "project", "testPlan"});
         return one;
     }
 
@@ -112,7 +112,7 @@ public class ProjectTestRepositoryPlanImpl implements ProjectTestRepositoryPlanS
         List<ProjectTestRepositoryPlanEntity> allProjectTestRepositoryPlan = projectTestRepositoryPlanDao.findAllProjectTestRepositoryPlan();
         List<ProjectTestRepositoryPlan> projectTestRepositoryPlans = BeanMapper.mapList(allProjectTestRepositoryPlan, ProjectTestRepositoryPlan.class);
 
-        joinTemplate.joinQuery(projectTestRepositoryPlans);
+        joinTemplate.joinQuery(projectTestRepositoryPlans, new String[]{"testRepository", "project", "testPlan"});
         return projectTestRepositoryPlans;
     }
 

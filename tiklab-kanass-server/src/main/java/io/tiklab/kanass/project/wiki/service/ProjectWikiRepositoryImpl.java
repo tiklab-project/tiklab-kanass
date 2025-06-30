@@ -103,7 +103,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
     public ProjectWikiRepository findProjectWikiRepository(@NotNull String id) {
         ProjectWikiRepository projectWikiRepository = findOne(id);
 
-        joinTemplate.joinQuery(projectWikiRepository);
+        joinTemplate.joinQuery(projectWikiRepository, new String[]{"wikiRepository", "project"});
 
         return projectWikiRepository;
     }
@@ -114,7 +114,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
 
         List<ProjectWikiRepository> projectWikiRepositoryList =  BeanMapper.mapList(projectWikiRepositoryEntityList,ProjectWikiRepository.class);
 
-        joinTemplate.joinQuery(projectWikiRepositoryList);
+        joinTemplate.joinQuery(projectWikiRepositoryList, new String[]{"wikiRepository", "project"});
 
         return projectWikiRepositoryList;
     }
@@ -144,7 +144,7 @@ public class ProjectWikiRepositoryImpl implements ProjectWikiRepositoryService {
 
         List<ProjectWikiRepository> projectWikiRepositoryList = BeanMapper.mapList(pagination.getDataList(),ProjectWikiRepository.class);
 
-        joinTemplate.joinQuery(projectWikiRepositoryList);
+        joinTemplate.joinQuery(projectWikiRepositoryList, new String[]{"wikiRepository", "project"});
 
         return PaginationBuilder.build(pagination,projectWikiRepositoryList);
     }

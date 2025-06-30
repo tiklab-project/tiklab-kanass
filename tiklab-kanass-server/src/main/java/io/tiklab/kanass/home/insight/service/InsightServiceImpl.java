@@ -92,7 +92,7 @@ public class InsightServiceImpl implements InsightService {
     public Insight findInsight(@NotNull String id) {
         Insight insight = findOne(id);
 
-        joinTemplate.joinQuery(insight);
+        joinTemplate.joinQuery(insight, new String[]{"master"});
 
         return insight;
     }
@@ -107,7 +107,7 @@ public class InsightServiceImpl implements InsightService {
 
         List<Insight> insightList =  BeanMapper.mapList(insightEntityList,Insight.class);
 
-        joinTemplate.joinQuery(insightList);
+        joinTemplate.joinQuery(insightList, new String[]{"master"});
 
         return insightList;
     }
@@ -123,7 +123,7 @@ public class InsightServiceImpl implements InsightService {
 
         List<Insight> insightList = BeanMapper.mapList(insightEntityList,Insight.class);
 
-        joinTemplate.joinQuery(insightList);
+        joinTemplate.joinQuery(insightList, new String[]{"master"});
 
         return insightList;
     }
@@ -139,7 +139,7 @@ public class InsightServiceImpl implements InsightService {
 
         List<Insight> insightList = BeanMapper.mapList(pagination.getDataList(),Insight.class);
 
-        joinTemplate.joinQuery(insightList);
+        joinTemplate.joinQuery(insightList, new String[]{"master"});
 
         return PaginationBuilder.build(pagination,insightList);
     }
@@ -157,7 +157,7 @@ public class InsightServiceImpl implements InsightService {
 
         List<Insight> insightList = BeanMapper.mapList(recentInsightList,Insight.class);
 
-        joinTemplate.joinQuery(insightList);// 关联查询
+        joinTemplate.joinQuery(insightList, new String[]{"master"});// 关联查询
 
         return insightList;
     }
@@ -175,7 +175,7 @@ public class InsightServiceImpl implements InsightService {
 
         List<Insight> insightList = BeanMapper.mapList(recentInsightList,Insight.class);
 
-        joinTemplate.joinQuery(insightList);
+        joinTemplate.joinQuery(insightList, new String[]{"master"});
 
         return insightList;
     }

@@ -10,7 +10,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
 
 /**
@@ -43,28 +43,28 @@ public class Sprint extends BaseModel {
     @Mappings({
             @Mapping(source = "master.id",target = "master")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User master;
 
     @ApiProperty(name="builder",desc="创建人")
     @Mappings({
             @Mapping(source = "builder.id",target = "builder")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User builder;
 
     @ApiProperty(name="project",desc="所属项目",eg="@selectOne")
     @Mappings({
             @Mapping(source = "project.id",target = "projectId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     @ApiProperty(name="sprintState",desc="迭代状态")
     @Mappings({
             @Mapping(source = "sprintState.id",target = "sprintStateId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private SprintState sprintState;
 
     @ApiProperty(name="startTime",desc="开始时间")

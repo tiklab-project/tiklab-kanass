@@ -68,7 +68,7 @@ public class AppraisedServiceImpl implements AppraisedService{
     public Appraised findAppraised(String id) {
         Appraised appraised = findOne(id);
 
-        joinTemplate.joinQuery(appraised);
+        joinTemplate.joinQuery(appraised, new String[]{"master", "builder", "project"});
         return appraised;
     }
 
@@ -76,7 +76,7 @@ public class AppraisedServiceImpl implements AppraisedService{
     public List<Appraised> findAllAppraised() {
         List<AppraisedEntity> allAppraised = appraisedDao.findAllAppraised();
         List<Appraised> appraiseds = BeanMapper.mapList(allAppraised, Appraised.class);
-        joinTemplate.joinQuery(appraiseds);
+        joinTemplate.joinQuery(appraiseds, new String[]{"master", "builder", "project"});
         return appraiseds;
     }
 
@@ -86,7 +86,7 @@ public class AppraisedServiceImpl implements AppraisedService{
 
         List<Appraised> mapList = BeanMapper.mapList(appraisedList, Appraised.class);
 
-        joinTemplate.joinQuery(mapList);
+        joinTemplate.joinQuery(mapList, new String[]{"master", "builder", "project"});
         return mapList;
     }
 
@@ -95,7 +95,7 @@ public class AppraisedServiceImpl implements AppraisedService{
         Pagination<AppraisedEntity> appraisedPage = appraisedDao.findAppraisedPage(appraisedQuery);
         List<Appraised> mapList = BeanMapper.mapList(appraisedPage.getDataList(), Appraised.class);
 
-        joinTemplate.joinQuery(mapList);
+        joinTemplate.joinQuery(mapList, new String[]{"master", "builder", "project"});
         return PaginationBuilder.build(appraisedPage, mapList);
     }
 }

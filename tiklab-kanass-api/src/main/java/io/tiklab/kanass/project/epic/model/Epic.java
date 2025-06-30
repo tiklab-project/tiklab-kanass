@@ -9,7 +9,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class Epic extends BaseModel{
     @Mappings({
             @Mapping(source = "parentEpic.id",target = "parentId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Epic parentEpic;
 
     @ApiProperty(name="children",desc="下级史诗列表")
@@ -54,7 +54,7 @@ public class Epic extends BaseModel{
     @Mappings({
             @Mapping(source = "master.id",target = "master")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User master;
 
     @ApiProperty(name="project",desc="所属项目",eg="@selectOne")
@@ -62,7 +62,7 @@ public class Epic extends BaseModel{
             @Mapping(source = "project.id",target = "projectId")
     })
 
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     @ApiProperty(name="startTime",desc="startTime")

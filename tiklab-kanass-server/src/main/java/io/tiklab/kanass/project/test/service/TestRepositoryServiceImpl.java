@@ -74,7 +74,7 @@ public class TestRepositoryServiceImpl implements TestRepositoryService {
         List<Repository> list = httpRequestUtil.requestPostList(httpHeaders, systemUrl + "/api/repository/findList", idList, Repository.class);
 
 //        List<Repository> list = repositoryServiceRpc().findList(idList);
-        joinTemplate.joinQuery(list);
+        joinTemplate.joinQuery(list, new String[]{"user"});
         List<TestRepository> testRepositoryList = new ArrayList<>();
         for (Repository repository : list) {
             if (repository == null){

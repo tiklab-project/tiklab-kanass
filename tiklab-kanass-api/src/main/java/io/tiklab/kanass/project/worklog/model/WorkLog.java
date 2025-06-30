@@ -9,7 +9,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.user.user.model.User;
 
@@ -31,7 +31,7 @@ public class WorkLog extends BaseModel {
     @Mappings({
             @Mapping(source = "workItem.id",target = "workItemId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WorkItem workItem;
 
 
@@ -39,14 +39,14 @@ public class WorkLog extends BaseModel {
     @Mappings({
             @Mapping(source = "project.id",target = "projectId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     @ApiProperty(name="user",desc="记录人")
     @Mappings({
             @Mapping(source = "user.id",target = "worker")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User user;
 
     @ApiProperty(name="workDate",desc="日志记录日期")

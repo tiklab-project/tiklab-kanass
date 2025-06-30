@@ -71,7 +71,7 @@ public class WorkRelateServiceImpl implements WorkRelateService {
 
         WorkRelate workRelate = BeanMapper.map(workRelateEntity, WorkRelate.class);
 
-        joinTemplate.joinQuery(workRelate);
+        joinTemplate.joinQuery(workRelate, new String[]{"workItem", "relateWorkItem"});
 
         return workRelate;
     }
@@ -82,7 +82,7 @@ public class WorkRelateServiceImpl implements WorkRelateService {
 
         List<WorkRelate> workRelateList =  BeanMapper.mapList(workRelateEntityList,WorkRelate.class);
 
-        joinTemplate.joinQuery(workRelateList);
+        joinTemplate.joinQuery(workRelateList, new String[]{"workItem", "relateWorkItem"});
 
         return workRelateList;
     }
@@ -115,7 +115,7 @@ public class WorkRelateServiceImpl implements WorkRelateService {
 
         List<WorkRelate> workRelateList = BeanMapper.mapList(pagination.getDataList(),WorkRelate.class);
 
-        joinTemplate.joinQuery(workRelateList);
+        joinTemplate.joinQuery(workRelateList, new String[]{"workItem", "relateWorkItem"});
 
         return PaginationBuilder.build(pagination,workRelateList);
 

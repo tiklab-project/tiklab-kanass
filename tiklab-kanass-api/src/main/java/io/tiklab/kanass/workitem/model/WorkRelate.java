@@ -8,7 +8,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -29,7 +29,7 @@ public class WorkRelate extends BaseModel {
     @Mappings({
             @Mapping(source = "workItem.id",target = "workItemId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WorkItem workItem;
 
     @NotNull
@@ -37,7 +37,7 @@ public class WorkRelate extends BaseModel {
     @Mappings({
             @Mapping(source = "relateWorkItem.id",target = "relateItemId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WorkItem relateWorkItem;
 
     @ApiProperty(name="createTime",desc="关联关系创建时间")

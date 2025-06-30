@@ -9,7 +9,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
 
 import javax.validation.constraints.NotNull;
@@ -35,14 +35,14 @@ public class Plan extends BaseModel{
     @Mappings({
             @Mapping(source = "project.id",target = "projectId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     @ApiProperty(name="parentPlan",desc="上级计划")
     @Mappings({
             @Mapping(source = "parentPlan.id",target = "parentId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Plan parentPlan;
 
     @ApiProperty(name="startTime",desc="计划开始时间")
@@ -55,7 +55,7 @@ public class Plan extends BaseModel{
     @Mappings({
             @Mapping(source = "master.id",target = "master")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User master;
 
     @ApiProperty(name="children",desc="下级计划列表")

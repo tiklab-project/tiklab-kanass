@@ -305,7 +305,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
     public WorkTypeDm findWorkTypeDm(@NotNull String id) {
         WorkTypeDm workTypeDm = findOne(id);
 
-        joinTemplate.joinQuery(workTypeDm);
+        joinTemplate.joinQuery(workTypeDm, new String[]{"workType", "flow", "form"});
 
         return workTypeDm;
     }
@@ -316,7 +316,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         List<WorkTypeDm> workTypeDmList =  BeanMapper.mapList(workTypeDmEntityList, WorkTypeDm.class);
 
-        joinTemplate.joinQuery(workTypeDmList);
+        joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
         return workTypeDmList;
     }
@@ -329,7 +329,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(WorkTypeDmEntity::getWorkTypeId))), ArrayList::new));
         List<WorkTypeDm> workTypeDmList = BeanMapper.mapList(collect,WorkTypeDm.class);
 
-        joinTemplate.joinQuery(workTypeDmList);
+        joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
         return workTypeDmList;
     }
@@ -342,7 +342,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 //                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(WorkTypeDmEntity::getWorkTypeId))), ArrayList::new));
         List<WorkTypeDm> workTypeDmList = BeanMapper.mapList(workTypeDmEntityList,WorkTypeDm.class);
 
-        joinTemplate.joinQuery(workTypeDmList);
+        joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
         return workTypeDmList;
     }
@@ -353,7 +353,7 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         List<WorkTypeDm> workTypeDmList = BeanMapper.mapList(pagination.getDataList(),WorkTypeDm.class);
 
-        joinTemplate.joinQuery(workTypeDmList);
+        joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
         return PaginationBuilder.build(pagination,workTypeDmList);
     }

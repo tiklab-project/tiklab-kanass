@@ -203,7 +203,7 @@ public class StageServiceImpl implements StageService {
     public Stage findStage(@NotNull String id) {
         Stage stage = findOne(id);
 
-        joinTemplate.joinQuery(stage);
+        joinTemplate.joinQuery(stage, new String[]{"parentStage", "project", "master"});
 
         return stage;
     }
@@ -214,7 +214,7 @@ public class StageServiceImpl implements StageService {
 
         List<Stage> stageList =  BeanMapper.mapList(stageEntityList,Stage.class);
 
-        joinTemplate.joinQuery(stageList);
+        joinTemplate.joinQuery(stageList, new String[]{"parentStage", "project", "master"});
 
         return stageList;
     }
@@ -225,7 +225,7 @@ public class StageServiceImpl implements StageService {
 
         List<Stage> stageList = BeanMapper.mapList(stageEntityList,Stage.class);
 
-        joinTemplate.joinQuery(stageList);
+        joinTemplate.joinQuery(stageList, new String[]{"parentStage", "project", "master"});
 
         return stageList;
     }
@@ -237,7 +237,7 @@ public class StageServiceImpl implements StageService {
 
         List<Stage> stageList = BeanMapper.mapList(pagination.getDataList(),Stage.class);
 
-        joinTemplate.joinQuery(stageList);
+        joinTemplate.joinQuery(stageList, new String[]{"parentStage", "project", "master"});
 
         return PaginationBuilder.build(pagination,stageList);
     }

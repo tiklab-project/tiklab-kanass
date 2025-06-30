@@ -8,7 +8,7 @@ import io.tiklab.toolkit.beans.annotation.Mapper;
 import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
 
 import java.util.Date;
@@ -35,7 +35,7 @@ public class RepositoryTestPlan extends BaseModel {
     @Mappings({
         @Mapping(source = "principal.id",target = "principal")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User principal;
     @ApiProperty (name="repository",desc="所属仓库") 
     private String repositoryId;

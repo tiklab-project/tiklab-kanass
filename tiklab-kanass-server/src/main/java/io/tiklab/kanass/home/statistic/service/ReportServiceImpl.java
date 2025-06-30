@@ -77,7 +77,7 @@ public class ReportServiceImpl implements ReportService {
     public Report findReport(@NotNull String id) {
         Report report = findOne(id);
 
-        joinTemplate.joinQuery(report);
+        joinTemplate.joinQuery(report, new String[]{"creater"});
 
         return report;
     }
@@ -88,7 +88,7 @@ public class ReportServiceImpl implements ReportService {
 
         List<Report> reportList =  BeanMapper.mapList(reportEntityList,Report.class);
 
-        joinTemplate.joinQuery(reportList);
+        joinTemplate.joinQuery(reportList, new String[]{"creater"});
 
         return reportList;
     }
@@ -99,7 +99,7 @@ public class ReportServiceImpl implements ReportService {
 
         List<Report> reportList = BeanMapper.mapList(reportEntityList,Report.class);
 
-        joinTemplate.joinQuery(reportList);
+        joinTemplate.joinQuery(reportList, new String[]{"creater"});
 
         return reportList;
     }
@@ -110,7 +110,7 @@ public class ReportServiceImpl implements ReportService {
 
         List<Report> reportList = BeanMapper.mapList(pagination.getDataList(),Report.class);
 
-        joinTemplate.joinQuery(reportList);
+        joinTemplate.joinQuery(reportList, new String[]{"creater"});
 
         return PaginationBuilder.build(pagination,reportList);
     }

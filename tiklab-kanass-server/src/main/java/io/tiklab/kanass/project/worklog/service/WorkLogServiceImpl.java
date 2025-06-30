@@ -86,7 +86,7 @@ public class WorkLogServiceImpl implements WorkLogService {
 
         WorkLog workLog = BeanMapper.map(workLogEntity, WorkLog.class);
 
-        joinTemplate.joinQuery(workLog);
+        joinTemplate.joinQuery(workLog, new String[]{"workItem", "project", "user"});
 
         return workLog;
     }
@@ -97,7 +97,7 @@ public class WorkLogServiceImpl implements WorkLogService {
 
         List<WorkLog> workLogList = BeanMapper.mapList(workLogEntityList,WorkLog.class);
 
-        joinTemplate.joinQuery(workLogList);
+        joinTemplate.joinQuery(workLogList, new String[]{"workItem", "project", "user"});
 
         return workLogList;
     }
@@ -108,7 +108,7 @@ public class WorkLogServiceImpl implements WorkLogService {
 
         List<WorkLog> workLogList = BeanMapper.mapList(workLogEntityList,WorkLog.class);
 
-        joinTemplate.joinQuery(workLogList);
+        joinTemplate.joinQuery(workLogList, new String[]{"workItem", "project", "user"});
 
         return workLogList;
     }
@@ -119,7 +119,7 @@ public class WorkLogServiceImpl implements WorkLogService {
         Pagination<WorkLogEntity> pagination = workLogDao.findWorkLogPage(workLogQuery);
 
         List<WorkLog> workLogList = BeanMapper.mapList(pagination.getDataList(),WorkLog.class);
-        joinTemplate.joinQuery(workLogList);
+        joinTemplate.joinQuery(workLogList, new String[]{"workItem", "project", "user"});
         // 获取日志的事项详情
         List<String> workItemIds = workLogList.stream().map(workLog -> workLog.getWorkItem().getId()).collect(Collectors.toList());
         WorkItemQuery workItemQuery = new WorkItemQuery();

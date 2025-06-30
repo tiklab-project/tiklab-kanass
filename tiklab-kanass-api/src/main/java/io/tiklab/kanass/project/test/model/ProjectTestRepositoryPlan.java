@@ -7,7 +7,7 @@ import io.tiklab.toolkit.beans.annotation.Mapper;
 import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 
 import javax.validation.constraints.NotNull;
 
@@ -22,7 +22,7 @@ public class ProjectTestRepositoryPlan {
     @Mappings({
             @Mapping(source = "testRepository.id",target = "testRepositoryId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private TestRepository testRepository;
 
     @ApiProperty(name="testRepositoryId",desc="所属仓库ID")
@@ -33,7 +33,7 @@ public class ProjectTestRepositoryPlan {
     @Mappings({
             @Mapping(source = "project.id",target = "projectId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     @ApiProperty(name="projectId",desc="所属项目ID")
@@ -44,7 +44,7 @@ public class ProjectTestRepositoryPlan {
     @Mappings({
             @Mapping(source = "testPlan.id",target = "planId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private TestPlan testPlan;
 
     @ApiProperty(name="planId",desc="所属测试计划ID")

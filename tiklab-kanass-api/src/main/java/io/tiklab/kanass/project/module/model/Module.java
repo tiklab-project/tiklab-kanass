@@ -7,7 +7,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.kanass.project.project.model.Project;
 
 import javax.validation.constraints.NotNull;
@@ -32,7 +32,7 @@ public class Module extends BaseModel {
     @Mappings({
             @Mapping(source = "parent.id",target = "parentId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Module parent;
 
     @ApiProperty(name="children",desc="下级事项列表")
@@ -48,7 +48,7 @@ public class Module extends BaseModel {
     @Mappings({
             @Mapping(source = "project.id",target = "projectId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     public java.lang.String getId() {

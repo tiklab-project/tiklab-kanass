@@ -80,7 +80,7 @@ public class WorkCommentServiceImpl implements WorkCommentService {
     public WorkComment findWorkComment(@NotNull String id) {
         WorkComment workComment = findOne(id);
 
-        joinTemplate.joinQuery(workComment);
+        joinTemplate.joinQuery(workComment, new String[]{"workItem", "user"});
 
         return workComment;
     }
@@ -91,7 +91,7 @@ public class WorkCommentServiceImpl implements WorkCommentService {
 
         List<WorkComment> workCommentList =  BeanMapper.mapList(workCommentEntityList,WorkComment.class);
 
-        joinTemplate.joinQuery(workCommentList);
+        joinTemplate.joinQuery(workCommentList, new String[]{"workItem", "user"});
 
         return workCommentList;
     }
@@ -102,7 +102,7 @@ public class WorkCommentServiceImpl implements WorkCommentService {
 
         List<WorkComment> workCommentList = BeanMapper.mapList(workCommentEntityList,WorkComment.class);
 
-        joinTemplate.joinQuery(workCommentList);
+        joinTemplate.joinQuery(workCommentList, new String[]{"workItem", "user"});
 
         return workCommentList;
     }
@@ -113,7 +113,7 @@ public class WorkCommentServiceImpl implements WorkCommentService {
 
         List<WorkComment> workCommentList = BeanMapper.mapList(pagination.getDataList(),WorkComment.class);
 
-        joinTemplate.joinQuery(workCommentList);
+        joinTemplate.joinQuery(workCommentList, new String[]{"workItem", "user"});
 
         return PaginationBuilder.build(pagination,workCommentList);
     }

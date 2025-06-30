@@ -67,7 +67,7 @@ public class MilestoneServiceImpl implements MilestoneService {
     public Milestone findMilestone(@NotNull String id) {
         Milestone milestone = findOne(id);
 
-        joinTemplate.joinQuery(milestone);
+        joinTemplate.joinQuery(milestone, new String[]{"master", "project"});
 
         return milestone;
     }
@@ -78,7 +78,7 @@ public class MilestoneServiceImpl implements MilestoneService {
 
         List<Milestone> milestoneList =  BeanMapper.mapList(milestoneEntityList,Milestone.class);
 
-        joinTemplate.joinQuery(milestoneList);
+        joinTemplate.joinQuery(milestoneList, new String[]{"master", "project"});
 
         return milestoneList;
     }
@@ -89,7 +89,7 @@ public class MilestoneServiceImpl implements MilestoneService {
 
         List<Milestone> milestoneList = BeanMapper.mapList(milestoneEntityList,Milestone.class);
 
-        joinTemplate.joinQuery(milestoneList);
+        joinTemplate.joinQuery(milestoneList, new String[]{"master", "project"});
 
         return milestoneList;
     }
@@ -100,7 +100,7 @@ public class MilestoneServiceImpl implements MilestoneService {
 
         List<Milestone> milestoneList = BeanMapper.mapList(pagination.getDataList(),Milestone.class);
 
-        joinTemplate.joinQuery(milestoneList);
+        joinTemplate.joinQuery(milestoneList, new String[]{"master", "project"});
 
         return PaginationBuilder.build(pagination,milestoneList);
     }

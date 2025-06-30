@@ -7,7 +7,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -34,7 +34,7 @@ public class TestCase extends BaseModel{
     @Mappings({
             @Mapping(source = "category.id",target = "categoryId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Category category;
 
 
@@ -45,7 +45,7 @@ public class TestCase extends BaseModel{
     @Mappings({
             @Mapping(source = "repository.id",target = "repositoryId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Repository repository;
 
     @NotNull
@@ -60,14 +60,14 @@ public class TestCase extends BaseModel{
     @Mappings({
             @Mapping(source = "createUser.id",target = "createUser")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User createUser;
 
     @ApiProperty(name="updateUser",desc="更新人")
     @Mappings({
             @Mapping(source = "updateUser.id",target = "updateUser")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User updateUser;
 
     @ApiProperty(name="createTime",desc="创建时间")
@@ -88,7 +88,7 @@ public class TestCase extends BaseModel{
     @Mappings({
             @Mapping(source = "director.id",target = "director")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User director;
 
     @ApiProperty(name="status",desc="状态")

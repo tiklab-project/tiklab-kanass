@@ -133,7 +133,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
     @Override
     public List<Sprint> statManageSprint(String projectId) {
         List<Sprint> list =  workItemStatDao.statManageSprint(projectId);
-        joinTemplate.joinQuery(list);
+        joinTemplate.joinQuery(list, new String[]{"master", "builder", "project", "sprintState"});
         return list;
     }
 
@@ -141,14 +141,14 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
     public List<Sprint> statProjectManageSprint(String masterId, String projectId) {
 
         List<Sprint> list =  workItemStatDao.statProjectManageSprint(masterId, projectId);
-        joinTemplate.joinQuery(list);
+        joinTemplate.joinQuery(list, new String[]{"master", "builder", "project", "sprintState"});
         return list;
     }
 
     @Override
     public List<WorkItem> statSprintProcessWorkItem(String masterId, String sprintId) {
         List<WorkItem> list =  workItemStatDao.statSprintProcessWorkItem(masterId, sprintId);
-        joinTemplate.joinQuery(list);
+        joinTemplate.joinQuery(list, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
         return list;
     }
 
@@ -165,7 +165,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
 
         List<WorkItem> workItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
 
-        joinTemplate.joinQuery(workItemList);
+        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
 
         return workItemList;
     }
@@ -176,7 +176,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
 
         List<WorkItem> workItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
 
-        joinTemplate.joinQuery(workItemList);
+        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
 
         return workItemList;
     }
@@ -187,7 +187,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
 
         List<WorkItem> workItemList = BeanMapper.mapList(workItemEntityList,WorkItem.class);
 
-        joinTemplate.joinQuery(workItemList);
+        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
 
         return workItemList;
     }
@@ -199,7 +199,7 @@ public class WorkItemStatServiceImpl implements WorkItemStatService {
 
         List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
 
-        joinTemplate.joinQuery(workItemList);
+        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
 
         return PaginationBuilder.build(pagination,workItemList);
     }

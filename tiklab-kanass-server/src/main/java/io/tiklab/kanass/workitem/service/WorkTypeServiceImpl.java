@@ -179,7 +179,7 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     public WorkType findWorkType(@NotNull String id) {
         WorkType workType = findOne(id);
 
-        joinTemplate.joinQuery(workType);
+        joinTemplate.joinQuery(workType, new String[]{"flow", "form"});
         return workType;
     }
 
@@ -191,7 +191,7 @@ public class WorkTypeServiceImpl implements WorkTypeService {
 
         List<WorkType> workTypeList = BeanMapper.mapList(workTypeEntityList,WorkType.class);
 
-        joinTemplate.joinQuery(workTypeList);
+        joinTemplate.joinQuery(workTypeList, new String[]{"flow", "form"});
         return workTypeList;
     }
 
@@ -209,7 +209,7 @@ public class WorkTypeServiceImpl implements WorkTypeService {
             workType.setUseNumber(size);
         }
 
-        joinTemplate.joinQuery(workTypeList);
+        joinTemplate.joinQuery(workTypeList, new String[]{"flow", "form"});
         return workTypeList;
     }
 
@@ -222,7 +222,7 @@ public class WorkTypeServiceImpl implements WorkTypeService {
 
         List<WorkType> workTypeList = BeanMapper.mapList(pagination.getDataList(),WorkType.class);
 
-        joinTemplate.joinQuery(workTypeList);
+        joinTemplate.joinQuery(workTypeList, new String[]{"flow", "form"});
 
         return PaginationBuilder.build(pagination,workTypeList);
     }

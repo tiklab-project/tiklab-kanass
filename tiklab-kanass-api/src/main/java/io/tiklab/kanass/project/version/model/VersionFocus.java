@@ -4,7 +4,7 @@ import io.tiklab.toolkit.beans.annotation.Mapper;
 import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 
@@ -27,7 +27,7 @@ public class VersionFocus extends BaseModel {
     @Mappings({
             @Mapping(source = "version.id",target = "versionId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private ProjectVersion version;
 
     @ApiProperty(name="masterId",desc="迭代创建人")

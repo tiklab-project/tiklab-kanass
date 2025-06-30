@@ -68,7 +68,7 @@ public class ModuleServiceImpl implements ModuleService {
     public Module findModule(@NotNull String id) {
         Module module = findOne(id);
 
-        joinTemplate.joinQuery(module);
+        joinTemplate.joinQuery(module, new String[]{"parent", "project"});
         return module;
     }
 
@@ -78,7 +78,7 @@ public class ModuleServiceImpl implements ModuleService {
 
         List<Module> moduleList = BeanMapper.mapList(moduleEntityList,Module.class);
         for(Module module:moduleList){
-            joinTemplate.joinQuery(module);
+            joinTemplate.joinQuery(module, new String[]{"parent", "project"});
         }
         return moduleList;
     }
@@ -89,7 +89,7 @@ public class ModuleServiceImpl implements ModuleService {
 
         List<Module> moduleList = BeanMapper.mapList(moduleEntityList,Module.class);
         for(Module module:moduleList){
-            joinTemplate.joinQuery(module);
+            joinTemplate.joinQuery(module, new String[]{"parent", "project"});
         }
         return moduleList;
     }
@@ -115,7 +115,7 @@ public class ModuleServiceImpl implements ModuleService {
                 ).collect(Collectors.toList());
 
         List<Module> moduleList = BeanMapper.mapList(moduleEntityList,Module.class);
-        joinTemplate.joinQuery(moduleList);
+        joinTemplate.joinQuery(moduleList, new String[]{"parent", "project"});
         return moduleList;
     }
 
@@ -135,7 +135,7 @@ public class ModuleServiceImpl implements ModuleService {
         //遍历 moduleList 中的每个模块对象，调用 joinTemplate.joinQuery(module) 方法对其进行额外的关联查询或处理
         for(Module module:moduleList){
             // 调用 joinTemplate.joinQuery(module) 方法对 module 进行关联查询或处理
-            joinTemplate.joinQuery(module);
+            joinTemplate.joinQuery(module, new String[]{"parent", "project"});
         }
         return rootModuleList;
     }
@@ -163,7 +163,7 @@ public class ModuleServiceImpl implements ModuleService {
 
         List<Module> moduleList = BeanMapper.mapList(pagination.getDataList(),Module.class);
 
-        joinTemplate.joinQuery(moduleList);
+        joinTemplate.joinQuery(moduleList, new String[]{"parent", "project"});
 
         return PaginationBuilder.build(pagination,moduleList);
     }

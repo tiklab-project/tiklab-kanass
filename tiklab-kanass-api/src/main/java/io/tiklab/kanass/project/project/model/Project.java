@@ -5,7 +5,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.kanass.sprint.model.Sprint;
@@ -66,7 +66,7 @@ public class Project extends BaseModel{
     @Mappings({
             @Mapping(source = "projectType.id",target = "projectTypeId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private ProjectType projectType;
 
     /**
@@ -76,7 +76,7 @@ public class Project extends BaseModel{
     @Mappings({
             @Mapping(source = "master.id",target = "master")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User master;
 
     /**

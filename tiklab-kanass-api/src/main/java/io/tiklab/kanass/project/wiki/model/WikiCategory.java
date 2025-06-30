@@ -6,7 +6,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.user.user.model.User;
@@ -42,21 +42,21 @@ public class WikiCategory extends BaseModel{
     @Mappings({
             @Mapping(source = "wikiRepository.id",target = "repositoryId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WikiRepository wikiRepository;
 
     @ApiProperty(name="master",desc="负责人",eg="@selectOne")
     @Mappings({
             @Mapping(source = "master.id",target = "master")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User master;
 
     @ApiProperty(name="parentWikiCategory",desc="上级分类",eg="@selectOne")
     @Mappings({
             @Mapping(source = "parentWikiCategory.id",target = "parentCategoryId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WikiCategory parentWikiCategory;
 
     @ApiProperty(name="sort",desc="sort")

@@ -9,7 +9,7 @@ import io.tiklab.toolkit.beans.annotation.Mapper;
 import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class AppraisedWorkItem {
     @Mappings({
             @Mapping(source = "appraised.id", target = "appraisedId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Appraised appraised;
 
     // 多个事项ID
@@ -37,7 +37,7 @@ public class AppraisedWorkItem {
     @Mappings({
             @Mapping(source = "workItem.id", target = "workItemId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private WorkItem workItem;
 
     // 0未评审 1通过 2未通过 3建议

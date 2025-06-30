@@ -88,7 +88,7 @@ public class VersionFocusServiceImpl implements VersionFocusService {
     public VersionFocus findVersionFocus(@NotNull String id) {
         VersionFocus versionFocus = findOne(id);
 
-        joinTemplate.joinQuery(versionFocus);
+        joinTemplate.joinQuery(versionFocus, new String[]{"version"});
 
         return versionFocus;
     }
@@ -99,7 +99,7 @@ public class VersionFocusServiceImpl implements VersionFocusService {
 
         List<VersionFocus> versionFocusList =  BeanMapper.mapList(versionFocusEntityList,VersionFocus.class);
 
-        joinTemplate.joinQuery(versionFocusList);
+        joinTemplate.joinQuery(versionFocusList, new String[]{"version"});
 
         return versionFocusList;
     }
@@ -110,7 +110,7 @@ public class VersionFocusServiceImpl implements VersionFocusService {
 
         List<VersionFocus> versionFocusList = BeanMapper.mapList(versionFocusEntityList,VersionFocus.class);
 
-        joinTemplate.joinQuery(versionFocusList);
+        joinTemplate.joinQuery(versionFocusList, new String[]{"version"});
 
         return versionFocusList;
     }
@@ -121,7 +121,7 @@ public class VersionFocusServiceImpl implements VersionFocusService {
 
         List<VersionFocus> versionFocusList = BeanMapper.mapList(pagination.getDataList(),VersionFocus.class);
 
-        joinTemplate.joinQuery(versionFocusList);
+        joinTemplate.joinQuery(versionFocusList, new String[]{"version"});
 
         return PaginationBuilder.build(pagination,versionFocusList);
     }

@@ -73,7 +73,7 @@ public class AppraisedWorkItemServiceImpl implements AppraisedWorkItemService{
     public AppraisedWorkItem findAppraisedWorkItem(String id) {
         AppraisedWorkItem one = findOne(id);
 
-        joinTemplate.joinQuery(one);
+        joinTemplate.joinQuery(one, new String[]{"appraised", "workItem"});
         return one;
     }
 
@@ -87,7 +87,7 @@ public class AppraisedWorkItemServiceImpl implements AppraisedWorkItemService{
     @Override
     public List<AppraisedWorkItem> findAppraisedWorkItemList(List<String> idList) {
         List<AppraisedWorkItem> list = findList(idList);
-        joinTemplate.joinQuery(list);
+        joinTemplate.joinQuery(list, new String[]{"appraised", "workItem"});
         return list;
     }
 
@@ -102,7 +102,7 @@ public class AppraisedWorkItemServiceImpl implements AppraisedWorkItemService{
     public List<AppraisedWorkItem> findAppraisedWorkItemList(AppraisedWorkItemQuery appraisedWorkItemQuery) {
         List<AppraisedWorkItemEntity> appraisedList = appraisedWorkItemDao.findAppraisedList(appraisedWorkItemQuery);
         List<AppraisedWorkItem> items = BeanMapper.mapList(appraisedList, AppraisedWorkItem.class);
-        joinTemplate.joinQuery(items);
+        joinTemplate.joinQuery(items, new String[]{"appraised", "workItem"});
         return items;
     }
 
@@ -112,10 +112,10 @@ public class AppraisedWorkItemServiceImpl implements AppraisedWorkItemService{
 
         List<AppraisedWorkItem> items = BeanMapper.mapList(appraisedPage.getDataList(), AppraisedWorkItem.class);
 
-        joinTemplate.joinQuery(items);
+        joinTemplate.joinQuery(items, new String[]{"appraised", "workItem"});
 
         for (AppraisedWorkItem item : items) {
-            joinTemplate.joinQuery(item.getWorkItem());
+            joinTemplate.joinQuery(item.getWorkItem(), new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
         }
 
         return PaginationBuilder.build(appraisedPage, items);

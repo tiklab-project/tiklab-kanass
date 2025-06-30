@@ -326,7 +326,7 @@ public class SprintServiceImpl implements SprintService {
         }
 
 
-        joinTemplate.joinQuery(sprint);
+        joinTemplate.joinQuery(sprint, new String[]{"master", "builder", "project", "sprintState"});
         return sprint;
     }
 
@@ -336,7 +336,7 @@ public class SprintServiceImpl implements SprintService {
 
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return sprintList;
     }
 
@@ -355,7 +355,7 @@ public class SprintServiceImpl implements SprintService {
             }
         }
         // 查找迭代的事项数量
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return sprintList;
     }
 
@@ -363,7 +363,7 @@ public class SprintServiceImpl implements SprintService {
         List<SprintEntity> sprintEntityList = sprintDao.findSelectSprintList(sprintQuery);
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return sprintList;
     }
 
@@ -404,7 +404,7 @@ public class SprintServiceImpl implements SprintService {
                 sprint.setWorkNumber(countList.size());
             }
         }
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return PaginationBuilder.build(pagination,sprintList);
     }
 
@@ -415,7 +415,7 @@ public class SprintServiceImpl implements SprintService {
 
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return sprintList;
     }
 
@@ -425,7 +425,7 @@ public class SprintServiceImpl implements SprintService {
 
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return sprintList;
     }
 
@@ -439,7 +439,7 @@ public class SprintServiceImpl implements SprintService {
         List<SprintEntity> sprintEntityList = sprintDao.findWorkSprintList(workId);
         List<Sprint> sprintList = BeanMapper.mapList(sprintEntityList, Sprint.class);
 
-        joinTemplate.joinQuery(sprintList);
+        joinTemplate.joinQuery(sprintList, new String[]{"master", "builder", "project", "sprintState"});
         return sprintList;
     }
 

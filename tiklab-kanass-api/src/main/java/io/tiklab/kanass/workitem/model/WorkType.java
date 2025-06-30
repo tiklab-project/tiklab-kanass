@@ -9,7 +9,7 @@ import io.tiklab.core.BaseModel;
 import io.tiklab.flow.flow.model.Flow;
 import io.tiklab.form.form.model.Form;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 
 import javax.validation.constraints.NotNull;
 
@@ -49,14 +49,14 @@ public class WorkType extends BaseModel {
     @Mappings({
             @Mapping(source = "form.id",target = "formId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Form form;
 
     @ApiProperty(name="flow",desc="关联流程")
     @Mappings({
             @Mapping(source = "flow.id",target = "flowId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Flow flow;
 
 

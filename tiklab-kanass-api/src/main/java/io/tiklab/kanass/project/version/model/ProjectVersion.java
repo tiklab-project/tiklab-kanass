@@ -9,7 +9,7 @@ import io.tiklab.toolkit.beans.annotation.Mapping;
 import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.core.BaseModel;
 import io.tiklab.toolkit.join.annotation.Join;
-import io.tiklab.toolkit.join.annotation.JoinQuery;
+import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.user.user.model.User;
 
@@ -36,14 +36,14 @@ public class ProjectVersion extends BaseModel {
     @Mappings({
             @Mapping(source = "master.id",target = "master")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User master;
 
     @ApiProperty(name="builder",desc="创建人")
     @Mappings({
             @Mapping(source = "builder.id",target = "builder")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private User builder;
 
 
@@ -86,14 +86,14 @@ public class ProjectVersion extends BaseModel {
     @Mappings({
             @Mapping(source = "versionState.id",target = "versionState")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private VersionState versionState;
 
     @ApiProperty(name = "project", desc = "所属项目")
     @Mappings({
             @Mapping(source = "project.id", target = "projectId")
     })
-    @JoinQuery(key = "id")
+    @JoinField(key = "id")
     private Project project;
 
     @ApiProperty(name="estimateTime",desc="计划工时")
