@@ -14,17 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GatewayFilterAutoConfiguration{
 
-    //认证filter
-    @Bean
-    AuthorHandler authorFilter(Authenticator authenticator, IgnoreConfig ignoreConfig){
-        DefaultAuthorHandler authorHandler = new DefaultAuthorHandler();
-        authorHandler.setAuthenticator(authenticator);
-        authorHandler.setIgnoreConfig(ignoreConfig);
-
-        return authorHandler;
-
-    }
-
     @Bean
     GatewayConfig gatewayConfig(IgnoreConfig ignoreConfig){
         GatewayConfig gatewayConfig = new GatewayConfig();

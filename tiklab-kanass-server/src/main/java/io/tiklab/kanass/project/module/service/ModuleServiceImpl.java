@@ -2,17 +2,23 @@ package io.tiklab.kanass.project.module.service;
 
 import io.tiklab.kanass.project.module.model.Module;
 import io.tiklab.kanass.project.module.model.ModuleQuery;
+import io.tiklab.kanass.workitem.dao.WorkItemDao;
+import io.tiklab.kanass.workitem.entity.WorkItemEntity;
+import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.kanass.project.module.dao.ModuleDao;
 import io.tiklab.kanass.project.module.entity.ModuleEntity;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +30,9 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Autowired
     ModuleDao moduleDao;
+
+    @Autowired
+    WorkItemDao workItemDao;
 
     @Autowired
     JoinTemplate joinTemplate;
@@ -43,8 +52,15 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public void deleteModule(@NotNull String id) {
+    public Boolean deleteModule(@NotNull String id) {
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        workItemQuery.setModuleIds(List.of(id));
+        List<WorkItemEntity> workItemList = workItemDao.findWorkItemList(workItemQuery);
+        if (CollectionUtils.isNotEmpty(workItemList)){
+            return false;
+        }
         moduleDao.deleteModule(id);
+        return true;
     }
 
     @Override

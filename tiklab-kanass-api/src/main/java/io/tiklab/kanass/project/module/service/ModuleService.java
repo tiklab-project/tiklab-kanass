@@ -35,7 +35,7 @@ public interface ModuleService {
     * 删除模块
     * @param id
     */
-    void deleteModule(@NotNull String id);
+    Boolean deleteModule(@NotNull String id);
 
     @FindOne
     Module findOne(@NotNull String id);

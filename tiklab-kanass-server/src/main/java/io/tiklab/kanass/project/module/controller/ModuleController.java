@@ -58,10 +58,8 @@ public class ModuleController {
     @RequestMapping(path="/deleteModule",method = RequestMethod.POST)
     //@ApiMethod(name = "deleteModule",desc = "根据模块ID删除模块")
     //@ApiParam(name = "id",desc = "模块ID",required = true)
-    public Result<Void> deleteModule(@NotNull String id){
-        moduleService.deleteModule(id);
-
-        return Result.ok();
+    public Result<Boolean> deleteModule(@NotNull String id){
+        return Result.ok(moduleService.deleteModule(id));
     }
 
 

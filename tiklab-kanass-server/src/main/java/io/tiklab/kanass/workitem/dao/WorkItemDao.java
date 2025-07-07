@@ -19,6 +19,7 @@ import io.tiklab.dal.jpa.criterial.condition.OrQueryCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.OrQueryBuilders;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,6 +228,12 @@ public class WorkItemDao{
             List<String> rootIds = workItemQuery.getRootIds();
             String[] arr = rootIds.toArray(new String[rootIds.size()]);
             queryBuilders.in("wi.rootId", arr);
+        }
+
+        if (CollectionUtils.isNotEmpty(workItemQuery.getModuleIds())){
+            List<String> moduleIds = workItemQuery.getModuleIds();
+            String[] array = moduleIds.toArray(new String[moduleIds.size()]);
+            queryBuilders.in("wi.moduleId", array);
         }
 
         QueryCondition queryCondition = queryBuilders.get();

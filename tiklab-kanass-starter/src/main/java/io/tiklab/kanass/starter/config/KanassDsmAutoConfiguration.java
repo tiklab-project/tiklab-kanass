@@ -192,6 +192,13 @@ public class KanassDsmAutoConfiguration {
                 .get();
         versionList.add(dsmVersion);
 
+        DsmVersion message_109 = DsmVersionBuilder.instance()
+                .version("message_1.0.9")
+                .db(new String[]{
+                        "message_1.0.9",
+                }).get();
+        versionList.add(message_109);
+
         return versionList;
     }
 }
