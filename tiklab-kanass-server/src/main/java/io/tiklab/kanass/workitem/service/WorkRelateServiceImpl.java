@@ -2,7 +2,9 @@ package io.tiklab.kanass.workitem.service;
 
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
+import io.tiklab.kanass.workitem.dao.WorkItemDao;
 import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.model.WorkRelate;
 import io.tiklab.kanass.workitem.model.WorkRelateQuery;
 import io.tiklab.core.page.PaginationBuilder;
@@ -119,5 +121,29 @@ public class WorkRelateServiceImpl implements WorkRelateService {
 
         return PaginationBuilder.build(pagination,workRelateList);
 
+    }
+
+    @Override
+    public Map<String, Integer> findWorkRelateAndChildNum(WorkRelateQuery workRelateQuery) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        // 关联事项个数
+        Integer workRelateNum = workRelateDao.findRelateNum(workRelateQuery);
+        resultMap.put("relateNum", workRelateNum);
+
+        // 子事项个数
+        WorkItemQuery workItemQuery = new WorkItemQuery();
+        workItemQuery.setParentId(workRelateQuery.getWorkItemId());
+        WorkItem workItem = workItemService.findWorkItem(workRelateQuery.getWorkItemId());
+        workItemQuery.setWorkTypeId(workItem.getWorkType().getId());
+        Integer childNum = workItemService.findWorkChildNum(workItemQuery);
+        resultMap.put("childNum", childNum);
+        // 子任务个数（当事项类型为需求时）
+        if (workItem.getWorkTypeCode().equals("demand")){
+            workItemQuery.setWorkTypeId(null);
+            workItemQuery.setWorkTypeCode("task");
+            childNum = workItemService.findWorkChildNum(workItemQuery);
+            resultMap.put("taskChildNum", childNum);
+        }
+        return resultMap;
     }
 }

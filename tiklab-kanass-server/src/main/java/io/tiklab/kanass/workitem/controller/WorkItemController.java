@@ -543,4 +543,15 @@ public class WorkItemController {
         return Result.ok(Map.of());
     }
 
+    /**
+     * 查询我的待办和我的创建事项个数
+     * @param workItemQuery
+     * @return
+     */
+    @RequestMapping(path = "/findUserCreateAndTodoWorkNum",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findUserCreateAndTodoWorkNum(@RequestBody @Valid WorkItemQuery workItemQuery){
+        Map<String, Integer> map = workItemService.findUserCreateAndTodoWorkNum(workItemQuery);
+
+        return Result.ok(map);
+    }
 }

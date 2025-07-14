@@ -331,7 +331,13 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
-        return workTypeDmList;
+        // 默认的排在前面，用户自定义的放在后面
+        List<WorkTypeDm> sortedList = workTypeDmList.stream()
+                .sorted(Comparator.comparing(
+                        o -> "system".equals(o.getWorkType().getGrouper()) ? 0 : 1
+                ))
+                .collect(Collectors.toList());
+        return sortedList;
     }
 
     @Override

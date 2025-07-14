@@ -256,6 +256,36 @@ public class WorkItemDao{
         return integer;
     }
 
+    public Integer findWorkChildNum(WorkItemQuery workItemQuery){
+        String sql = "select count(1) from pmc_work_item wi where 1=1 and wi.parent_id = '" + workItemQuery.getParentId() + "'";
+        if (StringUtils.isNotBlank(workItemQuery.getWorkTypeId())){
+            sql = sql.concat(" and wi.work_type_id = '" + workItemQuery.getWorkTypeId() + "'");
+        }
+        if (StringUtils.isNotBlank(workItemQuery.getWorkTypeCode())){
+            sql = sql.concat(" and wi.work_type_code = '" + workItemQuery.getWorkTypeCode() + "'");
+        }
+        return this.jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
+    }
+
+    public Integer findUserCreateAndTodoWorkNum(WorkItemQuery workItemQuery){
+//        HashMap<String, Integer> WorkItemCount = new HashMap<>();
+        workItemQuery.setWorkTypeId(null);
+        Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
+
+        String sql = new String();
+        Object o1 = stringObjectMap.get("sql");
+        Object query = stringObjectMap.get("query");
+        sql = sql.concat(String.valueOf(o1));
+
+        int index = sql.indexOf("where");
+        String substring = sql.substring(index);
+
+        sql = "Select count(1) as total from pmc_work_item p " + substring;
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        return allNum;
+
+    }
+
     /**
      * 根据条件按照分页查找事项列表
      * @param workItemQuery
@@ -513,6 +543,15 @@ public class WorkItemDao{
                 sql = sql.concat(" and p.id = '" + workItemQuery.getId() + "'");
             }
             paramMap.put("id", workItemQuery.getId());
+        }
+
+        if(workItemQuery.getParentId() != null && workItemQuery.getParentId().length()>0){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.parent_id = '" + workItemQuery.getParentId() + "'");
+            }else {
+                sql = sql.concat(" and p.parent_id = '" + workItemQuery.getParentId() + "'");
+            }
+            paramMap.put("parentId", workItemQuery.getParentId());
         }
 
         if(workItemQuery.getWorkTypeIds() != null && workItemQuery.getWorkTypeIds().size() > 0){

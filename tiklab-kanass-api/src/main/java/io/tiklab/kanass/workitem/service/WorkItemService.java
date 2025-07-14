@@ -1,9 +1,6 @@
 package io.tiklab.kanass.workitem.service;
 
-import io.tiklab.kanass.workitem.model.WorkBoard;
-import io.tiklab.kanass.workitem.model.WorkItem;
-import io.tiklab.kanass.workitem.model.WorkItemQuery;
-import io.tiklab.kanass.workitem.model.WorkUserGroupBoard;
+import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.core.page.Pagination;
 
 import io.tiklab.toolkit.join.annotation.FindList;
@@ -84,6 +81,8 @@ public interface WorkItemService {
 
     List<WorkItem> findWorkItemListNoJoinQuery(WorkItemQuery workItemQuery);
     Integer findWorkItemListCount(WorkItemQuery workItemQuery);
+    Integer findWorkChildNum(WorkItemQuery workItemQuery);
+    Map<String, Integer> findUserCreateAndTodoWorkNum(WorkItemQuery workItemQuery);
     /**
      * 查询可被史诗关联事项列表
      * @param workItemQuery

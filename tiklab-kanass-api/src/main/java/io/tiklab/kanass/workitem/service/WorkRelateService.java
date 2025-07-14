@@ -62,4 +62,10 @@ public interface WorkRelateService {
     */
     Pagination<WorkRelate> findWorkRelatePage(WorkRelateQuery workRelateQuery);
 
+    /**
+     * 查询关联事项数量和子事项数量
+     * @param workRelateQuery
+     * @return
+     */
+    Map<String,Integer> findWorkRelateAndChildNum(WorkRelateQuery workRelateQuery);
 }

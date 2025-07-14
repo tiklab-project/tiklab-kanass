@@ -1819,6 +1819,35 @@ public class WorkItemServiceImpl implements WorkItemService {
         return size;
     }
 
+    /**
+     * 查询子事项的个数
+     * @param workItemQuery
+     * @return
+     */
+    @Override
+    public Integer findWorkChildNum(WorkItemQuery workItemQuery) {
+        Integer size = workItemDao.findWorkChildNum(workItemQuery);
+        return size;
+    }
+
+    /**
+     * 查询用户创建事项和待办事项的个数
+     * @param workItemQuery
+     * @return
+     */
+    @Override
+    public Map<String, Integer> findUserCreateAndTodoWorkNum(WorkItemQuery workItemQuery) {
+        Map<String, Integer> map = new HashMap<>();
+        Integer count2 = workItemDao.findUserCreateAndTodoWorkNum(workItemQuery);
+        map.put("create", count2);
+        workItemQuery.setAssignerId(workItemQuery.getBuilderId());
+        workItemQuery.setBuilderId(null);
+        workItemQuery.setWorkStatusCodes(new ArrayList<>(List.of("TODO", "PROGRESS")));
+        Integer count = workItemDao.findUserCreateAndTodoWorkNum(workItemQuery);
+        map.put("pending", count);
+        return map;
+    }
+
     @Override
     public Pagination<WorkItem> findEpicSelectWorkItemList(WorkItemQuery workItemQuery) {
         //查询所有事项

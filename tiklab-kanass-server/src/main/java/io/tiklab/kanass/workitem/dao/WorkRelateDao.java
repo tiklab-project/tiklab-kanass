@@ -8,6 +8,7 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,5 +106,13 @@ public class WorkRelateDao{
                 .pagination(workRelateQuery.getPageParam())
                 .get();
         return jpaTemplate.findPage(queryCondition, WorkRelateEntity.class);
+    }
+
+    public Integer findRelateNum(WorkRelateQuery workRelateQuery){
+        String sql = "";
+        if (StringUtils.isNotBlank(workRelateQuery.getWorkItemId())){
+            sql = "select count(1) from pmc_work_relate where work_item_id = '" + workRelateQuery.getWorkItemId() + "'";
+        }
+        return jpaTemplate.getJdbcTemplate().queryForObject(sql, Integer.class);
     }
 }

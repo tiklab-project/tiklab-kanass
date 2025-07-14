@@ -99,4 +99,11 @@ public class WorkRelateController {
         return Result.ok(pagination);
     }
 
+    @RequestMapping(path = "/findWorkRelateAndChildNum",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findWorkRelateAndChildNum(@RequestBody @Valid @NotNull WorkRelateQuery workRelateQuery){
+        Map<String, Integer> workRelateAndChildNum = workRelateService.findWorkRelateAndChildNum(workRelateQuery);
+
+        return Result.ok(workRelateAndChildNum);
+    }
+
 }
