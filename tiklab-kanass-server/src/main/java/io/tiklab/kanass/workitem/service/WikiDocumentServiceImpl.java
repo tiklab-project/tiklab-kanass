@@ -85,6 +85,51 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
     }
 
     @Override
+    public Pagination<KanassDocument> findWorkDocumentPage(WorkItemDocumentQuery workItemDocumentQuery) {
+
+        NodeQuery nodeQuery = new NodeQuery();
+//        nodeQuery.setRepositoryId(workItemDocumentQuery.getRepositoryId());
+//        nodeQuery.setRepositoryIds(workItemDocumentQuery.getRepositoryIds());
+
+        nodeQuery.setPageParam(workItemDocumentQuery.getPageParam());
+        nodeQuery.setName(workItemDocumentQuery.getName());
+        nodeQuery.setType("document");
+//        List<WorkItemDocument> workItemDocumentList = workItemDocumentService.findWorkItemDocumentList(workItemDocumentQuery);
+//        List<String> workItemDocumentIds = workItemDocumentList.stream().map(workItemDocument -> workItemDocument.getDocumentId()).collect(Collectors.toList());
+//
+//        int sizeId = workItemDocumentIds.size();
+//        String[] stringIds = new String[sizeId];
+//        String[] documentIds = workItemDocumentIds.toArray(stringIds);
+        nodeQuery.setIds(workItemDocumentQuery.getDocumentIds());
+
+
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        Pagination<WikiDocument> documentPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/node/findNodePage", nodeQuery, WikiDocument.class);
+
+        Pagination<KanassDocument> kanassDocumentPage = new Pagination<KanassDocument>();
+        kanassDocumentPage.setTotalRecord(documentPage.getTotalRecord());
+        kanassDocumentPage.setTotalPage(documentPage.getTotalPage());
+        kanassDocumentPage.setPageSize(documentPage.getPageSize());
+        kanassDocumentPage.setCurrentPage(documentPage.getCurrentPage());
+
+        List<KanassDocument> kanassDocumentList = new ArrayList<KanassDocument>();
+        for (WikiDocument wikiDocument : documentPage.getDataList()) {
+            KanassDocument kanassDocument = new KanassDocument();
+            kanassDocument.setId(wikiDocument.getId());
+            kanassDocument.setDocumentName(wikiDocument.getName());
+            kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
+            kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
+            kanassDocument.setUserName(wikiDocument.getMaster().getName());
+            kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
+            kanassDocumentList.add(kanassDocument);
+        }
+        kanassDocumentPage.setDataList(kanassDocumentList);
+        return kanassDocumentPage;
+    }
+
+
+    @Override
     public List<WikiDocument> findDocumentList(NodeQuery nodeQuery) {
         HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
         String systemUrl = getSystemUrl();

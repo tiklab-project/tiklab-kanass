@@ -9,7 +9,7 @@ import io.tiklab.flow.statenode.model.StateNode;
 import io.tiklab.flow.statenode.service.StateNodeService;
 import io.tiklab.kanass.home.statistic.dao.StatisticWorkItemDao;
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class StatisticWorkItemServiceImpl implements StatisticWorkItemService {
     StateNodeService stateNodeService;
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Autowired
     WorkTypeService workTypeService;
@@ -47,7 +47,7 @@ public class StatisticWorkItemServiceImpl implements StatisticWorkItemService {
                     item.setStatisticalTitle(startNode.getName());
                 }
                 if(collectionField.equals("assigner") || collectionField.equals("builder") || collectionField.equals("reporter")){
-                    User user = userService.findUser(item.getStatisticalId());
+                    User user = userProcessor.findUser(item.getStatisticalId());
                     if(user != null){
                         item.setStatisticalTitle(user.getNickname());
                     }

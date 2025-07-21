@@ -3,8 +3,9 @@ package io.tiklab.kanass.starter.config;
 
 import io.tiklab.dsm.model.DsmConfig;
 import io.tiklab.dsm.model.DsmVersion;
-import io.tiklab.dsm.support.DsmConfigBuilder;
 import io.tiklab.dsm.support.DsmVersionBuilder;
+import io.tiklab.kanass.sql.Pmc155Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +14,9 @@ import java.util.List;
 
 @Configuration
 public class KanassDsmAutoConfiguration {
+
+    @Autowired
+    Pmc155Task pmc155Task;
 
     @Bean
     DsmConfig dsmConfig(){
@@ -198,6 +202,14 @@ public class KanassDsmAutoConfiguration {
                         "message_1.0.9",
                 }).get();
         versionList.add(message_109);
+
+        DsmVersion pmc_155 = DsmVersionBuilder.instance()
+                .version("pmc_1.5.5")
+                .task(pmc155Task)
+                .db(new String[]{
+                        "pmc_1.5.5",
+                }).get();
+        versionList.add(pmc_155);
 
         return versionList;
     }

@@ -62,6 +62,26 @@ public class TestRepositoryPlanServiceImpl implements TestRepositoryPlanService 
         return list;
     }
 
+    @Override
+    public List<TestPlan> listRepositoryTestPlanByName(String name) {
+        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+        String systemUrl = getSystemUrl();
+        RepositoryTestPlanQuery repositoryTestPlanQuery = new RepositoryTestPlanQuery();
+        repositoryTestPlanQuery.setName(name);
+        List<RepositoryTestPlan> repositoryTestPlanList = httpRequestUtil.requestPostList(httpHeaders,
+                systemUrl + "/api/testPlan/findTestPlanList",
+                repositoryTestPlanQuery,
+                RepositoryTestPlan.class);
+
+        List<TestPlan> list = new ArrayList<>();
+        for (RepositoryTestPlan repositoryTestPlan : repositoryTestPlanList) {
+            TestPlan testPlan = new TestPlan();
+            BeanUtils.copyProperties(repositoryTestPlan, testPlan);
+            list.add(testPlan);
+        }
+        return list;
+    }
+
 //    @Override
 //    public List<RepositoryTestPlan> findList(List<String> idList) {
 //        return List.of();

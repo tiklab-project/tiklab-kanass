@@ -62,7 +62,7 @@ import io.tiklab.user.dmUser.model.DmUser;
 import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,7 +155,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Autowired
     DmUserService dmUserService;
@@ -243,7 +243,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         message.setMessageType(messageType);
 
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
@@ -295,7 +295,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             content.put("versionId", workItem.getProjectVersion().getId());
         }
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
@@ -349,7 +349,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             content.put("versionId", workItem.getProjectVersion().getId());
         }
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
@@ -396,7 +396,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         task.setTodoType(taskType);
 
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         task.setCreateUser(user);
 
         HashMap<String, Object> content = new HashMap<>();
@@ -443,7 +443,7 @@ public class WorkItemServiceImpl implements WorkItemService {
     void updateTodoTask(WorkItem workItem, String taskId){
         Task task = taskService.findOne(taskId);
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         String updateField = workItem.getUpdateField();
 
         if(updateField.equals("assigner")){
@@ -549,7 +549,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         log.setUser(user);
 
         logContent.put("workItemTitle", workItem.getTitle());
@@ -595,7 +595,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         log.setUser(user);
 
         Map<String, String> content = new HashMap<>();
@@ -1244,7 +1244,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItem oldWorkItem = findWorkItem(id);
 
         String assignerId = workItem.getAssigner().getId();
-        User assigner = userService.findOne(assignerId);
+        User assigner = userProcessor.findOne(assignerId);
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
 
@@ -2149,7 +2149,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             for(DmUser dmUser:dmUserList){
                 WorkUserGroupBoard workUserGroupBoard = new WorkUserGroupBoard();
                 String useId = dmUser.getUser().getId();
-                User user = userService.findUser(useId);
+                User user = userProcessor.findUser(useId);
                 workUserGroupBoard.setUser(user);
 
                 List<String> list = new ArrayList<String>();

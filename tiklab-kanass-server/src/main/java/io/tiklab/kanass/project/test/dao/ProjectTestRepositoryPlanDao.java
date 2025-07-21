@@ -86,6 +86,7 @@ public class ProjectTestRepositoryPlanDao {
                 .eq("projectId", projectTestRepositoryPlanQuery.getProjectId())
                 .eq("testRepositoryId", projectTestRepositoryPlanQuery.getTestRepositoryId())
                 .eq("planId", projectTestRepositoryPlanQuery.getPlanId())
+                .in("planId", projectTestRepositoryPlanQuery.getPlanIds())
                 .get();
         return jpaTemplate.findList(queryCondition, ProjectTestRepositoryPlanEntity.class);
     }
@@ -98,8 +99,9 @@ public class ProjectTestRepositoryPlanDao {
     public Pagination<ProjectTestRepositoryPlanEntity> findProjectTestRepositoryPlanPage(ProjectTestRepositoryPlanQuery projectTestRepositoryPlanQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectTestRepositoryPlanEntity.class)
                 .eq("projectId", projectTestRepositoryPlanQuery.getProjectId())
-                .eq("test_repositoryId", projectTestRepositoryPlanQuery.getTestRepositoryId())
+                .eq("testRepositoryId", projectTestRepositoryPlanQuery.getTestRepositoryId())
                 .eq("planId", projectTestRepositoryPlanQuery.getPlanId())
+                .in("planId", projectTestRepositoryPlanQuery.getPlanIds())
                 .get();
         return jpaTemplate.findPage(queryCondition, ProjectTestRepositoryPlanEntity.class);
     }

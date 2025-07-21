@@ -33,7 +33,7 @@ import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.model.UserQuery;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataService {
     private static final Logger log = LoggerFactory.getLogger(Mantis2271ImportDataServiceImpl.class);
     @Autowired
-    private UserService userService;
+    private UserProcessor userProcessor;
 
     @Autowired
     private ProjectService projectService;
@@ -322,7 +322,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
             String nickName = mantisUser.getUserName();
             UserQuery userQuery = new UserQuery();
             userQuery.setName(userName);
-            List<User> nameUserList = userService.findUserList(userQuery);
+            List<User> nameUserList = userProcessor.findUserList(userQuery);
 
             try {
                 String  userId = new String();
@@ -335,7 +335,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
                     user.setDirId("1");
                     user.setPassword("123456");
                     user.setType(0);
-                    userId = userService.createUser(user);
+                    userId = userProcessor.createUser(user);
                 }else {
                     User user = new User();
                     user.setNickname(nickName);
@@ -347,7 +347,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
                     user.setType(0);
 
 
-                    userId = userService.createUser(user);
+                    userId = userProcessor.createUser(user);
                 }
 
                 mantisUser.setNewID(userId);

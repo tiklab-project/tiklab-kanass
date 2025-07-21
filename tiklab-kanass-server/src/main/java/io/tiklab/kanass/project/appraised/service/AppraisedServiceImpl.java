@@ -7,6 +7,8 @@ import io.tiklab.kanass.project.appraised.dao.AppraisedDao;
 import io.tiklab.kanass.project.appraised.entity.AppraisedEntity;
 import io.tiklab.kanass.project.appraised.model.Appraised;
 import io.tiklab.kanass.project.appraised.model.AppraisedQuery;
+import io.tiklab.kanass.project.appraised.model.AppraisedWorkItem;
+import io.tiklab.kanass.project.appraised.model.AppraisedWorkItemQuery;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.user.user.model.User;
@@ -21,6 +23,9 @@ public class AppraisedServiceImpl implements AppraisedService{
 
     @Autowired
     private AppraisedDao appraisedDao;
+
+    @Autowired
+    private AppraisedWorkItemService appraisedWorkItemService;
 
     @Autowired
     private JoinTemplate joinTemplate;
@@ -68,6 +73,19 @@ public class AppraisedServiceImpl implements AppraisedService{
     public Appraised findAppraised(String id) {
         Appraised appraised = findOne(id);
 
+        AppraisedWorkItemQuery workItemQuery = new AppraisedWorkItemQuery();
+        workItemQuery.setAppraisedId(id);
+        List<AppraisedWorkItem> appraisedWorkItemList = appraisedWorkItemService.findAppraisedWorkItemList(workItemQuery);
+        appraised.setAllAppraisedWorkItemNumber(appraisedWorkItemList.size());
+        appraised.setUnPassAppraisedWorkItemNumber(0);
+        appraised.setPassAppraisedWorkItemNumber(0);
+        for (AppraisedWorkItem appraisedWorkItem : appraisedWorkItemList) {
+            if ("1".equals(appraisedWorkItem.getWorkItemAppraisedState())) {
+                appraised.setPassAppraisedWorkItemNumber(appraised.getPassAppraisedWorkItemNumber() + 1);
+            } else if ("2".equals(appraisedWorkItem.getWorkItemAppraisedState())){
+                appraised.setUnPassAppraisedWorkItemNumber(appraised.getUnPassAppraisedWorkItemNumber() + 1);
+            }
+        }
         joinTemplate.joinQuery(appraised, new String[]{"master", "builder", "project"});
         return appraised;
     }

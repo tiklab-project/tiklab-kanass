@@ -21,7 +21,7 @@ import io.tiklab.kanass.workitem.model.WorkTestCase;
 import io.tiklab.kanass.workitem.model.WorkTestCaseQuery;
 import io.tiklab.kanass.project.test.model.TestCaseQuery;
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -63,12 +63,12 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         return url;
     }
 
-    UserService userServiceRpc(){
+    UserProcessor userServiceRpc(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("testhubo");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
-        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
+        return new RpcClientTeamWireUtil().rpcClient().getBean(UserProcessor.class, new FixedLookup(url));
     }
 
     @Override

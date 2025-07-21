@@ -34,7 +34,7 @@ import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.model.UserQuery;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,7 +100,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
     WorkTypeDmService workTypeDmService;
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Autowired
     DmFlowService dmFlowService;
@@ -386,7 +386,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
             UserQuery userQuery = new UserQuery();
             userQuery.setEmail(emailAddress);
 
-            List<User> userList = userService.findUserList(userQuery);
+            List<User> userList = userProcessor.findUserList(userQuery);
             if(ObjectUtils.isEmpty(userList)){
                 User user = new User();
                 user.setNickname(displayName);
@@ -398,7 +398,7 @@ public class JiraImportDataCloudServiceImpl implements JiraImportDataCloudServic
                 user.setType(0);
 
                 try {
-                    String userId = userService.createUser(user);
+                    String userId = userProcessor.createUser(user);
                     element.setAttribute("newId", userId);
                     System.out.println( element.getAttribute("newId"));
                 }catch (Exception e){

@@ -36,7 +36,7 @@ import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.model.UserQuery;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,7 +104,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
     WorkTypeDmService workTypeDmService;
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Autowired
     DmFlowService dmFlowService;
@@ -406,10 +406,10 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
             String nickName = element.getAttribute("displayName");
             UserQuery userQuery = new UserQuery();
             userQuery.setEmail(emailAddress);
-            List<User> emailUserList = userService.findUserList(userQuery);
+            List<User> emailUserList = userProcessor.findUserList(userQuery);
             userQuery = new UserQuery();
             userQuery.setName(userName);
-            List<User> nameUserList = userService.findUserList(userQuery);
+            List<User> nameUserList = userProcessor.findUserList(userQuery);
 
                 try {
                     String userId = new String();
@@ -422,7 +422,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                         user.setDirId("1");
                         user.setPassword("123456");
                         user.setType(0);
-                        userId = userService.createUser(user);
+                        userId = userProcessor.createUser(user);
                     }else {
                         User user = new User();
                         user.setNickname(nickName);
@@ -445,7 +445,7 @@ public class JiraImportData94ServiceImpl implements JiraImportData94Service {
                             user.setName(userName + "_jira");
                             user.setEmail(emailAddress);
                         }
-                        userId = userService.createUser(user);
+                        userId = userProcessor.createUser(user);
 
 
 //                        原本的逻辑相当于合并两个系统的用户

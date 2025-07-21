@@ -34,12 +34,12 @@ public class WorkRepositoryServiceImpl implements WorkRepositoryService {
         return url;
     }
 
-//    UserService userServiceRpc(){
+//    UserProcessor userServiceRpc(){
 //        SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
 //        systemUrlQuery.setName("sward");
 //        List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
 //        String url = systemUrlList.get(0).getSystemUrl();
-//        return new RpcClientTeamWireUtil().rpcClient().getBean(UserService.class, new FixedLookup(url));
+//        return new RpcClientTeamWireUtil().rpcClient().getBean(UserProcessor.class, new FixedLookup(url));
 //    }
 
 

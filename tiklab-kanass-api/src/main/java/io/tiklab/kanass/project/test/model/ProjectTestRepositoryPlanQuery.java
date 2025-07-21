@@ -23,6 +23,12 @@ public class ProjectTestRepositoryPlanQuery {
         @ApiProperty(name ="planId",desc = "测试计划id,精确匹配")
         private String planId;
 
+        @ApiProperty(name ="planIds",desc = "测试计划id,精确匹配")
+        private String[] planIds;
+
+        @ApiProperty(name ="name",desc = "计划名称,模糊匹配")
+        private String name;
+
         @ApiProperty(name ="orderParams",desc = "排序参数")
         private List<Order> orderParams = OrderBuilders.instance().asc("id").get();
 
@@ -68,5 +74,21 @@ public class ProjectTestRepositoryPlanQuery {
 
         public void setPlanId(String planId) {
                 this.planId = planId;
+        }
+
+        public String getName() {
+                return name;
+        }
+
+        public void setName(String name) {
+                this.name = name;
+        }
+
+        public String[] getPlanIds() {
+                return planIds;
+        }
+
+        public void setPlanIds(String[] planIds) {
+                this.planIds = planIds;
         }
 }

@@ -1,5 +1,6 @@
 package io.tiklab.kanass.workitem.service;
 
+import io.tiklab.core.page.PageEntity;
 import io.tiklab.kanass.project.wiki.model.KanassDocument;
 import io.tiklab.kanass.project.wiki.model.WikiDocument;
 import io.tiklab.kanass.support.model.SystemUrl;
@@ -19,6 +20,8 @@ import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.rpc.annotation.Exporter;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -27,10 +30,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 
+import javax.swing.text.html.parser.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -50,6 +56,9 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Autowired
     SystemUrlService systemUrlService;
+
+    @Autowired
+    WikiDocumentService wikiDocumentService;
 
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
@@ -192,44 +201,72 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
     @Override
     public Pagination<WorkItemDocument> findWorkItemDocumentPage(WorkItemDocumentQuery workItemDocumentQuery) {
-        Pagination<WorkItemDocumentEntity> pagination = workItemDocumentDao.findWorkItemDocumentPage(workItemDocumentQuery);
+        if (StringUtils.isBlank(workItemDocumentQuery.getName())){
+            // 没有查询name的情况
+            Pagination<WorkItemDocumentEntity> pagination = workItemDocumentDao.findWorkItemDocumentPage(workItemDocumentQuery);
 
-        List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(pagination.getDataList(),WorkItemDocument.class);
+            List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(pagination.getDataList(),WorkItemDocument.class);
 
 //        List<KanassDocument> list = new ArrayList<KanassDocument>();
-        if (!ObjectUtils.isEmpty(workItemDocumentList)){
-            for (WorkItemDocument workItemDocument:workItemDocumentList){
+            if (!ObjectUtils.isEmpty(workItemDocumentList)){
+                for (WorkItemDocument workItemDocument:workItemDocumentList){
 
-                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-                String systemUrl = getSystemUrl();
+                    HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+                    String systemUrl = getSystemUrl();
 
-                MultiValueMap param = new LinkedMultiValueMap<>();
-                param.add("id", workItemDocument.getDocumentId());
-                WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
+                    MultiValueMap param = new LinkedMultiValueMap<>();
+                    param.add("id", workItemDocument.getDocumentId());
+                    WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
 
-                KanassDocument kanassDocument = new KanassDocument();
-                if (!ObjectUtils.isEmpty(wikiDocument)){
-                    kanassDocument.setId(wikiDocument.getId());
-                    kanassDocument.setDocumentName(wikiDocument.getName());
-                    kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
-                    kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
-                    kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
-                    kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
-                    kanassDocument.setDocumentType(wikiDocument.getDocumentType());
-                    workItemDocument.setKanassDocument(kanassDocument);
+                    KanassDocument kanassDocument = new KanassDocument();
+                    if (!ObjectUtils.isEmpty(wikiDocument)){
+                        kanassDocument.setId(wikiDocument.getId());
+                        kanassDocument.setDocumentName(wikiDocument.getName());
+                        kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
+                        kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
+                        kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
+                        kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
+                        kanassDocument.setDocumentType(wikiDocument.getDocumentType());
+                        workItemDocument.setKanassDocument(kanassDocument);
 //                    list.add(kanassDocument);
-                }else {
-                    kanassDocument.setDocumentName("文档已删除");
-                    kanassDocument.setId(workItemDocument.getDocumentId());
-                    kanassDocument.setExist(false);
-                    workItemDocument.setKanassDocument(kanassDocument);
+                    }else {
+                        kanassDocument.setDocumentName("文档已删除");
+                        kanassDocument.setId(workItemDocument.getDocumentId());
+                        kanassDocument.setExist(false);
+                        workItemDocument.setKanassDocument(kanassDocument);
 //                    list.add(kanassDocument);
+                    }
                 }
             }
+
+            joinTemplate.joinQuery(workItemDocumentList, new String[]{"workItem"});
+
+            return PaginationBuilder.build(pagination,workItemDocumentList);
         }
+        else{
+            // 参数中有name，手动分页
+            // 查询所有记录并填充名称
+            List<WorkItemDocumentEntity> allWorkItemDocument = workItemDocumentDao.findAllWorkItemDocument();
+            List<String> allDocumentIds = allWorkItemDocument.stream().map(WorkItemDocumentEntity::getDocumentId).collect(Collectors.toList());
+            workItemDocumentQuery.setDocumentIds(allDocumentIds.toArray(new String[allDocumentIds.size()]));
 
-        joinTemplate.joinQuery(workItemDocumentList, new String[]{"workItem"});
+            Pagination<KanassDocument> workDocumentPage = wikiDocumentService.findWorkDocumentPage(workItemDocumentQuery);
 
-        return PaginationBuilder.build(pagination,workItemDocumentList);
+            Map<String, KanassDocument> dataList = workDocumentPage.getDataList().stream().collect(Collectors.toMap(KanassDocument::getId, doc -> doc));
+            List<WorkItemDocumentEntity> pageWorkItemDocumentEntityList = new ArrayList<>();
+            if (CollectionUtils.isNotEmpty(dataList.keySet())){
+                pageWorkItemDocumentEntityList = allWorkItemDocument.stream().filter(entity -> dataList.containsKey(entity.getDocumentId())).collect(Collectors.toList());
+            }
+
+            List<WorkItemDocument> workItemDocumentList = BeanMapper.mapList(pageWorkItemDocumentEntityList,WorkItemDocument.class);
+
+            for (WorkItemDocument workItemDocument : workItemDocumentList) {
+                workItemDocument.setKanassDocument(dataList.get(workItemDocument.getDocumentId()));
+            }
+
+            joinTemplate.joinQuery(workItemDocumentList, new String[]{"workItem"});
+
+            return PaginationBuilder.build(workDocumentPage,workItemDocumentList);
+        }
     }
 }

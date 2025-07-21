@@ -1,12 +1,18 @@
 package io.tiklab.kanass.project.appraised.service;
 
 import io.tiklab.core.page.Pagination;
+import io.tiklab.kanass.project.appraised.model.Appraised;
 import io.tiklab.kanass.project.appraised.model.AppraisedWorkItem;
 import io.tiklab.kanass.project.appraised.model.AppraisedWorkItemQuery;
 import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.toolkit.join.annotation.FindAll;
+import io.tiklab.toolkit.join.annotation.FindList;
+import io.tiklab.toolkit.join.annotation.FindOne;
+import io.tiklab.toolkit.join.annotation.JoinProvider;
 
 import java.util.List;
 
+@JoinProvider(model = AppraisedWorkItem.class)
 public interface AppraisedWorkItemService {
     /**
      * 新建评审项
@@ -32,6 +38,7 @@ public interface AppraisedWorkItemService {
      * @param id
      * @return
      */
+    @FindOne
     AppraisedWorkItem findOne(String id);
 
     AppraisedWorkItem findAppraisedWorkItem(String id);
@@ -41,6 +48,7 @@ public interface AppraisedWorkItemService {
      * @param idList
      * @return
      */
+    @FindList
     List<AppraisedWorkItem> findList(List<String> idList);
     List<AppraisedWorkItem> findAppraisedWorkItemList(List<String> idList);
 
@@ -48,6 +56,7 @@ public interface AppraisedWorkItemService {
      * 查询所有评审项
      * @return
      */
+    @FindAll
     List<AppraisedWorkItem> findAll();
 
     /**

@@ -28,7 +28,7 @@ import io.tiklab.message.message.model.SendMessageNotice;
 import io.tiklab.message.message.service.SendMessageNoticeService;
 import io.tiklab.message.setting.model.MessageType;
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +73,7 @@ public class SprintServiceImpl implements SprintService {
     @Autowired
     WorkSprintService workSprintService;
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Value("${base.url:null}")
     String baseUrl;
@@ -101,7 +101,7 @@ public class SprintServiceImpl implements SprintService {
         message.setData(content);
 
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
@@ -140,7 +140,7 @@ public class SprintServiceImpl implements SprintService {
         content.put("newValue", newSprint.getSprintState().getName());
 
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         content.put("createUser", user);
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));

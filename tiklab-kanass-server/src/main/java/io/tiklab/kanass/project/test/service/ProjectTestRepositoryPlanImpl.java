@@ -7,9 +7,12 @@ import io.tiklab.kanass.project.test.entity.ProjectTestRepositoryPlanEntity;
 import io.tiklab.kanass.project.test.model.*;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.toolkit.join.JoinTemplate;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -140,27 +143,46 @@ public class ProjectTestRepositoryPlanImpl implements ProjectTestRepositoryPlanS
 
     @Override
     public Pagination<ProjectTestRepositoryPlan> findProjectTestRepositoryPlanPage(ProjectTestRepositoryPlanQuery projectTestRepositoryPlanQuery) {
-        Pagination<ProjectTestRepositoryPlanEntity> projectTestRepositoryPlanPage = projectTestRepositoryPlanDao.findProjectTestRepositoryPlanPage(projectTestRepositoryPlanQuery);
-
-        List<ProjectTestRepositoryPlan> projectTestRepositoryPlans = BeanMapper.mapList(projectTestRepositoryPlanPage.getDataList(), ProjectTestRepositoryPlan.class);
-//        joinTemplate.joinQuery(projectTestRepositoryPlans);
-
-//        testRepositoryPlanService.listRepositoryTestPlan(projectTestRepositoryPlanQuery.getTestRepositoryId());
         List<TestRepository> allRepository = testRepositoryService.findAllRepository();
         Map<String, TestRepository> repositoryMap = allRepository.stream().collect(Collectors.toMap(TestRepository::getId, Function.identity()));
-        for (ProjectTestRepositoryPlan projectTestRepositoryPlan : projectTestRepositoryPlans) {
-            String testRepositoryId = projectTestRepositoryPlan.getTestRepositoryId();
-            TestRepository testRepository = repositoryMap.get(testRepositoryId);
-            projectTestRepositoryPlan.setTestRepository(testRepository);
-            List<TestPlan> testPlanList = testRepositoryPlanService.listRepositoryTestPlan(testRepositoryId);
-            for (TestPlan testPlan : testPlanList) {
-                if (testPlan.getId().equals(projectTestRepositoryPlan.getPlanId())){
-                    projectTestRepositoryPlan.setTestPlan(testPlan);
-                    break;
+        if (StringUtils.isBlank(projectTestRepositoryPlanQuery.getName())){
+            Pagination<ProjectTestRepositoryPlanEntity> projectTestRepositoryPlanPage = projectTestRepositoryPlanDao.findProjectTestRepositoryPlanPage(projectTestRepositoryPlanQuery);
+
+            List<ProjectTestRepositoryPlan> projectTestRepositoryPlans = BeanMapper.mapList(projectTestRepositoryPlanPage.getDataList(), ProjectTestRepositoryPlan.class);
+
+            for (ProjectTestRepositoryPlan projectTestRepositoryPlan : projectTestRepositoryPlans) {
+                String testRepositoryId = projectTestRepositoryPlan.getTestRepositoryId();
+                TestRepository testRepository = repositoryMap.get(testRepositoryId);
+                projectTestRepositoryPlan.setTestRepository(testRepository);
+                List<TestPlan> testPlanList = testRepositoryPlanService.listRepositoryTestPlan(testRepositoryId);
+                for (TestPlan testPlan : testPlanList) {
+                    if (testPlan.getId().equals(projectTestRepositoryPlan.getPlanId())){
+                        projectTestRepositoryPlan.setTestPlan(testPlan);
+                        break;
+                    }
                 }
             }
-        }
 
-        return PaginationBuilder.build(projectTestRepositoryPlanPage, projectTestRepositoryPlans);
+            return PaginationBuilder.build(projectTestRepositoryPlanPage, projectTestRepositoryPlans);
+        }else {
+            // 查询符合条件的计划
+            List<TestPlan> testPlanList = testRepositoryPlanService.listRepositoryTestPlanByName(projectTestRepositoryPlanQuery.getName());
+            if (CollectionUtils.isEmpty(testPlanList)){
+                return PaginationBuilder.build(new Pagination<>(), new ArrayList<>());
+            }
+            Map<String, TestPlan> testPlanMap = testPlanList.stream().collect(Collectors.toMap(TestPlan::getId, Function.identity()));
+            projectTestRepositoryPlanQuery.setPlanIds(testPlanMap.keySet().toArray(new String[0]));
+            Pagination<ProjectTestRepositoryPlanEntity> repositoryPlanPage = projectTestRepositoryPlanDao.findProjectTestRepositoryPlanPage(projectTestRepositoryPlanQuery);
+
+            List<ProjectTestRepositoryPlan> projectTestRepositoryPlans = BeanMapper.mapList(repositoryPlanPage.getDataList(), ProjectTestRepositoryPlan.class);
+
+            for (ProjectTestRepositoryPlan projectTestRepositoryPlan : projectTestRepositoryPlans) {
+                String testRepositoryId = projectTestRepositoryPlan.getTestRepositoryId();
+                TestRepository testRepository = repositoryMap.get(testRepositoryId);
+                projectTestRepositoryPlan.setTestRepository(testRepository);
+                projectTestRepositoryPlan.setTestPlan(testPlanMap.get(projectTestRepositoryPlan.getPlanId()));
+            }
+            return PaginationBuilder.build(repositoryPlanPage, projectTestRepositoryPlans);
+        }
     }
 }

@@ -26,7 +26,7 @@ import io.tiklab.user.dmUser.model.DmUser;
 import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -65,7 +65,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     DmRoleService dmRoleService;
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Autowired
     ProjectInsightReportService projectInsightReportService;
@@ -73,7 +73,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     @Override
     public String createProjectSet(@NotNull @Valid ProjectSet projectSet) {
         String createUserId = LoginContext.getLoginId();
-        User user = userService.findOne(createUserId);
+        User user = userProcessor.findOne(createUserId);
         projectSet.setMaster(user);
 
         // 默认状态未开始

@@ -66,6 +66,13 @@ public class Appraised extends BaseModel {
     @ApiProperty(name="description",desc="描述")
     private String description;
 
+    // 所有评审事项
+    private Integer allAppraisedWorkItemNumber;
+    // 通过的评审事项
+    private Integer passAppraisedWorkItemNumber;
+    // 未通过的评审事项
+    private Integer unPassAppraisedWorkItemNumber;
+
     public String getId() {
         return id;
     }
@@ -144,5 +151,29 @@ public class Appraised extends BaseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getAllAppraisedWorkItemNumber() {
+        return allAppraisedWorkItemNumber;
+    }
+
+    public void setAllAppraisedWorkItemNumber(Integer allAppraisedWorkItemNumber) {
+        this.allAppraisedWorkItemNumber = allAppraisedWorkItemNumber;
+    }
+
+    public Integer getPassAppraisedWorkItemNumber() {
+        return passAppraisedWorkItemNumber;
+    }
+
+    public void setPassAppraisedWorkItemNumber(Integer passAppraisedWorkItemNumber) {
+        this.passAppraisedWorkItemNumber = passAppraisedWorkItemNumber;
+    }
+
+    public Integer getUnPassAppraisedWorkItemNumber() {
+        return unPassAppraisedWorkItemNumber;
+    }
+
+    public void setUnPassAppraisedWorkItemNumber(Integer unPassAppraisedWorkItemNumber) {
+        this.unPassAppraisedWorkItemNumber = unPassAppraisedWorkItemNumber;
     }
 }

@@ -11,7 +11,7 @@ import io.tiklab.kanass.home.insight.dao.InsightDao;
 import io.tiklab.kanass.home.insight.entity.InsightEntity;
 
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +32,12 @@ public class InsightServiceImpl implements InsightService {
     JoinTemplate joinTemplate;
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Override
     public String createInsight(@NotNull @Valid Insight insight) {
         String createUserId = LoginContext.getLoginId();// 获取当前登录用户id
-        User user = userService.findOne(createUserId);//根据用户id查询用户信息
+        User user = userProcessor.findOne(createUserId);//根据用户id查询用户信息
         insight.setMaster(user);//设置仪表盘的所有者
 
         InsightEntity insightEntity = BeanMapper.map(insight, InsightEntity.class);//将仪表盘对象映射为实体对象

@@ -105,7 +105,7 @@ public class WorkItemDocumentDao{
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkItemDocumentEntity.class)
                 .eq("workItemId", workItemDocumentQuery.getWorkItemId())
                 .eq("documentId", workItemDocumentQuery.getDocumentId())
-                .like("name", workItemDocumentQuery.getName())
+//                .like("name", workItemDocumentQuery.getName())
                 .eq("repositoryId", workItemDocumentQuery.getRepositoryId())
                 .in("repositoryId", workItemDocumentQuery.getRepositoryIds())
                 .eq("projectId", workItemDocumentQuery.getProjectId())

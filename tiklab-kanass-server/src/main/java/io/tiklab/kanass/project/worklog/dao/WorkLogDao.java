@@ -22,7 +22,7 @@ import io.tiklab.user.dmUser.model.DmUser;
 import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
-import io.tiklab.user.user.service.UserService;
+import io.tiklab.user.user.service.UserProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class WorkLogDao{
     ProjectService projectService;
 
     @Autowired
-    UserService userService;
+    UserProcessor userProcessor;
 
     @Autowired
     DmUserService dmUserService;
@@ -304,7 +304,7 @@ public class WorkLogDao{
             if(userGroups != null && userGroups.size() > 0){
                userLog = userGroups.get(0);
                 String worker = userLog.getUserId();
-                User user = userService.findUser(worker);
+                User user = userProcessor.findUser(worker);
                 userLog.setUser(user);
                 Map<String, Object> paramMap1 = new HashMap<String, Object>();
                 paramMap1.put("startTime", startTime);
@@ -368,7 +368,7 @@ public class WorkLogDao{
             }else {
                 //若没有成员日志记录，则查找此人负责所有项目，并设置每天日志统计用时为0
                 userLog.setUserId(userId);
-                User user = userService.findOne(userId);
+                User user = userProcessor.findOne(userId);
                 userLog.setUser(user);
                 userLog.setTotal(0);
 
@@ -528,7 +528,7 @@ public class WorkLogDao{
                 ProjectListLog projectListLog = new ProjectListLog();
 
                 String userId = worker;
-                User user = userService.findOne(userId);
+                User user = userProcessor.findOne(userId);
                 projectListLog.setUser(user);
                 projectListLog.setUserId(userId);
 
@@ -551,7 +551,7 @@ public class WorkLogDao{
                     ProjectListLog projectListLog = new ProjectListLog();
 
                     String userId = dmUser.getUser().getId();
-                    User user = userService.findOne(userId);
+                    User user = userProcessor.findOne(userId);
                     projectListLog.setUser(user);
                     projectListLog.setUserId(userId);
 
@@ -590,7 +590,7 @@ public class WorkLogDao{
                 userListLog = userGroups.get(0);
 
                 userListLog.setUserId(userId);
-                User user = userService.findOne(userId);
+                User user = userProcessor.findOne(userId);
                 userListLog.setUser(user);
                 List<EneryDayTotal> integers = new ArrayList<EneryDayTotal>();
 
@@ -620,7 +620,7 @@ public class WorkLogDao{
             }else {
                 //如成员无记录，则用0 补齐
                 userListLog.setUserId(userId);
-                User user = userService.findOne(userId);
+                User user = userProcessor.findOne(userId);
                 userListLog.setUser(user);
                 userListLog.setProjectLogTotal(0);
 

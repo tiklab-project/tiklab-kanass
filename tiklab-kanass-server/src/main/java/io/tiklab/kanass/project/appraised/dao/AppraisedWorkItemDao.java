@@ -79,10 +79,9 @@ public class AppraisedWorkItemDao {
         QueryCondition queryCondition = QueryBuilders.createQuery(AppraisedWorkItemEntity.class,"awi")
                 .leftJoin(WorkItemEntity.class, "wi", "wi.id=awi.workItemId")
 //                .leftJoin(AppraisedEntity.class, "a", "a.id=awi.appraised_id")
-                .like("wi.name", appraisedWorkItemQuery.getWorkItemTitle())
+                .like("wi.title", appraisedWorkItemQuery.getWorkItemTitle())
                 .eq("workItemAppraisedState", appraisedWorkItemQuery.getWorkItemAppraisedState())
                 .eq("appraisedId", appraisedWorkItemQuery.getAppraisedId())
-                .orders(appraisedWorkItemQuery.getOrderParams())
                 .get();
 
         return jpaTemplate.findList(queryCondition,AppraisedWorkItemEntity.class);

@@ -163,6 +163,12 @@
             <groupId>io.tiklab</groupId>
             <artifactId>tiklab-licence-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.tiklab</groupId>
+            <artifactId>tiklab-dsm-core</artifactId>
+            <version>1.0.2</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 <!--    <build>-->

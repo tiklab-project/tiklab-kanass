@@ -21,6 +21,7 @@ public interface WikiDocumentService {
     * @return
     */
     Pagination<KanassDocument> findUnRelationWorkDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
+    Pagination<KanassDocument> findWorkDocumentPage(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
     List<WikiDocument> findDocumentList(@NotNull @Valid NodeQuery nodeQuery);
 
 }
