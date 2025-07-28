@@ -7,6 +7,7 @@ import io.tiklab.kanass.project.appraised.model.*;
 import io.tiklab.kanass.project.appraised.service.AppraisedHistoryService;
 import io.tiklab.kanass.project.appraised.service.AppraisedService;
 import io.tiklab.kanass.project.appraised.service.AppraisedWorkItemService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class Pmc155Task implements DsmProcessTask {
@@ -59,7 +57,11 @@ public class Pmc155Task implements DsmProcessTask {
             appraisedHistory.setWorkAppraised(appraised);
             appraisedHistory.setWorkItemAppraisedState(appraised.getWorkItemAppraisedState());
             appraisedHistory.setCreater(appraised.getAppraised().getMaster());
-            appraisedHistory.setAdvice(appraised.getAdvice());
+            if (StringUtils.isEmpty(appraised.getAdvice())){
+                appraisedHistory.setAdvice("");
+            }else {
+                appraisedHistory.setAdvice(appraised.getAdvice());
+            }
             appraisedHistoryService.createAppraisedHistory(appraisedHistory);
 //            appraisedHistoryEntity.setCreateTime(new Date());
 //            appraisedHistoryEntity.setUpdateTime(new Date());

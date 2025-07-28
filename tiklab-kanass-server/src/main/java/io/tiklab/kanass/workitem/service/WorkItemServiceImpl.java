@@ -821,6 +821,12 @@ public class WorkItemServiceImpl implements WorkItemService {
             case "preDependWorkItem":
                 updatePreDependWorkItem(workItem);
                 break;
+            case "estimateTime":
+                updateEstimateTime(workItem);
+                break;
+            case "surplusTime":
+                updateSurplusTime(workItem);
+                break;
             default:
                 WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
                 workItemDao.updateWorkItem(workItemEntity);
@@ -1049,6 +1055,49 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
+    }
+
+    /**
+     * 更新预估用时
+     * @param workItem
+     */
+    public void updateEstimateTime(WorkItem workItem){
+        String id = workItem.getId();
+        WorkItem oldWorkItem = findWorkItem(id);
+
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        workItemDao.updateWorkItem(workItemEntity);
+
+        WorkItem newWorkItem = findWorkItem(id);
+        // 创建修改动态
+        // todo todoTask、message暂时未创建
+        HashMap<String, Object> logContent = new HashMap<>();
+        if(ObjectUtils.isEmpty(oldWorkItem.getEstimateTime())){
+            logContent.put("oldValue", 0);
+        }else {
+            logContent.put("oldValue", oldWorkItem.getEstimateTime());
+        }
+        logContent.put("newValue", newWorkItem.getEstimateTime());
+        creatUpdateOplog(newWorkItem, logContent, "KANASS_LOGTYPE_WORKUPDATEMESTIMATETIME");
+    }
+
+    public void updateSurplusTime(WorkItem workItem){
+        String id = workItem.getId();
+        WorkItem oldWorkItem = findWorkItem(id);
+
+        WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
+        workItemDao.updateWorkItem(workItemEntity);
+
+        WorkItem newWorkItem = findWorkItem(id);
+        // 创建修改动态
+        HashMap<String, Object> logContent = new HashMap<>();
+        if(ObjectUtils.isEmpty(oldWorkItem.getSurplusTime())){
+            logContent.put("oldValue", 0);
+        }else {
+            logContent.put("oldValue", oldWorkItem.getEstimateTime());
+        }
+        logContent.put("newValue", newWorkItem.getSurplusTime());
+        creatUpdateOplog(newWorkItem, logContent, "KANASS_LOGTYPE_WORKUPDATESURPLUSTIME");
     }
 
     /**

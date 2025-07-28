@@ -3,7 +3,7 @@ CREATE TABLE pmc_work_appraised_history (
     work_appraised_id varchar(12) NOT NULL ,
     work_item_appraised_state varchar(32) NOT NULL,
     creater varchar(12) NOT NULL,
-    advice text NOT NULL,
+    advice text,
     create_time timestamp(6) NOT NULL,
     update_time timestamp(6) NOT NULL
 );

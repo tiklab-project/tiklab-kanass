@@ -1,7 +1,9 @@
 package io.tiklab.kanass.project.worklog.service;
 
+import com.alibaba.fastjson.JSON;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
+import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.kanass.project.worklog.dao.WorkLogDao;
 import io.tiklab.kanass.project.worklog.model.CalendarHeader;
 import io.tiklab.kanass.project.worklog.model.ProjectLog;
@@ -10,16 +12,22 @@ import io.tiklab.kanass.project.worklog.model.WorkLogQuery;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkItemService;
+import io.tiklab.security.logging.logging.model.Logging;
+import io.tiklab.security.logging.logging.model.LoggingType;
+import io.tiklab.security.logging.logging.service.LoggingByTempService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.kanass.project.worklog.entity.WorkLogEntity;
+import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -47,6 +55,12 @@ public class WorkLogServiceImpl implements WorkLogService {
     @Autowired
     WorkItemService workItemService;
 
+    @Autowired
+    LoggingByTempService opLogByTemplService;
+
+    @Value("${base.url:null}")
+    String baseUrl;
+
     @Override
     public String createWorkLog(@NotNull @Valid WorkLog workLog) {
         workLog.setWorkDate(new Timestamp(System.currentTimeMillis()));
@@ -57,9 +71,24 @@ public class WorkLogServiceImpl implements WorkLogService {
 
     @Override
     public void updateWorkLog(@NotNull @Valid WorkLog workLog) {
-        WorkLogEntity workLogEntity = BeanMapper.map(workLog, WorkLogEntity.class);
+        WorkLog oldWorkLog = findWorkLog(workLog.getId());
 
+        WorkLogEntity workLogEntity = BeanMapper.map(workLog, WorkLogEntity.class);
         workLogDao.updateWorkLog(workLogEntity);
+
+        WorkLog newWorkLog = findWorkLog(workLog.getId());
+
+        if (!oldWorkLog.getTakeupTime().equals(newWorkLog.getTakeupTime())){
+            HashMap<String, Object> logContent = new HashMap<>();
+            if(ObjectUtils.isEmpty(oldWorkLog.getTakeupTime())){
+                logContent.put("oldValue", 0);
+            }else {
+                logContent.put("oldValue", oldWorkLog.getTakeupTime());
+            }
+            logContent.put("newValue", newWorkLog.getTakeupTime());
+            creatUpdateOplog(newWorkLog, logContent, "KANASS_LOGTYPE_WORKUPDATETAKEUPTIME");
+        }
+
     }
 
     @Override
@@ -445,4 +474,44 @@ public class WorkLogServiceImpl implements WorkLogService {
         return allDate;
     }
 
+    /**
+     * 更新事项创建日志
+     * @param logContent
+     * @param workLog
+     */
+    void creatUpdateOplog(WorkLog workLog, HashMap<String, Object> logContent, String actionType){
+        Logging log = new Logging();
+        log.setBgroup("kanass");
+        log.setModule("workItem");
+        log.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        log.setUser(user);
+
+        logContent.put("workItemTitle", workLog.getWorkItem().getTitle());
+        logContent.put("workItemId", workLog.getWorkItem().getId());
+        logContent.put("projectId", workLog.getWorkItem().getProject().getId());
+        logContent.put("master", user);
+        logContent.put("receiveTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        logContent.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+
+        if(workLog.getWorkItem().getSprint() != null) {
+            logContent.put("sprintId", workLog.getWorkItem().getSprint().getId());
+        }
+        if(workLog.getWorkItem().getProjectVersion() != null) {
+            logContent.put("versionId", workLog.getWorkItem().getProjectVersion().getId());
+        }
+
+        LoggingType opLogType = new LoggingType();
+        opLogType.setId(actionType);
+        log.setActionType(opLogType);
+
+        log.setBaseUrl(baseUrl);
+        log.setAction(workLog.getWorkItem().getTitle());
+        log.setLink("/project/${projectId}/workitem/${workItemId}");
+        log.setData(JSON.toJSONString(logContent));
+
+        opLogByTemplService.createLog(log);
+    }
 }

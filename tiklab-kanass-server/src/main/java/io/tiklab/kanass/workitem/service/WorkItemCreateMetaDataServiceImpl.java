@@ -156,7 +156,8 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
         orderParams  = new ArrayList<>();
         order.setName("startTime");
         order.setOrderType(OrderTypeEnum.desc);
-        if (project.getProjectType().getType().equals("scrum")){
+        if (project.getProjectType().getType().equals("scrum") ||
+                project.getProjectType().getType().equals("kanban")){
             // 迭代信息
             SprintQuery sprintQuery = new SprintQuery();
             sprintQuery.setProjectId(projectId);
@@ -164,6 +165,21 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
             List<Sprint> selectSprintList = sprintService.findSelectSprintList(sprintQuery);
             result.setSprintList(selectSprintList);
         }else if (project.getProjectType().getType().equals("nomal")){
+            StageQuery stageQuery = new StageQuery();
+            stageQuery.setProjectId(projectId);
+            stageQuery.setOrderParams(orderParams);
+            List<Stage> stageList = stageService.findStageList(stageQuery);
+            result.setStageList(stageList);
+        }
+
+        if (project.getProjectType().getType().equals("hybrid")){
+            // 迭代信息
+            SprintQuery sprintQuery = new SprintQuery();
+            sprintQuery.setProjectId(projectId);
+            sprintQuery.setOrderParams(orderParams);
+            List<Sprint> selectSprintList = sprintService.findSelectSprintList(sprintQuery);
+            result.setSprintList(selectSprintList);
+
             StageQuery stageQuery = new StageQuery();
             stageQuery.setProjectId(projectId);
             stageQuery.setOrderParams(orderParams);
@@ -303,7 +319,9 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
         orderParams  = new ArrayList<>();
         order.setName("startTime");
         order.setOrderType(OrderTypeEnum.desc);
-        if (project.getProjectType().getType().equals("scrum")){
+        if (project.getProjectType().getType().equals("scrum") ||
+                project.getProjectType().getType().equals("kanban") ||
+                project.getProjectType().getType().equals("hybrid")){
             // 迭代信息
             SprintQuery sprintQuery = new SprintQuery();
             sprintQuery.setProjectId(projectId);
@@ -313,7 +331,26 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
 
             List<Sprint> workSprintList = sprintService.findWorkSprintList(workItemId);
             result.setWorkSprintList(workSprintList);
-        }else if (project.getProjectType().getType().equals("nomal")){
+        }else if (project.getProjectType().getType().equals("nomal")||
+                project.getProjectType().getType().equals("hybrid")){
+            StageQuery stageQuery = new StageQuery();
+            stageQuery.setProjectId(projectId);
+            stageQuery.setOrderParams(orderParams);
+            List<Stage> stageList = stageService.findStageList(stageQuery);
+            result.setStageList(stageList);
+        }
+
+        if (project.getProjectType().getType().equals("hybrid")){
+            SprintQuery sprintQuery = new SprintQuery();
+            sprintQuery.setProjectId(projectId);
+            sprintQuery.setOrderParams(orderParams);
+            List<Sprint> selectSprintList = sprintService.findSelectSprintList(sprintQuery);
+            result.setSprintList(selectSprintList);
+
+            List<Sprint> workSprintList = sprintService.findWorkSprintList(workItemId);
+            result.setWorkSprintList(workSprintList);
+
+
             StageQuery stageQuery = new StageQuery();
             stageQuery.setProjectId(projectId);
             stageQuery.setOrderParams(orderParams);

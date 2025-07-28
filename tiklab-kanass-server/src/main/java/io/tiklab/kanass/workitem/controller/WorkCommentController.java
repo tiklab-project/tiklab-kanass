@@ -2,6 +2,7 @@ package io.tiklab.kanass.workitem.controller;
 
 import io.tiklab.kanass.workitem.model.WorkComment;
 import io.tiklab.kanass.workitem.model.WorkCommentQuery;
+import io.tiklab.kanass.workitem.model.WorkRelateQuery;
 import io.tiklab.kanass.workitem.service.WorkCommentService;
 import io.tiklab.postin.annotation.Api;
 import io.tiklab.core.page.Pagination;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 事项评论控制器
@@ -95,4 +97,15 @@ public class WorkCommentController {
         return Result.ok(pagination);
     }
 
+    /**
+     * 查询动态、评论、工时记录数量
+     * @param workCommentQuery
+     * @return
+     */
+    @RequestMapping(path = "/findWorkDynamicAndCommentAndLogNum",method = RequestMethod.POST)
+    public Result<Map<String, Integer>> findWorkDynamicAndCommentAndLogNum(@RequestBody @Valid @NotNull WorkCommentQuery workCommentQuery){
+        Map<String, Integer> numMap = workCommentService.findWorkDynamicAndCommentAndLogNum(workCommentQuery);
+
+        return Result.ok(numMap);
+    }
 }
