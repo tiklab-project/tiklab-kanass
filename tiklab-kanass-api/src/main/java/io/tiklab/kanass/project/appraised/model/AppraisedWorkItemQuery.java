@@ -49,6 +49,18 @@ public class AppraisedWorkItemQuery {
     @ApiProperty(name ="workItemTypeCode",desc = "事项类型")
     private String workItemTypeCode;
 
+    @ApiProperty(name ="master",desc = "负责人")
+    private String master;
+
+    @ApiProperty(name ="builder",desc = "创建者")
+    private String builder;
+
+    @ApiProperty(name ="projectId",desc = "项目id")
+    private String projectId;
+
+    @ApiProperty(name ="projectIds",desc = "项目id列表")
+    private String[] projectIds;
+
     public String getId() {
         return id;
     }
@@ -135,5 +147,37 @@ public class AppraisedWorkItemQuery {
 
     public void setWorkItemTypeCode(String workItemTypeCode) {
         this.workItemTypeCode = workItemTypeCode;
+    }
+
+    public String getMaster() {
+        return master;
+    }
+
+    public void setMaster(String master) {
+        this.master = master;
+    }
+
+    public String getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(String builder) {
+        this.builder = builder;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public String[] getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(String[] projectIds) {
+        this.projectIds = projectIds;
     }
 }
