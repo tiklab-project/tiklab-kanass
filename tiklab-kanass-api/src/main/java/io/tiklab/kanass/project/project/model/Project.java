@@ -94,6 +94,13 @@ public class Project extends BaseModel{
     private java.lang.String projectSetId;
 
     /**
+     * @pi.name: productId
+     * @pi.value: productId
+     */
+    @ApiProperty(name = "productId",desc = "产品")
+    private java.lang.String productId;
+
+    /**
      * @pi.name: startTime
      * @pi.value: 2023-01-01 12:00:00
      */
@@ -211,6 +218,14 @@ public class Project extends BaseModel{
 
     public void setProjectSetId(String projectSetId) {
         this.projectSetId = projectSetId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public Date getStartTime() {

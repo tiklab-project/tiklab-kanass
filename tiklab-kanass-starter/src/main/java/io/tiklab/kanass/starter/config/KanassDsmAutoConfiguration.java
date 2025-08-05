@@ -218,6 +218,13 @@ public class KanassDsmAutoConfiguration {
                 }).get();
         versionList.add(pmc_156);
 
+        DsmVersion pmc_157 = DsmVersionBuilder.instance()
+                .version("pmc_1.5.7")
+                .db(new String[]{
+                        "pmc_1.5.7",
+                }).get();
+        versionList.add(pmc_157);
+
         return versionList;
     }
 }

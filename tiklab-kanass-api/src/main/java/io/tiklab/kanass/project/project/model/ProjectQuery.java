@@ -47,6 +47,16 @@ public class ProjectQuery implements Serializable {
     private String[] projectSetIds;
 
     /**
+     * @pi.name: projectSetId
+     * @pi.value: projectSetId
+     */
+    @ApiProperty(name ="productId",desc = "产品id, 精确匹配")
+    private String productId;
+
+    @ApiProperty(name ="productIds",desc = "产品id, 精确匹配")
+    private String[] productIds;
+
+    /**
      * @pi.name: projectLimits
      * @pi.value: projectLimits
      */
@@ -139,6 +149,22 @@ public class ProjectQuery implements Serializable {
 
     public void setProjectSetId(String projectSetId) {
         this.projectSetId = projectSetId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String[] getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String[] productIds) {
+        this.productIds = productIds;
     }
 
     public String getMaster() {
