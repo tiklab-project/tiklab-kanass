@@ -2,6 +2,9 @@ package io.tiklab.kanass.project.module.service;
 
 import io.tiklab.kanass.project.module.model.Module;
 import io.tiklab.kanass.project.module.model.ModuleQuery;
+import io.tiklab.kanass.test.test.model.TestCase;
+import io.tiklab.kanass.test.test.model.TestCaseQuery;
+import io.tiklab.kanass.test.test.service.TestCaseService;
 import io.tiklab.kanass.workitem.dao.WorkItemDao;
 import io.tiklab.kanass.workitem.entity.WorkItemEntity;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
@@ -14,12 +17,11 @@ import io.tiklab.kanass.project.module.entity.ModuleEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +38,9 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Autowired
     JoinTemplate joinTemplate;
+
+    @Autowired
+    TestCaseService testCaseService;
 
     @Override
     public String createModule(@NotNull @Valid Module module) {
@@ -183,4 +188,85 @@ public class ModuleServiceImpl implements ModuleService {
 
         return PaginationBuilder.build(pagination,moduleList);
     }
+
+
+    @Override
+    public List<Module> findCaseModuleListTree(ModuleQuery moduleQuery) {
+        //查找所有符合条件列表
+        List<Module> matchModuleList = findModuleList(moduleQuery);
+
+        //查找并设置分类下面的用例数
+        List<Module> moduleMethodList = findModuleMethodList(matchModuleList, moduleQuery);
+
+        //查找第一级分类列表
+        List<Module> topModuleList = findTopModuleList(moduleMethodList);
+
+        //查找并设置子分类列表
+        if(topModuleList != null){
+            for(Module topModule : topModuleList){
+                setChildren(matchModuleList, topModule);
+            }
+        }
+        return topModuleList;
+    }
+
+    /**
+     * 查找分类列表下的用例
+     * @param matchModuleList
+     * @return
+     */
+    List<Module> findModuleMethodList(List<Module> matchModuleList, ModuleQuery moduleQuery){
+        List<Module> moduleList = matchModuleList.stream().map(module -> {
+            TestCaseQuery testCaseQuery = new TestCaseQuery();
+            testCaseQuery.setModuleId(module.getId());
+            List<TestCase> testCaseList = testCaseService.findTestCaseList(testCaseQuery);
+            module.setNodeList(testCaseList);
+            return module;
+        }).collect(Collectors.toList());
+
+
+        return moduleList;
+    }
+
+    /**
+     * 查找第一级分类列表
+     * @param matchModuleList
+     * @return
+     */
+    List<Module> findTopModuleList(List<Module> matchModuleList){
+        return matchModuleList.stream()
+                .filter(module -> (module.getParent() == null))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 查找并设置下级分类列表
+     * @param matchModuleList
+     * @param parentModule
+     */
+    void setChildren(List<Module> matchModuleList, Module parentModule) {
+        List<Module> childModuleList = matchModuleList.stream()
+                .filter(module -> module.getParent() != null && module.getParent().getId().equals(parentModule.getId()))
+                .collect(Collectors.toList());
+
+        Set<String> moduleIds = new HashSet<>();
+        moduleIds.add(parentModule.getId().toString()); // 包含自身
+
+        if (!childModuleList.isEmpty()) {
+            parentModule.setChildren(childModuleList);
+
+            for (Module child : childModuleList) {
+                setChildren(matchModuleList, child); // 递归设置子节点
+
+                List<String> childIds = child.getModuleIds();
+                if (childIds != null) {
+                    moduleIds.addAll(childIds); // 合并子节点的 ID
+                }
+            }
+        }
+
+
+        parentModule.setModuleIds(new ArrayList<>(moduleIds)); // 转为 List<String>
+    }
+
 }

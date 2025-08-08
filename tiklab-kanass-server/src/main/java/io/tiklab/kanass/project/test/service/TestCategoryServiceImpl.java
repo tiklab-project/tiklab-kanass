@@ -33,7 +33,7 @@ public class TestCategoryServiceImpl implements TestCategoryService{
     String getSystemUrl(){
 
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("testhubo");
+        systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return url;

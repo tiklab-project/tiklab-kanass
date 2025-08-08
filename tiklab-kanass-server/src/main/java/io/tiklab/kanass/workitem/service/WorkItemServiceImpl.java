@@ -733,7 +733,7 @@ public class WorkItemServiceImpl implements WorkItemService {
             }
         }
 
-        //特殊处理，从testhubo跳过来创建缺陷传递caseId进行回调绑定
+        //特殊处理，从kanass跳过来创建缺陷传递caseId进行回调绑定
         if(workItem.getCaseId() != null){
             JSONObject jsonObject = new JSONObject();
 

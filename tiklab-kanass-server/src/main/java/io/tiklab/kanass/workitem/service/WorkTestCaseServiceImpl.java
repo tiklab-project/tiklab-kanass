@@ -57,7 +57,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("testhubo");
+        systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return url;
@@ -65,7 +65,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
     UserProcessor userServiceRpc(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
-        systemUrlQuery.setName("testhubo");
+        systemUrlQuery.setName("kanass");
         List<SystemUrl> systemUrlList = systemUrlService.findSystemUrlList(systemUrlQuery);
         String url = systemUrlList.get(0).getSystemUrl();
         return new RpcClientTeamWireUtil().rpcClient().getBean(UserProcessor.class, new FixedLookup(url));
@@ -75,7 +75,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
     public String createWorkTestCase(@NotNull List<WorkTestCase> workTestCase) {
         String document=null;
 
-        //批量创建文档
+        //批量创建
         for (WorkTestCase itemTestCase: workTestCase){
             WorkTestCaseEntity workTestCaseEntity = BeanMapper.map(itemTestCase, WorkTestCaseEntity.class);
              document = workTestCaseDao.createWorkTestCase(workTestCaseEntity);

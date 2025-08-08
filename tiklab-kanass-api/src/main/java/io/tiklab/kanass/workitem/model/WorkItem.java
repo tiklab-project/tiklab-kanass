@@ -248,7 +248,7 @@ public class WorkItem extends BaseModel {
     )
     private Boolean isRele;
 
-    @ApiProperty(name = "特殊处理，从testhubo跳过来创建缺陷传递caseId进行回调绑定")
+    @ApiProperty(name = "特殊处理，从kanass跳过来创建缺陷传递caseId进行回调绑定")
     private String caseId;
 
 

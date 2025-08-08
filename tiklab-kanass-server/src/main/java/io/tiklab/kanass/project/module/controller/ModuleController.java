@@ -117,4 +117,13 @@ public class ModuleController {
         return Result.ok(pagination);
     }
 
+    @RequestMapping(path = "/findCaseModuleListTree",method = RequestMethod.POST)
+    //@ApiMethod(name = "findCaseModuleListTree",desc = "测试模块树结构")
+    //@ApiParam(name = "moduleQuery",desc = "模块查询对象",required = true)
+    public Result<List<Module>> findCategoryListTree(@RequestBody @Valid @NotNull ModuleQuery moduleQuery){
+        List<Module> moduleList = moduleService.findCaseModuleListTree(moduleQuery);
+
+        return Result.ok(moduleList);
+    }
+
 }

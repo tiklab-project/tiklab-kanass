@@ -1,5 +1,6 @@
 package io.tiklab.kanass.project.module.model;
 
+import io.tiklab.kanass.test.test.model.TestCase;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.toolkit.beans.annotation.Mapper;
@@ -11,6 +12,7 @@ import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.kanass.project.project.model.Project;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,6 +52,14 @@ public class Module extends BaseModel {
     })
     @JoinField(key = "id")
     private Project project;
+
+    /**
+     * @pi.name: children
+     * @pi.value: []
+     */
+    @ApiProperty(name="nodeList",desc="分类用例")
+    private List<TestCase> nodeList=new ArrayList<>();
+    private List<String> moduleIds;
 
     public java.lang.String getId() {
         return id;
@@ -96,5 +106,21 @@ public class Module extends BaseModel {
 
     public void setChildren(List<Module> children) {
         this.children = children;
+    }
+
+    public List<TestCase> getNodeList() {
+        return nodeList;
+    }
+
+    public void setNodeList(List<TestCase> nodeList) {
+        this.nodeList = nodeList;
+    }
+
+    public List<String> getModuleIds() {
+        return moduleIds;
+    }
+
+    public void setModuleIds(List<String> moduleIds) {
+        this.moduleIds = moduleIds;
     }
 }

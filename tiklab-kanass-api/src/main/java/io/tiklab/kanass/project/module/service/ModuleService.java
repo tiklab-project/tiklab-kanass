@@ -78,4 +78,10 @@ public interface ModuleService {
      */
     Pagination<Module> findModulePage(ModuleQuery moduleQuery);
 
+    /**
+     * 测试模块树结构
+     * @param moduleQuery
+     * @return
+     */
+    List<Module> findCaseModuleListTree(ModuleQuery moduleQuery);
 }
