@@ -148,6 +148,9 @@ public class Project extends BaseModel{
     @ApiProperty(name="surplusTime",desc="剩余工时")
     private Integer surplusTime;
 
+    @ApiProperty(name="color",desc="项目颜色")
+    private int color;
+
     public String getId() {
         return id;
     }
@@ -322,5 +325,13 @@ public class Project extends BaseModel{
 
     public void setSurplusTime(Integer surplusTime) {
         this.surplusTime = surplusTime;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

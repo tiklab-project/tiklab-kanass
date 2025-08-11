@@ -12,11 +12,11 @@ public class ProductModuleEntity implements Serializable {
     @Column(name = "id", length = 12)
     private String id;
 
-    @Column(name = "name", length = 64,notNull = true)
+    @Column(name = "module_name", length = 64,notNull = true)
     private String moduleName;
 
     @Column(name = "description")
-    private String description;
+    private String desc;
 
     @Column(name = "parent_id", length = 12)
     private String parentId;
@@ -40,12 +40,12 @@ public class ProductModuleEntity implements Serializable {
         this.moduleName = moduleName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public String getParentId() {

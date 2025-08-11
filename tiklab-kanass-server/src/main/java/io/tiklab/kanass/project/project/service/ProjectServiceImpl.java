@@ -172,6 +172,9 @@ public class ProjectServiceImpl implements ProjectService {
             project.setCreator(createUserId);
         }
 
+        int color = new Random().nextInt(3) + 1;
+        project.setColor(color);
+
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 
         String projectKey = project.getProjectKey();

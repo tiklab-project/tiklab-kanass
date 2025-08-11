@@ -17,7 +17,7 @@ public class ProductFocusEntity implements Serializable {
 
     // 产品id
     @Column(name = "product_id",length = 64)
-    private String projectSetId;
+    private String productId;
 
     // 收藏者id
     @Column(name = "master_id",length = 64)
@@ -35,12 +35,12 @@ public class ProductFocusEntity implements Serializable {
         this.id = id;
     }
 
-    public String getProjectSetId() {
-        return projectSetId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProjectSetId(String projectSetId) {
-        this.projectSetId = projectSetId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getMasterId() {

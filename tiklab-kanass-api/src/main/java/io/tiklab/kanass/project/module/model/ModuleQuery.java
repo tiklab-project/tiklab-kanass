@@ -17,6 +17,9 @@ public class ModuleQuery {
     @ApiProperty(name ="projectId",desc = "所属项目ID，精确匹配")
     private String projectId;
 
+    @ApiProperty(name ="projectIds",desc = "所属项目ID，精确匹配")
+    private String[] projectIds;
+
     @ApiProperty(name ="moduleName",desc = "模块名称，模糊匹配")
     private String moduleName;
 
@@ -56,5 +59,13 @@ public class ModuleQuery {
 
     public void setOrderParams(List<Order> orderParams) {
         this.orderParams = orderParams;
+    }
+
+    public String[] getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(String[] projectIds) {
+        this.projectIds = projectIds;
     }
 }

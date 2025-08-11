@@ -11,16 +11,16 @@ import java.util.List;
 public interface ProductFocusService {
     /**
      * 创建收藏的产品
-     * @param ProductFocus
+     * @param productFocus
      * @return
      */
-    String createProductFocus(@NotNull @Valid ProductFocus ProductFocus);
+    String createProductFocus(@NotNull @Valid ProductFocus productFocus);
 
     /**
      * 更新收藏的产品
-     * @param ProductFocus
+     * @param productFocus
      */
-    void updateProductFocus(@NotNull @Valid ProductFocus ProductFocus);
+    void updateProductFocus(@NotNull @Valid ProductFocus productFocus);
 
     /**
      * 删除收藏的产品
@@ -57,16 +57,21 @@ public interface ProductFocusService {
 
     /**
      * 根据条件查询收藏产品列表
-     * @param ProductFocusQuery
+     * @param productFocusQuery
      * @return
      */
-    List<ProductFocus> findProductFocusList(ProductFocusQuery ProductFocusQuery);
+    List<ProductFocus> findProductFocusList(ProductFocusQuery productFocusQuery);
 
     /**
      * 根据条件按分页查询收藏产品列表
-     * @param ProductFocusQuery
+     * @param productFocusQuery
      * @return
      */
-    Pagination<ProductFocus> findProductFocusPage(ProductFocusQuery ProductFocusQuery);
+    Pagination<ProductFocus> findProductFocusPage(ProductFocusQuery productFocusQuery);
 
+    /**
+     * 通过条件删除产品关联关系
+     * @param productFocusQuery
+     */
+    void deleteProductFocusByQuery(ProductFocusQuery productFocusQuery);
 }

@@ -963,6 +963,7 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
         String projectSetId = params.get("projectSetId");
         String sprintId = params.get("sprintId");
         String versionId = params.get("versionId");
+        String productId = params.get("productId");
         //根据项目ID统计待办工作项
         if(!StringUtils.isEmpty(projectId)){
             data.put("projectId", projectId);
@@ -1011,9 +1012,42 @@ public class ProjectInsightReportServiceImpl implements ProjectInsightReportServ
             todoCount.put("end", end);
             todoCount.put("overdue", overdue);
         }
+        //根据项目集ID统计待办工作项
+        if(!StringUtils.isEmpty(productId)){
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setProductId(productId);
+            List<Project> projectList = projectService.findProjectList(projectQuery);
+            //初始化四个计数器：total、progress、end 和 overdue
+            int total = 0;
+            int progress = 0;
+            int end = 0;
+            int overdue = 0;
+            //遍历 projectList 中的每一个 Project 对象
+            for (Project project : projectList) {
+                String projectId1 = project.getId();
+                data.put("projectId", projectId1);
+                todoCount = getTodoStatistics(data);
+
+                Integer total1 = todoCount.get("total");
+                total = total + total1;
+
+                Integer progress1 = todoCount.get("progress");
+                progress = progress + progress1;
+
+                Integer end1 = todoCount.get("end");
+                end = end + end1;
+
+                Integer overdue1 = todoCount.get("overdue");
+                overdue = overdue + overdue1;
+            }
+            todoCount.put("total", total);
+            todoCount.put("progress", progress);
+            todoCount.put("end", end);
+            todoCount.put("overdue", overdue);
+        }
         //处理无参数的情况
         if(StringUtils.isEmpty(projectSetId) && StringUtils.isEmpty(projectId)
-                && StringUtils.isEmpty(sprintId) && StringUtils.isEmpty(versionId)){
+                && StringUtils.isEmpty(sprintId) && StringUtils.isEmpty(versionId) && StringUtils.isEmpty(productId)){
             todoCount = getTodoStatistics(data);
         }
         return todoCount;

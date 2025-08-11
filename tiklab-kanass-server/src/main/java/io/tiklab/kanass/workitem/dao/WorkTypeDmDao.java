@@ -1,5 +1,6 @@
 package io.tiklab.kanass.workitem.dao;
 
+import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.kanass.workitem.entity.WorkTypeDmEntity;
 import io.tiklab.kanass.workitem.entity.WorkTypeEntity;
 import io.tiklab.kanass.workitem.model.WorkTypeDmQuery;
@@ -84,8 +85,11 @@ public class WorkTypeDmDao{
     public List<WorkTypeDmEntity> findWorkTypeDmList(WorkTypeDmQuery workTypeDmQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkTypeDmEntity.class, "wd")
                 .leftJoin( WorkTypeEntity.class, "wt","wd.workTypeId=wt.id")
+                .leftJoin(ProjectEntity.class, "p", "wd.projectId=p.id")
                 .eq("wd.projectId",workTypeDmQuery.getProjectId())
                 .in("wd.projectId", workTypeDmQuery.getProjectIds())
+                .eq("p.productId",workTypeDmQuery.getProductId())
+                .in("p.productId", workTypeDmQuery.getProductIds())
                 .eq("wd.workTypeId",workTypeDmQuery.getWorkTypeId())
                 .eq("wt.grouper", workTypeDmQuery.getGrouper())
                 .eq("wt.code", workTypeDmQuery.getCode())

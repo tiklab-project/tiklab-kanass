@@ -430,6 +430,9 @@ public class ProjectDao{
 //            sql = sql.concat(" and p.project_set_id = '?'");
 //            objects.add(projectQuery.getProjectSetId());
         }
+        if (projectQuery.getProductId() != null){
+            sql = sql.concat(" and p.product_id = '" + projectQuery.getProductId() + "'");
+        }
         if (projectQuery.getOverdue() != null && projectQuery.getOverdue()){
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

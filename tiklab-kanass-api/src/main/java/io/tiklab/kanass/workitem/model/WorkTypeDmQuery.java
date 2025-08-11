@@ -22,6 +22,12 @@ public class WorkTypeDmQuery implements Serializable{
     @ApiProperty(name ="projectIds",desc = "项目ids，精准匹配")
     private String[] projectIds;
 
+    @ApiProperty(name ="productId",desc = "产品id，精准匹配")
+    private String productId;
+
+    @ApiProperty(name ="productIds",desc = "产品ids，精准匹配")
+    private String[] productIds;
+
     @ApiProperty(name ="workTypeId",desc = "事项类型id，精准匹配")
     private String workTypeId;
 
@@ -104,5 +110,21 @@ public class WorkTypeDmQuery implements Serializable{
 
     public void setCodes(String[] codes) {
         this.codes = codes;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String[] getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String[] productIds) {
+        this.productIds = productIds;
     }
 }

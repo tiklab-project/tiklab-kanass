@@ -36,7 +36,7 @@ public class ProductModule {
 
 
 
-    @ApiProperty(name="desc",desc="模块描述")
+    @ApiProperty(name="description",desc="模块描述")
     private String desc;
 
     @NotNull
@@ -46,4 +46,52 @@ public class ProductModule {
     })
     @JoinField(key = "id")
     private Product product;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public ProductModule getParent() {
+        return parent;
+    }
+
+    public void setParent(ProductModule parent) {
+        this.parent = parent;
+    }
+
+    public List<ProductModule> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<ProductModule> children) {
+        this.children = children;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

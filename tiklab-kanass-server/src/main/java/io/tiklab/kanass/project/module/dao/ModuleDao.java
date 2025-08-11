@@ -83,6 +83,7 @@ public class ModuleDao{
     public List<ModuleEntity> findModuleList(ModuleQuery moduleQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(ModuleEntity.class)
                 .eq("projectId", moduleQuery.getProjectId())
+                .in("projectId", moduleQuery.getProjectIds())
                 .like("moduleName", moduleQuery.getModuleName())
                 .orders(moduleQuery.getOrderParams())
                 .get();

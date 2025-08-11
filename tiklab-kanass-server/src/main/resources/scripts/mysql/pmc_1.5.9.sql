@@ -1,0 +1,1 @@
+ALTER TABLE pmc_project ADD COLUMN color int DEFAULT NULL COMMENT '产品id';

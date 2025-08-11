@@ -154,7 +154,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     public void deleteProjectSet(@NotNull String id) {
         // 删除项目集与项目的关联
         ProjectQuery projectQuery = new ProjectQuery();
-        projectQuery.setProductId(id);
+        projectQuery.setProjectSetId(id);
         List<Project> projectList = projectService.findProjectList(projectQuery);
         if(projectList.size() > 0){
             for (Project project : projectList) {
