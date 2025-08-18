@@ -66,6 +66,13 @@ public class Appraised extends BaseModel {
     @ApiProperty(name="description",desc="描述")
     private String description;
 
+    @ApiProperty(name="appraisedType",desc="评审类型")
+    @Mappings({
+            @Mapping(source = "appraisedType.id",target = "appraisedTypeId")
+    })
+    @JoinField(key = "id")
+    private AppraisedType appraisedType;
+
     // 所有评审事项
     private Integer allAppraisedWorkItemNumber;
     // 通过的评审事项
@@ -175,5 +182,13 @@ public class Appraised extends BaseModel {
 
     public void setUnPassAppraisedWorkItemNumber(Integer unPassAppraisedWorkItemNumber) {
         this.unPassAppraisedWorkItemNumber = unPassAppraisedWorkItemNumber;
+    }
+
+    public AppraisedType getAppraisedType() {
+        return appraisedType;
+    }
+
+    public void setAppraisedType(AppraisedType appraisedType) {
+        this.appraisedType = appraisedType;
     }
 }

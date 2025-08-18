@@ -13,6 +13,7 @@ import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.user.user.model.User;
+import org.springframework.beans.PropertyValue;
 
 import java.util.List;
 
@@ -62,6 +63,9 @@ public class Stage extends BaseModel {
 
     @ApiProperty(name="progress",desc="进度，百分比")
     private java.lang.Integer progress = 0;
+
+    private int doneWorkCount = 0;
+    private int totalWorkCount = 0;
 
     @ApiProperty(name="master",desc="负责人")
     @Mappings({
@@ -222,5 +226,25 @@ public class Stage extends BaseModel {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public boolean isChangeParent() {
+        return isChangeParent;
+    }
+
+    public int getDoneWorkCount() {
+        return doneWorkCount;
+    }
+
+    public void setDoneWorkCount(int doneWorkCount) {
+        this.doneWorkCount = doneWorkCount;
+    }
+
+    public int getTotalWorkCount() {
+        return totalWorkCount;
+    }
+
+    public void setTotalWorkCount(int totalWorkCount) {
+        this.totalWorkCount = totalWorkCount;
     }
 }

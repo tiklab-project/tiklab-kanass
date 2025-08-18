@@ -3,6 +3,7 @@ package io.tiklab.kanass.workitem.service;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.kanass.project.wiki.model.KanassDocument;
 import io.tiklab.kanass.project.wiki.model.NodeQuery;
+import io.tiklab.kanass.project.wiki.model.ProjectDocumentQuery;
 import io.tiklab.kanass.project.wiki.model.WikiDocument;
 import io.tiklab.kanass.workitem.model.WorkItemDocumentQuery;
 
@@ -21,7 +22,8 @@ public interface WikiDocumentService {
     * @return
     */
     Pagination<KanassDocument> findUnRelationWorkDocumentList(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
-    Pagination<KanassDocument> findWorkDocumentPage(@NotNull @Valid WorkItemDocumentQuery workItemDocumentQuery);
+    Pagination<KanassDocument> findUnRelationProjectDocumentList(@NotNull @Valid ProjectDocumentQuery projectDocumentQuery);
+    Pagination<KanassDocument> findWorkDocumentPage(@NotNull @Valid NodeQuery nodeQuery);
     List<WikiDocument> findDocumentList(@NotNull @Valid NodeQuery nodeQuery);
 
 }

@@ -282,7 +282,43 @@ public class StageServiceImpl implements StageService {
             }
         }
 
+        // 计算进度
+        for (Stage stage : stageList) {
+            calcStageProgress(stage);
+        }
+
         return stagePage;
+    }
+
+    private void calcStageProgress(Stage stage){
+        int doneWorkCount = 0;
+        int totalWorkCount = 0;
+        if (stage.getChildrenWorkItem() != null){
+            for (WorkItem workItem : stage.getChildrenWorkItem()) {
+                totalWorkCount++;
+                if(workItem.getWorkStatusCode().equals("DONE")){
+                    doneWorkCount++;
+                }
+            }
+        }
+
+        // 查询子stage
+        if (stage.getChildren() != null) {
+            for (Stage childStage : stage.getChildren()) {
+                calcStageProgress(childStage); // 递归计算子 Stage
+                totalWorkCount += childStage.getTotalWorkCount();
+                doneWorkCount += childStage.getDoneWorkCount();
+            }
+        }
+
+        if (totalWorkCount > 0){
+            stage.setProgress(doneWorkCount * 100 / totalWorkCount);
+        }else {
+            stage.setProgress(0);
+        }
+
+        stage.setTotalWorkCount(totalWorkCount);
+        stage.setDoneWorkCount(doneWorkCount);
     }
 
     @Override

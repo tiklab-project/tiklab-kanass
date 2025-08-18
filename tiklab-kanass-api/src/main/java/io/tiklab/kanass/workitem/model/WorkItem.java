@@ -3,6 +3,7 @@ package io.tiklab.kanass.workitem.model;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.tiklab.form.field.model.SelectItem;
+import io.tiklab.kanass.product.plan.model.ProductPlan;
 import io.tiklab.kanass.project.stage.model.Stage;
 import io.tiklab.toolkit.beans.annotation.Mapper;
 import io.tiklab.toolkit.beans.annotation.Mapping;
@@ -156,6 +157,16 @@ public class WorkItem extends BaseModel {
     })
     @JoinField(key = "id")
     private ProjectVersion projectVersion;
+
+    @ApiProperty(name="productPlan",desc="所属产品计划")
+    @Mappings({
+            @Mapping(source = "productPlan.id",target = "productPlanId")
+    })
+    @JoinField(key = "id")
+    private ProductPlan productPlan;
+
+    @ApiProperty(name="productPlanList",desc="分配过的产品计划")
+    private List<ProductPlan> productPlanList;
 
     @ApiProperty(name="builder",desc="创建人")
     @Mappings({
@@ -622,5 +633,21 @@ public class WorkItem extends BaseModel {
     }
     public void setCaseId(String caseId) {
         this.caseId = caseId;
+    }
+
+    public ProductPlan getProductPlan() {
+        return productPlan;
+    }
+
+    public void setProductPlan(ProductPlan productPlan) {
+        this.productPlan = productPlan;
+    }
+
+    public List<ProductPlan> getProductPlanList() {
+        return productPlanList;
+    }
+
+    public void setProductPlanList(List<ProductPlan> productPlanList) {
+        this.productPlanList = productPlanList;
     }
 }

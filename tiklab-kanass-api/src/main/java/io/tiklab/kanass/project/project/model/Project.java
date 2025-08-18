@@ -114,6 +114,9 @@ public class Project extends BaseModel{
     @ApiProperty(name="endTime",desc="结束时间")
     private Date endTime;
 
+    @ApiProperty(name="createTime",desc="创建时间")
+    private Date createTime;
+
     /**
      * @pi.name: projectState
      * @pi.value: 1: 未完成   2:进行中   3：已结束
@@ -333,5 +336,13 @@ public class Project extends BaseModel{
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

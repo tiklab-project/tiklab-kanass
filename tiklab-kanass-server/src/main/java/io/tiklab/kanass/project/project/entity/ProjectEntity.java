@@ -75,6 +75,9 @@ public class ProjectEntity implements Serializable {
     @Column(name = "color")
     private int color;
 
+    @Column(name = "create_time")
+    private Date createTime;
+
     public String getId() {
         return id;
     }
@@ -193,5 +196,13 @@ public class ProjectEntity implements Serializable {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

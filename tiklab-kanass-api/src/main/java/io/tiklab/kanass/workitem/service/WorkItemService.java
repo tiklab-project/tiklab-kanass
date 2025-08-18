@@ -7,6 +7,7 @@ import io.tiklab.toolkit.join.annotation.FindList;
 import io.tiklab.toolkit.join.annotation.JoinProvider;
 import io.tiklab.toolkit.join.annotation.FindAll;
 import io.tiklab.toolkit.join.annotation.FindOne;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -216,10 +217,19 @@ public interface WorkItemService {
      */
     void updateBatchWorkItemVersion(@NotNull String oldVersionId, String newVersionId);
 
+    /**
+     * 批量更新事项的产品计划
+     * @param oldProductPlanId
+     * @param newProductPlanId
+     */
+    void updateBatchWorkItemProductPlan(@NotNull String oldProductPlanId, String newProductPlanId);
+
 
     List<WorkItem> findSprintWorkItemList(@NotNull String sprintId);
 
     List<WorkItem> findVersionWorkItemList(@NotNull String versionId);
+
+    List<WorkItem> findProductPlanWorkItemList(@NotNull String productPlanId);
 
     /**
      * 查找迭代下各个状态的事项
@@ -229,6 +239,8 @@ public interface WorkItemService {
     HashMap<String, Integer> findSprintWorkItemNum(@NotNull String sprintId);
 
     HashMap<String, Integer> findVersionWorkItemNum(@NotNull String versionId);
+
+    HashMap<String, Integer> findProductPlanWorkItemNum(@NotNull String productPlanId);
 
     /**
      * 查找迭代下的预计工时和剩余工时
@@ -243,6 +255,8 @@ public interface WorkItemService {
      * @return
      */
     Map<String, Integer> findVersionWorkTime(@NotNull String versionId);
+
+    Map<String, Integer> findProductPlanWorkTime(@NotNull String productPlanId);
 
     /**
      * 查看事项有几级下级事项
@@ -264,4 +278,12 @@ public interface WorkItemService {
      * @return
      */
     Map<String, Integer> findTodoPageWorkItemNum(WorkItemQuery workItemQuery);
+
+    /**
+     * 查询未关联产品计划的事项
+     * @param workItemQuery
+     * @return
+     */
+    Pagination<WorkItem> findUnLinkProductPlanWorkPage(WorkItemQuery workItemQuery);
+
 }

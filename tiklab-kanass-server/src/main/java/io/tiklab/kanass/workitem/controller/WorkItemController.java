@@ -554,4 +554,10 @@ public class WorkItemController {
 
         return Result.ok(map);
     }
+
+    @RequestMapping(path = "/findUnLinkProductPlanWorkPage",method = RequestMethod.POST)
+    public Result<Pagination<WorkItem>> findUnLinkProductPlanWorkPage(@RequestBody @Valid WorkItemQuery workItemQuery){
+        Pagination<WorkItem> pagination = workItemService.findUnLinkProductPlanWorkPage(workItemQuery);
+        return Result.ok(pagination);
+    }
 }

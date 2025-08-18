@@ -175,6 +175,8 @@ public class ProjectServiceImpl implements ProjectService {
         int color = new Random().nextInt(3) + 1;
         project.setColor(color);
 
+        project.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
+
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 
         String projectKey = project.getProjectKey();
@@ -270,6 +272,11 @@ public class ProjectServiceImpl implements ProjectService {
             String createUserId = LoginContext.getLoginId();
             project.setCreator(createUserId);
         }
+
+        int color = new Random().nextInt(3) + 1;
+        project.setColor(color);
+
+        project.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
 
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 

@@ -164,7 +164,8 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
             sprintQuery.setOrderParams(orderParams);
             List<Sprint> selectSprintList = sprintService.findSelectSprintList(sprintQuery);
             result.setSprintList(selectSprintList);
-        }else if (project.getProjectType().getType().equals("nomal")){
+        }else if ((project.getProjectType().getType().equals("nomal") ||
+                project.getProjectType().getType().equals("ipd"))){
             StageQuery stageQuery = new StageQuery();
             stageQuery.setProjectId(projectId);
             stageQuery.setOrderParams(orderParams);

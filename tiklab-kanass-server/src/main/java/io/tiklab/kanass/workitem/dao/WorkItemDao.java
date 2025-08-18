@@ -321,6 +321,14 @@ public class WorkItemDao{
             }
         }
 
+        if(workItemQuery.getProductPlanIdIsNull() != null) {
+            if(workItemQuery.getProductPlanIdIsNull() == true){
+                queryBuilders = queryBuilders.isNull("wi.productPlanId");
+            }else {
+                queryBuilders = queryBuilders.isNotNull("wi.productPlanId");
+            }
+        }
+
         if(workItemQuery.getWorkStatusIds() != null){
             List<String> workStatusIds = workItemQuery.getWorkStatusIds();
             String[] arr = workStatusIds.toArray(new String[workStatusIds.size()]);
@@ -1054,6 +1062,33 @@ public class WorkItemDao{
             }
             paramMap.put("neqStageId", workItemQuery.getNeqStageId());
         }
+
+        if(workItemQuery.getProductPlanId() != null && workItemQuery.getProductPlanId().length()>0){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.product_plan_id = '" + workItemQuery.getProductPlanId() + "'");
+            }else {
+                sql = sql.concat(" and p.product_plan_id = '" + workItemQuery.getProductPlanId() + "'");
+            }
+            paramMap.put("productPlanId", workItemQuery.getProductPlanId());
+        }
+
+        if(workItemQuery.getProductPlanIds() != null && workItemQuery.getProductPlanIds().size()>0){
+            List<String> productPlanIds = workItemQuery.getProductPlanIds();
+            String s = new String("(");
+            for(String productPlanId : productPlanIds){
+                s = s.concat("'" + productPlanId + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s= s.concat(")");
+
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.product_plan_id in " + s);
+            }else {
+                sql = sql.concat(" and p.product_plan_id in " + s);
+            }
+            paramMap.put("productPlanIds", workItemQuery.getAssignerIds());
+        }
+
         objectObjectHashMap.put("query", paramMap);
         objectObjectHashMap.put("sql", sql);
 
@@ -1717,6 +1752,25 @@ public class WorkItemDao{
         }
     }
 
+    public void updateBatchWorkItemProductPlan(String oldProductPlanId, String newProductPlanId){
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        if(newProductPlanId != null){
+            String sql = "update pmc_work_item SET product_plan_id = '" + newProductPlanId + "' WHERE product_plan_id = '" + oldProductPlanId + "' and work_status_code != 'DONE' ";
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e){
+                throw new ApplicationException(ErrorCode.CREATE_ERROR,"批量更新事项版本失败" + e.getMessage());
+            }
+        }else {
+            String sql = "update pmc_work_item SET product_plan_id = null WHERE product_plan_id = '" + oldProductPlanId + "' and work_status_code != 'DONE'";
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e){
+                throw new ApplicationException(ErrorCode.CREATE_ERROR,"批量更新事项版本失败" + e.getMessage());
+            }
+        }
+    }
+
     public List<WorkItemEntity> findSprintWorkItemList(String sprintId){
         String sql = "select * from pmc_work_item where sprint_id = '" +  sprintId + "' and work_status_code != 'DONE'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
@@ -1726,6 +1780,13 @@ public class WorkItemDao{
 
     public List<WorkItemEntity> findVersionWorkItemList(String versionId){
         String sql = "select * from pmc_work_item where version_id = '" +  versionId + "' and work_status_code != 'DONE'";
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        List<WorkItemEntity> workItemEntityList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WorkItemEntity.class));
+        return workItemEntityList;
+    }
+
+    public List<WorkItemEntity> findProductPlanWorkItemList(String productPlanId){
+        String sql = "select * from pmc_work_item where product_plan_id = '" +  productPlanId + "' and work_status_code != 'DONE'";
         JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
         List<WorkItemEntity> workItemEntityList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WorkItemEntity.class));
         return workItemEntityList;
@@ -1745,6 +1806,12 @@ public class WorkItemDao{
 
     public List<String> findWorkItemIdsByStage(String stageId){
         String sql = "SELECT work_item_id from pmc_stage_work_item WHERE stage_id = '" + stageId + "'";
+        List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
+        return workItemIds;
+    }
+
+    public List<String> findWorkItemIdsByProductPlan(String productPlanId){
+        String sql = "SELECT work_item_id from pmc_work_product_plan WHERE product_plan_id = '" + productPlanId + "'";
         List<String> workItemIds = jpaTemplate.getJdbcTemplate().queryForList(sql, String.class);
         return workItemIds;
     }
@@ -1783,6 +1850,23 @@ public class WorkItemDao{
         return versionWorkItemNum;
     }
 
+    public HashMap<String, Integer> findProductPlanWorkItemNum(String productPlanId){
+        HashMap<String, Integer> versionWorkItemNum = new HashMap<>();
+        String sql = "Select count(1) as total from pmc_work_item wk LEFT JOIN pmc_work_product_plan ws on wk.id = ws.work_item_id  where ws.product_plan_id = '" + productPlanId + "'";
+        Integer allNum = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
+        versionWorkItemNum.put("all", allNum);
+
+        String sql1 = sql + " and wk.work_status_code != 'DONE'";
+        Integer progressNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        versionWorkItemNum.put("progress", progressNum);
+
+        sql1 = sql + " and wk.work_status_code = 'DONE'";
+        Integer doneNum = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
+        versionWorkItemNum.put("done", doneNum);
+
+        return versionWorkItemNum;
+    }
+
     public Map<String, Integer> findSprintWorkTime(String sprintId){
         String sql = "Select sum(estimate_time) as estimateTime, sum(surplus_time) as surplusTime from pmc_work_item where sprint_id = ?";
         Map<String, Object> map = jpaTemplate.getJdbcTemplate().queryForMap(sql, sprintId);
@@ -1803,6 +1887,24 @@ public class WorkItemDao{
     public Map<String, Integer> findVersionWorkTime(String versionId){
         String sql = "Select sum(wk.estimate_time) as estimateTime, sum(wk.surplus_time) as surplusTime from pmc_work_item wk LEFT JOIN pmc_work_version ws on wk.id = ws.work_item_id  where ws.version_id = ?";
         Map<String, Object> map = jpaTemplate.getJdbcTemplate().queryForMap(sql, versionId);
+        Map<String, Integer> map1 = new HashMap<>();
+        if(map.get("estimateTime") != null){
+            map1.put("estimateTime", Integer.valueOf(map.get("estimateTime").toString()));
+        }
+        else {
+            map1.put("estimateTime", 0);
+        }
+        if(map.get("surplusTime") != null){
+            map1.put("surplusTime", Integer.valueOf(map.get("surplusTime").toString()));
+        }else {
+            map1.put("surplusTime", 0);
+        }
+        return map1;
+    }
+
+    public Map<String, Integer> findProductPlanWorkTime(String productPlanId){
+        String sql = "Select sum(wk.estimate_time) as estimateTime, sum(wk.surplus_time) as surplusTime from pmc_work_item wk LEFT JOIN pmc_work_product_plan ws on wk.id = ws.work_item_id  where ws.product_plan_id = ?";
+        Map<String, Object> map = jpaTemplate.getJdbcTemplate().queryForMap(sql, productPlanId);
         Map<String, Integer> map1 = new HashMap<>();
         if(map.get("estimateTime") != null){
             map1.put("estimateTime", Integer.valueOf(map.get("estimateTime").toString()));

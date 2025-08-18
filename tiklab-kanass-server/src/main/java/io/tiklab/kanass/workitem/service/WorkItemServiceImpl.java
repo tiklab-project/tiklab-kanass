@@ -27,6 +27,7 @@ import io.tiklab.kanass.project.worklog.model.WorkLogQuery;
 import io.tiklab.kanass.project.worklog.service.WorkLogService;
 import io.tiklab.kanass.sprint.model.Sprint;
 import io.tiklab.kanass.sprint.service.SprintService;
+import io.tiklab.kanass.workitem.entity.WorkProductPlanEntity;
 import io.tiklab.message.message.model.SendMessageNotice;
 import io.tiklab.message.message.service.SendMessageNoticeService;
 import io.tiklab.privilege.vRole.model.VRoleDomain;
@@ -564,6 +565,9 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
         if(workItem.getProjectVersion() != null) {
             logContent.put("versionId", workItem.getProjectVersion().getId());
+        }
+        if(workItem.getStage() != null) {
+            logContent.put("stageId", workItem.getStage().getId());
         }
 
         LoggingType opLogType = new LoggingType();
@@ -2473,6 +2477,16 @@ public class WorkItemServiceImpl implements WorkItemService {
     }
 
     /**
+     * 批量更新事项的版本
+     * @param oldProductPlanId
+     * @param newProductPlanId
+     */
+    @Override
+    public void updateBatchWorkItemProductPlan(String oldProductPlanId, String newProductPlanId) {
+        workItemDao.updateBatchWorkItemProductPlan(oldProductPlanId, newProductPlanId);
+    }
+
+    /**
      * 根据迭代id查找没有完成的事项列表
      * @param sprintId
      * @return
@@ -2501,6 +2515,15 @@ public class WorkItemServiceImpl implements WorkItemService {
         return workItemList;
     }
 
+    @Override
+    public List<WorkItem> findProductPlanWorkItemList(String productPlanId) {
+        List<WorkItemEntity> versionWorkItemList = workItemDao.findProductPlanWorkItemList(productPlanId);
+        List<WorkItem> workItemList = BeanMapper.mapList(versionWorkItemList,WorkItem.class);
+        this.handleDefaultNodeWorkItem(workItemList);
+        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
+        return workItemList;
+    }
+
     /**
      * 查找迭代下事项的个数
      * @param sprintId
@@ -2523,6 +2546,12 @@ public class WorkItemServiceImpl implements WorkItemService {
         return versionWorkItemNum;
     }
 
+    @Override
+    public HashMap<String, Integer> findProductPlanWorkItemNum(String productPlanId) {
+        HashMap<String, Integer> versionWorkItemNum = workItemDao.findProductPlanWorkItemNum(productPlanId);
+        return versionWorkItemNum;
+    }
+
     /**
      * 查找迭代下事项的个数
      * @param sprintId
@@ -2542,6 +2571,17 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Override
     public Map<String, Integer> findVersionWorkTime(String versionId) {
         Map<String, Integer> result = workItemDao.findVersionWorkTime(versionId);
+        return result;
+    }
+
+    /**
+     * 查找产品计划下事项的个数
+     * @param versionId
+     * @return
+     */
+    @Override
+    public Map<String, Integer> findProductPlanWorkTime(String productPlanId) {
+        Map<String, Integer> result = workItemDao.findProductPlanWorkTime(productPlanId);
         return result;
     }
 
@@ -2631,5 +2671,18 @@ public class WorkItemServiceImpl implements WorkItemService {
 //
 //        }
         return Map.of();
+    }
+
+    /**
+     *
+     * @param workItemQuery
+     * @return
+     */
+    public Pagination<WorkItem> findUnLinkProductPlanWorkPage(WorkItemQuery workItemQuery){
+        Pagination<WorkItemEntity> pagination = workItemDao.findWorkItemPage(workItemQuery);
+        List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
+        this.handleDefaultNodeWorkItem(workItemList);
+        joinTemplate.joinQuery(workItemList,  new String[]{"project", "workPriority", "workStatusNode", "workTypeSys"});
+        return PaginationBuilder.build(pagination,workItemList);
     }
 }

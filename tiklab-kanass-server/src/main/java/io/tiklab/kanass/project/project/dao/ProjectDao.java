@@ -1,5 +1,7 @@
 package io.tiklab.kanass.project.project.dao;
 
+import io.tiklab.core.order.Order;
+import io.tiklab.core.order.OrderTypeEnum;
 import io.tiklab.kanass.common.JdbcTypeCheckUtil;
 import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.kanass.project.project.entity.ProjectFocusEntity;
@@ -465,6 +467,18 @@ public class ProjectDao{
 //            objects.add(projectQuery.getFocusUser());
         }
 
+        if(!ObjectUtils.isEmpty(projectQuery.getOrderParams())){
+            sql= sql.concat(" order by");
+            for (Order orderParam : projectQuery.getOrderParams()) {
+                OrderTypeEnum orderType = orderParam.getOrderType();
+                String name = orderParam.getName();
+                sql = sql.concat(" p." + camelToUnderline(name) + " " + orderType + "," );
+            }
+        }
+        if(!ObjectUtils.isEmpty(projectQuery.getOrderParams())){
+            sql= sql.substring(0, sql.length() - 1);
+        }
+
         int size = objects.size();
         Object[] objects1 = new Object[size];
         Object[] objects2 = objects.toArray(objects1);
@@ -474,6 +488,18 @@ public class ProjectDao{
                 projectQuery.getPageParam(),
                 new BeanPropertyRowMapper(ProjectEntity.class)
         );
+    }
+
+    /**
+     * 将驼峰命名转换为下划线命名（createTime -> create_time）
+     * @param camelCase 驼峰命名字符串
+     * @return 下划线命名字符串
+     */
+    public static String camelToUnderline(String camelCase) {
+        if (camelCase == null || camelCase.isEmpty()) {
+            return camelCase;
+        }
+        return camelCase.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
     /**

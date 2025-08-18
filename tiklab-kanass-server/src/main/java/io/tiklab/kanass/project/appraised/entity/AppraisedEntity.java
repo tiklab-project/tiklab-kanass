@@ -43,6 +43,9 @@ public class AppraisedEntity implements Serializable {
     @Column(name = "color")
     private int color;
 
+    @Column(name = "appraised_type_id",length = 12)
+    private String appraisedTypeId;
+
     public String getId() {
         return id;
     }
@@ -121,5 +124,13 @@ public class AppraisedEntity implements Serializable {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public String getAppraisedTypeId() {
+        return appraisedTypeId;
+    }
+
+    public void setAppraisedTypeId(String appraisedTypeId) {
+        this.appraisedTypeId = appraisedTypeId;
     }
 }

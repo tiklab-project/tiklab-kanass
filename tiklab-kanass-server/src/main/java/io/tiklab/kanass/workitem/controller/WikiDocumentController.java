@@ -2,6 +2,7 @@ package io.tiklab.kanass.workitem.controller;
 
 import io.tiklab.core.page.Pagination;
 import io.tiklab.kanass.project.wiki.model.NodeQuery;
+import io.tiklab.kanass.project.wiki.model.ProjectDocumentQuery;
 import io.tiklab.postin.annotation.Api;
 import io.tiklab.postin.annotation.ApiMethod;
 import io.tiklab.postin.annotation.ApiParam;
@@ -53,6 +54,13 @@ public class WikiDocumentController {
     //@ApiParam(name = "workItemDocumentQuery",desc = "workItemDocumentQuery",required = true)
     public Result<KanassDocument> findUnRelationWorkDocumentList(@RequestBody @Valid @NotNull WorkItemDocumentQuery workItemDocumentQuery){
         Pagination<KanassDocument> unRelationWorkDocumentList = wikiDocumentService.findUnRelationWorkDocumentList(workItemDocumentQuery);
+
+        return Result.ok(unRelationWorkDocumentList);
+    }
+
+    @RequestMapping(path="/findUnRelationProjectDocumentList",method = RequestMethod.POST)
+    public Result<KanassDocument> findUnRelationProjectDocumentList(@RequestBody @Valid @NotNull ProjectDocumentQuery projectDocumentQuery){
+        Pagination<KanassDocument> unRelationWorkDocumentList = wikiDocumentService.findUnRelationProjectDocumentList(projectDocumentQuery);
 
         return Result.ok(unRelationWorkDocumentList);
     }

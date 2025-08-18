@@ -95,6 +95,10 @@ public class WorkItemEntity implements Serializable {
     @Column(name = "version_id",length = 32)
     private String versionId;
 
+    //所属产品计划D
+    @Column(name = "product_plan_id",length = 32)
+    private String productPlanId;
+
     //经办人ID
     @Column(name = "assigner_id",length = 32)
     private String assignerId;
@@ -428,5 +432,13 @@ public class WorkItemEntity implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getProductPlanId() {
+        return productPlanId;
+    }
+
+    public void setProductPlanId(String productPlanId) {
+        this.productPlanId = productPlanId;
     }
 }

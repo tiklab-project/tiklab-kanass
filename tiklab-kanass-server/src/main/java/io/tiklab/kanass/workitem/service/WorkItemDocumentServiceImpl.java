@@ -1,8 +1,11 @@
 package io.tiklab.kanass.workitem.service;
 
+import io.tiklab.core.page.Page;
 import io.tiklab.core.page.PageEntity;
-import io.tiklab.kanass.project.wiki.model.KanassDocument;
-import io.tiklab.kanass.project.wiki.model.WikiDocument;
+import io.tiklab.kanass.project.wiki.controller.ProjectDocumentController;
+import io.tiklab.kanass.project.wiki.dao.ProjectDocumentDao;
+import io.tiklab.kanass.project.wiki.entity.ProjectDocumentEntity;
+import io.tiklab.kanass.project.wiki.model.*;
 import io.tiklab.kanass.support.model.SystemUrl;
 import io.tiklab.kanass.support.model.SystemUrlQuery;
 import io.tiklab.kanass.support.service.SystemUrlService;
@@ -36,6 +39,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -60,6 +64,9 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
     @Autowired
     WikiDocumentService wikiDocumentService;
 
+    @Autowired
+    ProjectDocumentDao projectDocumentDao;
+
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
         systemUrlQuery.setName("sward");
@@ -75,6 +82,21 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
         for (WorkItemDocument itemDocument: workItemDocument){
             WorkItemDocumentEntity workItemDocumentEntity = BeanMapper.map(itemDocument, WorkItemDocumentEntity.class);
              document = workItemDocumentDao.createWorkItemDocument(workItemDocumentEntity);
+
+            // 查询是否已经存在
+            ProjectDocumentQuery projectDocumentQuery = new ProjectDocumentQuery();
+            projectDocumentQuery.setDocumentId(itemDocument.getDocumentId());
+            projectDocumentQuery.setProjectId(itemDocument.getProjectId());
+            List<ProjectDocumentEntity> projectDocumentList = projectDocumentDao.findProjectDocumentList(projectDocumentQuery);
+            if (CollectionUtils.isEmpty(projectDocumentList)){
+                ProjectDocumentEntity projectDocumentEntity = new ProjectDocumentEntity();
+                projectDocumentEntity.setDocumentId(itemDocument.getDocumentId());
+                projectDocumentEntity.setProjectId(itemDocument.getProjectId());
+                projectDocumentEntity.setRepositoryId(itemDocument.getRepositoryId());
+                projectDocumentEntity.setSort(itemDocument.getSort());
+//                ProjectDocumentEntity projectDocumentEntity = BeanMapper.map(itemDocument, ProjectDocumentEntity.class);
+                document = projectDocumentDao.createProjectDocument(projectDocumentEntity);
+            }
         }
         return document;
     }
@@ -209,15 +231,23 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
 
 //        List<KanassDocument> list = new ArrayList<KanassDocument>();
             if (!ObjectUtils.isEmpty(workItemDocumentList)){
+                List<String> documentIds = workItemDocumentList.stream().map(WorkItemDocument::getDocumentId).collect(Collectors.toList());
+                NodeQuery nodeQuery = new NodeQuery();
+                nodeQuery.setIds(documentIds.toArray());
+                nodeQuery.setType("document");
+                nodeQuery.setPageParam(new Page(1,100));
+                List<WikiDocument> documentList = wikiDocumentService.findDocumentList(nodeQuery);
+                Map<String, WikiDocument> documentMap = documentList.stream().collect(Collectors.toMap(WikiDocument::getId, Function.identity()));
                 for (WorkItemDocument workItemDocument:workItemDocumentList){
 
-                    HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-                    String systemUrl = getSystemUrl();
+//                    HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+//                    String systemUrl = getSystemUrl();
+//
+//                    MultiValueMap param = new LinkedMultiValueMap<>();
+//                    param.add("id", workItemDocument.getDocumentId());
+//                    WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
 
-                    MultiValueMap param = new LinkedMultiValueMap<>();
-                    param.add("id", workItemDocument.getDocumentId());
-                    WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
-
+                    WikiDocument wikiDocument = documentMap.get(workItemDocument.getDocumentId());
                     KanassDocument kanassDocument = new KanassDocument();
                     if (!ObjectUtils.isEmpty(wikiDocument)){
                         kanassDocument.setId(wikiDocument.getId());
@@ -250,7 +280,12 @@ public class WorkItemDocumentServiceImpl implements WorkItemDocumentService {
             List<String> allDocumentIds = allWorkItemDocument.stream().map(WorkItemDocumentEntity::getDocumentId).collect(Collectors.toList());
             workItemDocumentQuery.setDocumentIds(allDocumentIds.toArray(new String[allDocumentIds.size()]));
 
-            Pagination<KanassDocument> workDocumentPage = wikiDocumentService.findWorkDocumentPage(workItemDocumentQuery);
+            NodeQuery nodeQuery = new NodeQuery();
+            nodeQuery.setPageParam(workItemDocumentQuery.getPageParam());
+            nodeQuery.setName(workItemDocumentQuery.getName());
+            nodeQuery.setType("document");
+            nodeQuery.setIds(workItemDocumentQuery.getDocumentIds());
+            Pagination<KanassDocument> workDocumentPage = wikiDocumentService.findWorkDocumentPage(nodeQuery);
 
             Map<String, KanassDocument> dataList = workDocumentPage.getDataList().stream().collect(Collectors.toMap(KanassDocument::getId, doc -> doc));
             List<WorkItemDocumentEntity> pageWorkItemDocumentEntityList = new ArrayList<>();
