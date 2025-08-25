@@ -59,6 +59,9 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
         System.out.println(color);
         projectVersion.setColor(color);
 
+        projectVersion.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
+        projectVersion.setUpdateTime(new java.sql.Date(System.currentTimeMillis()));
+
         ProjectVersionEntity projectVersionEntity = BeanMapper.map(projectVersion, ProjectVersionEntity.class);
         return projectVersionDao.createVersion(projectVersionEntity);
     }

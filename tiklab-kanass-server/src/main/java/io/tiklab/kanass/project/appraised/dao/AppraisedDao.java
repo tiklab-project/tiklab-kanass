@@ -79,6 +79,8 @@ public class AppraisedDao {
                 .eq("projectId", appraisedQuery.getProjectId())
                 .like("name", appraisedQuery.getName())
                 .eq("appraisedState", appraisedQuery.getAppraisedState())
+                .eq("stageId", appraisedQuery.getStageId())
+                .in("stageId", appraisedQuery.getStageIds())
                 .orders(appraisedQuery.getOrderParams())
                 .get();
 
@@ -92,6 +94,8 @@ public class AppraisedDao {
                 .eq("appraisedState", appraisedQuery.getAppraisedState())
                 .eq("master", appraisedQuery.getMasterId())
                 .eq("builder", appraisedQuery.getAppraisedStates())
+                .eq("stageId", appraisedQuery.getStageId())
+                .in("stageId", appraisedQuery.getStageIds())
                 .orders(appraisedQuery.getOrderParams())
                 .pagination(appraisedQuery.getPageParam())
                 .get();

@@ -13,6 +13,8 @@ import io.tiklab.toolkit.join.annotation.Join;
 import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
 
+import java.sql.Date;
+
 /**
  * 迭代模板
  */
@@ -86,6 +88,12 @@ public class Sprint extends BaseModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String relaEndTime;
+
+    @ApiProperty(name="createTime",desc="创建时间")
+    private Date createTime;
+
+    @ApiProperty(name="updateTime",desc="更新时间")
+    private Date updateTime;
 
     @ApiProperty(name="work_number",desc="迭代的事项数量")
     private Integer workNumber;
@@ -263,5 +271,21 @@ public class Sprint extends BaseModel {
 
     public void setSurplusTime(Integer surplusTime) {
         this.surplusTime = surplusTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

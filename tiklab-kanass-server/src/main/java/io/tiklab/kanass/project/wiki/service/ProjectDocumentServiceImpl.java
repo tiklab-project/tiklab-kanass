@@ -134,6 +134,32 @@ public class ProjectDocumentServiceImpl implements ProjectDocumentService{
     public ProjectDocument findProjectDocument(@NotNull String id) {
         ProjectDocument projectDocument = findOne(id);
 
+        List<String> documentIds = new ArrayList<>();
+        documentIds.add(projectDocument.getDocumentId());
+        NodeQuery nodeQuery = new NodeQuery();
+        nodeQuery.setIds(documentIds.toArray());
+        nodeQuery.setType("document");
+        nodeQuery.setPageParam(new Page(1,100));
+        List<WikiDocument> documentList = wikiDocumentService.findDocumentList(nodeQuery);
+        KanassDocument kanassDocument = new KanassDocument();
+        if (CollectionUtils.isNotEmpty(documentList)){
+            WikiDocument wikiDocument = documentList.get(0);
+            kanassDocument.setId(wikiDocument.getId());
+            kanassDocument.setDocumentName(wikiDocument.getName());
+            kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
+            kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
+            kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
+            kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
+            kanassDocument.setDocumentType(wikiDocument.getDocumentType());
+            projectDocument.setKanassDocument(kanassDocument);
+        }else {
+
+            kanassDocument.setDocumentName("文档已删除");
+            kanassDocument.setId(projectDocument.getDocumentId());
+            kanassDocument.setExist(false);
+            projectDocument.setKanassDocument(kanassDocument);
+        }
+
         joinTemplate.joinQuery(projectDocument, new String[]{"workItem"});
         return projectDocument;
     }
@@ -209,7 +235,6 @@ public class ProjectDocumentServiceImpl implements ProjectDocumentService{
 
             List<ProjectDocument> projectDocumentList = BeanMapper.mapList(pagination.getDataList(),ProjectDocument.class);
 
-//        List<KanassDocument> list = new ArrayList<KanassDocument>();
             if (!ObjectUtils.isEmpty(projectDocumentList)){
                 List<String> documentIds = projectDocumentList.stream().map(ProjectDocument::getDocumentId).collect(Collectors.toList());
                 NodeQuery nodeQuery = new NodeQuery();
@@ -219,14 +244,6 @@ public class ProjectDocumentServiceImpl implements ProjectDocumentService{
                 List<WikiDocument> documentList = wikiDocumentService.findDocumentList(nodeQuery);
                 Map<String, WikiDocument> documentMap = documentList.stream().collect(Collectors.toMap(WikiDocument::getId, Function.identity()));
                 for (ProjectDocument projectDocument:projectDocumentList){
-
-//                    HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-//                    String systemUrl = getSystemUrl();
-//
-//                    MultiValueMap param = new LinkedMultiValueMap<>();
-//                    param.add("id", projectDocument.getDocumentId());
-//                    WikiDocument wikiDocument = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/node/findNode", param, WikiDocument.class);
-
                     WikiDocument wikiDocument = documentMap.get(projectDocument.getDocumentId());
                     KanassDocument kanassDocument = new KanassDocument();
                     if (!ObjectUtils.isEmpty(wikiDocument)){
@@ -238,7 +255,6 @@ public class ProjectDocumentServiceImpl implements ProjectDocumentService{
                         kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
                         kanassDocument.setDocumentType(wikiDocument.getDocumentType());
                         projectDocument.setKanassDocument(kanassDocument);
-//                    list.add(kanassDocument);
                     }else {
                         kanassDocument.setDocumentName("文档已删除");
                         kanassDocument.setId(projectDocument.getDocumentId());

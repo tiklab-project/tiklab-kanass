@@ -63,6 +63,12 @@ public class SprintEntity implements Serializable {
     @Column(name = "rela_end_time")
     private String relaEndTime;
 
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "update_time")
+    private Date updateTime;
+
 
     public String getId() {
         return id;
@@ -158,5 +164,21 @@ public class SprintEntity implements Serializable {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

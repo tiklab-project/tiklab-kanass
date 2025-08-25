@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.tiklab.core.BaseModel;
 import io.tiklab.kanass.project.project.model.Project;
+import io.tiklab.kanass.project.stage.model.Stage;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.toolkit.beans.annotation.Mapper;
@@ -12,6 +13,8 @@ import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.toolkit.join.annotation.Join;
 import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
+
+import java.sql.Timestamp;
 
 /**
  * 项目评审模型
@@ -72,6 +75,23 @@ public class Appraised extends BaseModel {
     })
     @JoinField(key = "id")
     private AppraisedType appraisedType;
+
+    @ApiProperty(name = "stage", desc = "所属阶段")
+    @Mappings({
+            @Mapping(source = "stage.id", target = "stageId")
+    })
+    @JoinField(key = "id")
+    private Stage stage;
+
+    @ApiProperty(name = "createTime", desc = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp createTime;
+
+    @ApiProperty(name = "updateTime", desc = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp updateTime;
 
     // 所有评审事项
     private Integer allAppraisedWorkItemNumber;
@@ -190,5 +210,29 @@ public class Appraised extends BaseModel {
 
     public void setAppraisedType(AppraisedType appraisedType) {
         this.appraisedType = appraisedType;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
     }
 }

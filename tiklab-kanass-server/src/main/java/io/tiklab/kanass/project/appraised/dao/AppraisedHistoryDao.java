@@ -2,19 +2,14 @@ package io.tiklab.kanass.project.appraised.dao;
 
 import io.tiklab.core.page.Pagination;
 import io.tiklab.dal.jpa.JpaTemplate;
-import io.tiklab.dal.jpa.annotation.*;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.kanass.project.appraised.entity.AppraisedHistoryEntity;
-import io.tiklab.kanass.project.appraised.entity.AppraisedWorkItemEntity;
+import io.tiklab.kanass.project.appraised.entity.AppraisedItemEntity;
 import io.tiklab.kanass.project.appraised.model.AppraisedHistoryQuery;
-import io.tiklab.kanass.project.appraised.model.AppraisedWorkItem;
-import io.tiklab.kanass.workitem.entity.WorkItemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
@@ -75,9 +70,9 @@ public class AppraisedHistoryDao {
 
     public List<AppraisedHistoryEntity> findAppraisedList(AppraisedHistoryQuery appraisedHistoryQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(AppraisedHistoryEntity.class,"ah")
-                .leftJoin(AppraisedWorkItemEntity.class, "awi", "awi.id=ah.workAppraisedId")
-                .eq("ah.workAppraisedId", appraisedHistoryQuery.getWorkAppraisedId())
-                .eq("ah.workItemAppraisedState", appraisedHistoryQuery.getWorkItemAppraisedState())
+                .leftJoin(AppraisedItemEntity.class, "awi", "awi.id=ah.appraisedItemId")
+                .eq("ah.appraisedItemId", appraisedHistoryQuery.getAppraisedItemId())
+                .eq("ah.AppraisedItemState", appraisedHistoryQuery.getAppraisedItemState())
                 .orders(appraisedHistoryQuery.getOrderParams())
                 .get();
 
@@ -86,9 +81,9 @@ public class AppraisedHistoryDao {
 
     public Pagination<AppraisedHistoryEntity> findAppraisedPage(AppraisedHistoryQuery appraisedHistoryQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(AppraisedHistoryEntity.class,"ah")
-                .leftJoin(AppraisedWorkItemEntity.class, "awi", "awi.id=ah.workAppraisedId")
-                .eq("ah.workAppraisedId", appraisedHistoryQuery.getWorkAppraisedId())
-                .eq("awi.workItemAppraisedState", appraisedHistoryQuery.getWorkItemAppraisedState())
+                .leftJoin(AppraisedItemEntity.class, "awi", "awi.id=ah.appraisedItemId")
+                .eq("ah.appraisedItemId", appraisedHistoryQuery.getAppraisedItemId())
+                .eq("awi.appraisedItemState", appraisedHistoryQuery.getAppraisedItemState())
                 .orders(appraisedHistoryQuery.getOrderParams())
                 .pagination(appraisedHistoryQuery.getPageParam())
                 .get();

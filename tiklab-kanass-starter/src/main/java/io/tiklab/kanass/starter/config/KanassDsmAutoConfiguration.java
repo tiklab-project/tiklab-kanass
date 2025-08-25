@@ -6,6 +6,8 @@ import io.tiklab.dsm.model.DsmVersion;
 import io.tiklab.dsm.support.DsmVersionBuilder;
 import io.tiklab.kanass.sql.Pmc155Task;
 import io.tiklab.kanass.sql.Pmc159Task;
+import io.tiklab.kanass.sql.Pmc163Task;
+import io.tiklab.kanass.sql.Pmc164PrivilegeTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,12 @@ public class KanassDsmAutoConfiguration {
 
     @Autowired
     Pmc159Task pmc159Task;
+
+    @Autowired
+    Pmc163Task pmc163Task;
+
+    @Autowired
+    Pmc164PrivilegeTask pmc164PrivilegeTask;
 
     @Bean
     DsmConfig dsmConfig(){
@@ -209,7 +217,6 @@ public class KanassDsmAutoConfiguration {
 
         DsmVersion pmc_155 = DsmVersionBuilder.instance()
                 .version("pmc_1.5.5")
-                .task(pmc155Task)
                 .db(new String[]{
                         "pmc_1.5.5",
                 }).get();
@@ -238,7 +245,6 @@ public class KanassDsmAutoConfiguration {
 
         DsmVersion pmc_159 = DsmVersionBuilder.instance()
                 .version("pmc_1.5.9")
-                .task(pmc159Task)
                 .db(new String[]{
                         "pmc_1.5.9",
                 }).get();
@@ -257,6 +263,58 @@ public class KanassDsmAutoConfiguration {
                         "pmc_1.6.1",
                 }).get();
         versionList.add(pmc_161);
+
+        DsmVersion pmc_162 = DsmVersionBuilder.instance()
+                .version("pmc_1.6.2")
+                .db(new String[]{
+                        "pmc_1.6.2",
+                }).get();
+        versionList.add(pmc_162);
+
+        DsmVersion pmc_163 = DsmVersionBuilder.instance()
+                .version("pmc_1.6.3")
+                .db(new String[]{
+                        "pmc_1.6.3",
+                }).get();
+        versionList.add(pmc_163);
+
+        DsmVersion privilege_gorup_100 = DsmVersionBuilder.instance()
+                .version("privilege-gorup_1.0.0")
+                .db(new String[]{
+                        "privilege-gorup_1.0.0",
+                }).get();
+        versionList.add(privilege_gorup_100);
+
+        DsmVersion pmc_164_privilege = DsmVersionBuilder.instance()
+                .version("pmc_1.6.4_privilege")
+                .db(new String[]{
+                        "pmc_1.6.4_privilege",
+                }).get();
+        versionList.add(pmc_164_privilege);
+
+        DsmVersion task159 = DsmVersionBuilder.instance()
+                .version("task_1.5.9")
+                .task(pmc159Task)
+                .get();
+        versionList.add(task159);
+
+        DsmVersion task155 = DsmVersionBuilder.instance()
+                .version("task_1.5.5")
+                .task(pmc155Task)
+                .get();
+        versionList.add(task155);
+
+        DsmVersion task163 = DsmVersionBuilder.instance()
+                .version("task_1.6.3")
+                .task(pmc163Task)
+                .get();
+        versionList.add(task163);
+
+        DsmVersion pmc164Privilege = DsmVersionBuilder.instance()
+                .version("task_1.6.4_privilege")
+                .task(pmc164PrivilegeTask)
+                .get();
+        versionList.add(pmc164Privilege);
 
         return versionList;
     }

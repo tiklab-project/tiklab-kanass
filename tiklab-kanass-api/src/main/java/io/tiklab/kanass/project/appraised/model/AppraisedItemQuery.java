@@ -13,7 +13,7 @@ import java.util.List;
 @ApiModel
 @Mapper
 @Join
-public class AppraisedWorkItemQuery {
+public class AppraisedItemQuery {
 
     @ApiProperty(name ="id",desc = "关联id")
     private String id;

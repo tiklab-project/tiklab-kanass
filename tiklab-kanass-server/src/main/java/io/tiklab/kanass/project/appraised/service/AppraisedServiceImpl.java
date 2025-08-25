@@ -7,14 +7,16 @@ import io.tiklab.kanass.project.appraised.dao.AppraisedDao;
 import io.tiklab.kanass.project.appraised.entity.AppraisedEntity;
 import io.tiklab.kanass.project.appraised.model.Appraised;
 import io.tiklab.kanass.project.appraised.model.AppraisedQuery;
-import io.tiklab.kanass.project.appraised.model.AppraisedWorkItem;
-import io.tiklab.kanass.project.appraised.model.AppraisedWorkItemQuery;
+import io.tiklab.kanass.project.appraised.model.AppraisedItem;
+import io.tiklab.kanass.project.appraised.model.AppraisedItemQuery;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.user.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -25,7 +27,7 @@ public class AppraisedServiceImpl implements AppraisedService{
     private AppraisedDao appraisedDao;
 
     @Autowired
-    private AppraisedWorkItemService appraisedWorkItemService;
+    private AppraisedItemService appraisedItemService;
 
     @Autowired
     private JoinTemplate joinTemplate;
@@ -40,6 +42,11 @@ public class AppraisedServiceImpl implements AppraisedService{
         // 设置版本头像颜色
         int color = new Random().nextInt(3) + 1;
         appraised.setColor(color);
+
+        Date nowDate = new Date();
+        appraised.setCreateTime(new Timestamp(nowDate.getTime()));
+        appraised.setUpdateTime(new Timestamp(nowDate.getTime()));
+
         AppraisedEntity appraisedEntity = BeanMapper.map(appraised, AppraisedEntity.class);
         return appraisedDao.createAppraised(appraisedEntity);
     }
@@ -73,20 +80,20 @@ public class AppraisedServiceImpl implements AppraisedService{
     public Appraised findAppraised(String id) {
         Appraised appraised = findOne(id);
 
-        AppraisedWorkItemQuery workItemQuery = new AppraisedWorkItemQuery();
+        AppraisedItemQuery workItemQuery = new AppraisedItemQuery();
         workItemQuery.setAppraisedId(id);
-        List<AppraisedWorkItem> appraisedWorkItemList = appraisedWorkItemService.findAppraisedWorkItemList(workItemQuery);
-        appraised.setAllAppraisedWorkItemNumber(appraisedWorkItemList.size());
+        List<AppraisedItem> appraisedItemList = appraisedItemService.findAppraisedItemList(workItemQuery);
+        appraised.setAllAppraisedWorkItemNumber(appraisedItemList.size());
         appraised.setUnPassAppraisedWorkItemNumber(0);
         appraised.setPassAppraisedWorkItemNumber(0);
-        for (AppraisedWorkItem appraisedWorkItem : appraisedWorkItemList) {
-            if ("1".equals(appraisedWorkItem.getWorkItemAppraisedState())) {
+        for (AppraisedItem appraisedItem : appraisedItemList) {
+            if ("1".equals(appraisedItem.getAppraisedItemState())) {
                 appraised.setPassAppraisedWorkItemNumber(appraised.getPassAppraisedWorkItemNumber() + 1);
-            } else if ("2".equals(appraisedWorkItem.getWorkItemAppraisedState())){
+            } else if ("2".equals(appraisedItem.getAppraisedItemState())){
                 appraised.setUnPassAppraisedWorkItemNumber(appraised.getUnPassAppraisedWorkItemNumber() + 1);
             }
         }
-        joinTemplate.joinQuery(appraised, new String[]{"master", "builder", "project"});
+        joinTemplate.joinQuery(appraised, new String[]{"master", "builder", "project", "stage", "appraisedType"});
         return appraised;
     }
 
@@ -94,7 +101,7 @@ public class AppraisedServiceImpl implements AppraisedService{
     public List<Appraised> findAllAppraised() {
         List<AppraisedEntity> allAppraised = appraisedDao.findAllAppraised();
         List<Appraised> appraiseds = BeanMapper.mapList(allAppraised, Appraised.class);
-        joinTemplate.joinQuery(appraiseds, new String[]{"master", "builder", "project"});
+        joinTemplate.joinQuery(appraiseds, new String[]{"master", "builder", "project", "stage", "appraisedType"});
         return appraiseds;
     }
 
@@ -104,7 +111,7 @@ public class AppraisedServiceImpl implements AppraisedService{
 
         List<Appraised> mapList = BeanMapper.mapList(appraisedList, Appraised.class);
 
-        joinTemplate.joinQuery(mapList, new String[]{"master", "builder", "project"});
+        joinTemplate.joinQuery(mapList, new String[]{"master", "builder", "project", "stage", "appraisedType"});
         return mapList;
     }
 
@@ -113,7 +120,7 @@ public class AppraisedServiceImpl implements AppraisedService{
         Pagination<AppraisedEntity> appraisedPage = appraisedDao.findAppraisedPage(appraisedQuery);
         List<Appraised> mapList = BeanMapper.mapList(appraisedPage.getDataList(), Appraised.class);
 
-        joinTemplate.joinQuery(mapList, new String[]{"master", "builder", "project"});
+        joinTemplate.joinQuery(mapList, new String[]{"master", "builder", "project", "stage", "appraisedType"});
         return PaginationBuilder.build(appraisedPage, mapList);
     }
 }

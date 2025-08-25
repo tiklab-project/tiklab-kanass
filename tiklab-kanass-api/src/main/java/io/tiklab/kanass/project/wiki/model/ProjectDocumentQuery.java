@@ -25,6 +25,9 @@ public class ProjectDocumentQuery {
         @ApiProperty(name ="documentId",desc = "文档id，精确匹配")
         private String[] documentIds;
 
+        @ApiProperty(name ="idNotIn",desc = "不存在文档id，精确匹配")
+        private String[] idNotIn;
+
         private String projectId;
 
         //只用于project查询 sward 使用
@@ -125,5 +128,13 @@ public class ProjectDocumentQuery {
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
+    }
+
+    public String[] getIdNotIn() {
+        return idNotIn;
+    }
+
+    public void setIdNotIn(String[] idNotIn) {
+        this.idNotIn = idNotIn;
     }
 }

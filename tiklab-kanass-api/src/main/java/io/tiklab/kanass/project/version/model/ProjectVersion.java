@@ -13,6 +13,8 @@ import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.user.user.model.User;
 
+import java.sql.Date;
+
 /**
  * 项目版本模型
  */
@@ -69,6 +71,12 @@ public class ProjectVersion extends BaseModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String relaPublishTime;
+
+    @ApiProperty(name="createTime",desc="创建时间")
+    private Date createTime;
+
+    @ApiProperty(name="updateTime",desc="更新时间")
+    private Date updateTime;
 
     @ApiProperty(name = "workNumber", desc = "事项数量")
     private int workNumber;
@@ -245,5 +253,21 @@ public class ProjectVersion extends BaseModel {
 
     public void setSurplusTime(Integer surplusTime) {
         this.surplusTime = surplusTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

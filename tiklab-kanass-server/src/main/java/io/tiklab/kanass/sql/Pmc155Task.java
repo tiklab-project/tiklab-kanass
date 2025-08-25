@@ -2,19 +2,14 @@ package io.tiklab.kanass.sql;
 
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.dsm.support.DsmProcessTask;
-import io.tiklab.kanass.project.appraised.entity.AppraisedHistoryEntity;
 import io.tiklab.kanass.project.appraised.model.*;
 import io.tiklab.kanass.project.appraised.service.AppraisedHistoryService;
-import io.tiklab.kanass.project.appraised.service.AppraisedService;
-import io.tiklab.kanass.project.appraised.service.AppraisedWorkItemService;
+import io.tiklab.kanass.project.appraised.service.AppraisedItemService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -24,44 +19,41 @@ public class Pmc155Task implements DsmProcessTask {
     JpaTemplate jpaTemplate;
 
     @Autowired
-    AppraisedWorkItemService appraisedWorkItemService;
+    AppraisedItemService appraisedItemService;
 
     @Autowired
     AppraisedHistoryService appraisedHistoryService;
 
     @Override
     public void execute() {
-        AppraisedWorkItemQuery appraisedQuery = new AppraisedWorkItemQuery();
+        AppraisedItemQuery appraisedQuery = new AppraisedItemQuery();
         appraisedQuery.setWorkItemAppraisedState("1");
-        List<AppraisedWorkItem> appraisedList1 = appraisedWorkItemService.findAppraisedWorkItemList(appraisedQuery);
-        appraisedQuery = new AppraisedWorkItemQuery();
+        List<AppraisedItem> appraisedList1 = appraisedItemService.findAppraisedItemList(appraisedQuery);
+        appraisedQuery = new AppraisedItemQuery();
         appraisedQuery.setWorkItemAppraisedState("2");
-        List<AppraisedWorkItem> appraisedList2 = appraisedWorkItemService.findAppraisedWorkItemList(appraisedQuery);
-        List<AppraisedWorkItem> appraisedList = new ArrayList<>();
+        List<AppraisedItem> appraisedList2 = appraisedItemService.findAppraisedItemList(appraisedQuery);
+        List<AppraisedItem> appraisedList = new ArrayList<>();
         appraisedList.addAll(appraisedList1);
         appraisedList.addAll(appraisedList2);
-//        String selectSql = "select pwa.id as work_appraised_id, pwa.work_item_appraised_state,pwa.advice,pa.master as creater " +
-//                "from pmc_work_appraised pwa LEFT JOIN pmc_appraised pa ON pwa.appraised_id = pa.id " +
-//                "where pwa.work_item_appraised_state IN ('1', '2')";
 
-//        List<AppraisedHistoryEntity> appraisedHistoryList = jpaTemplate.getJdbcTemplate().query(selectSql, new BeanPropertyRowMapper<>(AppraisedHistoryEntity.class));
-//        for (AppraisedHistoryEntity appraisedHistory : appraisedHistoryList) {
-//            appraisedHistory.setId(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
-////            appraisedHistory.setCreateTime(new Date());
-////            appraisedHistory.setUpdateTime(new Date());
-//        }
+        List<AppraisedHistory> appraisedHistoryList = appraisedHistoryService.findAll();
+        List<String> historyIdList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(appraisedHistoryList)){
+            for (AppraisedHistory item : appraisedHistoryList) {
+                historyIdList.add(item.getAppraisedItemId());
+            }
+        }
 
-        for (AppraisedWorkItem appraised : appraisedList) {
+        for (AppraisedItem appraised : appraisedList) {
+            if (historyIdList.contains(appraised.getId())){
+                continue;
+            }
             AppraisedHistory appraisedHistory = new AppraisedHistory();
             appraisedHistory.setId(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
-            appraisedHistory.setWorkAppraised(appraised);
-            appraisedHistory.setWorkItemAppraisedState(appraised.getWorkItemAppraisedState());
+            appraisedHistory.setAppraisedItemId(appraised.getId());
+            appraisedHistory.setAppraisedItemState(appraised.getAppraisedItemState());
             appraisedHistory.setCreater(appraised.getAppraised().getMaster());
-            if (StringUtils.isEmpty(appraised.getAdvice())){
-                appraisedHistory.setAdvice("");
-            }else {
-                appraisedHistory.setAdvice(appraised.getAdvice());
-            }
+            appraisedHistory.setAdvice("");
             appraisedHistoryService.createAppraisedHistory(appraisedHistory);
 //            appraisedHistoryEntity.setCreateTime(new Date());
 //            appraisedHistoryEntity.setUpdateTime(new Date());

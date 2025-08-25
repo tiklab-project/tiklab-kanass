@@ -3,6 +3,7 @@ package io.tiklab.kanass.project.appraised.entity;
 import io.tiklab.dal.jpa.annotation.*;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "pmc_appraised")
@@ -45,6 +46,15 @@ public class AppraisedEntity implements Serializable {
 
     @Column(name = "appraised_type_id",length = 12)
     private String appraisedTypeId;
+
+    @Column(name = "stage_id",length = 12)
+    private String stageId;
+
+    @Column(name = "create_time")
+    private Timestamp createTime;
+
+    @Column(name = "update_time")
+    private Timestamp updateTime;
 
     public String getId() {
         return id;
@@ -132,5 +142,29 @@ public class AppraisedEntity implements Serializable {
 
     public void setAppraisedTypeId(String appraisedTypeId) {
         this.appraisedTypeId = appraisedTypeId;
+    }
+
+    public String getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(String stageId) {
+        this.stageId = stageId;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
     }
 }

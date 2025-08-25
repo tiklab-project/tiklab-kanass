@@ -59,7 +59,7 @@ public class AppraisedHistoryServiceImpl implements AppraisedHistoryService{
     public AppraisedHistory findAppraisedHistory(String id) {
         AppraisedHistory one = findOne(id);
 
-        joinTemplate.joinQuery(one, new String[]{"workAppraised"});
+        joinTemplate.joinQuery(one, new String[]{"creater"});
         return one;
     }
 
@@ -73,7 +73,7 @@ public class AppraisedHistoryServiceImpl implements AppraisedHistoryService{
     @Override
     public List<AppraisedHistory> findAppraisedHistoryList(List<String> idList) {
         List<AppraisedHistory> list = findList(idList);
-        joinTemplate.joinQuery(list, new String[]{"workAppraised"});
+        joinTemplate.joinQuery(list, new String[]{"creater"});
         return list;
     }
 
@@ -88,7 +88,7 @@ public class AppraisedHistoryServiceImpl implements AppraisedHistoryService{
     public List<AppraisedHistory> findAppraisedHistoryList(AppraisedHistoryQuery appraisedHistoryQuery) {
         List<AppraisedHistoryEntity> appraisedList = appraisedHistoryDao.findAppraisedList(appraisedHistoryQuery);
         List<AppraisedHistory> items = BeanMapper.mapList(appraisedList, AppraisedHistory.class);
-        joinTemplate.joinQuery(items, new String[]{"workAppraised","creater"});
+        joinTemplate.joinQuery(items, new String[]{"creater"});
         return items;
     }
 

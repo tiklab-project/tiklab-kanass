@@ -2,6 +2,10 @@ package io.tiklab.kanass.project.stage.service;
 
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
+import io.tiklab.kanass.project.appraised.model.Appraised;
+import io.tiklab.kanass.project.appraised.model.AppraisedQuery;
+import io.tiklab.kanass.project.appraised.service.AppraisedService;
+import io.tiklab.kanass.project.project.service.ProjectService;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkItemService;
@@ -14,6 +18,7 @@ import io.tiklab.kanass.project.stage.model.StageQuery;
 import io.tiklab.kanass.project.stage.dao.StageDao;
 import io.tiklab.kanass.project.stage.entity.StageEntity;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -41,6 +47,9 @@ public class StageServiceImpl implements StageService {
 
     @Autowired
     JoinTemplate joinTemplate;
+
+    @Autowired
+    AppraisedService appraisedService;
 
     @Override
     public String createStage(@NotNull @Valid Stage stage) {
@@ -238,6 +247,21 @@ public class StageServiceImpl implements StageService {
         List<Stage> stageList = BeanMapper.mapList(pagination.getDataList(),Stage.class);
 
         joinTemplate.joinQuery(stageList, new String[]{"parentStage", "project", "master"});
+
+        if (CollectionUtils.isNotEmpty(stageList)){
+            List<String> stageIdList = stageList.stream().map(Stage::getId).collect(Collectors.toList());
+            AppraisedQuery appraisedQuery = new AppraisedQuery();
+            appraisedQuery.setStageIds(stageIdList.toArray(new String[stageIdList.size()]));
+
+            List<Appraised> appraisedList = appraisedService.findAppraisedList(appraisedQuery);
+            if (CollectionUtils.isNotEmpty(appraisedList)){
+                Map<String, List<Appraised>> appraisedMap = appraisedList.stream().collect(Collectors.groupingBy(item -> item.getStage().getId()));
+                for (Stage stage : stageList) {
+                    List<Appraised> appraiseds = appraisedMap.get(stage.getId());
+                    stage.setAppraisedList(appraiseds);
+                }
+            }
+        }
 
         return PaginationBuilder.build(pagination,stageList);
     }

@@ -2,6 +2,7 @@ package io.tiklab.kanass.project.stage.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.tiklab.kanass.project.appraised.model.Appraised;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.toolkit.beans.annotation.Mapper;
@@ -94,6 +95,9 @@ public class Stage extends BaseModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String endTime;
+
+    @ApiProperty(name="appraisedList",desc="评审列表")
+    private List<Appraised> appraisedList;
 
     public java.lang.String getId() {
         return id;
@@ -246,5 +250,13 @@ public class Stage extends BaseModel {
 
     public void setTotalWorkCount(int totalWorkCount) {
         this.totalWorkCount = totalWorkCount;
+    }
+
+    public List<Appraised> getAppraisedList() {
+        return appraisedList;
+    }
+
+    public void setAppraisedList(List<Appraised> appraisedList) {
+        this.appraisedList = appraisedList;
     }
 }

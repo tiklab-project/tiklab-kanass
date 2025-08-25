@@ -39,6 +39,11 @@ public class AppraisedQuery {
     @ApiProperty(name ="builderId",desc = "评审创建人")
     private String builderId;
 
+    @ApiProperty(name ="stageId",desc = "所属阶段ID")
+    private String stageId;
+
+    @ApiProperty(name ="stageIds",desc = "所属阶段ID列表")
+    private String[] stageIds;
 
     @ApiProperty(name ="orderParams",desc = "排序参数")
     private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
@@ -124,5 +129,21 @@ public class AppraisedQuery {
 
     public void setPageParam(Page pageParam) {
         this.pageParam = pageParam;
+    }
+
+    public String getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(String stageId) {
+        this.stageId = stageId;
+    }
+
+    public String[] getStageIds() {
+        return stageIds;
+    }
+
+    public void setStageIds(String[] stageIds) {
+        this.stageIds = stageIds;
     }
 }

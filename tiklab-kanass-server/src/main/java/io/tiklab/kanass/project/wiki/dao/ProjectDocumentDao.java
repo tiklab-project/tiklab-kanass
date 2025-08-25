@@ -83,7 +83,7 @@ public class ProjectDocumentDao {
      */
     public List<ProjectDocumentEntity> findProjectDocumentList(ProjectDocumentQuery projectDocumentQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectDocumentEntity.class)
-                .eq("workItemId", projectDocumentQuery.getWorkItemId())
+                .eq("projectId", projectDocumentQuery.getProjectId())
                 .eq("documentId", projectDocumentQuery.getDocumentId())
                 .eq("repositoryId", projectDocumentQuery.getRepositoryId())
                 .in("repositoryId", projectDocumentQuery.getRepositoryIds())
@@ -101,6 +101,7 @@ public class ProjectDocumentDao {
         QueryCondition queryCondition = QueryBuilders.createQuery(ProjectDocumentEntity.class)
                 .eq("workItemId", projectDocumentQuery.getWorkItemId())
                 .eq("documentId", projectDocumentQuery.getDocumentId())
+                .notIn("id", projectDocumentQuery.getIdNotIn())
 //                .like("name", projectDocumentQuery.getName())
                 .eq("repositoryId", projectDocumentQuery.getRepositoryId())
                 .in("repositoryId", projectDocumentQuery.getRepositoryIds())
@@ -109,6 +110,6 @@ public class ProjectDocumentDao {
                 .pagination(projectDocumentQuery.getPageParam())
                 .get();
 
-        return jpaTemplate.findPage(queryCondition, ProjectDocumentEntity.class);
+            return jpaTemplate.findPage(queryCondition, ProjectDocumentEntity.class);
     }
 }

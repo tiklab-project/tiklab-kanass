@@ -10,20 +10,20 @@ import java.util.Date;
  * 事项与评审关联表
  */
 @Entity
-@Table(name = "pmc_work_appraised_history")
+@Table(name = "pmc_appraised_item_history")
 public class AppraisedHistoryEntity implements Serializable {
     @Id
     @GeneratorValue(length = 12)
     @Column(name = "id",length = 12)
     private String id;
 
-    // 事项评审id
-    @Column(name = "work_appraised_id",length = 12,notNull = true)
-    private String workAppraisedId;
+    // 评审id
+    @Column(name = "appraised_item_id",length = 12,notNull = true)
+    private String appraisedItemId;
 
     // 评审状态  0未评审 1通过 2未通过 3建议
-    @Column(name = "work_item_appraised_state",length = 12)
-    private String workItemAppraisedState;
+    @Column(name = "appraised_item_state",length = 12)
+    private String appraisedItemState;
 
     // 事项评审id
     @Column(name = "creater",length = 12,notNull = true)
@@ -49,20 +49,20 @@ public class AppraisedHistoryEntity implements Serializable {
         this.id = id;
     }
 
-    public String getWorkAppraisedId() {
-        return workAppraisedId;
+    public String getAppraisedItemId() {
+        return appraisedItemId;
     }
 
-    public void setWorkAppraisedId(String workAppraisedId) {
-        this.workAppraisedId = workAppraisedId;
+    public void setAppraisedItemId(String appraisedItemId) {
+        this.appraisedItemId = appraisedItemId;
     }
 
-    public String getWorkItemAppraisedState() {
-        return workItemAppraisedState;
+    public String getAppraisedItemState() {
+        return appraisedItemState;
     }
 
-    public void setWorkItemAppraisedState(String workItemAppraisedState) {
-        this.workItemAppraisedState = workItemAppraisedState;
+    public void setAppraisedItemState(String appraisedItemState) {
+        this.appraisedItemState = appraisedItemState;
     }
 
     public String getCreater() {

@@ -176,6 +176,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setColor(color);
 
         project.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
+        project.setUpdateTime(new java.sql.Date(System.currentTimeMillis()));
 
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 
@@ -277,6 +278,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setColor(color);
 
         project.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
+        project.setUpdateTime(new java.sql.Date(System.currentTimeMillis()));
 
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 

@@ -117,6 +117,9 @@ public class Project extends BaseModel{
     @ApiProperty(name="createTime",desc="创建时间")
     private Date createTime;
 
+    @ApiProperty(name="updateTime",desc="更新时间")
+    private Date updateTime;
+
     /**
      * @pi.name: projectState
      * @pi.value: 1: 未完成   2:进行中   3：已结束
@@ -344,5 +347,13 @@ public class Project extends BaseModel{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

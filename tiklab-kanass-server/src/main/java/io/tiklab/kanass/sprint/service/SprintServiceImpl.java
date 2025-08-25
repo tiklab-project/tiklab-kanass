@@ -187,6 +187,9 @@ public class SprintServiceImpl implements SprintService {
         System.out.println(color);
         sprint.setColor(color);
 
+        sprint.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
+        sprint.setUpdateTime(new java.sql.Date(System.currentTimeMillis()));
+
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
 //        Sprint sprint1 = findSprint(id);
@@ -198,6 +201,9 @@ public class SprintServiceImpl implements SprintService {
     @Override
     public String createJiraSprint(@NotNull @Valid Sprint sprint) {
         //初始化迭代状态
+        sprint.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
+        sprint.setUpdateTime(new java.sql.Date(System.currentTimeMillis()));
+
         SprintEntity sprintEntity = BeanMapper.map(sprint, SprintEntity.class);
         String id = sprintDao.createSprint(sprintEntity);
         return id;

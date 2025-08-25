@@ -8,7 +8,6 @@ import io.tiklab.toolkit.beans.annotation.Mappings;
 import io.tiklab.toolkit.join.annotation.Join;
 import io.tiklab.toolkit.join.annotation.JoinField;
 import io.tiklab.user.user.model.User;
-import io.tiklab.kanass.project.appraised.model.AppraisedWorkItem;
 
 import java.util.Date;
 
@@ -22,17 +21,12 @@ public class AppraisedHistory {
     @ApiProperty(name = "id", desc = "唯一ID")
     private String id;
 
-    @ApiProperty(name = "workAppraised", desc = "评审记录")
-    @Mappings({
-            @Mapping(source = "workAppraised.id", target = "workAppraisedId")
-    })
-    @JoinField(key = "id")
-    private AppraisedWorkItem workAppraised;
+    @ApiProperty(name = "appraisedItemId", desc = "评审项id")
+    private String appraisedItemId;
 
-
-    // 0未评审 1通过 2未通过 3建议
-    @ApiProperty(name = "workItemAppraisedState", desc = "评审状态")
-    private String workItemAppraisedState;
+    // 0未评审 1通过 2未通过
+    @ApiProperty(name = "appraisedItemState", desc = "评审状态")
+    private String appraisedItemState;
 
     @ApiProperty(name="creater",desc="创建人")
     @Mappings({
@@ -58,20 +52,20 @@ public class AppraisedHistory {
         this.id = id;
     }
 
-    public AppraisedWorkItem getWorkAppraised() {
-        return workAppraised;
+    public String getAppraisedItemId() {
+        return appraisedItemId;
     }
 
-    public void setWorkAppraised(AppraisedWorkItem workAppraised) {
-        this.workAppraised = workAppraised;
+    public void setAppraisedItemId(String appraisedItemId) {
+        this.appraisedItemId = appraisedItemId;
     }
 
-    public String getWorkItemAppraisedState() {
-        return workItemAppraisedState;
+    public String getAppraisedItemState() {
+        return appraisedItemState;
     }
 
-    public void setWorkItemAppraisedState(String workItemAppraisedState) {
-        this.workItemAppraisedState = workItemAppraisedState;
+    public void setAppraisedItemState(String appraisedItemState) {
+        this.appraisedItemState = appraisedItemState;
     }
 
     public String getAdvice() {
