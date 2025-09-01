@@ -57,6 +57,13 @@ public class WorkItemBindController {
         return Result.ok();
     }
 
+    @RequestMapping(path="/deleteWorkItemBindByCondition",method = RequestMethod.POST)
+    public Result<Void> deleteWorkItemBindByCondition(@RequestBody @Valid @NotNull WorkItemBindQuery workItemBindQuery){
+        workItemBindService.deleteWorkItemBindByCondition(workItemBindQuery);
+
+        return Result.ok();
+    }
+
     @RequestMapping(path="/findWorkItemBind",method = RequestMethod.POST)
 //    @ApiMethod(name = "findWorkItemBind",desc = "根据id查找绑定的缺陷")
 //    @ApiParam(name = "id",desc = "id",required = true)

@@ -163,7 +163,8 @@ public class TestCaseServiceImpl implements TestCaseService {
                 "project",
                 "updateUser",
                 "createUser",
-                "director"
+                "director",
+                "demand"
         });
 
         return testCase;
@@ -202,7 +203,8 @@ public class TestCaseServiceImpl implements TestCaseService {
                 "createUser",
                 "project",
                 "updateUser",
-                "director"
+                "director",
+                "demand"
         });
 
 //        List<TestCase> newTestCaseList = recentInstance(testCaseList);

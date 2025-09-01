@@ -32,7 +32,7 @@ public class WorkTestCase extends BaseModel{
     private String testCaseId;
 
     private ProjectTestCase projectTestCase;
-    @NotNull
+//    @NotNull
     @ApiProperty(name="repositoryId",desc="知识库id",required = true)
     private String repositoryId;
 

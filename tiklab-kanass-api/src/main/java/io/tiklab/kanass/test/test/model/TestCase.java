@@ -2,6 +2,7 @@ package io.tiklab.kanass.test.test.model;
 
 import io.tiklab.kanass.project.module.model.Module;
 import io.tiklab.kanass.project.project.model.Project;
+import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.toolkit.beans.annotation.Mapper;
@@ -71,11 +72,11 @@ public class TestCase extends BaseModel{
     private User updateUser;
 
     @ApiProperty(name="createTime",desc="创建时间")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Timestamp createTime;
 
     @ApiProperty(name="updateTime",desc="更新时间")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Timestamp updateTime;
 
     @ApiProperty(name="sort",desc="排序")
@@ -96,6 +97,13 @@ public class TestCase extends BaseModel{
 
     @ApiProperty(name="priorityLevel",desc="优先级")
     private Integer priorityLevel;
+
+    @ApiProperty(name="demand",desc="关联需求")
+    @Mappings({
+            @Mapping(source = "demand.id",target = "demand")
+    })
+    @JoinField(key = "id")
+    private WorkItem demand;
 
 
     public String getId() {
@@ -228,4 +236,11 @@ public class TestCase extends BaseModel{
         this.project = project;
     }
 
+    public WorkItem getDemand() {
+        return demand;
+    }
+
+    public void setDemand(WorkItem demand) {
+        this.demand = demand;
+    }
 }

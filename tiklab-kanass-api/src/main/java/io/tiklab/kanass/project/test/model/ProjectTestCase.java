@@ -9,6 +9,9 @@ public class ProjectTestCase {
     @ApiProperty(name="id",desc="id")
     private String id;
 
+    @ApiProperty(name="TestCaseKey",desc="用例key")
+    private String TestCaseKey;
+
     @ApiProperty(name="TestCategoryName",desc="测试仓库名称")
     private String TestCategoryName;
 
@@ -21,12 +24,12 @@ public class ProjectTestCase {
     @ApiProperty(name="caseType",desc="类型")
     private String caseType;
 
-    @ApiProperty(name="repository",desc="所属模块")
-    @Mappings({
-            @Mapping(source = "repository.id",target = "repositoryId")
-    })
-    @JoinField(key = "id")
-    private Repository repository;
+//    @ApiProperty(name="module",desc="所属模块")
+//    @Mappings({
+//            @Mapping(source = "module.id",target = "module")
+//    })
+//    @JoinField(key = "id")
+    private String moduleName;
 
     @ApiProperty(name="isExist",desc="类型")
     private boolean isExist = true;
@@ -79,11 +82,28 @@ public class ProjectTestCase {
         isExist = exist;
     }
 
-    public Repository getRepository() {
-        return repository;
+//    public Repository getRepository() {
+//        return repository;
+//    }
+//
+//    public void setRepository(Repository repository) {
+//        this.repository = repository;
+//    }
+
+
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setRepository(Repository repository) {
-        this.repository = repository;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public String getTestCaseKey() {
+        return TestCaseKey;
+    }
+
+    public void setTestCaseKey(String testCaseKey) {
+        TestCaseKey = testCaseKey;
     }
 }

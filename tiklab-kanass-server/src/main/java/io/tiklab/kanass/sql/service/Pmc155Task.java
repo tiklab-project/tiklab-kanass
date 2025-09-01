@@ -1,4 +1,4 @@
-package io.tiklab.kanass.sql;
+package io.tiklab.kanass.sql.service;
 
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.dsm.support.DsmProcessTask;
@@ -6,7 +6,6 @@ import io.tiklab.kanass.project.appraised.model.*;
 import io.tiklab.kanass.project.appraised.service.AppraisedHistoryService;
 import io.tiklab.kanass.project.appraised.service.AppraisedItemService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

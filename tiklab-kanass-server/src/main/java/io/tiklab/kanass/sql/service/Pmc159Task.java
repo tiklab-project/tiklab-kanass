@@ -1,4 +1,4 @@
-package io.tiklab.kanass.sql;
+package io.tiklab.kanass.sql.service;
 
 import io.tiklab.dsm.support.DsmProcessTask;
 import io.tiklab.kanass.project.project.model.Project;

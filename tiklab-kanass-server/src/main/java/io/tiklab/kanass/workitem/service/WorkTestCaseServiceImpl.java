@@ -1,5 +1,8 @@
 package io.tiklab.kanass.workitem.service;
 
+import io.tiklab.kanass.test.test.model.TestCase;
+import io.tiklab.kanass.test.test.model.TestCaseQuery;
+import io.tiklab.kanass.test.test.service.TestCaseService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
@@ -9,7 +12,6 @@ import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.rpc.annotation.Exporter;
 import io.tiklab.rpc.client.router.lookup.FixedLookup;
 import io.tiklab.kanass.project.test.model.ProjectTestCase;
-import io.tiklab.kanass.project.test.model.TestCase;
 import io.tiklab.kanass.support.model.SystemUrl;
 import io.tiklab.kanass.support.model.SystemUrlQuery;
 import io.tiklab.kanass.support.service.SystemUrlService;
@@ -19,7 +21,6 @@ import io.tiklab.kanass.workitem.dao.WorkTestCaseDao;
 import io.tiklab.kanass.workitem.entity.WorkTestCaseEntity;
 import io.tiklab.kanass.workitem.model.WorkTestCase;
 import io.tiklab.kanass.workitem.model.WorkTestCaseQuery;
-import io.tiklab.kanass.project.test.model.TestCaseQuery;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,9 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
     @Autowired
     SystemUrlService systemUrlService;
+
+    @Autowired
+    TestCaseService testCaseService;
 
     String getSystemUrl(){
         SystemUrlQuery systemUrlQuery = new SystemUrlQuery();
@@ -162,24 +166,27 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         List<ProjectTestCase> list = new ArrayList<>();
         if (!ObjectUtils.isEmpty(workTestCaseList)){
             for (WorkTestCase workTestCase:workTestCaseList){
-                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-                String systemUrl = getSystemUrl();
-                MultiValueMap param = new LinkedMultiValueMap<>();
-                param.add("id", workTestCase.getTestCaseId());
-                TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
+//                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+//                String systemUrl = getSystemUrl();
+//                MultiValueMap param = new LinkedMultiValueMap<>();
+//                param.add("id", workTestCase.getTestCaseId());
+//                TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
+
+                TestCase testCase = testCaseService.findTestCase(workTestCase.getTestCaseId());
 
 
                 ProjectTestCase projectTestCase = new ProjectTestCase();
 
                 if (!ObjectUtils.isEmpty(testCase)){
+                    projectTestCase.setTestCaseKey(testCase.getCaseKey());
                     projectTestCase.setTestCaseName(testCase.getName());
                     projectTestCase.setId(testCase.getId());
-                    projectTestCase.setCreateUser(testCase.getCreateUser().getNickname());
-                    if(!ObjectUtils.isEmpty(testCase.getCategory())){
-                        projectTestCase.setTestCategoryName(testCase.getCategory().getName());
-                    }
+                    projectTestCase.setCreateUser(testCase.getDirector() != null ? testCase.getDirector().getNickname() : null);
+//                    if(!ObjectUtils.isEmpty(testCase.getCategory())){
+//                        projectTestCase.setTestCategoryName(testCase.getCategory().getName());
+//                    }
                     projectTestCase.setCaseType(testCase.getCaseType());
-                    projectTestCase.setRepository(testCase.getRepository());
+                    projectTestCase.setModuleName(testCase.getModule().getModuleName());
                     list.add(projectTestCase);
                 }else {
                     projectTestCase.setTestCaseName("用例已被删除");
@@ -202,24 +209,26 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
 
         if (!ObjectUtils.isEmpty(workTestCaseList)){
             for (WorkTestCase workTestCase:workTestCaseList){
-                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-                String systemUrl = getSystemUrl();
-                MultiValueMap param = new LinkedMultiValueMap<>();
-                param.add("id", workTestCase.getTestCaseId());
-                TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
+//                HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+//                String systemUrl = getSystemUrl();
+//                MultiValueMap param = new LinkedMultiValueMap<>();
+//                param.add("id", workTestCase.getTestCaseId());
+//                TestCase testCase = httpRequestUtil.requestPost(httpHeaders, systemUrl + "/api/testCase/findTestCase", param, TestCase.class);
 
+                TestCase testCase = testCaseService.findTestCase(workTestCase.getTestCaseId());
 
                 ProjectTestCase projectTestCase = new ProjectTestCase();
 
                 if (!ObjectUtils.isEmpty(testCase)){
+                    projectTestCase.setTestCaseKey(testCase.getCaseKey());
                     projectTestCase.setTestCaseName(testCase.getName());
                     projectTestCase.setId(testCase.getId());
-                    projectTestCase.setCreateUser(testCase.getCreateUser().getNickname());
-                    if(!ObjectUtils.isEmpty(testCase.getCategory())){
-                        projectTestCase.setTestCategoryName(testCase.getCategory().getName());
-                    }
+                    projectTestCase.setCreateUser(testCase.getDirector() != null ? testCase.getDirector().getNickname() : null);
+//                    if(!ObjectUtils.isEmpty(testCase.getCategory())){
+//                        projectTestCase.setTestCategoryName(testCase.getCategory().getName());
+//                    }
                     projectTestCase.setCaseType(testCase.getCaseType());
-                    projectTestCase.setRepository(testCase.getRepository());
+                    projectTestCase.setModuleName(testCase.getModule().getModuleName());
                     workTestCase.setProjectTestCase(projectTestCase);
                 }else {
                     projectTestCase.setTestCaseName("用例已被删除");
@@ -236,8 +245,8 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
     public Pagination<ProjectTestCase> findUnRelationWorkTestCaseList(WorkTestCaseQuery workTestCaseQuery) {
         TestCaseQuery testCaseQuery = new TestCaseQuery();
 
-        String[] repositoryIds = workTestCaseQuery.getRepositoryIds();
-        testCaseQuery.setInList(repositoryIds);
+//        String[] repositoryIds = workTestCaseQuery.getRepositoryIds();
+//        testCaseQuery.setInList(repositoryIds);
 
         List<WorkTestCase> workTestCaseList = findWorkTestCaseList(workTestCaseQuery);
         List<String> workTestCaseIds = workTestCaseList.stream().map(workTestCase -> workTestCase.getTestCaseId()).collect(Collectors.toList());
@@ -245,15 +254,17 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         String[] stringIds = new String[size];
         String[] documentIds = workTestCaseIds.toArray(stringIds);
         testCaseQuery.setNotInList(documentIds);
-        testCaseQuery.setInList(repositoryIds);
+//        testCaseQuery.setInList(repositoryIds);
         testCaseQuery.setName(workTestCaseQuery.getName());
         testCaseQuery.setCreateUser(workTestCaseQuery.getCreatUserId());
 //        testCaseQuery.getPageParam().setCurrentPage(workTestCaseQuery.getPageParam().getCurrentPage());
         testCaseQuery.setPageParam(workTestCaseQuery.getPageParam());
 
-        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
-        String systemUrl = getSystemUrl();
-        Pagination<TestCase> testCaseListPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/testCase/findTestCasePage", testCaseQuery, TestCase.class);
+//        HttpHeaders httpHeaders = httpRequestUtil.initHeaders(MediaType.APPLICATION_JSON, null);
+//        String systemUrl = getSystemUrl();
+//        Pagination<TestCase> testCaseListPage = httpRequestUtil.requestPostPage(httpHeaders, systemUrl + "/api/testCase/findTestCasePage", testCaseQuery, TestCase.class);
+
+        Pagination<TestCase> testCaseListPage = testCaseService.findTestCasePage(testCaseQuery);
 
         Pagination<ProjectTestCase> projectTestCasePagination = new Pagination<ProjectTestCase>();
         projectTestCasePagination.setTotalRecord(testCaseListPage.getTotalRecord());
@@ -264,14 +275,16 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         List<ProjectTestCase> projectTestCaseList = new ArrayList<ProjectTestCase>();
         for (TestCase testCase : testCaseListPage.getDataList()) {
             ProjectTestCase projectTestCase = new ProjectTestCase();
+            projectTestCase.setTestCaseKey(testCase.getCaseKey());
             projectTestCase.setTestCaseName(testCase.getName());
             projectTestCase.setId(testCase.getId());
-            projectTestCase.setCreateUser(testCase.getCreateUser().getName());
-            projectTestCase.setRepository(testCase.getRepository());
-            if(!ObjectUtils.isEmpty(testCase.getCategory())){
-                projectTestCase.setTestCategoryName(testCase.getCategory().getName());
-            }
+            projectTestCase.setCreateUser(testCase.getDirector() != null ? testCase.getDirector().getNickname() : null);
+//            projectTestCase.setRepository(testCase.getRepository());
+//            if(!ObjectUtils.isEmpty(testCase.getCategory())){
+//                projectTestCase.setTestCategoryName(testCase.getCategory().getName());
+//            }
             projectTestCase.setCaseType(testCase.getCaseType());
+            projectTestCase.setModuleName(testCase.getModule().getModuleName());
             projectTestCaseList.add(projectTestCase);
         }
         projectTestCasePagination.setDataList(projectTestCaseList);

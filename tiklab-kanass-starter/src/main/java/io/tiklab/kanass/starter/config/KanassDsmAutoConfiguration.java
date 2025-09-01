@@ -4,10 +4,7 @@ package io.tiklab.kanass.starter.config;
 import io.tiklab.dsm.model.DsmConfig;
 import io.tiklab.dsm.model.DsmVersion;
 import io.tiklab.dsm.support.DsmVersionBuilder;
-import io.tiklab.kanass.sql.Pmc155Task;
-import io.tiklab.kanass.sql.Pmc159Task;
-import io.tiklab.kanass.sql.Pmc163Task;
-import io.tiklab.kanass.sql.Pmc164PrivilegeTask;
+import io.tiklab.kanass.sql.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +26,9 @@ public class KanassDsmAutoConfiguration {
 
     @Autowired
     Pmc164PrivilegeTask pmc164PrivilegeTask;
+
+    @Autowired
+    Pmc166ProjectPrivilegeTask pmc166ProjectPrivilegeTask;
 
     @Bean
     DsmConfig dsmConfig(){
@@ -292,6 +292,20 @@ public class KanassDsmAutoConfiguration {
                 }).get();
         versionList.add(pmc_164_privilege);
 
+        DsmVersion pmc_165 = DsmVersionBuilder.instance()
+                .version("pmc_1.6.5")
+                .db(new String[]{
+                        "pmc_1.6.5",
+                }).get();
+        versionList.add(pmc_165);
+
+        DsmVersion pmc_166_project_privilege = DsmVersionBuilder.instance()
+                .version("pmc_1.6.6_project_privilege")
+                .db(new String[]{
+                        "pmc_1.6.6_project_privilege",
+                }).get();
+        versionList.add(pmc_166_project_privilege);
+
         DsmVersion task159 = DsmVersionBuilder.instance()
                 .version("task_1.5.9")
                 .task(pmc159Task)
@@ -310,11 +324,17 @@ public class KanassDsmAutoConfiguration {
                 .get();
         versionList.add(task163);
 
-        DsmVersion pmc164Privilege = DsmVersionBuilder.instance()
-                .version("task_1.6.4_privilege")
-                .task(pmc164PrivilegeTask)
+//        DsmVersion pmc164Privilege = DsmVersionBuilder.instance()
+//                .version("task_1.6.4_privilege")
+//                .task(pmc164PrivilegeTask)
+//                .get();
+//        versionList.add(pmc164Privilege);
+
+        DsmVersion pmc166ProjectPrivilege = DsmVersionBuilder.instance()
+                .version("task_1.6.6_project_privilege")
+                .task(pmc166ProjectPrivilegeTask)
                 .get();
-        versionList.add(pmc164Privilege);
+        versionList.add(pmc166ProjectPrivilege);
 
         return versionList;
     }

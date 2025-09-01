@@ -1,10 +1,14 @@
 package io.tiklab.kanass.test.workItemBind.service;
 
+import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
+import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.tiklab.kanass.test.test.service.TestCaseService;
 import io.tiklab.kanass.test.workItemBind.dao.WorkItemBindDao;
 import io.tiklab.kanass.test.workItemBind.entity.WorkItemBindEntity;
 import io.tiklab.kanass.test.workItemBind.model.WorkItemBind;
 import io.tiklab.kanass.test.workItemBind.model.WorkItemBindQuery;
+import io.tiklab.kanass.testplan.cases.service.TestPlanCaseService;
+import io.tiklab.kanass.workitem.entity.WorkTestCaseEntity;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
@@ -31,6 +35,9 @@ public class WorkItemBindServiceImpl implements WorkItemBindService {
     @Autowired
     JoinTemplate joinTemplate;
 
+    @Autowired
+    TestPlanCaseService testPlanCaseService;
+
 
     @Override
     public String createWorkItemBind(@NotNull @Valid WorkItemBind workItemBind) {
@@ -49,6 +56,16 @@ public class WorkItemBindServiceImpl implements WorkItemBindService {
     @Override
     public void deleteWorkItemBind(@NotNull String id) {
         workItemBindDao.deleteWorkItemBind(id);
+    }
+
+    @Override
+    public void deleteWorkItemBindByCondition(WorkItemBindQuery workspaceBindQuery) {
+        DeleteCondition deleteCondition = DeleteBuilders.createDelete(WorkItemBindEntity.class)
+                .eq("caseId", workspaceBindQuery.getCaseId())
+                .eq("workItemId", workspaceBindQuery.getWorkItemId())
+                .get();
+
+        workItemBindDao.deleteWorkItemBind(deleteCondition);
     }
 
     @Override

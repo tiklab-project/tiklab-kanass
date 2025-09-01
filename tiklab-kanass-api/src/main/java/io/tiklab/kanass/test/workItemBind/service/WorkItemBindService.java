@@ -36,6 +36,7 @@ public interface WorkItemBindService {
      * @param id
      */
     void deleteWorkItemBind(@NotNull String id);
+    void deleteWorkItemBindByCondition(WorkItemBindQuery workspaceBindQuery);
 
     void deleteAllWorkItemBind(String caseId);
 

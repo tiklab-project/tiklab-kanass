@@ -17,6 +17,9 @@ public class WorkItemBindQuery {
     @ApiProperty(name ="caseId",desc = "用例ID，精确匹配")
     private String caseId;
 
+    @ApiProperty(name ="workItemId",desc = "缺陷ID，精确匹配")
+    private String workItemId;
+
     @ApiProperty(name ="testPlanId",desc = "测试计划ID，精确匹配")
     private String testPlanId;
 
@@ -84,5 +87,13 @@ public class WorkItemBindQuery {
 
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
+    }
+
+    public String getWorkItemId() {
+        return workItemId;
+    }
+
+    public void setWorkItemId(String workItemId) {
+        this.workItemId = workItemId;
     }
 }

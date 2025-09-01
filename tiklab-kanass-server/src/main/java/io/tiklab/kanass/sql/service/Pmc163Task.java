@@ -1,4 +1,4 @@
-package io.tiklab.kanass.sql;
+package io.tiklab.kanass.sql.service;
 
 import io.tiklab.dsm.support.DsmProcessTask;
 import io.tiklab.kanass.project.appraised.model.AppraisedHistory;
@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;

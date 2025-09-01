@@ -72,6 +72,10 @@ public class TestCasesEntity implements Serializable {
     @Column(name = "description",length = 128)
     private String desc;
 
+    // 关联需求
+    @Column(name = "demand", length = 12)
+    private String demand;
+
 
     public String getId() {
         return id;
@@ -193,4 +197,11 @@ public class TestCasesEntity implements Serializable {
         this.priorityLevel = priorityLevel;
     }
 
+    public String getDemand() {
+        return demand;
+    }
+
+    public void setDemand(String demand) {
+        this.demand = demand;
+    }
 }
