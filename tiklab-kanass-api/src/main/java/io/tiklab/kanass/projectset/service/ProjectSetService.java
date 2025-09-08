@@ -96,6 +96,13 @@ public interface ProjectSetService {
     Map findProjectIsOrNotRe();
 
     /**
+     * 查询所有未关联项目
+     * @param
+     * @return
+     */
+    Pagination<Project> findNotRelateProjectPage(ProjectQuery projectQuery);
+
+    /**
      * 添加关联项目
      * @param
      * @return

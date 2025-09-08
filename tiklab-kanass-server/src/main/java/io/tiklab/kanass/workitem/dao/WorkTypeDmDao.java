@@ -1,5 +1,7 @@
 package io.tiklab.kanass.workitem.dao;
 
+import io.tiklab.core.order.Order;
+import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.kanass.workitem.entity.WorkTypeDmEntity;
 import io.tiklab.kanass.workitem.entity.WorkTypeEntity;
@@ -9,9 +11,11 @@ import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -83,6 +87,11 @@ public class WorkTypeDmDao{
      * @return
      */
     public List<WorkTypeDmEntity> findWorkTypeDmList(WorkTypeDmQuery workTypeDmQuery) {
+        for (Order orderParam : workTypeDmQuery.getOrderParams()) {
+            if (orderParam.getName().equals("id")){
+                orderParam.setName("wd.id");
+            }
+        }
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkTypeDmEntity.class, "wd")
                 .leftJoin( WorkTypeEntity.class, "wt","wd.workTypeId=wt.id")
                 .leftJoin(ProjectEntity.class, "p", "wd.projectId=p.id")

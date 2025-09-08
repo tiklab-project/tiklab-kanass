@@ -254,6 +254,7 @@ public class WorkTestCaseServiceImpl implements WorkTestCaseService {
         String[] stringIds = new String[size];
         String[] documentIds = workTestCaseIds.toArray(stringIds);
         testCaseQuery.setNotInList(documentIds);
+        testCaseQuery.setProjectId(workTestCaseQuery.getProjectId());
 //        testCaseQuery.setInList(repositoryIds);
         testCaseQuery.setName(workTestCaseQuery.getName());
         testCaseQuery.setCreateUser(workTestCaseQuery.getCreatUserId());

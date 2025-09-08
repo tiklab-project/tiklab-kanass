@@ -210,6 +210,51 @@ public class TestCaseDao {
     }
 
 
+    public HashMap<String, Integer> findTestCaseStatusNum(TestCaseQuery testCaseQuery) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT ")
+                .append("COUNT(*) AS total_count, ")
+                .append("COUNT(CASE WHEN status = 0 THEN 1 END) AS todo_count, ")
+                .append("COUNT(CASE WHEN status = 1 THEN 1 END) AS progress_count, ")
+                .append("COUNT(CASE WHEN status = 2 THEN 1 END) AS done_count ")
+                .append("FROM test_testcase WHERE 1=1 ");
+
+        List<Object> params = new ArrayList<>();
+
+        if (testCaseQuery.getProjectId() != null) {
+            sql.append("AND project_id = ? ");
+            params.add(testCaseQuery.getProjectId());
+        }
+
+        if (testCaseQuery.getCreateUser() != null && !testCaseQuery.getCreateUser().isEmpty()) {
+            sql.append("AND create_user = ? ");
+            params.add(testCaseQuery.getCreateUser());
+        }
+
+        if (testCaseQuery.getDirector() != null && !testCaseQuery.getDirector().isEmpty()) {
+            sql.append("AND director = ? ");
+            params.add(testCaseQuery.getDirector());
+        }
+
+        if (testCaseQuery.getModuleIds() != null && testCaseQuery.getModuleIds().length > 0) {
+            String placeholders = Arrays.stream(testCaseQuery.getModuleIds())
+                    .map(id -> "?")
+                    .collect(Collectors.joining(", "));
+            sql.append("AND module_id IN (" + placeholders + ") ");
+            Collections.addAll(params, testCaseQuery.getModuleIds());
+        }
+
+        Map<String, Object> result = jpaTemplate.getJdbcTemplate().queryForMap(sql.toString(), params.toArray());
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("total_count", ((Number) result.get("total_count")).intValue());
+        resultMap.put("todo_count", ((Number) result.get("todo_count")).intValue());
+        resultMap.put("progress_count", ((Number) result.get("progress_count")).intValue());
+        resultMap.put("done_count", ((Number) result.get("done_count")).intValue());
+
+        return resultMap;
+    }
+
     public HashMap<String, Integer> findDiffTestCaseNum(TestCaseQuery testCaseQuery) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ")

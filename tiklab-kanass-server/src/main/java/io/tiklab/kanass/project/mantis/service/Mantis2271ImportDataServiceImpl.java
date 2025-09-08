@@ -109,7 +109,7 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
     @PostConstruct
     public void init(){
         this.unzipAddress = Paths.get(dataHome,"unzip", "Mantis").toString();
-        this.attachmentPath = Paths.get(unzipAddress + "attachments").toString();
+        this.attachmentPath = Paths.get(unzipAddress, "attachments").toString();
     }
 
     @Override
@@ -554,17 +554,26 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
                 String additionalInformation = issue.getAdditionalInformation();
 //                String desc = "描述：" + description + "\n" + "步骤：" + stepsToReproduce + "\n" + "附加信息：" + additionalInformation;
 //                workItem.setDesc("[{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ desc + "\"}]}]");
+                boolean needComma = false;
                 StringBuffer descBuffer = new StringBuffer("[");
                 if (description != null && !description.isBlank()){
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"描述：\"}]},");
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ description + "\"}]}");
+                    needComma = true;
                 }
                 if (stepsToReproduce != null && !stepsToReproduce.isBlank()) {
+                    if (needComma){
+                        descBuffer.append(",");
+                    }
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"步骤：\"}]},");
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ stepsToReproduce + "\"}]}");
+                    needComma = true;
                 }
                 if (additionalInformation != null && !additionalInformation.isBlank()) {
-                    descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"附加信息：\"}]}");
+                    if (needComma){
+                        descBuffer.append(",");
+                    }
+                    descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\"附加信息：\"}]},");
                     descBuffer.append("{\"type\":\"paragraph\",\"children\":[{\"text\":\""+ additionalInformation + "\"}]}");
                 }
                 if (descBuffer.equals("[")){
@@ -657,6 +666,17 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
             }
         }
         return  userId;
+    }
+
+    public String getUserName(String key){
+        String userName = new String();
+        for (MantisUser mantisUser : this.MantisUserSet.get()) {
+            String userKey = mantisUser.getId();
+            if(userKey.equals(key)){
+                userName = mantisUser.getUserName();
+            }
+        }
+        return  userName;
     }
 
     /**
@@ -766,12 +786,14 @@ public class Mantis2271ImportDataServiceImpl implements Mantis2271ImportDataServ
             workComment.setDetails(mantisNote.getNote());
             User user = new User();
             user.setId(getUserId(mantisNote.getReporterId()));
+            user.setName(getUserName(mantisNote.getReporterId()));
+            user.setNickname(getUserName(mantisNote.getReporterId()));
             workComment.setUser(user);
 //            Instant instant = Instant.ofEpochSecond(timestampSeconds);
 
             workComment.setCreateTime(new java.util.Date(Long.valueOf(mantisNote.getDateSubmitted()) * 1000));
             workComment.setUpdateTime(new java.util.Date(Long.valueOf(mantisNote.getDateSubmitted()) * 1000));
-            workCommentService.createWorkComment(workComment);
+            workCommentService.createImportWorkComment(workComment);
         }
     }
 

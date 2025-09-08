@@ -17,6 +17,9 @@ public class WorkItemBindQuery {
     @ApiProperty(name ="caseId",desc = "用例ID，精确匹配")
     private String caseId;
 
+    @ApiProperty(name ="caseIds",desc = "用例ID列表，精确匹配")
+    private String[] caseIds;
+
     @ApiProperty(name ="workItemId",desc = "缺陷ID，精确匹配")
     private String workItemId;
 
@@ -95,5 +98,13 @@ public class WorkItemBindQuery {
 
     public void setWorkItemId(String workItemId) {
         this.workItemId = workItemId;
+    }
+
+    public String[] getCaseIds() {
+        return caseIds;
+    }
+
+    public void setCaseIds(String[] caseIds) {
+        this.caseIds = caseIds;
     }
 }

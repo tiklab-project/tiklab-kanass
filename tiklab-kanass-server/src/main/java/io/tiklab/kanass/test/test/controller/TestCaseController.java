@@ -49,6 +49,13 @@ public class TestCaseController {
         return Result.ok();
     }
 
+    @RequestMapping(path="/updateTestCaseList",method = RequestMethod.POST)
+    public Result<Void> updateTestCaseList(@RequestBody List<TestCase> testCaseList){
+        testCaseService.updateTestCaseList(testCaseList);
+
+        return Result.ok();
+    }
+
     @RequestMapping(path="/deleteTestCase",method = RequestMethod.POST)
 //    @ApiMethod(name = "deleteTestCase",desc = "删除测试用例")
 //    @ApiParam(name = "id",desc = "id",required = true)
@@ -92,6 +99,13 @@ public class TestCaseController {
         Pagination<TestCase> pagination = testCaseService.findTestCasePage(testCaseQuery);
 
         return Result.ok(pagination);
+    }
+
+    @RequestMapping(path = "/findTestCaseStatusNum",method = RequestMethod.POST)
+    public Result<HashMap<String, Integer>> findTestCaseStatusNum(@RequestBody @Valid @NotNull TestCaseQuery testCaseQuery){
+        HashMap<String, Integer> testCaseStatusNum = testCaseService.findTestCaseStatusNum(testCaseQuery);
+
+        return Result.ok(testCaseStatusNum);
     }
 
     @RequestMapping(path = "/findDiffTestCaseNum",method = RequestMethod.POST)

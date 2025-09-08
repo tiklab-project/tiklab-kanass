@@ -78,7 +78,7 @@ public class WikiDocumentServiceImpl implements WikiDocumentService {
             kanassDocument.setDocumentName(wikiDocument.getName());
             kanassDocument.setKanassRepositoryId(wikiDocument.getWikiRepository().getId());
             kanassDocument.setKanassRepositoryName(wikiDocument.getWikiRepository().getName());
-            kanassDocument.setUserName(wikiDocument.getMaster().getName());
+            kanassDocument.setUserName(wikiDocument.getMaster().getNickname());
             kanassDocument.setCreateTime(wikiDocument.getUpdateTime());
             kanassDocumentList.add(kanassDocument);
         }

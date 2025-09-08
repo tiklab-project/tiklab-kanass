@@ -84,6 +84,16 @@ public class TestCaseServiceImpl implements TestCaseService {
     }
 
     @Override
+    public void updateTestCaseList(List<TestCase> testCaseList) {
+        for (TestCase testCase : testCaseList) {
+            TestCase one = findOne(testCase.getId());
+            one.setDirector(testCase.getDirector());
+
+            updateTestCase(one);
+        }
+    }
+
+    @Override
     public void deleteTestCase(@NotNull String id,String caseType) {
 
         //删除用例
@@ -210,6 +220,18 @@ public class TestCaseServiceImpl implements TestCaseService {
 //        List<TestCase> newTestCaseList = recentInstance(testCaseList);
 
         return PaginationBuilder.build(pagination, testCaseList);
+    }
+
+    /**
+     * 根据查询参数获取各个状态的用例数量
+     *
+     * @param testCaseQuery
+     * @return
+     */
+    @Override
+    public HashMap<String, Integer> findTestCaseStatusNum(TestCaseQuery testCaseQuery) {
+        HashMap<String, Integer> testCaseStatusNum = testCaseDao.findTestCaseStatusNum(testCaseQuery);
+        return testCaseStatusNum;
     }
 
     @Override

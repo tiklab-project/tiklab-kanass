@@ -32,6 +32,8 @@ public interface TestCaseService {
     */
     void updateTestCase(@NotNull @Valid TestCase testCase);
 
+    void updateTestCaseList(List<TestCase> testCaseList);
+
     /**
     * 删除测试用例
     * @param id
@@ -98,6 +100,13 @@ public interface TestCaseService {
     * @return
     */
     Pagination<TestCase> findTestCasePage(TestCaseQuery testCaseQuery);
+
+    /**
+     * 根据查询参数获取各个状态的用例数量
+     * @param testCaseQuery
+     * @return
+     */
+    HashMap<String, Integer> findTestCaseStatusNum(TestCaseQuery testCaseQuery);
 
     /**
      * 根据查询参数获取各个测试类型的用例数量

@@ -149,6 +149,12 @@ public class ProjectSetController {
         return Result.ok(projectIsOrNotRe);
     }
 
+    @RequestMapping(path = "/findNotRelateProjectPage",method = RequestMethod.POST)
+    public Result<Pagination<Project>> findNotRelateProjectPage(@RequestBody ProjectQuery projectQuery){
+        Pagination<Project> projectPage = projectSetService.findNotRelateProjectPage(projectQuery);
+        return Result.ok(projectPage);
+    }
+
 
     @RequestMapping(path = "/addRelevance",method = RequestMethod.POST)
     //@ApiMethod(name = "addRelevance",desc = "添加关联项目")

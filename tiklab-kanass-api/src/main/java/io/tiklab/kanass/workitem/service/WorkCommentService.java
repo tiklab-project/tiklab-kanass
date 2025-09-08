@@ -22,6 +22,7 @@ public interface WorkCommentService {
     * @return
     */
     String createWorkComment(@NotNull @Valid WorkComment workComment);
+    String createImportWorkComment(@NotNull WorkComment workComment);
 
     /**
     * 更新事项评论

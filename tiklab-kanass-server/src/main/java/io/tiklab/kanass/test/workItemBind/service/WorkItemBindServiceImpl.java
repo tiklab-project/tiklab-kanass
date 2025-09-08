@@ -9,6 +9,8 @@ import io.tiklab.kanass.test.workItemBind.model.WorkItemBind;
 import io.tiklab.kanass.test.workItemBind.model.WorkItemBindQuery;
 import io.tiklab.kanass.testplan.cases.service.TestPlanCaseService;
 import io.tiklab.kanass.workitem.entity.WorkTestCaseEntity;
+import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.kanass.workitem.service.WorkItemService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
@@ -37,6 +39,9 @@ public class WorkItemBindServiceImpl implements WorkItemBindService {
 
     @Autowired
     TestPlanCaseService testPlanCaseService;
+
+    @Autowired
+    WorkItemService workItemService;
 
 
     @Override
@@ -137,8 +142,13 @@ public class WorkItemBindServiceImpl implements WorkItemBindService {
 
         List<WorkItemBind> workItemBindList = BeanMapper.mapList(pagination.getDataList(),WorkItemBind.class);
 
-        joinTemplate.joinQuery(workItemBindList,new String[]{"testCase","testPlan","workItem"});
+        joinTemplate.joinQuery(workItemBindList,new String[]{"testCase","testPlan"});
 
+        for (WorkItemBind workItemBind : workItemBindList) {
+            String workItemId = workItemBind.getWorkItem().getId();
+            WorkItem workItem = workItemService.findWorkItem(workItemId);
+            workItemBind.setWorkItem(workItem);
+        }
         return PaginationBuilder.build(pagination,workItemBindList);
     }
 

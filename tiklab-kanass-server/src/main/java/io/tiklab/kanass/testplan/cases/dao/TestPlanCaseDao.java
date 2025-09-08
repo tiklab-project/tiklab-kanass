@@ -9,6 +9,7 @@ import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.kanass.testplan.cases.model.TestPlanCaseQuery;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.kanass.testplan.cases.entity.PlanCaseEntity;
+import io.tiklab.user.dmUser.model.DmUserQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,8 +165,7 @@ public class TestPlanCaseDao {
     public Pagination<PlanCaseEntity> findPlanCasePage(TestPlanCaseQuery testPlanCaseQuery) {
         StringBuilder modelSqlBuilder = new StringBuilder();
         modelSqlBuilder.append("SELECT test_test_plan_cases.id AS plan_case_id, test_testcase.id, test_testcase.create_user, test_testcase.create_time, ")
-                .append("test_testcase.case_type, test_testcase.module_id, test_testcase.name ");
-
+                .append("test_testcase.case_type, test_testcase.module_id, test_testcase.name, test_testcase.director ");
         boolean isFunctionPlan = Objects.equals(testPlanCaseQuery.getTestPlanType(), MagicValue.TEST_TYPE_FUNCTION);
 
         // FUNCTION 计划时加入 result 字段
@@ -179,7 +179,11 @@ public class TestPlanCaseDao {
                 .append("JOIN test_testcase ON test_testcase.id = test_test_plan_cases.test_case_id ")
                 .append("JOIN test_test_plan ON test_test_plan.id = test_test_plan_cases.test_plan_id ");
 
-        modelSqlBuilder.append("WHERE test_test_plan.id = '").append(testPlanCaseQuery.getTestPlanId()).append("'");
+        modelSqlBuilder.append("WHERE 1=1 ");
+
+        if (testPlanCaseQuery.getTestPlanId() != null) {
+            modelSqlBuilder.append("AND test_test_plan.id = '").append(testPlanCaseQuery.getTestPlanId()).append("'");
+        }
 
         if (testPlanCaseQuery.getName() != null) {
             modelSqlBuilder.append(" AND test_testcase.name LIKE '%").append(testPlanCaseQuery.getName()).append("%'");
@@ -237,7 +241,8 @@ public class TestPlanCaseDao {
                 .append(" FROM test_test_plan_cases  ")
                 .append(" JOIN test_test_plan ON test_test_plan.id = test_test_plan_cases.test_plan_id ")
                 .append(" WHERE test_test_plan_cases.test_case_id = test_testcase.id ")
-                .append(" AND test_test_plan.id = '").append(testPlanCaseQuery.getTestPlanId()).append("')");
+//                .append(" AND test_test_plan.id = '").append(testPlanCaseQuery.getTestPlanId()).append("')");
+                .append(")");
 
 
         if (testPlanCaseQuery.getName() != null) {

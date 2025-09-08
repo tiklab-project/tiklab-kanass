@@ -61,6 +61,9 @@ public class NodeQuery extends BaseModel {
     @ApiProperty(name ="pageParam",desc = "分页参数")
     private Page pageParam = new Page();
 
+    // 1草稿  2评审中  3评审通过
+    @ApiProperty(name ="nodeStatus",desc = "节点状态")
+    private Integer nodeStatus;
 
     public List<Order> getOrderParams() {
         return orderParams;
@@ -198,5 +201,13 @@ public class NodeQuery extends BaseModel {
 
     public void setNotIds(Object[] notIds) {
         this.notIds = notIds;
+    }
+
+    public Integer getNodeStatus() {
+        return nodeStatus;
+    }
+
+    public void setNodeStatus(Integer nodeStatus) {
+        this.nodeStatus = nodeStatus;
     }
 }

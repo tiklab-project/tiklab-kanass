@@ -6,6 +6,9 @@ import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.flow.transition.model.Transition;
 import io.tiklab.flow.transition.model.TransitionQuery;
 import io.tiklab.flow.transition.service.TransitionService;
+import io.tiklab.kanass.test.test.model.TestCase;
+import io.tiklab.kanass.test.test.model.TestCaseQuery;
+import io.tiklab.kanass.test.test.service.TestCaseService;
 import io.tiklab.kanass.test.workItemBind.model.WorkItemBind;
 import io.tiklab.kanass.test.workItemBind.model.WorkItemBindQuery;
 import io.tiklab.kanass.test.workItemBind.service.WorkItemBindService;
@@ -13,6 +16,7 @@ import io.tiklab.kanass.test.workItemData.model.WorkItemTestOnQuery;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
 import io.tiklab.kanass.workitem.service.WorkItemService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,9 @@ public class WorkItemDataServiceImpl implements WorkItemDataService {
     @Autowired
     TransitionService transitionService;
 
+    @Autowired
+    TestCaseService testCaseService;
+
 
     @Override
     public Pagination<WorkItem> findWorkItemList(WorkItemTestOnQuery workItemTestOnQuery) {
@@ -43,6 +50,19 @@ public class WorkItemDataServiceImpl implements WorkItemDataService {
         workItemQuery.setProjectId(workItemTestOnQuery.getProjectId());
         workItemQuery.setTitle(workItemTestOnQuery.getName());
         workItemQuery.setPageParam(workItemTestOnQuery.getPageParam());
+
+        // 查询当前已经关联的需求
+        TestCaseQuery testCaseQuery = new TestCaseQuery();
+        testCaseQuery.setProjectId(workItemTestOnQuery.getProjectId());
+        List<TestCase> testCaseList = testCaseService.findTestCaseList(testCaseQuery);
+        List<String> demandIdList = testCaseList.stream()
+                .filter(testCase -> testCase.getDemand() != null)
+                .map(testCase -> testCase.getDemand().getId())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(demandIdList)){
+            workItemQuery.setIdNotIn(demandIdList.toArray(new String[demandIdList.size()]));
+        }
+
 
         Pagination<WorkItem> workItemPagination = workItemService.findConditionWorkItemPage(workItemQuery);
 

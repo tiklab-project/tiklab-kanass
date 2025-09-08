@@ -89,6 +89,15 @@ public class TestPlanCaseController {
         return Result.ok(pagination);
     }
 
+    @RequestMapping(path = "/findPlanCaseList",method = RequestMethod.POST)
+//    @ApiMethod(name = "findPlanCasePage",desc = "测试计划已绑定的用例")
+//    @ApiParam(name = "testPlanCaseQuery",desc = "testCaseQuery",required = true)
+    public Result<List<PlanCase>> findPlanCaseList(@RequestBody @Valid @NotNull TestPlanCaseQuery testPlanCaseQuery){
+        List<PlanCase> list = testPlanCaseService.findPlanCaseList(testPlanCaseQuery);
+
+        return Result.ok(list);
+    }
+
     @RequestMapping(path = "/findTestCasePage",method = RequestMethod.POST)
 //    @ApiMethod(name = "findPlanCasePage",desc = "查询关联的用例，剔除已关联的用例")
 //    @ApiParam(name = "testPlanCaseQuery",desc = "testCaseQuery",required = true)

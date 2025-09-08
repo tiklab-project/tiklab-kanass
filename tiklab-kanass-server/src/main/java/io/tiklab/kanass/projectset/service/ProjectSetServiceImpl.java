@@ -358,6 +358,17 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         return projectMap;
     }
 
+    /**
+     * 查询所有未关联项目
+     *
+     * @return
+     */
+    @Override
+    public Pagination<Project> findNotRelateProjectPage(ProjectQuery projectQuery) {
+        projectQuery.setProjectSetIdNull(true);
+        Pagination<Project> projectPage = projectService.findProjectPage(projectQuery);
+        return projectPage;
+    }
 
     /**
      * 添加关联项目

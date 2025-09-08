@@ -81,7 +81,9 @@ public class GatewayFilterAutoConfiguration{
                         "/message/messageItem/syncUpdateMessage",
                         "/message/messageItem/syncDeleteMessage",
                         "/init/install/findStatus",
-                        "/openapi/doc"
+                        "/openapi/doc",
+                        "/user/ldap/common/cfg/findLdapCfg",
+                        "/eam/ldap/passport/login"
 
                 })
                 .ignorePreUrls(new String[]{

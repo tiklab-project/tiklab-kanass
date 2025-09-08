@@ -14,6 +14,11 @@ import io.tiklab.kanass.workitem.entity.WorkCommentEntity;
 
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
+import io.tiklab.kanass.workitem.model.WorkItem;
+import io.tiklab.message.message.model.Message;
+import io.tiklab.message.message.model.MessageReceiver;
+import io.tiklab.message.message.service.SendMessageNoticeService;
+import io.tiklab.message.setting.model.MessageType;
 import io.tiklab.security.logging.logging.model.Logging;
 import io.tiklab.security.logging.logging.model.LoggingQuery;
 import io.tiklab.security.logging.logging.model.LoggingType;
@@ -65,13 +70,24 @@ public class WorkCommentServiceImpl implements WorkCommentService {
     @Autowired
     WorkLogService workLogService;
 
+    @Autowired
+    SendMessageNoticeService sendMessageNoticeService;
+
     @Override
     public String createWorkComment(@NotNull @Valid WorkComment workComment) {
         WorkCommentEntity workCommentEntity = BeanMapper.map(workComment, WorkCommentEntity.class);
         String workCommentId = workCommentDao.createWorkComment(workCommentEntity);
-//        executorService.submit(() -> {
+        executorService.submit(() -> {
             creatWorkItemCommentDynamic(workCommentId);
-//        });
+            sendMessageForComment(workCommentId);
+        });
+        return workCommentId;
+    }
+
+    public String createImportWorkComment(@NotNull @Valid WorkComment workComment) {
+        WorkCommentEntity workCommentEntity = BeanMapper.map(workComment, WorkCommentEntity.class);
+        String workCommentId = workCommentDao.createWorkComment(workCommentEntity);
+        creatImportWorkItemCommentDynamic(workCommentId, workComment);
         return workCommentId;
     }
 
@@ -209,5 +225,89 @@ public class WorkCommentServiceImpl implements WorkCommentService {
         log.setBaseUrl(baseUrl);
         log.setAction(content.get("workItemTitle"));
         opLogByTemplService.createLog(log);
+    }
+
+    public void creatImportWorkItemCommentDynamic(String workCommentId, WorkComment workComment){
+        Logging log = new Logging();
+        log.setBgroup("kanass");
+
+        LoggingType opLogType = new LoggingType();
+        opLogType.setId("KANASS_LOGTYPE_WORKITEMCOMMENTADD");
+        log.setActionType(opLogType);
+
+        log.setModule("workItem");
+        log.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
+        // 导入的时候事项还没有创建，所以join填充的workitem是空的
+//        WorkComment workComment = this.findWorkComment(workCommentId);
+        log.setUser(workComment.getUser());
+
+        Map<String, String> content = new HashMap<>();
+        content.put("id", workComment.getId());
+        content.put("projectId", workComment.getWorkItem().getProject().getId());
+        content.put("workItemId", workComment.getWorkItem().getId());
+        content.put("workItemTitle",  workComment.getWorkItem().getTitle());
+        content.put("details",  workComment.getDetails());
+        content.put("master", workComment.getUser().getNickname());
+        content.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        content.put("createUserIcon",workComment.getUser().getNickname().substring( 0, 1).toUpperCase());
+        log.setData(JSONObject.toJSONString(content));
+        log.setLink("/project/${projectId}/workitem/${workItemId}");
+        log.setBaseUrl(baseUrl);
+        log.setAction(content.get("workItemTitle"));
+        opLogByTemplService.createLog(log);
+    }
+
+    /**
+     * 评论 发送消息
+     * @param workCommentId
+     */
+    void sendMessageForComment(String workCommentId){
+        WorkComment workComment = this.findWorkComment(workCommentId);
+
+        WorkItem workItem = workComment.getWorkItem();
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("workItemTitle", workItem.getTitle());
+        content.put("workItemId", workItem.getId());
+        content.put("projectId", workItem.getProject().getId());
+        content.put("comment", workComment.getDetails());
+
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        Message message = new Message();
+        MessageType messageType = new MessageType();
+        messageType.setId("KANASS_MESSAGETYPE_WORKITEM_DELETE");
+        message.setMessageType(messageType);
+        message.setData(content);
+
+        // 接收者
+        User assigner = workItem.getAssigner();
+        List<MessageReceiver> objects = new ArrayList<>();
+        MessageReceiver messageReceiver = new MessageReceiver();
+        messageReceiver.setUserId(assigner.getId());
+        messageReceiver.setEmail(assigner.getEmail());
+        objects.add(messageReceiver);
+        message.setMessageReceiverList(objects);
+        message.setBaseUrl(baseUrl);
+        message.setLink("/project/${projectId}/work/${workItemId}");
+        message.setAction(workItem.getTitle());
+        message.setSendId(user.getId());
+        message.setData(content);
+
+
+        message.setMessageSendTypeId("site");
+        sendMessageNoticeService.sendMessage(message);
+
+//        message.setId(null);
+//        message.setMessageSendTypeId("email");
+//        sendMessageNoticeService.sendMessage(message);
+//
+//        message.setId(null);
+//        message.setMessageSendTypeId("qywechat");
+//        sendMessageNoticeService.sendMessage(message);
     }
 }

@@ -432,8 +432,14 @@ public class ProjectDao{
 //            sql = sql.concat(" and p.project_set_id = '?'");
 //            objects.add(projectQuery.getProjectSetId());
         }
+        if (projectQuery.isProjectSetIdNull()){
+            sql = sql.concat(" and p.project_set_id is null");
+        }
         if (projectQuery.getProductId() != null){
             sql = sql.concat(" and p.product_id = '" + projectQuery.getProductId() + "'");
+        }
+        if (projectQuery.isProductIdNull()){
+            sql = sql.concat(" and p.product_id is null");
         }
         if (projectQuery.getOverdue() != null && projectQuery.getOverdue()){
             Date date = new Date();
@@ -867,6 +873,12 @@ public class ProjectDao{
             String currentTime = simpleDateFormat.format(date);
             sql1 = sql1.concat(" and end_time <= '"+ currentTime + "' and project_state != '3'");
         }
+        if (StringUtils.isNotBlank(projectQuery.getProjectSetId())){
+            sql1 = sql1.concat(" and project_set_id = '" + projectQuery.getProjectSetId() + "'");
+        }
+        if (StringUtils.isNotBlank(projectQuery.getProductId())){
+            sql1 = sql1.concat(" and product_id = '" + projectQuery.getProductId() + "'");
+        }
 
         Integer total = jpaTemplate.getJdbcTemplate().queryForObject(sql1, new Object[]{}, Integer.class);
         projectCount.put("total", total);
@@ -884,6 +896,12 @@ public class ProjectDao{
             String currentTime = simpleDateFormat.format(date);
             sql2 = sql2.concat(" and end_time <= '"+ currentTime + "' and project_state != '3'");
         }
+        if (StringUtils.isNotBlank(projectQuery.getProjectSetId())){
+            sql2 = sql2.concat(" and project_set_id = '" + projectQuery.getProjectSetId() + "'");
+        }
+        if (StringUtils.isNotBlank(projectQuery.getProductId())){
+            sql2 = sql2.concat(" and product_id = '" + projectQuery.getProductId() + "'");
+        }
         Integer myCreated = jpaTemplate.getJdbcTemplate().queryForObject(sql2, new Object[]{}, Integer.class);
         projectCount.put("myCreated", myCreated);
 
@@ -900,6 +918,12 @@ public class ProjectDao{
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String currentTime = simpleDateFormat.format(date);
             sql3 = sql3.concat(" and p.end_time <= '"+ currentTime + "' and p.project_state != '3'");
+        }
+        if (StringUtils.isNotBlank(projectQuery.getProjectSetId())){
+            sql3 = sql3.concat(" and project_set_id = '" + projectQuery.getProjectSetId() + "'");
+        }
+        if (StringUtils.isNotBlank(projectQuery.getProductId())){
+            sql3 = sql3.concat(" and product_id = '" + projectQuery.getProductId() + "'");
         }
         Integer myFocus = jpaTemplate.getJdbcTemplate().queryForObject(sql3, new Object[]{}, Integer.class);
         projectCount.put("myFocus", myFocus);

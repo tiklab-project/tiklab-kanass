@@ -46,6 +46,9 @@ public class ProjectQuery implements Serializable {
     @ApiProperty(name ="projectSetIds",desc = "项目集id, 精确匹配")
     private String[] projectSetIds;
 
+    @ApiProperty(name ="projectSetIdNull",desc = "项目集id为空")
+    private boolean projectSetIdNull;
+
     /**
      * @pi.name: projectSetId
      * @pi.value: projectSetId
@@ -55,6 +58,9 @@ public class ProjectQuery implements Serializable {
 
     @ApiProperty(name ="productIds",desc = "产品id, 精确匹配")
     private String[] productIds;
+
+    @ApiProperty(name ="productIdNull",desc = "产品id为空")
+    private boolean productIdNull;
 
     /**
      * @pi.name: projectLimits
@@ -261,5 +267,21 @@ public class ProjectQuery implements Serializable {
 
     public void setOverdue(Boolean overdue) {
         this.overdue = overdue;
+    }
+
+    public boolean isProjectSetIdNull() {
+        return projectSetIdNull;
+    }
+
+    public void setProjectSetIdNull(boolean projectSetIdNull) {
+        this.projectSetIdNull = projectSetIdNull;
+    }
+
+    public boolean isProductIdNull() {
+        return productIdNull;
+    }
+
+    public void setProductIdNull(boolean productIdNull) {
+        this.productIdNull = productIdNull;
     }
 }

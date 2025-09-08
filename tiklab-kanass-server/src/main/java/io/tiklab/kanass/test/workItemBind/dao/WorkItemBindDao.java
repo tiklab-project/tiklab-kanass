@@ -131,6 +131,20 @@ public class WorkItemBindDao {
             sql.append(" AND case_id = ?");
             params.add(workItemBindQuery.getCaseId());
         }
+        // 新增 caseIds 数组条件
+        if (workItemBindQuery.getCaseIds() != null && workItemBindQuery.getCaseIds().length > 0) {
+            sql.append(" AND case_id IN (");
+            String[] caseIds = workItemBindQuery.getCaseIds();
+            for (int i = 0; i < caseIds.length; i++) {
+                if (i > 0) {
+                    sql.append(",");
+                }
+                sql.append("?");
+                params.add(caseIds[i]);
+            }
+            sql.append(")");
+        }
+
         if (workItemBindQuery.getProjectId() != null) {
             sql.append(" AND project_id = ?");
             params.add(workItemBindQuery.getProjectId());

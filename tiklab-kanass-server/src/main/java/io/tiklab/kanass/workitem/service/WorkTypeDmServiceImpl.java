@@ -350,7 +350,12 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
         joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
-        return workTypeDmList;
+        List<WorkTypeDm> sortedList = workTypeDmList.stream()
+                .sorted(Comparator.comparing(
+                        o -> "system".equals(o.getWorkType().getGrouper()) ? 0 : 1
+                ))
+                .collect(Collectors.toList());
+        return sortedList;
     }
 
     @Override

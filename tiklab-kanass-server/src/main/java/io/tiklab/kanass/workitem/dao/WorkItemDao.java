@@ -269,7 +269,7 @@ public class WorkItemDao{
 
     public Integer findUserCreateAndTodoWorkNum(WorkItemQuery workItemQuery){
 //        HashMap<String, Integer> WorkItemCount = new HashMap<>();
-        workItemQuery.setWorkTypeId(null);
+//        workItemQuery.setWorkTypeId(null);
         Map<String, Object> stringObjectMap = WorkItemSearchSql(workItemQuery);
 
         String sql = new String();
@@ -560,6 +560,15 @@ public class WorkItemDao{
                 sql = sql.concat(" and p.parent_id = '" + workItemQuery.getParentId() + "'");
             }
             paramMap.put("parentId", workItemQuery.getParentId());
+        }
+
+        if(workItemQuery.getWorkTypeId() != null && workItemQuery.getWorkTypeId().length()>0){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" p.work_type_sys_id = '" + workItemQuery.getWorkTypeId() + "'");
+            }else {
+                sql = sql.concat(" and p.work_type_sys_id = '" + workItemQuery.getWorkTypeId() + "'");
+            }
+            paramMap.put("workTypeId", workItemQuery.getWorkTypeId());
         }
 
         if(workItemQuery.getWorkTypeIds() != null && workItemQuery.getWorkTypeIds().size() > 0){
