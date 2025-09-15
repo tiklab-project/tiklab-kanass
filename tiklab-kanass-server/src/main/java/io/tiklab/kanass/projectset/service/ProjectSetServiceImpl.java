@@ -1,9 +1,11 @@
 package io.tiklab.kanass.projectset.service;
 
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.home.insight.service.ProjectInsightReportService;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
+import io.tiklab.message.message.model.MessageNoticePatch;
 import io.tiklab.privilege.dmRole.service.DmRoleService;
 import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.kanass.project.project.model.Project;
@@ -35,6 +37,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +46,7 @@ import java.util.stream.Collectors;
 */
 @Service
 public class ProjectSetServiceImpl implements ProjectSetService {
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     ProjectSetDao projectSetDao;
 
@@ -70,6 +74,63 @@ public class ProjectSetServiceImpl implements ProjectSetService {
     @Autowired
     ProjectInsightReportService projectInsightReportService;
 
+    @Autowired
+    SendMessageUtil sendMessageUtil;
+
+    // 创建项目集
+    void sendCreateProjectSetMessage(ProjectSet projectSet){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectSetName", projectSet.getName());
+        content.put("projectSetId", projectSet.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/projectSet/${projectSetId}");
+        content.put("action", "创建项目集");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECTSET_CREATE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 更新项目集
+    void sendUpdateProjectSetMessage(ProjectSet projectSet){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectSetName", projectSet.getName());
+        content.put("projectSetId", projectSet.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/projectSet/${projectSetId}");
+        content.put("action", "编辑项目集");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECTSET_UPDATE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 删除项目集
+    void sendDeleteProjectSetMessage(ProjectSet projectSet){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectSetName", projectSet.getName());
+        content.put("projectSetId", projectSet.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/projectSet");
+        content.put("action", "删除项目集");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECTSET_DELETE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
     @Override
     public String createProjectSet(@NotNull @Valid ProjectSet projectSet) {
         String createUserId = LoginContext.getLoginId();
@@ -94,6 +155,12 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         String masterId = user.getId();
         initProjectSetDmRole(masterId, projectSetId);
+
+        projectSet.setId(projectSetId);
+
+        executorService.submit(() -> {
+            sendCreateProjectSetMessage(projectSet);
+        });
 
         return projectSetId;
     }
@@ -148,6 +215,12 @@ public class ProjectSetServiceImpl implements ProjectSetService {
         ProjectSetEntity projectSetEntity = BeanMapper.map(projectSet, ProjectSetEntity.class);
 
         projectSetDao.updateProjectSet(projectSetEntity);
+
+        ProjectSet newProjectSet = findProjectSet(projectSet.getId());
+
+        executorService.submit(() -> {
+            sendUpdateProjectSetMessage(newProjectSet);
+        });
     }
 
     @Override
@@ -162,8 +235,13 @@ public class ProjectSetServiceImpl implements ProjectSetService {
                 projectService.updateProject(project);
             }
         }
+        ProjectSet newProjectSet = findProjectSet(id);
 
         projectSetDao.deleteProjectSet(id);
+
+        executorService.submit(() -> {
+            sendDeleteProjectSetMessage(newProjectSet);
+        });
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.tiklab.kanass.product.product.service;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.home.insight.service.ProjectInsightReportService;
 import io.tiklab.kanass.product.product.dao.ProductDao;
 import io.tiklab.kanass.product.product.entity.ProductEntity;
@@ -28,11 +29,13 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService{
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     private ProductDao productDao;
 
@@ -57,6 +60,62 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     WorkItemService workItemService;
 
+    @Autowired
+    SendMessageUtil sendMessageUtil;
+
+    // 创建产品
+    void sendCreateProductMessage(Product product){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("productName", product.getName());
+        content.put("productId", product.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/product/${productId}");
+        content.put("action", "创建项目集");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PRODUCT_CREATE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 更新产品
+    void sendUpdateProductMessage(Product product){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("productName", product.getName());
+        content.put("productId", product.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/product/${productId}");
+        content.put("action", "编辑项目集");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PRODUCT_UPDATE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 删除产品
+    void sendDeleteProductMessage(Product product){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("productName", product.getName());
+        content.put("productId", product.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/product");
+        content.put("action", "删除项目集");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PRODUCT_DELETE");
+
+        sendMessageUtil.sendMessage(content);
+    }
 
     /**
      * 创建产品
@@ -89,6 +148,11 @@ public class ProductServiceImpl implements ProductService{
         String masterId = user.getId();
         initProductDmRole(masterId, productId);
 
+        product.setId(productId);
+
+        executorService.submit(() -> {
+            sendCreateProductMessage(product);
+        });
         return productId;
     }
 
@@ -147,6 +211,12 @@ public class ProductServiceImpl implements ProductService{
         ProductEntity productEntity = BeanMapper.map(product, ProductEntity.class);
 
         productDao.updateProduct(productEntity);
+
+        Product newProduct = findProduct(product.getId());
+
+        executorService.submit(() -> {
+            sendUpdateProductMessage(newProduct);
+        });
     }
 
     /**
@@ -165,8 +235,13 @@ public class ProductServiceImpl implements ProductService{
                 projectService.deleteProject(project.getId());
             }
         }
+        Product newProduct = findProduct(id);
 
         productDao.deleteProduct(id);
+
+        executorService.submit(() -> {
+            sendDeleteProductMessage(newProduct);
+        });
     }
 
     /**

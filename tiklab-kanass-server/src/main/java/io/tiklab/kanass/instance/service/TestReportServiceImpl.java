@@ -48,6 +48,8 @@ public class TestReportServiceImpl implements TestReportService {
         String userId = LoginContext.getLoginId();
         testReportEntity.setCreateUser(userId);
         testReportEntity.setCreateTime(new java.sql.Timestamp(System.currentTimeMillis()));
+        testReportEntity.setStartTime(testReportEntity.getCreateTime());
+        testReportEntity.setEndTime(testReportEntity.getCreateTime());
         return testReportDao.createTestReport(testReportEntity);
     }
 

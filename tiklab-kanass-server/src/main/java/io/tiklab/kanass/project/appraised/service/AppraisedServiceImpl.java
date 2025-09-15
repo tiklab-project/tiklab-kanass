@@ -3,6 +3,8 @@ package io.tiklab.kanass.project.appraised.service;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.common.SendMessageUtil;
+import io.tiklab.kanass.product.product.model.Product;
 import io.tiklab.kanass.project.appraised.dao.AppraisedDao;
 import io.tiklab.kanass.project.appraised.entity.AppraisedEntity;
 import io.tiklab.kanass.project.appraised.model.Appraised;
@@ -12,17 +14,22 @@ import io.tiklab.kanass.project.appraised.model.AppraisedItemQuery;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.user.user.model.User;
+import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class AppraisedServiceImpl implements AppraisedService{
-
+    public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired
     private AppraisedDao appraisedDao;
 
@@ -31,6 +38,50 @@ public class AppraisedServiceImpl implements AppraisedService{
 
     @Autowired
     private JoinTemplate joinTemplate;
+
+    @Autowired
+    private SendMessageUtil sendMessageUtil;
+
+    @Autowired
+    private UserProcessor userProcessor;
+
+    // 创建产品
+    void sendCreateAppraisedMessage(Appraised appraised){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("appraisedName", appraised.getName());
+        content.put("appraisedId", appraised.getId());
+        content.put("projectId", appraised.getProject().getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/project/${projectId}/appraised/${appraisedId}");
+        content.put("action", "创建评审");
+        content.put("noticeId", "KANASS_MESSAGETYPE_APPRAISED_CREATE");
+
+        sendMessageUtil.sendDomainMessage(content, appraised.getProject().getId());
+    }
+
+    // 更新产品
+    void sendUpdateAppraisedMessage(Appraised appraised){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("appraisedName", appraised.getName());
+        content.put("appraisedId", appraised.getId());
+        content.put("projectId", appraised.getProject().getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/project/${projectId}/appraised/${appraisedId}");
+        content.put("action", "创建评审");
+        content.put("noticeId", "KANASS_MESSAGETYPE_APPRAISED_UPDATE");
+
+        sendMessageUtil.sendDomainMessage(content, appraised.getProject().getId());
+    }
 
     @Override
     public String createAppraised(Appraised appraised) {
@@ -48,13 +99,23 @@ public class AppraisedServiceImpl implements AppraisedService{
         appraised.setUpdateTime(new Timestamp(nowDate.getTime()));
 
         AppraisedEntity appraisedEntity = BeanMapper.map(appraised, AppraisedEntity.class);
-        return appraisedDao.createAppraised(appraisedEntity);
+        String appraisedId = appraisedDao.createAppraised(appraisedEntity);
+        appraised.setId(appraisedId);
+        executorService.submit(() -> {
+            sendCreateAppraisedMessage(appraised);
+        });
+        return appraisedId;
     }
 
     @Override
     public void updateAppraised(Appraised appraised) {
         AppraisedEntity map = BeanMapper.map(appraised, AppraisedEntity.class);
         appraisedDao.updateAppraised(map);
+
+        Appraised newAppraised = findAppraised(appraised.getId());
+        executorService.submit(() -> {
+            sendUpdateAppraisedMessage(newAppraised);
+        });
     }
 
     @Override

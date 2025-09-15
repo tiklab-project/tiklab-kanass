@@ -24,6 +24,9 @@ public class TestCaseQuery implements Serializable {
     @ApiProperty(name="status",desc="状态")
     private Integer status;
 
+    @ApiProperty(name="priorityLevel",desc="优先级")
+    private Integer priorityLevel;
+
     @ApiProperty(name="仓库Id",desc="projectId")
     private String projectId;
 
@@ -49,7 +52,7 @@ public class TestCaseQuery implements Serializable {
     private String director;
 
     @ApiProperty(name = "orderParams", desc = "排序参数")
-    private List<Order> orderParams = OrderBuilders.instance().desc("sort").get();
+    private List<Order> orderParams = OrderBuilders.instance().desc("createTime").get();
 
 
     @ApiProperty(name = "pageParam", desc = "分页参数")
@@ -176,5 +179,13 @@ public class TestCaseQuery implements Serializable {
 
     public void setModuleIds(String[] moduleIds) {
         this.moduleIds = moduleIds;
+    }
+
+    public Integer getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(Integer priorityLevel) {
+        this.priorityLevel = priorityLevel;
     }
 }

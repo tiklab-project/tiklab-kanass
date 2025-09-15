@@ -61,6 +61,9 @@ public class AppraisedItemQuery {
     @ApiProperty(name ="projectIds",desc = "项目id列表")
     private String[] projectIds;
 
+    @ApiProperty(name ="appraisedTypeId",desc = "评审类型id")
+    private String appraisedTypeId;
+
     public String getId() {
         return id;
     }
@@ -179,5 +182,13 @@ public class AppraisedItemQuery {
 
     public void setProjectIds(String[] projectIds) {
         this.projectIds = projectIds;
+    }
+
+    public String getAppraisedTypeId() {
+        return appraisedTypeId;
+    }
+
+    public void setAppraisedTypeId(String appraisedTypeId) {
+        this.appraisedTypeId = appraisedTypeId;
     }
 }

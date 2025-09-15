@@ -6,6 +6,7 @@ import io.tiklab.kanass.test.func.instance.service.FunctionInstanceService;
 import io.tiklab.kanass.testplan.cases.dao.TestPlanCaseDao;
 import io.tiklab.kanass.testplan.cases.entity.PlanCaseEntity;
 import io.tiklab.kanass.testplan.cases.entity.TestPlanCaseEntity;
+import io.tiklab.kanass.testplan.cases.model.TestPlanQuery;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.kanass.testplan.cases.model.PlanCase;
@@ -179,6 +180,20 @@ public class TestPlanCaseServiceImpl implements TestPlanCaseService {
         return PaginationBuilder.build(planCasePage, testCaseList);
     }
 
+    /**
+     * 通过用例查询计划下用例结果
+     *
+     * @param testPlanCaseQuery
+     * @return
+     */
+    @Override
+    public List<PlanCase> findPlanCaseResultListByCase(TestPlanCaseQuery testPlanCaseQuery) {
+        List<PlanCaseEntity> planCaseList = testPlanDetailDao.findPlanCaseResultListByCase(testPlanCaseQuery);
+        List<PlanCase> testCaseList = BeanMapper.mapList(planCaseList, PlanCase.class);
+        joinTemplate.joinQuery(testCaseList,new String[]{"module","createUser","director"});
+
+        return List.of();
+    }
 
     @Override
     public Pagination<PlanCase> findTestCasePage(TestPlanCaseQuery testPlanCaseQuery) {

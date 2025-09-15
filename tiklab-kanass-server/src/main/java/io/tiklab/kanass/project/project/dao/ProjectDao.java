@@ -472,6 +472,11 @@ public class ProjectDao{
 //            sql = sql.concat(" and ppf.master_id = '?'");
 //            objects.add(projectQuery.getFocusUser());
         }
+        if (projectQuery.getProjectTypeId() != null){
+            sql = sql.concat(" and p.project_type_id = '" + projectQuery.getProjectTypeId() + "'");
+//            sql = sql.concat(" and p.creator = '?'");
+//            objects.add(projectQuery.getCreator());
+        }
 
         if(!ObjectUtils.isEmpty(projectQuery.getOrderParams())){
             sql= sql.concat(" order by");

@@ -102,11 +102,11 @@ public interface TestCaseService {
     Pagination<TestCase> findTestCasePage(TestCaseQuery testCaseQuery);
 
     /**
-     * 根据查询参数获取各个状态的用例数量
+     * 根据查询参数获取各个优先级的用例数量
      * @param testCaseQuery
      * @return
      */
-    HashMap<String, Integer> findTestCaseStatusNum(TestCaseQuery testCaseQuery);
+    HashMap<String, Integer> findTestCasePriorityLevelNum(TestCaseQuery testCaseQuery);
 
     /**
      * 根据查询参数获取各个测试类型的用例数量

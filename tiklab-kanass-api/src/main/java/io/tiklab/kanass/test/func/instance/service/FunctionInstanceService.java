@@ -1,6 +1,8 @@
 package io.tiklab.kanass.test.func.instance.service;
 
 import io.tiklab.core.page.Pagination;
+import io.tiklab.kanass.instance.model.Instance;
+import io.tiklab.kanass.instance.model.InstanceQuery;
 import io.tiklab.kanass.test.func.instance.model.FunctionInstance;
 import io.tiklab.kanass.test.func.instance.model.FunctionInstanceQuery;
 import io.tiklab.toolkit.join.annotation.FindAll;
@@ -63,6 +65,13 @@ public interface FunctionInstanceService {
     * @return
     */
     List<FunctionInstance> findFunctionInstanceList(FunctionInstanceQuery scenInstanceQuery);
+
+    /**
+     * 查询用例最近的实例列表
+     * @param functionInstanceQuery
+     * @return
+     */
+    List<FunctionInstance> findRecentCaseFunctionInstanceList(FunctionInstanceQuery functionInstanceQuery);
 
     /**
     * 根据查询按分页查询功能用例历史实例

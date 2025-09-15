@@ -1,5 +1,6 @@
 package io.tiklab.kanass.testplan.cases.service;
 
+import io.tiklab.kanass.testplan.cases.model.TestPlanQuery;
 import io.tiklab.toolkit.join.annotation.JoinProvider;
 import io.tiklab.kanass.testplan.cases.model.PlanCase;
 import io.tiklab.kanass.testplan.cases.model.TestPlanCase;
@@ -83,6 +84,12 @@ public interface TestPlanCaseService {
      */
     Pagination<PlanCase> findPlanCasePage(TestPlanCaseQuery testPlanCaseQuery);
 
+    /**
+     * 通过用例查询计划下用例结果
+     * @param testPlanQuery
+     * @return
+     */
+    List<PlanCase> findPlanCaseResultListByCase(TestPlanCaseQuery testPlanCaseQuery);
     /**
      * 关联用例，剔除已关联的用例
      * @param testPlanCaseQuery

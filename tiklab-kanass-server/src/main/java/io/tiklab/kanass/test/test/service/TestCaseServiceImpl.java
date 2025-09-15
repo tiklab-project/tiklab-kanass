@@ -229,8 +229,8 @@ public class TestCaseServiceImpl implements TestCaseService {
      * @return
      */
     @Override
-    public HashMap<String, Integer> findTestCaseStatusNum(TestCaseQuery testCaseQuery) {
-        HashMap<String, Integer> testCaseStatusNum = testCaseDao.findTestCaseStatusNum(testCaseQuery);
+    public HashMap<String, Integer> findTestCasePriorityLevelNum(TestCaseQuery testCaseQuery) {
+        HashMap<String, Integer> testCaseStatusNum = testCaseDao.findTestCasePriorityLevelNum(testCaseQuery);
         return testCaseStatusNum;
     }
 

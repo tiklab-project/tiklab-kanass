@@ -6,6 +6,7 @@ import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 import io.tiklab.kanass.instance.entity.InstanceEntity;
+import io.tiklab.kanass.instance.model.Instance;
 import io.tiklab.kanass.instance.model.InstanceQuery;
 import io.tiklab.kanass.instance.model.InstanceStatusSummary;
 import org.apache.commons.lang.ArrayUtils;

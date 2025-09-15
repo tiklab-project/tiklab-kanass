@@ -178,6 +178,7 @@ public class TestCaseDao {
                 .eq("status", testCaseQuery.getStatus())
                 .eq("createUser", testCaseQuery.getCreateUser())
                 .eq("director", testCaseQuery.getDirector())
+                .eq("priorityLevel", testCaseQuery.getPriorityLevel())
                 .like("name", testCaseQuery.getName())
                 .in("moduleId", testCaseQuery.getModuleIds())
                 .pagination(testCaseQuery.getPageParam())
@@ -210,13 +211,13 @@ public class TestCaseDao {
     }
 
 
-    public HashMap<String, Integer> findTestCaseStatusNum(TestCaseQuery testCaseQuery) {
+    public HashMap<String, Integer> findTestCasePriorityLevelNum(TestCaseQuery testCaseQuery) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ")
                 .append("COUNT(*) AS total_count, ")
-                .append("COUNT(CASE WHEN status = 0 THEN 1 END) AS todo_count, ")
-                .append("COUNT(CASE WHEN status = 1 THEN 1 END) AS progress_count, ")
-                .append("COUNT(CASE WHEN status = 2 THEN 1 END) AS done_count ")
+                .append("COUNT(CASE WHEN priority_level = 0 THEN 1 END) AS low_count, ")
+                .append("COUNT(CASE WHEN priority_level = 1 THEN 1 END) AS mid_count, ")
+                .append("COUNT(CASE WHEN priority_level = 2 THEN 1 END) AS high_count ")
                 .append("FROM test_testcase WHERE 1=1 ");
 
         List<Object> params = new ArrayList<>();
@@ -248,9 +249,9 @@ public class TestCaseDao {
 
         HashMap<String, Integer> resultMap = new HashMap<>();
         resultMap.put("total_count", ((Number) result.get("total_count")).intValue());
-        resultMap.put("todo_count", ((Number) result.get("todo_count")).intValue());
-        resultMap.put("progress_count", ((Number) result.get("progress_count")).intValue());
-        resultMap.put("done_count", ((Number) result.get("done_count")).intValue());
+        resultMap.put("low_count", ((Number) result.get("low_count")).intValue());
+        resultMap.put("mid_count", ((Number) result.get("mid_count")).intValue());
+        resultMap.put("high_count", ((Number) result.get("high_count")).intValue());
 
         return resultMap;
     }

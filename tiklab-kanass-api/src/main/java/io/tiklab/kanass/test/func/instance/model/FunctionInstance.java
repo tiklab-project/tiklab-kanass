@@ -2,6 +2,7 @@ package io.tiklab.kanass.test.func.instance.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.tiklab.core.BaseModel;
+import io.tiklab.kanass.testplan.cases.model.TestPlan;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.kanass.test.func.cases.model.FuncUnitCase;
@@ -32,7 +33,12 @@ public class FunctionInstance extends BaseModel{
     private FuncUnitCase funcUnitCase;
 
     @ApiProperty(name="testPlanInstanceId",desc="测试计划历史id")
-    private String testPlanInstanceId;
+    @Mappings({
+            @Mapping(source = "testPlan.id",target = "testPlanInstanceId")
+    })
+    @JoinField(key = "id")
+    private TestPlan testPlan;
+//    private String testPlanInstanceId;
 
     @ApiProperty(name="projectId",desc="仓库id")
     private String projectId;
@@ -41,7 +47,7 @@ public class FunctionInstance extends BaseModel{
     private Integer result;
 
     @ApiProperty(name="createTime",desc="创建时间")
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     private Timestamp createTime;
 
     @ApiProperty(name="createUser",desc="创建人")
@@ -68,14 +74,6 @@ public class FunctionInstance extends BaseModel{
 
     public void setFuncUnitCase(FuncUnitCase funcUnitCase) {
         this.funcUnitCase = funcUnitCase;
-    }
-
-    public String getTestPlanInstanceId() {
-        return testPlanInstanceId;
-    }
-
-    public void setTestPlanInstanceId(String testPlanInstanceId) {
-        this.testPlanInstanceId = testPlanInstanceId;
     }
 
     public Integer getResult() {
@@ -116,5 +114,13 @@ public class FunctionInstance extends BaseModel{
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public TestPlan getTestPlan() {
+        return testPlan;
+    }
+
+    public void setTestPlan(TestPlan testPlan) {
+        this.testPlan = testPlan;
     }
 }

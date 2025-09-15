@@ -99,6 +99,7 @@ public class AppraisedItemDao {
                 .eq("a.builder", appraisedItemQuery.getBuilder())
                 .eq("a.projectId", appraisedItemQuery.getProjectId())
                 .in("a.projectId", appraisedItemQuery.getProjectIds())
+                .eq("ai.appraisedTypeId", appraisedItemQuery.getAppraisedTypeId())
                 .orders(appraisedItemQuery.getOrderParams())
                 .pagination(appraisedItemQuery.getPageParam())
                 .get();

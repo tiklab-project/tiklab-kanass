@@ -38,7 +38,7 @@ public class TestPlanCase extends BaseModel{
     @JoinField(key = "id")
     private TestCase testCase;
 
-    @ApiProperty(name="status",desc="状态:0 失败  1 通过  2未执行")
+    @ApiProperty(name="status",desc="状态:0 失败  1 通过  2无法执行")
     private Integer status;
 
     @ApiProperty(name="sort",desc="排序")

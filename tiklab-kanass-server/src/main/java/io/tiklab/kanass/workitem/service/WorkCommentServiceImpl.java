@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.project.worklog.model.WorkLog;
 import io.tiklab.kanass.project.worklog.model.WorkLogQuery;
 import io.tiklab.kanass.project.worklog.service.WorkLogService;
@@ -71,7 +72,7 @@ public class WorkCommentServiceImpl implements WorkCommentService {
     WorkLogService workLogService;
 
     @Autowired
-    SendMessageNoticeService sendMessageNoticeService;
+    SendMessageUtil sendMessageUtil;
 
     @Override
     public String createWorkComment(@NotNull @Valid WorkComment workComment) {
@@ -263,51 +264,22 @@ public class WorkCommentServiceImpl implements WorkCommentService {
      * @param workCommentId
      */
     void sendMessageForComment(String workCommentId){
-        WorkComment workComment = this.findWorkComment(workCommentId);
-
-        WorkItem workItem = workComment.getWorkItem();
+        WorkComment workComment = findWorkComment(workCommentId);
         HashMap<String, Object> content = new HashMap<>();
-        content.put("workItemTitle", workItem.getTitle());
-        content.put("workItemId", workItem.getId());
-        content.put("projectId", workItem.getProject().getId());
         content.put("comment", workComment.getDetails());
-
+        content.put("workItemTitle", workComment.getWorkItem().getTitle());
+        content.put("workItemId", workComment.getWorkItem().getId());
+        content.put("projectId", workComment.getWorkItem().getProject().getId());
         String createUserId = LoginContext.getLoginId();
         User user = userProcessor.findOne(createUserId);
         content.put("creater", user.getNickname());
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
 
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_WORKITEM_DELETE");
-        message.setMessageType(messageType);
-        message.setData(content);
+        content.put("link", "/project/${projectId}/work/${workItemId}");
+        content.put("action", "创建事项评论");
+        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_COMMENT");
 
-        // 接收者
-        User assigner = workItem.getAssigner();
-        List<MessageReceiver> objects = new ArrayList<>();
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.setUserId(assigner.getId());
-        messageReceiver.setEmail(assigner.getEmail());
-        objects.add(messageReceiver);
-        message.setMessageReceiverList(objects);
-        message.setBaseUrl(baseUrl);
-        message.setLink("/project/${projectId}/work/${workItemId}");
-        message.setAction(workItem.getTitle());
-        message.setSendId(user.getId());
-        message.setData(content);
-
-
-        message.setMessageSendTypeId("site");
-        sendMessageNoticeService.sendMessage(message);
-
-//        message.setId(null);
-//        message.setMessageSendTypeId("email");
-//        sendMessageNoticeService.sendMessage(message);
-//
-//        message.setId(null);
-//        message.setMessageSendTypeId("qywechat");
-//        sendMessageNoticeService.sendMessage(message);
+        sendMessageUtil.sendDomainMessage(content, workComment.getWorkItem().getProject().getId());
     }
 }

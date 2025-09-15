@@ -33,6 +33,9 @@ public class KanassDsmAutoConfiguration {
     @Autowired
     KanassMessage100Task kanassMessage100Task;
 
+    @Autowired
+    KanassMessage101Task kanassMessage101Task;
+
     @Bean
     DsmConfig dsmConfig(){
         DsmConfig dsmConfig = new DsmConfig();
@@ -330,6 +333,27 @@ public class KanassDsmAutoConfiguration {
                 }).get();
         versionList.add(kanass_message_100);
 
+        DsmVersion kanass_message_101 = DsmVersionBuilder.instance()
+                .version("kanass_message_1.0.1")
+                .db(new String[]{
+                        "kanass_message_1.0.1",
+                }).get();
+        versionList.add(kanass_message_101);
+
+        DsmVersion message_200 = DsmVersionBuilder.instance()
+                .version("message_2.0.0")
+                .db(new String[]{
+                        "message_2.0.0",
+                }).get();
+        versionList.add(message_200);
+
+        DsmVersion pmc_167 = DsmVersionBuilder.instance()
+                .version("pmc_1.6.7")
+                .db(new String[]{
+                        "pmc_1.6.7",
+                }).get();
+        versionList.add(pmc_167);
+
         DsmVersion task159 = DsmVersionBuilder.instance()
                 .version("task_1.5.9")
                 .task(pmc159Task)
@@ -365,6 +389,12 @@ public class KanassDsmAutoConfiguration {
                 .task(kanassMessage100Task)
                 .get();
         versionList.add(TaskKanassMessage100);
+
+        DsmVersion TaskKanassMessage101 = DsmVersionBuilder.instance()
+                .version("kanass_message_1.0.1_task")
+                .task(kanassMessage101Task)
+                .get();
+        versionList.add(TaskKanassMessage101);
 
         return versionList;
     }

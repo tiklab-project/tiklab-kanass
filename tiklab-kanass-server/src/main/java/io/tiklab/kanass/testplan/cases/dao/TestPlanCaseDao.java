@@ -224,6 +224,76 @@ public class TestPlanCaseDao {
         return page;
     }
 
+    /**
+     * 通过用例查询计划下用例结果
+     * @param testPlanCaseQuery
+     * @return
+     */
+    public List<PlanCaseEntity> findPlanCaseResultListByCase(TestPlanCaseQuery testPlanCaseQuery) {
+        StringBuilder modelSqlBuilder = new StringBuilder();
+        modelSqlBuilder.append("SELECT test_test_plan_cases.id AS plan_case_id, test_testcase.id, test_testcase.create_user, test_testcase.create_time, ")
+                .append("test_testcase.case_type, test_testcase.module_id, test_testcase.name, test_testcase.director ");
+        boolean isFunctionPlan = Objects.equals(testPlanCaseQuery.getTestPlanType(), MagicValue.TEST_TYPE_FUNCTION);
+
+        // FUNCTION 计划时加入 result 字段
+        modelSqlBuilder.append(", (SELECT result FROM test_function_instance ")
+                .append("WHERE test_function_instance.test_plan_instance_id = test_test_plan.id ")
+                .append("AND test_function_instance.case_id = test_testcase.id ")
+                .append("ORDER BY create_time DESC LIMIT 1) AS result ");
+
+
+        modelSqlBuilder.append("FROM test_test_plan_cases ")
+                .append("JOIN test_testcase ON test_testcase.id = test_test_plan_cases.test_case_id ")
+                .append("JOIN test_test_plan ON test_test_plan.id = test_test_plan_cases.test_plan_id ");
+
+        modelSqlBuilder.append("WHERE 1=1 ");
+
+        if (testPlanCaseQuery.getTestPlanId() != null) {
+            modelSqlBuilder.append("AND test_test_plan.id = '").append(testPlanCaseQuery.getTestPlanId()).append("'");
+        }
+
+        if (testPlanCaseQuery.getTestPlanId() != null) {
+            modelSqlBuilder.append("AND test_testcase.caseId = '").append(testPlanCaseQuery.getCaseId()).append("'");
+        }
+
+        if (testPlanCaseQuery.getName() != null) {
+            modelSqlBuilder.append(" AND test_testcase.name LIKE '%").append(testPlanCaseQuery.getName()).append("%'");
+        }
+
+        String moduleId = testPlanCaseQuery.getModuleId();
+        if (moduleId != null && !"nullstring".equals(moduleId)) {
+            // 如果 moduleId 不为 null 且不是 "nullstring"，则按指定 moduleId 查询
+            modelSqlBuilder.append(" AND test_testcase.module_id = '").append(moduleId).append("'");
+        } else if ("nullstring".equals(moduleId)) {
+            // 如果 moduleId 是 "nullstring"，则只查询 module_id 为 null 的记录
+            modelSqlBuilder.append(" AND test_testcase.module_id IS NULL");
+        }
+
+        if (testPlanCaseQuery.getCaseType() != null) {
+            modelSqlBuilder.append(" AND test_testcase.case_type = '").append(testPlanCaseQuery.getCaseType()).append("'");
+        }
+
+        if (isFunctionPlan && testPlanCaseQuery.getResult() != null) {
+            modelSqlBuilder.append(" AND EXISTS (SELECT 1 FROM test_function_instance ")
+                    .append("WHERE test_function_instance.test_plan_instance_id = test_test_plan.id ")
+                    .append("AND test_function_instance.case_id = test_testcase.id ")
+                    .append("AND test_function_instance.result = ").append(testPlanCaseQuery.getResult())
+                    .append(" ORDER BY create_time DESC LIMIT 1)");
+        }
+
+        if (testPlanCaseQuery.getCaseTypeList() != null && testPlanCaseQuery.getCaseTypeList().length > 0) {
+            String caseTypeList = String.join(",", Arrays.stream(testPlanCaseQuery.getCaseTypeList())
+                    .map(type -> "'" + type + "'")
+                    .toArray(String[]::new));
+            modelSqlBuilder.append(" AND test_testcase.case_type IN (").append(caseTypeList).append(")");
+        }
+
+        String modelSql = modelSqlBuilder.toString();
+        List<PlanCaseEntity> page = jpaTemplate.getJdbcTemplate().queryForList(
+                modelSql, PlanCaseEntity.class);
+        return page;
+    }
+
 
 
     /**

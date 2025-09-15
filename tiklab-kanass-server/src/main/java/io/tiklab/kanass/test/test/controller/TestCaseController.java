@@ -101,9 +101,9 @@ public class TestCaseController {
         return Result.ok(pagination);
     }
 
-    @RequestMapping(path = "/findTestCaseStatusNum",method = RequestMethod.POST)
-    public Result<HashMap<String, Integer>> findTestCaseStatusNum(@RequestBody @Valid @NotNull TestCaseQuery testCaseQuery){
-        HashMap<String, Integer> testCaseStatusNum = testCaseService.findTestCaseStatusNum(testCaseQuery);
+    @RequestMapping(path = "/findTestCasePriorityLevelNum",method = RequestMethod.POST)
+    public Result<HashMap<String, Integer>> findTestCasePriorityLevelNum(@RequestBody @Valid @NotNull TestCaseQuery testCaseQuery){
+        HashMap<String, Integer> testCaseStatusNum = testCaseService.findTestCasePriorityLevelNum(testCaseQuery);
 
         return Result.ok(testCaseStatusNum);
     }

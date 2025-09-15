@@ -19,6 +19,7 @@ import io.tiklab.form.field.model.SelectItemRelation;
 import io.tiklab.form.field.model.SelectItemRelationQuery;
 import io.tiklab.form.field.service.SelectItemRelationService;
 import io.tiklab.kanass.common.ErrorCode;
+import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.test.service.TestRepositoryService;
 import io.tiklab.kanass.project.version.model.ProjectVersion;
@@ -199,6 +200,9 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Value("${base.url:null}")
     String baseUrl;
 
+    @Autowired
+    SendMessageUtil sendMessageUtil;
+
     /**
      * 设置事项code
      */
@@ -233,40 +237,17 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("workType", workItem.getWorkTypeSys().getName());
         content.put("projectId", workItem.getProject().getId());
 
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_WORKITEM_CREATE");
-        message.setMessageType(messageType);
-
         String createUserId = LoginContext.getLoginId();
         User user = userProcessor.findOne(createUserId);
         content.put("creater", user.getNickname());
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
 
-        // 接收者
-        User assigner = workItem.getAssigner();
-        List<MessageReceiver> objects = new ArrayList<>();
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.setUserId(assigner.getId());
-        messageReceiver.setEmail(assigner.getEmail());
-        objects.add(messageReceiver);
-        message.setMessageReceiverList(objects);
-        message.setBaseUrl(baseUrl);
-        message.setLink("/project/${projectId}/work/${workItemId}");
-        message.setAction(workItem.getTitle());
-        message.setSendId(user.getId());
-        message.setData(content);
+        content.put("link", "/project/${projectId}/work/${workItemId}");
+        content.put("action", "创建事项");
+        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_CREATE");
 
-        message.setMessageSendTypeId("site");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("email");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setMessageSendTypeId("qywechat");
-        sendMessageNoticeService.sendMessage(message);
+        sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
     }
 
     /**
@@ -287,35 +268,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
 
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_WORKITEM_UPDATE");
-        message.setMessageType(messageType);
-        message.setData(content);
+        content.put("link", "/project/${projectId}/work/${workItemId}");
+        content.put("action", "编辑事项");
+        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_UPDATE");
 
-        // 接收者
-        List<MessageReceiver> objects = new ArrayList<>();
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.setUserId(receiver.getId());
-        objects.add(messageReceiver);
-        message.setMessageReceiverList(objects);
-
-
-        message.setBaseUrl(baseUrl);
-        message.setLink("/project/${projectId}/work/${workItemId}");
-        message.setAction(workItem.getTitle());
-        message.setMessageSendTypeId("site");
-        // 发送者
-        message.setSendId(user.getId());
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("email");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("qywechat");
-        sendMessageNoticeService.sendMessage(message);
+        sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
     }
 
     /**
@@ -341,39 +298,12 @@ public class WorkItemServiceImpl implements WorkItemService {
 //        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
         String msg = JSONObject.toJSONString(content);
-//        Message message = new Message();
-//        MessageType messageType = new MessageType();
-//        messageType.setId("KANASS_MESSAGETYPE_UPDATESTATUS");
 
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_WORKITEM_UPDATESTATUS");
-        message.setMessageType(messageType);
-        message.setData(content);
+        content.put("link", "/project/${projectId}/workitem");
+        content.put("action", "事项状态流转");
+        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_UPDATESTATUS");
 
-        // 接收者
-        List<MessageReceiver> objects = new ArrayList<>();
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.setUserId(workItem.getAssigner().getId());
-        objects.add(messageReceiver);
-        message.setMessageReceiverList(objects);
-
-
-        message.setBaseUrl(baseUrl);
-        message.setLink("/project/${projectId}/work/${workItemId}");
-        message.setAction(workItem.getTitle());
-        message.setMessageSendTypeId("site");
-        // 发送者
-        message.setSendId(user.getId());
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("email");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("qywechat");
-        sendMessageNoticeService.sendMessage(message);
+        sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
 
 //        SendMessageNotice sendMessageNotice = new SendMessageNotice();
 //        sendMessageNotice.setId("KANASS_MESSAGETYPE_WORKITEM_UPDATESTATUS");
@@ -411,37 +341,11 @@ public class WorkItemServiceImpl implements WorkItemService {
         content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
         content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
 
-        Message message = new Message();
-        MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_WORKITEM_DELETE");
-        message.setMessageType(messageType);
-        message.setData(content);
+        content.put("link", "/project/${projectId}/workitem");
+        content.put("action", "删除事项");
+        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_DELETE");
 
-        // 接收者
-        User assigner = workItem.getAssigner();
-        List<MessageReceiver> objects = new ArrayList<>();
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.setUserId(assigner.getId());
-        messageReceiver.setEmail(assigner.getEmail());
-        objects.add(messageReceiver);
-        message.setMessageReceiverList(objects);
-        message.setBaseUrl(baseUrl);
-        message.setLink("/project/${projectId}/work/${workItemId}");
-        message.setAction(workItem.getTitle());
-        message.setSendId(user.getId());
-        message.setData(content);
-
-
-        message.setMessageSendTypeId("site");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("email");
-        sendMessageNoticeService.sendMessage(message);
-
-        message.setId(null);
-        message.setMessageSendTypeId("qywechat");
-        sendMessageNoticeService.sendMessage(message);
+        sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
     }
 
     /**
@@ -921,7 +825,9 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItem1.setUpdateField(workItem.getUpdateField());
         updateTodoTaskData(workItem1);
 
-        sendMessageForUpdate(workItem1, workItem1.getAssigner(), "标题");
+        executorService.submit(() -> {
+            sendMessageForUpdate(workItem1, workItem1.getAssigner(), "标题");
+        });
     }
 
     /**
@@ -962,7 +868,10 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workItem1.setSprint(sprint);
                 updateWorkItemSprint(workItem1);
 
-                sendMessageForUpdate(workItem1, workItem1.getAssigner(), "迭代");
+                executorService.submit(() -> {
+                    sendMessageForUpdate(workItem1, workItem1.getAssigner(), "迭代");
+                });
+
             }
         }
     }
@@ -1021,7 +930,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItem1.setUpdateField(workItem.getUpdateField());
         updateTodoTaskData(workItem1);
 
-        sendMessageForUpdate(workItem1, workItem1.getAssigner(), "迭代");
+        executorService.submit(() -> {
+            sendMessageForUpdate(workItem1, workItem1.getAssigner(), "迭代");
+        });
+
     }
 
     /**
@@ -1040,7 +952,9 @@ public class WorkItemServiceImpl implements WorkItemService {
                 workItem1.setProjectVersion(projectVersion);
                 updateWorkItemVersion(workItem1);
 
-                sendMessageForUpdate(workItem1, workItem1.getAssigner(), "版本");
+                executorService.submit(() -> {
+                    sendMessageForUpdate(workItem1, workItem1.getAssigner(), "版本");
+                });
             }
         }
     }
@@ -1097,7 +1011,9 @@ public class WorkItemServiceImpl implements WorkItemService {
         workItem1.setUpdateField(workItem.getUpdateField());
         updateTodoTaskData(workItem1);
 
-        sendMessageForUpdate(workItem1, workItem1.getAssigner(), "版本");
+        executorService.submit(() -> {
+            sendMessageForUpdate(workItem1, workItem1.getAssigner(), "版本");
+        });
     }
 
     /**
@@ -1246,7 +1162,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         WorkItemEntity workItemEntity = BeanMapper.map(workItem, WorkItemEntity.class);
         workItemDao.updateWorkItem(workItemEntity);
         WorkItem workItem1 = findWorkItem(workItemEntity.getId());
-        sendMessageForUpdate(workItem1, workItem1.getAssigner(), "优先级");
+        executorService.submit(() -> {
+            sendMessageForUpdate(workItem1, workItem1.getAssigner(), "优先级");
+        });
+
     }
 
     // 更新上级事项
@@ -1383,7 +1302,10 @@ public class WorkItemServiceImpl implements WorkItemService {
         newWorkItem.setUpdateField("assigner");
         updateTodoTaskData(newWorkItem);
 
-        sendMessageForUpdate(newWorkItem, assigner, "负责人");
+        executorService.submit(() -> {
+            sendMessageForUpdate(newWorkItem, assigner, "负责人");
+        });
+
         HashMap<String, Object> logContent = new HashMap<>();
         if(ObjectUtils.isEmpty(oldWorkItem.getAssigner())){
             User user = new User();
@@ -1505,7 +1427,10 @@ public class WorkItemServiceImpl implements WorkItemService {
 //                    creatTodoTask(oldWorkItem, user);
                     newWorkItem.setUpdateField("assigner");
                     updateTodoTaskData(newWorkItem);
-                    sendMessageForUpdate(oldWorkItem, user, "负责人");
+                    executorService.submit(() -> {
+                        sendMessageForUpdate(oldWorkItem, user, "负责人");
+                    });
+
                 }
             }
         }
@@ -1636,6 +1561,12 @@ public class WorkItemServiceImpl implements WorkItemService {
                 taskQuery.setBgroup("kanass");
                 taskService.deleteAllTask(taskQuery);
             }
+            executorService.submit(() -> {
+                for (WorkItem workItem : workItemList) {
+                    sendMessageForDelete(workItem, workItem.getAssigner());
+                }
+
+            });
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -1730,7 +1661,7 @@ public class WorkItemServiceImpl implements WorkItemService {
         }
 
         executorService.submit(() -> {
-//            sendMessageForDelete(workItem, workItem.getAssigner());
+            sendMessageForDelete(workItem, workItem.getAssigner());
         });
 
         // 删除产生的待办
@@ -1754,16 +1685,16 @@ public class WorkItemServiceImpl implements WorkItemService {
             deleteBuilders.in("stageId", workItemQuery.getStageIds());
         }
 
-        List<WorkItem> workItemList = findWorkItemList(workItemQuery);
+//        List<WorkItem> workItemList = findWorkItemList(workItemQuery);
 
         DeleteCondition deleteCondition = deleteBuilders.get();
         workItemDao.deleteWorkItemList(deleteCondition);
 
-        executorService.submit(() -> {
+//        executorService.submit(() -> {
 //            for (WorkItem workItem : workItemList) {
 //                sendMessageForDelete(workItem, workItem.getAssigner());
 //            }
-        });
+//        });
     }
     @Override
     public WorkItem findOne(String id) {

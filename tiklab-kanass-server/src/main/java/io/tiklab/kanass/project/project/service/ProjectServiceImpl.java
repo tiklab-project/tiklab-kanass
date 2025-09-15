@@ -5,10 +5,13 @@ import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.eam.common.context.LoginContext;
+import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.project.project.model.*;
 import io.tiklab.kanass.project.workPrivilege.service.WorkPrivilegeService;
 import io.tiklab.message.message.model.MessageNoticePatch;
+import io.tiklab.message.message.model.SendMessageNotice;
 import io.tiklab.message.message.service.MessageDmNoticeService;
+import io.tiklab.message.message.service.SendMessageNoticeService;
 import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.kanass.workitem.service.WorkTypeDmService;
@@ -37,6 +40,7 @@ import io.tiklab.user.dmUser.model.DmUserQuery;
 import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserProcessor;
+import javassist.expr.NewArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +130,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ProjectFocusService projectFocusService;
 
+    @Autowired
+    private SendMessageUtil sendMessageUtil;
+
 
 
     @Value("${base.url:null}")
@@ -158,6 +165,92 @@ public class ProjectServiceImpl implements ProjectService {
         log.setLink("/project/${projectId}/workitem");
         log.setAction(content.get("projectName"));
         opLogByTemplService.createLog(log);
+    }
+
+    // 创建项目
+    void sendCreateProjectMessage(Project project){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectName", project.getProjectName());
+        content.put("projectId", project.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/project/${projectId}");
+        content.put("action", "创建项目");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_CREATE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 更新项目
+    void sendUpdateProjectMessage(Project project){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectName", project.getProjectName());
+        content.put("projectId", project.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/project/${projectId}");
+        content.put("action", "编辑项目");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_UPDATE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 删除项目
+    void sendDeleteProjectMessage(Project project){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectName", project.getProjectName());
+        content.put("projectId", project.getId());
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/project");
+        content.put("action", "删除项目");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_DELETE");
+
+        sendMessageUtil.sendMessage(content);
+    }
+
+    // 更新项目状态
+    void sendUpdateProjectStatusMessage(Project oldProject, Project newProject){
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("projectName", newProject.getProjectName());
+        content.put("projectId", newProject.getId());
+        content.put("oldValue", getProjectStateName(oldProject.getProjectState()));
+        content.put("newValue", getProjectStateName(newProject.getProjectState()));
+        String createUserId = LoginContext.getLoginId();
+        User user = userProcessor.findOne(createUserId);
+        content.put("creater", user.getNickname());
+        content.put("createUserIcon",user.getNickname().substring( 0, 1).toUpperCase());
+        content.put("receiveTime", new SimpleDateFormat("MM-dd").format(new Date()));
+
+        content.put("link", "/#/project");
+        content.put("action", "修改项目状态");
+        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_UPDATESTATUS");
+
+        sendMessageUtil.sendDomainMessage(content, newProject.getId());
+    }
+
+    String getProjectStateName(String projectState){
+        switch (projectState){
+            case "1":
+                return "未开始";
+            case "2":
+                return "进行中";
+            case "3":
+                return "已结束";
+        }
+        return "未开始";
     }
 
     @Override
@@ -216,6 +309,7 @@ public class ProjectServiceImpl implements ProjectService {
             MessageNoticePatch messageNoticePatch = new MessageNoticePatch();
             messageNoticePatch.setDomainId(id);
             messageDmNoticeService.initMessageDmNotice(messageNoticePatch);
+            sendCreateProjectMessage(project);
         });
 
 
@@ -359,15 +453,22 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public void updateProject(@NotNull @Valid Project project) {
+        Project oldProject = findProject(project.getId());
         //更新项目
         ProjectEntity projectEntity = BeanMapper.map(project, ProjectEntity.class);
 
         projectDao.updateProject(projectEntity);
         String id = project.getId();
-        //创建动态
-        Map<String, String> content = new HashMap<>();
-        content.put("projectId", id);
-        content.put("projectName", project.getProjectName());
+
+        Project newProject = findProject(id);
+
+        executorService.submit(() -> {
+            if (project.getProjectState() != null){
+                sendUpdateProjectStatusMessage(oldProject, newProject);
+            }
+            sendUpdateProjectMessage(newProject);
+        });
+
     }
 
     /**
@@ -376,6 +477,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public void deleteProject(@NotNull String id) {
+        Project project = findProject(id);
         //删除模块、里程碑、事项类型、知识库、测试用例、模块、最近查看、项目燃尽图、关注的项目
         projectDao.deleteProjectAndRelation(id);
         //删除事项
@@ -410,6 +512,10 @@ public class ProjectServiceImpl implements ProjectService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        executorService.submit(() -> {
+            sendDeleteProjectMessage(project);
+        });
     }
 
 

@@ -41,6 +41,9 @@ public class TestPlanCaseQuery {
     @ApiProperty(name = "result", desc = "用于结果筛选")
     private Integer result;
 
+    @ApiProperty(name = "caseId", desc = "用例id")
+    private String caseId;
+
     public List<Order> getOrderParams() {
         return orderParams;
     }
@@ -128,5 +131,13 @@ public class TestPlanCaseQuery {
 
     public void setModuleId(String moduleId) {
         this.moduleId = moduleId;
+    }
+
+    public String getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
     }
 }

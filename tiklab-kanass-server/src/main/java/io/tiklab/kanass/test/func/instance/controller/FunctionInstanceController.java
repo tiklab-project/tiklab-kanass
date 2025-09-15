@@ -86,6 +86,12 @@ public class FunctionInstanceController {
         return Result.ok(functionInstanceList);
     }
 
+    @RequestMapping(path = "/findRecentCaseFunctionInstanceList",method = RequestMethod.POST)
+    public Result<List<FunctionInstance>> findRecentCaseFunctionInstanceList(@RequestBody @Valid FunctionInstanceQuery functionInstanceQuery){
+        List<FunctionInstance> functionInstanceList = functionInstanceService.findRecentCaseFunctionInstanceList(functionInstanceQuery);
+        return Result.ok(functionInstanceList);
+    }
+
     @RequestMapping(path = "/findFunctionInstancePage",method = RequestMethod.POST)
 //    @ApiMethod(name = "findFunctionInstancePage",desc = "根据查询按分页查询功能用例历史实例")
 //    @ApiParam(name = "functionInstanceQuery",desc = "functionInstanceQuery",required = true)

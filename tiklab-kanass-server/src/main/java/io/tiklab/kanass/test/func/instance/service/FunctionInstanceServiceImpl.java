@@ -5,9 +5,11 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.eam.common.context.LoginContext;
 import io.tiklab.kanass.common.MagicValue;
+import io.tiklab.kanass.instance.entity.InstanceEntity;
 import io.tiklab.kanass.instance.model.Instance;
 import io.tiklab.kanass.instance.service.InstanceService;
 import io.tiklab.kanass.test.func.cases.model.FuncUnitCase;
+import io.tiklab.kanass.test.func.cases.model.FuncUnitCaseQuery;
 import io.tiklab.kanass.test.func.cases.service.FuncUnitCaseService;
 import io.tiklab.kanass.test.func.instance.dao.FunctionInstanceDao;
 import io.tiklab.kanass.test.func.instance.entity.FunctionInstanceEntity;
@@ -116,6 +118,27 @@ public class FunctionInstanceServiceImpl implements FunctionInstanceService {
         return testInstanceList;
     }
 
+    /**
+     * 查询用例最近的实例列表
+     *
+     * @param functionInstanceQuery
+     * @return
+     */
+    @Override
+    public List<FunctionInstance> findRecentCaseFunctionInstanceList(FunctionInstanceQuery functionInstanceQuery) {
+        List<FunctionInstanceEntity> instanceEntityList = functionInstanceDao.findRecentCaseFunctionInstanceList(functionInstanceQuery);
+
+        List<FunctionInstance> instanceList = BeanMapper.mapList(instanceEntityList, FunctionInstance.class);
+
+        joinTemplate.joinQuery(instanceList,new String[]{
+                "createUser",
+                "testPlan",
+                "testCase"
+        });
+
+        return instanceList;
+    }
+
     @Override
     public Pagination<FunctionInstance> findFunctionInstancePage(FunctionInstanceQuery functionInstanceQuery) {
         Pagination<FunctionInstanceEntity>  pagination = functionInstanceDao.findFunctionInstancePage(functionInstanceQuery);
@@ -130,7 +153,7 @@ public class FunctionInstanceServiceImpl implements FunctionInstanceService {
     @Override
     public String setFunctionResult(FunctionInstance functionInstanceSource) {
         FunctionInstanceQuery functionInstanceQuery = new FunctionInstanceQuery();
-        functionInstanceQuery.setTestPlanInstanceId(functionInstanceSource.getTestPlanInstanceId());
+        functionInstanceQuery.setTestPlanInstanceId(functionInstanceSource.getTestPlan().getId());
         functionInstanceQuery.setFunctionId(functionInstanceSource.getFuncUnitCase().getId());
         List<FunctionInstance> functionInstanceList = findFunctionInstanceList(functionInstanceQuery);
 
@@ -152,17 +175,17 @@ public class FunctionInstanceServiceImpl implements FunctionInstanceService {
     }
 
     private void setInstance(FunctionInstance functionInstanceSource) {
-        FunctionTestReport functionTestReport = functionTestReportService.getFunctionTestReport(functionInstanceSource.getTestPlanInstanceId());
+        FunctionTestReport functionTestReport = functionTestReportService.getFunctionTestReport(functionInstanceSource.getTestPlan().getId());
         String jsonString = JSON.toJSONString(functionTestReport);
 
-        Instance existInstance = instanceService.findInstance(functionInstanceSource.getTestPlanInstanceId());
+        Instance existInstance = instanceService.findInstance(functionInstanceSource.getTestPlan().getId());
         if(existInstance==null) {
             Instance instance = new Instance();
             instance.setExecuteNumber(1);
             instance.setContent(jsonString);
-            instance.setId(functionInstanceSource.getTestPlanInstanceId());
+            instance.setId(functionInstanceSource.getTestPlan().getId());
             TestPlan testPlan = new TestPlan();
-            testPlan.setId(functionInstanceSource.getTestPlanInstanceId());
+            testPlan.setId(functionInstanceSource.getTestPlan().getId());
             instance.setTestPlan(testPlan);
             instance.setPlanType(MagicValue.TEST_TYPE_FUNCTION);
             instance.setProjectId(functionInstanceSource.getProjectId());

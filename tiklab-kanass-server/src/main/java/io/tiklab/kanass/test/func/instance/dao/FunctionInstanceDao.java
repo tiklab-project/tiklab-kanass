@@ -6,11 +6,13 @@ import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.QueryBuilders;
 
+import io.tiklab.kanass.instance.entity.InstanceEntity;
 import io.tiklab.kanass.test.func.instance.entity.FunctionInstanceEntity;
 import io.tiklab.kanass.test.func.instance.model.FunctionInstanceQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -88,6 +90,23 @@ public class FunctionInstanceDao {
                 .orders(functionInstanceQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, FunctionInstanceEntity.class);
+    }
+
+    public List<FunctionInstanceEntity> findRecentCaseFunctionInstanceList(FunctionInstanceQuery functionInstanceQuery){
+        String sql = "SELECT t1.* FROM test_function_instance t1 JOIN (" +
+                "    SELECT test_plan_instance_id, MAX(create_time) AS max_time " +
+                "    FROM test_function_instance " +
+                "    WHERE case_id = ? " +
+                "    GROUP BY test_plan_instance_id " +
+                ") t2 ON t1.test_plan_instance_id = t2.test_plan_instance_id AND t1.create_time = t2.max_time " +
+                "WHERE t1.case_id = ? " +
+                "ORDER BY t1.create_time DESC;";
+
+        return jpaTemplate.getJdbcTemplate().query(
+                sql,
+                new Object[]{functionInstanceQuery.getFunctionId(), functionInstanceQuery.getFunctionId()},
+                new BeanPropertyRowMapper<>(FunctionInstanceEntity.class)
+        );
     }
 
     /**
