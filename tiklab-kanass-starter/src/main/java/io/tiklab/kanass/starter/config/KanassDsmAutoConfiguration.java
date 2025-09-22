@@ -16,13 +16,7 @@ import java.util.List;
 public class KanassDsmAutoConfiguration {
 
     @Autowired
-    Pmc155Task pmc155Task;
-
-    @Autowired
     Pmc159Task pmc159Task;
-
-    @Autowired
-    Pmc163Task pmc163Task;
 
     @Autowired
     Pmc164PrivilegeTask pmc164PrivilegeTask;
@@ -35,6 +29,9 @@ public class KanassDsmAutoConfiguration {
 
     @Autowired
     KanassMessage101Task kanassMessage101Task;
+
+    @Autowired
+    Pmc168WorkCodeTask pmc168WorkCodeTask;
 
     @Bean
     DsmConfig dsmConfig(){
@@ -360,17 +357,18 @@ public class KanassDsmAutoConfiguration {
                 .get();
         versionList.add(task159);
 
-        DsmVersion task155 = DsmVersionBuilder.instance()
-                .version("task_1.5.5")
-                .task(pmc155Task)
-                .get();
-        versionList.add(task155);
-
-        DsmVersion task163 = DsmVersionBuilder.instance()
-                .version("task_1.6.3")
-                .task(pmc163Task)
-                .get();
-        versionList.add(task163);
+//        评审放到EE版
+//        DsmVersion task155 = DsmVersionBuilder.instance()
+//                .version("task_1.5.5")
+//                .task(pmc155Task)
+//                .get();
+//        versionList.add(task155);
+//        评审放到EE版
+//        DsmVersion task163 = DsmVersionBuilder.instance()
+//                .version("task_1.6.3")
+//                .task(pmc163Task)
+//                .get();
+//        versionList.add(task163);
 
 //        DsmVersion pmc164Privilege = DsmVersionBuilder.instance()
 //                .version("task_1.6.4_privilege")
@@ -395,6 +393,12 @@ public class KanassDsmAutoConfiguration {
                 .task(kanassMessage101Task)
                 .get();
         versionList.add(TaskKanassMessage101);
+
+        DsmVersion Pmc168WorkCodeTask = DsmVersionBuilder.instance()
+                .version("pmc_1.6.8_work_code_task")
+                .task(pmc168WorkCodeTask)
+                .get();
+        versionList.add(Pmc168WorkCodeTask);
 
         return versionList;
     }

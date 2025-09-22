@@ -48,8 +48,6 @@ public class StageServiceImpl implements StageService {
     @Autowired
     JoinTemplate joinTemplate;
 
-    @Autowired
-    AppraisedService appraisedService;
 
     @Override
     public String createStage(@NotNull @Valid Stage stage) {
@@ -247,21 +245,6 @@ public class StageServiceImpl implements StageService {
         List<Stage> stageList = BeanMapper.mapList(pagination.getDataList(),Stage.class);
 
         joinTemplate.joinQuery(stageList, new String[]{"parentStage", "project", "master"});
-
-        if (CollectionUtils.isNotEmpty(stageList)){
-            List<String> stageIdList = stageList.stream().map(Stage::getId).collect(Collectors.toList());
-            AppraisedQuery appraisedQuery = new AppraisedQuery();
-            appraisedQuery.setStageIds(stageIdList.toArray(new String[stageIdList.size()]));
-
-            List<Appraised> appraisedList = appraisedService.findAppraisedList(appraisedQuery);
-            if (CollectionUtils.isNotEmpty(appraisedList)){
-                Map<String, List<Appraised>> appraisedMap = appraisedList.stream().collect(Collectors.groupingBy(item -> item.getStage().getId()));
-                for (Stage stage : stageList) {
-                    List<Appraised> appraiseds = appraisedMap.get(stage.getId());
-                    stage.setAppraisedList(appraiseds);
-                }
-            }
-        }
 
         return PaginationBuilder.build(pagination,stageList);
     }

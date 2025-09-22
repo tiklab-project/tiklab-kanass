@@ -115,8 +115,9 @@ public class WorkLogServiceImpl implements WorkLogService {
 
         WorkLog workLog = BeanMapper.map(workLogEntity, WorkLog.class);
 
-        joinTemplate.joinQuery(workLog, new String[]{"workItem", "project", "user"});
-
+        joinTemplate.joinQuery(workLog, new String[]{"project", "user"});
+        WorkItem workItem = workItemService.findWorkItem(workLog.getWorkItem().getId());
+        workLog.setWorkItem(workItem);
         return workLog;
     }
 

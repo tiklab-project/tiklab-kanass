@@ -107,6 +107,13 @@ public interface WorkItemService {
 
 
     /**
+     * 按条件分页查询列表,包含child子事项信息
+     * @param workItemQuery
+     * @return
+     */
+    Pagination<WorkItem> findConditionWorkItemPageWithChild(WorkItemQuery workItemQuery);
+
+    /**
      * 按条件分页查询列表
      * @param workItemQuery
      * @return

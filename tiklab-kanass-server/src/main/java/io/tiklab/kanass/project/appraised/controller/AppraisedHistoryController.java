@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * 评审记录控制器
  */
-@RestController
-@RequestMapping("/appraisedHistory")
+//@RestController
+//@RequestMapping("/appraisedHistory")
 public class AppraisedHistoryController {
     private static Logger logger = LoggerFactory.getLogger(AppraisedHistoryController.class);
 

@@ -701,7 +701,17 @@ public class ProjectServiceImpl implements ProjectService {
         DmUserQuery dmUserQuery = new DmUserQuery();
         dmUserQuery.setUserId(userId);
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+        // 被邀请加入的项目
         List<String> collect = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+
+        // 查询出所有公开的项目
+        List<ProjectEntity> allProject = projectDao.findAllProject();
+        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(allProject)){
+            allProject.stream().filter(project -> project.getProjectLimits().equals("0")).forEach(project -> {
+                collect.add(project.getId());
+            });
+        }
+
         String[] arr = collect.toArray(new String[collect.size()]);
         projectQuery.setProjectIds(arr);
 

@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * 项目评审控制器
  */
-@RestController
-@RequestMapping("/appraised")
+//@RestController
+//@RequestMapping("/appraised")
 //@Api(name = "AppraisedController",desc = "项目评审")
 public class AppraisedController {
     private static Logger logger = LoggerFactory.getLogger(AppraisedController.class);

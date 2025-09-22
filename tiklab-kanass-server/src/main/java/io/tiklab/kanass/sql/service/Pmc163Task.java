@@ -17,48 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
-public class Pmc163Task implements DsmProcessTask {
+//@Service
+public class Pmc163Task {
 
-    @Autowired
-    private AppraisedItemService appraisedItemService;
-
-    @Autowired
-    private AppraisedHistoryService appraisedHistoryService;
-
-    @Override
-    public void execute() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        List<AppraisedItem> appraisedItemList = appraisedItemService.findAll();
-        List<AppraisedHistory> historyList = appraisedHistoryService.findAll();
-        Map<String, List<AppraisedHistory>> historyMap = historyList.stream()
-                .collect(Collectors.groupingBy(
-                        AppraisedHistory::getAppraisedItemId,
-                        // 对每个分组内的列表按 createTime 升序排序
-                        Collectors.collectingAndThen(
-                                Collectors.toList(),
-                                list -> list.stream()
-                                        .sorted(Comparator.comparing(AppraisedHistory::getCreateTime))
-                                        .collect(Collectors.toList())
-                        )
-                ));
-        for (AppraisedItem appraisedItem : appraisedItemList) {
-            String appraisedItemId = appraisedItem.getId();
-            List<AppraisedHistory> historyList1 = historyMap.get(appraisedItemId);
-            if (CollectionUtils.isNotEmpty(historyList1)){
-                Date createTime1 = historyList1.get(0).getCreateTime();
-                Date date1 = new Date(createTime1.getTime());
-                Date updateTime1 = historyList1.get(historyList1.size() - 1).getUpdateTime();
-                Date date2 = new Date(updateTime1.getTime());
-                appraisedItem.setCreateTime(new Timestamp(date1.getTime()));
-                appraisedItem.setUpdateTime(new Timestamp(date2.getTime()));
-            }else {
-                Date date = new Date();
-                appraisedItem.setCreateTime(new Timestamp(date.getTime()));
-                appraisedItem.setUpdateTime(new Timestamp(date.getTime()));
-            }
-            appraisedItemService.updateAppraisedItem(appraisedItem);
-        }
-    }
 }

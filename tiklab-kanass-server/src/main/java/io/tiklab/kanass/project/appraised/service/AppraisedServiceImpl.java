@@ -27,7 +27,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Service
+//@Service
 public class AppraisedServiceImpl implements AppraisedService{
     public final ExecutorService executorService = Executors.newCachedThreadPool();
     @Autowired

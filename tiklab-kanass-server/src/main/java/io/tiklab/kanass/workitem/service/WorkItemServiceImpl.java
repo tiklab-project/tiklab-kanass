@@ -19,6 +19,7 @@ import io.tiklab.form.field.model.SelectItemRelation;
 import io.tiklab.form.field.model.SelectItemRelationQuery;
 import io.tiklab.form.field.service.SelectItemRelationService;
 import io.tiklab.kanass.common.ErrorCode;
+import io.tiklab.kanass.common.IDGeneratorUtil;
 import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.test.service.TestRepositoryService;
@@ -209,20 +210,22 @@ public class WorkItemServiceImpl implements WorkItemService {
     public String setWorkItemCode(WorkItem workItem){
         String projectId = workItem.getProject().getId();
         String projectKey = projectService.findProject(projectId).getProjectKey();
-        Integer maxOrderNum = workItemDao.findMaxIdWorkItem(projectId);
+//        Integer maxOrderNum = workItemDao.findMaxIdWorkItem(projectId);
+        WorkItemEntity maxWorkItem = workItemDao.findMaxOrderNumWorkItem(projectId);
+        Integer maxOrderNum = 1;
         //项目key - id
-        String newId = new String();
-        if(maxOrderNum != null){
-            maxOrderNum = maxOrderNum + 1;
+        String newCode = new String();
+        if(maxWorkItem != null){
+            maxOrderNum = maxWorkItem.getOrderNum() + 1;
             int idInt = maxOrderNum;
-            newId = projectKey.concat("-" + String.valueOf(idInt));
+            newCode = IDGeneratorUtil.incrementID(maxWorkItem.getCode());
         }else {
             maxOrderNum = 1;
-            newId = projectKey.concat("-" + String.valueOf(1));
+            newCode = IDGeneratorUtil.generateID();
         }
         workItem.setOrderNum(maxOrderNum);
-        workItem.setCode(newId);
-        return newId;
+        workItem.setCode(newCode);
+        return newCode;
     }
 
     /**
@@ -2004,6 +2007,29 @@ public class WorkItemServiceImpl implements WorkItemService {
         return PaginationBuilder.build(pagination,workItemList);
     }
 
+    @Override
+    public Pagination<WorkItem> findConditionWorkItemPageWithChild(WorkItemQuery workItemQuery) {
+        Pagination<WorkItemEntity> pagination = workItemDao.findConditionWorkItemPage(workItemQuery);
+
+        List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
+        this.handleDefaultNodeWorkItem(workItemList);
+        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
+
+        //查询子事项列表
+        List<WorkItem> parentWorkItemList = workItemList.stream().filter(workItem -> workItem.getParentId() == null).collect(Collectors.toList());
+        List<WorkItem> childWorkItemList = findChildWorkItemList(parentWorkItemList);
+        // 处理子事项信息
+        if(childWorkItemList != null && childWorkItemList.size() > 0){
+            for(WorkItem topWorkItem:workItemList){
+                if (topWorkItem.getParentId() == null){
+                    setChildren(childWorkItemList,topWorkItem);
+                }
+            }
+        }
+
+        return PaginationBuilder.build(pagination,workItemList);
+    }
+
     /**
      * 安装分页查找事项列表，平铺
      * @param workItemQuery
@@ -2306,7 +2332,7 @@ public class WorkItemServiceImpl implements WorkItemService {
                     workBoard.setState(stateNode);
 
                     workItemQuery.setWorkStatusId(stateFlowNode.getNode().getId());
-                    Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemPage(workItemQuery);
+                    Pagination<WorkItem> conditionWorkItemList = this.findConditionWorkItemPageWithChild(workItemQuery);
                     workBoard.setWorkItemList(conditionWorkItemList);
                     if(workBoard != null){
                         workBoardList.add(workBoard);
