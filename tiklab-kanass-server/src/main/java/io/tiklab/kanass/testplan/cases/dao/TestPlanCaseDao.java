@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 测试计划绑定的用例 服务接口
@@ -217,6 +218,21 @@ public class TestPlanCaseDao {
             modelSqlBuilder.append(" AND test_testcase.case_type IN (").append(caseTypeList).append(")");
         }
 
+        String director = testPlanCaseQuery.getDirector();
+        if (director != null && !"nullstring".equals(director)) {
+            // 如果 director 不为 null 且不是 "nullstring"，则按指定 moduleId 查询
+            modelSqlBuilder.append(" AND test_testcase.director = '").append(director).append("'");
+        } else if ("nullstring".equals(director)) {
+            // 如果 director 是 "nullstring"，则只查询 director 为 null 的记录
+            modelSqlBuilder.append(" AND test_testcase.director IS NULL");
+        }
+
+        // 排序
+        if (testPlanCaseQuery.getOrderParams() != null){
+            modelSqlBuilder.append(" ORDER BY ").append(testPlanCaseQuery.getOrderParams().stream()
+                    .map(order -> order.getName() + " " + order.getOrderType().name())
+                    .collect(Collectors.joining(",")));
+        }
         String modelSql = modelSqlBuilder.toString();
         Pagination<PlanCaseEntity> page = jpaTemplate.getJdbcTemplate().findPage(
                 modelSql, new Object[]{}, testPlanCaseQuery.getPageParam(), new BeanPropertyRowMapper<>(PlanCaseEntity.class)
@@ -317,6 +333,14 @@ public class TestPlanCaseDao {
 
         if (testPlanCaseQuery.getName() != null) {
             modelSqlBuilder.append(" AND test_testcase.name LIKE '%").append(testPlanCaseQuery.getName()).append("%'");
+        }
+
+        if (testPlanCaseQuery.getPriorityLevel() != null) {
+            modelSqlBuilder.append(" AND test_testcase.priority_level = ").append(testPlanCaseQuery.getPriorityLevel()).append(" ");
+        }
+
+        if (testPlanCaseQuery.getModuleId() != null) {
+            modelSqlBuilder.append(" AND test_testcase.module_id = '").append(testPlanCaseQuery.getModuleId()).append("'");
         }
 
         String modelSql = modelSqlBuilder.toString();

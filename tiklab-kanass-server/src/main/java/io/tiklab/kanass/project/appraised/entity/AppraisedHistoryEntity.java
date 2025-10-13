@@ -9,8 +9,8 @@ import java.util.Date;
 /**
  * 事项与评审关联表
  */
-@Entity
-@Table(name = "pmc_appraised_item_history")
+//@Entity
+//@Table(name = "pmc_appraised_item_history")
 public class AppraisedHistoryEntity implements Serializable {
     @Id
     @GeneratorValue(length = 12)

@@ -1,0 +1,1 @@
+ALTER TABLE test_test_report MODIFY COLUMN description TEXT;

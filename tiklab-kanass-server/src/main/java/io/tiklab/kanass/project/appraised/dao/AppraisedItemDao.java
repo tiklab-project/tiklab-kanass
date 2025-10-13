@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 事项与评审关联表
  */
-@Repository
+//@Repository
 public class AppraisedItemDao {
     private static Logger logger = LoggerFactory.getLogger(AppraisedDao.class);
 

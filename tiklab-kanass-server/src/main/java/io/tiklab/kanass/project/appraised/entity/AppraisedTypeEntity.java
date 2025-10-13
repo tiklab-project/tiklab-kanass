@@ -2,8 +2,8 @@ package io.tiklab.kanass.project.appraised.entity;
 
 import io.tiklab.dal.jpa.annotation.*;
 
-@Entity
-@Table(name="pmc_appraised_type")
+//@Entity
+//@Table(name="pmc_appraised_type")
 public class AppraisedTypeEntity {
 
     @Id

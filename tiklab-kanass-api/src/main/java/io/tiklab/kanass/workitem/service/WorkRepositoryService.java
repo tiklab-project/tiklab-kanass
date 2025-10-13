@@ -1,6 +1,7 @@
 package io.tiklab.kanass.workitem.service;
 
 import io.tiklab.kanass.project.wiki.model.KanassRepository;
+import io.tiklab.kanass.project.wiki.model.WikiRepository;
 import io.tiklab.user.dmUser.model.DmUser;
 import io.tiklab.user.dmUser.model.DmUserQuery;
 
@@ -20,5 +21,11 @@ public interface WorkRepositoryService {
     List<KanassRepository> findList(List<String> idList);
 
     List<DmUser> findRepositoryUserList(DmUserQuery dmUserQuery);
+
+    /**
+     * 创建知识库
+     * @return
+     */
+    String createRepository(WikiRepository wikiRepository);
 
 }

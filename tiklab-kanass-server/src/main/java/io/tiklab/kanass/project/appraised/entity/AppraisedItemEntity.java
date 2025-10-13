@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 /**
  * 事项与评审关联表
  */
-@Entity
-@Table(name = "pmc_appraised_item")
+//@Entity
+//@Table(name = "pmc_appraised_item")
 public class AppraisedItemEntity implements Serializable {
     @Id
     @GeneratorValue(length = 12)

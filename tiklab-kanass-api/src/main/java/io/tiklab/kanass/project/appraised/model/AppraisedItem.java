@@ -21,7 +21,7 @@ import java.util.List;
  * 评审与事项关联模型
  */
 @ApiModel
-@Mapper
+@Mapper(targetName = "io.tiklab.kanass.appraised.entity.AppraisedItemEntity")
 @Join
 public class AppraisedItem {
     @ApiProperty(name = "id", desc = "唯一ID")

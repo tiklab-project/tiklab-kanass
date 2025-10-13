@@ -73,3 +73,6 @@ auth:
 # 访问地址，用于显示日志，消息，待办的图标
 external:
   url: http://192.168.10.7:8080
+
+version:
+  check: dGlrbGFidGlrbGFi

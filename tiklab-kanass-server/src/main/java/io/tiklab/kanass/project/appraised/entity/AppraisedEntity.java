@@ -5,8 +5,8 @@ import io.tiklab.dal.jpa.annotation.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "pmc_appraised")
+//@Entity
+//@Table(name = "pmc_appraised")
 public class AppraisedEntity implements Serializable {
     @Id
     @GeneratorValue(length = 12)

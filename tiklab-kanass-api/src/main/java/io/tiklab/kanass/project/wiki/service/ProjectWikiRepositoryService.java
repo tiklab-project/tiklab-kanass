@@ -27,6 +27,13 @@ public interface ProjectWikiRepositoryService {
     String createProjectWikiRepository(@NotNull @Valid ProjectWikiRepository projectWikiRepository);
 
     /**
+     * 创建知识库，然后关联
+     * @param projectWikiRepository
+     * @return
+     */
+    String createWikiRepository(@NotNull @Valid ProjectWikiRepository projectWikiRepository);
+
+    /**
      * 更新计划
      * @param projectWikiRepository
      */

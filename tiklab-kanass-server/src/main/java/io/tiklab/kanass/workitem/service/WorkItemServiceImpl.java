@@ -204,6 +204,9 @@ public class WorkItemServiceImpl implements WorkItemService {
     @Autowired
     SendMessageUtil sendMessageUtil;
 
+    @Autowired
+    WorkTransitionHistoryService workTransitionHistoryService;
+
     /**
      * 设置事项code
      */
@@ -1283,6 +1286,21 @@ public class WorkItemServiceImpl implements WorkItemService {
         if(transitionId != null){
             updateByTransitionRule(workItem, oldWorkItem, transitionId);
         }
+
+        // 增加流转记录
+        createWorkTransitionHistory(oldWorkItem, newWorkItem, workItem.getTransitionDesc());
+    }
+
+    public void createWorkTransitionHistory(WorkItem oldWorkItem, WorkItem newWorkItem, String transitionDesc) {
+        WorkTransitionHistory workTransitionHistory = new WorkTransitionHistory();
+        workTransitionHistory.setWorkItem(oldWorkItem);
+        workTransitionHistory.setOldNode(oldWorkItem.getWorkStatusNode());
+        workTransitionHistory.setNewNode(newWorkItem.getWorkStatusNode());
+        workTransitionHistory.setCreater(new User(LoginContext.getLoginId()));
+        workTransitionHistory.setTransitionDesc(transitionDesc);
+        workTransitionHistory.setCreateTime(new Date());
+
+        workTransitionHistoryService.createWorkTransitionHistory(workTransitionHistory);
     }
 
     /**

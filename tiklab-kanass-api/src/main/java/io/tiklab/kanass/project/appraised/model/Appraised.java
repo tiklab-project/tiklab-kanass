@@ -20,7 +20,7 @@ import java.sql.Timestamp;
  * 项目评审模型
  */
 @ApiModel
-@Mapper
+@Mapper(targetName = "io.tiklab.kanass.appraised.entity.AppraisedEntity")
 @Join
 public class Appraised extends BaseModel {
     @ApiProperty(name = "id", desc = "唯一ID")

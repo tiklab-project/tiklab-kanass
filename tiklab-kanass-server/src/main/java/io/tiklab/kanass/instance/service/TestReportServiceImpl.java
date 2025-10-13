@@ -50,6 +50,7 @@ public class TestReportServiceImpl implements TestReportService {
         testReportEntity.setCreateTime(new java.sql.Timestamp(System.currentTimeMillis()));
         testReportEntity.setStartTime(testReportEntity.getCreateTime());
         testReportEntity.setEndTime(testReportEntity.getCreateTime());
+        testReportEntity.setDesc("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]");
         return testReportDao.createTestReport(testReportEntity);
     }
 
@@ -93,7 +94,7 @@ public class TestReportServiceImpl implements TestReportService {
     public TestReport findTestReport(@NotNull String id) {
         TestReport testReport = findOne(id);
 
-        joinTemplate.joinQuery(testReport);
+        joinTemplate.joinQuery(testReport, new String[]{"testPlan","createUser"});
         return testReport;
     }
 
@@ -103,7 +104,7 @@ public class TestReportServiceImpl implements TestReportService {
 
         List<TestReport> testReportList =  BeanMapper.mapList(testReportEntityList, TestReport.class);
 
-        joinTemplate.joinQuery(testReportList);
+        joinTemplate.joinQuery(testReportList, new String[]{"testPlan","createUser"});
         return testReportList;
     }
 
@@ -113,7 +114,7 @@ public class TestReportServiceImpl implements TestReportService {
 
         List<TestReport> testReportList = BeanMapper.mapList(testReportEntityList, TestReport.class);
 
-        joinTemplate.joinQuery(testReportList);
+        joinTemplate.joinQuery(testReportList, new String[]{"testPlan","createUser"});
 
         return testReportList;
     }
@@ -125,7 +126,7 @@ public class TestReportServiceImpl implements TestReportService {
 
         List<TestReport> testReportList = BeanMapper.mapList(pagination.getDataList(), TestReport.class);
 
-        joinTemplate.joinQuery(testReportList);
+        joinTemplate.joinQuery(testReportList, new String[]{"testPlan","createUser"});
 
         return PaginationBuilder.build(pagination, testReportList);
     }

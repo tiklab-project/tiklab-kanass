@@ -44,6 +44,12 @@ public class TestPlanCaseQuery {
     @ApiProperty(name = "caseId", desc = "用例id")
     private String caseId;
 
+    @ApiProperty(name = "priorityLevel", desc = "优先级")
+    private Integer priorityLevel;
+
+    @ApiProperty(name = "director", desc = "负责人")
+    private String director;
+
     public List<Order> getOrderParams() {
         return orderParams;
     }
@@ -139,5 +145,21 @@ public class TestPlanCaseQuery {
 
     public void setCaseId(String caseId) {
         this.caseId = caseId;
+    }
+
+    public Integer getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(Integer priorityLevel) {
+        this.priorityLevel = priorityLevel;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
     }
 }

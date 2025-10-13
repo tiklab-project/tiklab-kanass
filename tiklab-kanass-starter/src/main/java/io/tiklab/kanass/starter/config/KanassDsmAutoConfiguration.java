@@ -33,6 +33,12 @@ public class KanassDsmAutoConfiguration {
     @Autowired
     Pmc168WorkCodeTask pmc168WorkCodeTask;
 
+    @Autowired
+    Pmc169ReportDescTask pmc169ReportDescTask;
+
+    @Autowired
+    KanassProjectPrivilege100Task kanassProjectPrivilege100Task;
+
     @Bean
     DsmConfig dsmConfig(){
         DsmConfig dsmConfig = new DsmConfig();
@@ -351,6 +357,34 @@ public class KanassDsmAutoConfiguration {
                 }).get();
         versionList.add(pmc_167);
 
+        DsmVersion kanass_test_100 = DsmVersionBuilder.instance()
+                .version("kanass_test_1.0.0")
+                .db(new String[]{
+                        "kanass_test_1.0.0",
+                }).get();
+        versionList.add(kanass_test_100);
+
+        DsmVersion kanass_flow_100 = DsmVersionBuilder.instance()
+                .version("kanass_flow_1.0.0")
+                .db(new String[]{
+                        "kanass_flow_1.0.0",
+                }).get();
+        versionList.add(kanass_flow_100);
+
+        DsmVersion kanass_flow_101 = DsmVersionBuilder.instance()
+                .version("kanass_flow_1.0.1")
+                .db(new String[]{
+                        "kanass_flow_1.0.1",
+                }).get();
+        versionList.add(kanass_flow_101);
+
+        DsmVersion kanass_flow_102 = DsmVersionBuilder.instance()
+                .version("kanass_flow_1.0.2")
+                .db(new String[]{
+                        "kanass_flow_1.0.2",
+                }).get();
+        versionList.add(kanass_flow_102);
+
         DsmVersion task159 = DsmVersionBuilder.instance()
                 .version("task_1.5.9")
                 .task(pmc159Task)
@@ -399,6 +433,18 @@ public class KanassDsmAutoConfiguration {
                 .task(pmc168WorkCodeTask)
                 .get();
         versionList.add(Pmc168WorkCodeTask);
+
+        DsmVersion Pmc169ReportDescTask = DsmVersionBuilder.instance()
+                .version("pmc_1.6.9_report_desc_task")
+                .task(pmc169ReportDescTask)
+                .get();
+        versionList.add(Pmc169ReportDescTask);
+
+        DsmVersion TaskKanassProjectPrivilege100 = DsmVersionBuilder.instance()
+                .version("project_privilege_1.0.0_task")
+                .task(kanassProjectPrivilege100Task)
+                .get();
+        versionList.add(TaskKanassProjectPrivilege100);
 
         return versionList;
     }

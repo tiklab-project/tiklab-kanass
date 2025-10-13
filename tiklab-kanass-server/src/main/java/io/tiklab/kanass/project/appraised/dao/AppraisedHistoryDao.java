@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+//@Repository
 public class AppraisedHistoryDao {
     @Autowired
     JpaTemplate jpaTemplate;

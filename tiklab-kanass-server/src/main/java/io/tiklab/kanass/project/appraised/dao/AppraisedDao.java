@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 项目评审数据访问
  */
-@Repository
+//@Repository
 public class AppraisedDao {
     private static Logger logger = LoggerFactory.getLogger(AppraisedDao.class);
 

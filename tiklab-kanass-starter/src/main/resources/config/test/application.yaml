@@ -61,3 +61,6 @@ dcs:
 
 external:
     url: http://kanass-ce.test.kanass.net
+
+version:
+    check: dGlrbGFidGlrbGFi

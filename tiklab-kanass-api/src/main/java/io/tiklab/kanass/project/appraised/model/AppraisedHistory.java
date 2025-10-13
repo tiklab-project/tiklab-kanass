@@ -15,7 +15,7 @@ import java.util.Date;
  * 事项记录
  */
 @ApiModel
-@Mapper
+@Mapper(targetName = "io.tiklab.kanass.appraised.entity.AppraisedHistoryEntity")
 @Join
 public class AppraisedHistory {
     @ApiProperty(name = "id", desc = "唯一ID")

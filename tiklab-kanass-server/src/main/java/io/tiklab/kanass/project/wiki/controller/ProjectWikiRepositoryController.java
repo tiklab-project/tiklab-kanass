@@ -121,5 +121,17 @@ public class ProjectWikiRepositoryController {
         return Result.ok(pagination);
     }
 
+    /**
+     * 创建知识库，然后关联
+     * @param projectWikiRepository
+     * @return
+     */
+    @RequestMapping(path="/createWikiRepository",method = RequestMethod.POST)
+    public Result<String> createWikiRepository(@RequestBody @NotNull @Valid ProjectWikiRepository projectWikiRepository){
+        String id = projectWikiRepositoryService.createWikiRepository(projectWikiRepository);
+
+        return Result.ok(id);
+    }
+
 
 }

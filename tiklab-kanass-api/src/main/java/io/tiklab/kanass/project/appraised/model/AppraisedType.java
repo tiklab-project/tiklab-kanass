@@ -7,7 +7,7 @@ import io.tiklab.toolkit.join.annotation.Join;
 
 @ApiModel
 @Join
-@Mapper
+@Mapper(targetName = "io.tiklab.kanass.appraised.entity.AppraisedTypeEntity")
 public class AppraisedType {
 
     @ApiProperty(name="id",desc="id")

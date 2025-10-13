@@ -262,6 +262,8 @@ public class WorkItem extends BaseModel {
     @ApiProperty(name = "特殊处理，从kanass跳过来创建缺陷传递caseId进行回调绑定")
     private String caseId;
 
+    @ApiProperty(name = "transitionDesc",desc = "状态转换描述")
+    private String transitionDesc;
 
     public String getId() {
         return id;
@@ -649,5 +651,13 @@ public class WorkItem extends BaseModel {
 
     public void setProductPlanList(List<ProductPlan> productPlanList) {
         this.productPlanList = productPlanList;
+    }
+
+    public String getTransitionDesc() {
+        return transitionDesc;
+    }
+
+    public void setTransitionDesc(String transitionDesc) {
+        this.transitionDesc = transitionDesc;
     }
 }

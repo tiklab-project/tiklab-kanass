@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+//@Repository
 public class AppraisedTypeDao {
     private static Logger logger = LoggerFactory.getLogger(AppraisedTypeDao.class);
 
