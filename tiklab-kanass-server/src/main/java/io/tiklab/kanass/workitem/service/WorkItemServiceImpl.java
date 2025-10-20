@@ -18,10 +18,12 @@ import io.tiklab.form.field.model.SelectItem;
 import io.tiklab.form.field.model.SelectItemRelation;
 import io.tiklab.form.field.model.SelectItemRelationQuery;
 import io.tiklab.form.field.service.SelectItemRelationService;
+import io.tiklab.form.field.service.SelectItemService;
 import io.tiklab.kanass.common.ErrorCode;
 import io.tiklab.kanass.common.IDGeneratorUtil;
 import io.tiklab.kanass.common.SendMessageUtil;
 import io.tiklab.kanass.project.project.model.Project;
+import io.tiklab.kanass.project.project.model.ProjectQuery;
 import io.tiklab.kanass.project.test.service.TestRepositoryService;
 import io.tiklab.kanass.project.version.model.ProjectVersion;
 import io.tiklab.kanass.project.version.service.ProjectVersionService;
@@ -67,6 +69,7 @@ import io.tiklab.user.dmUser.service.DmUserService;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserProcessor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.aspectj.weaver.ast.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +89,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -131,6 +135,12 @@ public class WorkItemServiceImpl implements WorkItemService {
 
     @Autowired
     StateNodeService stateNodeService;
+
+    @Autowired
+    WorkTypeService workTypeService;
+
+    @Autowired
+    SelectItemService selectItemService;
 
     @Autowired
     JoinTemplate joinTemplate;
@@ -251,7 +261,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         content.put("link", "/project/${projectId}/work/${workItemId}");
         content.put("action", "创建事项");
-        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_CREATE");
+        content.put("noticeId", "KANASS_WORKITEM_CREATE");
 
         sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
     }
@@ -276,7 +286,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         content.put("link", "/project/${projectId}/work/${workItemId}");
         content.put("action", "编辑事项");
-        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_UPDATE");
+        content.put("noticeId", "KANASS_WORKITEM_UPDATE");
 
         sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
     }
@@ -307,12 +317,12 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         content.put("link", "/project/${projectId}/workitem");
         content.put("action", "事项状态流转");
-        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_UPDATESTATUS");
+        content.put("noticeId", "KANASS_WORKITEM_UPDATESTATUS");
 
         sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
 
 //        SendMessageNotice sendMessageNotice = new SendMessageNotice();
-//        sendMessageNotice.setId("KANASS_MESSAGETYPE_WORKITEM_UPDATESTATUS");
+//        sendMessageNotice.setId("KANASS_WORKITEM_UPDATESTATUS");
 //        sendMessageNotice.setDomainId(projectId);
 //        sendMessageNotice.setLink("/project/${projectId}/work/${workId}");
 //        sendMessageNotice.setAction(workItem.getTitle());
@@ -349,7 +359,7 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         content.put("link", "/project/${projectId}/workitem");
         content.put("action", "删除事项");
-        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_DELETE");
+        content.put("noticeId", "KANASS_WORKITEM_DELETE");
 
         sendMessageUtil.sendDomainMessage(content, workItem.getProject().getId());
     }
@@ -1817,34 +1827,34 @@ public class WorkItemServiceImpl implements WorkItemService {
         logger.info("------------开始------------");
         WorkItem workItem = findWorkItem(id);
         long time2 = System.currentTimeMillis();
-        logger.info("findWorkItem 花费时间:{}----------------",time2-time1);
+        logger.info("*********findWorkItem 花费时间:{}----------------",time2-time1);
 
         this.handleDefaultNodeWorkItem(Stream.of(workItem).collect(Collectors.toList()));
 
         long time12 = System.currentTimeMillis();
-        logger.info("findWorkItem 花费时间:{}----------------",time12-time2);
+        logger.info("*********findWorkItem 花费时间:{}----------------",time12-time2);
         String projectId = workItem.getProject().getId();
         Project project = projectService.findProject(projectId);
         workItem.setProject(project);
 
         long time13 = System.currentTimeMillis();
-        logger.info("findWorkItem 花费时间:{}----------------",time13-time12);
+        logger.info("*********findWorkItem 花费时间:{}----------------",time13-time12);
 
         List<Sprint> workSprintList = sprintService.findWorkSprintList(id);
         workItem.setSprintList(workSprintList);
 
         long time3 = System.currentTimeMillis();
-        logger.info("findWorkSprintList 花费时间:{}----------------",time3-time2);
+        logger.info("*********findWorkSprintList 花费时间:{}----------------",time3-time13);
 
         List<ProjectVersion> workVersionList = projectVersionService.findWorkVersionList(id);
         workItem.setProjectVersionList(workVersionList);
 
         long time4 = System.currentTimeMillis();
-        logger.info("findWorkVersionList 花费时间:{}----------------",time4-time3);
+        logger.info("*********findWorkVersionList 花费时间:{}----------------",time4-time3);
 
         Integer workItemUsedTime = workLogService.findWorkItemUsedTime(id);
         long time5 = System.currentTimeMillis();
-        logger.info("findWorkItemUsedTime 花费时间:{}----------------",time5-time4);
+        logger.info("*********findWorkItemUsedTime 花费时间:{}----------------",time5-time4);
         if(workItemUsedTime != null){
             workItem.setUsedTime(workItemUsedTime);
         }else {
@@ -2059,9 +2069,39 @@ public class WorkItemServiceImpl implements WorkItemService {
 
         List<WorkItem> workItemList = BeanMapper.mapList(pagination.getDataList(),WorkItem.class);
         this.handleDefaultNodeWorkItem(workItemList);
-        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
+        if (CollectionUtils.isEmpty(workItemList)){
+            return PaginationBuilder.build(pagination, workItemList);
+        }
+//        joinTemplate.joinQuery(workItemList, new String[]{ "project", "workTypeSys", "workPriority", "workStatusNode", "assigner"});
+//        joinTemplate.joinQuery(workItemList, new String[]{"parentWorkItem", "preDependWorkItem", "project", "workType", "workTypeSys", "workPriority", "workStatus", "workStatusNode", "module", "sprint", "stage", "projectVersion", "builder", "assigner", "reporter"});
+        // 获取记录中出现的项目id、事项类型Id、优先级id、事项状态id、负责人id，统一查询出结果后再手动插入到记录中
+        List<String> projectIdList = workItemList.stream().map(workItem -> workItem.getProject().getId()).distinct().collect(Collectors.toList());
+        List<String> workTypeIdList = workItemList.stream().map(workItem -> workItem.getWorkTypeSys().getId()).distinct().collect(Collectors.toList());
+        List<String> workPriorityIdList = workItemList.stream().map(workItem -> workItem.getWorkPriority().getId()).distinct().collect(Collectors.toList());
+        List<String> workStatusNodeIdList = workItemList.stream().map(workItem -> workItem.getWorkStatusNode().getId()).distinct().collect(Collectors.toList());
+        List<String> assignerIdList = workItemList.stream().map(workItem -> workItem.getAssigner().getId()).distinct().collect(Collectors.toList());
 
-        return PaginationBuilder.build(pagination,workItemList);
+        List<Project> projectList = projectService.findList(projectIdList);
+        List<WorkType> workTypeList = workTypeService.findList(workTypeIdList);
+        List<SelectItem> priorityList = selectItemService.findList(workPriorityIdList);
+        List<StateNode> stateNodeList = stateNodeService.findList(workStatusNodeIdList);
+        List<User> userList = userProcessor.findList(assignerIdList);
+
+        Map<String, Project> projectMap = projectList.stream().collect(Collectors.toMap(Project::getId, Function.identity()));
+        Map<String, WorkType> workTypeMap = workTypeList.stream().collect(Collectors.toMap(WorkType::getId, Function.identity()));
+        Map<String, SelectItem> priorityMap = priorityList.stream().collect(Collectors.toMap(SelectItem::getId, Function.identity()));
+        Map<String, StateNode> stateNodeMap = stateNodeList.stream().collect(Collectors.toMap(StateNode::getId, Function.identity()));
+        Map<String, User> userMap = userList.stream().collect(Collectors.toMap(User::getId, Function.identity()));
+
+        for (WorkItem workItem : workItemList) {
+            workItem.setProject(projectMap.get(workItem.getProject().getId()));
+            workItem.setWorkTypeSys(workTypeMap.get(workItem.getWorkTypeSys().getId()));
+            workItem.setWorkPriority(priorityMap.get(workItem.getWorkPriority().getId()));
+            workItem.setWorkStatusNode(stateNodeMap.get(workItem.getWorkStatusNode().getId()));
+            workItem.setAssigner(userMap.get(workItem.getAssigner().getId()));
+        }
+
+        return PaginationBuilder.build(pagination, workItemList);
     }
 
 

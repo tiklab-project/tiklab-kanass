@@ -90,7 +90,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         content.put("link", "/#/projectSet/${projectSetId}");
         content.put("action", "创建项目集");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECTSET_CREATE");
+        content.put("noticeId", "KANASS_PROJECTSET_CREATE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -108,7 +108,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         content.put("link", "/#/projectSet/${projectSetId}");
         content.put("action", "编辑项目集");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECTSET_UPDATE");
+        content.put("noticeId", "KANASS_PROJECTSET_UPDATE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -126,7 +126,7 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
         content.put("link", "/#/projectSet");
         content.put("action", "删除项目集");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECTSET_DELETE");
+        content.put("noticeId", "KANASS_PROJECTSET_DELETE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -353,11 +353,6 @@ public class ProjectSetServiceImpl implements ProjectSetService {
 
                 List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
                 project.setEndWorkItemNumber(doneList.size());
-
-                DmUserQuery dmUserQuery = new DmUserQuery();
-                dmUserQuery.setDomainId(id);
-                List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
-                project.setMember(dmUserList.size());
 
                 // 统计项目预计工时和剩余工时
                 WorkItemQuery workItemQuery = new WorkItemQuery();

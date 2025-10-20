@@ -116,7 +116,11 @@ public class ProjectDao{
 
     public List<ProjectEntity> findProjectList(ProjectQuery projectQuery) {
         QueryBuilders queryBuilders = QueryBuilders.createQuery(ProjectEntity.class, "pj");
-        QueryCondition queryCondition = queryBuilders.leftJoin(ProjectFocusEntity.class,"pf","pf.projectId=pj.id")
+        if (StringUtils.isNotBlank(projectQuery.getFocusUser())){
+            queryBuilders.leftJoin(ProjectFocusEntity.class,"pf","pf.projectId=pj.id")
+                    .eq("pf.masterId", projectQuery.getFocusUser());
+        }
+        QueryCondition queryCondition = queryBuilders
                 .like("pj.projectName", projectQuery.getProjectName())
                 .eq("pj.projectSetId", projectQuery.getProjectSetId())
                 .eq("pj.productId", projectQuery.getProductId())
@@ -129,7 +133,6 @@ public class ProjectDao{
                 .in("pj.id",projectQuery.getProjectIds())
                 .in("pj.projectSetId", projectQuery.getProjectSetIds())
                 .in("pj.productId", projectQuery.getProductIds())
-                .eq("pf.masterId", projectQuery.getFocusUser())
                 .in("pj.projectState", projectQuery.getProjectStates())
                 .orders(projectQuery.getOrderParams())
                 .get();
@@ -154,6 +157,15 @@ public class ProjectDao{
             paramMap.put("project_name", projectQuery.getFocusUser());
         }
 
+        if(projectQuery.getProjectLimits() != null ){
+            if(paramMap.isEmpty()){
+                sql = sql.concat(" pr.project_limits = '" + projectQuery.getProjectLimits() + "'");
+            }else {
+                sql = sql.concat(" and pr.project_limits = '" + projectQuery.getProjectLimits() + "'");
+            }
+            paramMap.put("project_limits", projectQuery.getProjectLimits());
+        }
+
         if(projectQuery.getCreator() != null ){
             if(paramMap.isEmpty()){
                 sql = sql.concat(" pr.creator = '" + projectQuery.getCreator() + "'");
@@ -163,7 +175,7 @@ public class ProjectDao{
             paramMap.put("creator", projectQuery.getCreator());
         }
 
-        if(projectQuery.getProjectIds() != null ){
+        if(projectQuery.getProjectIds() != null && projectQuery.getProjectIds().length > 0 ){
 //            if(paramMap.isEmpty()){
 //                sql = sql.concat(" pr.id  in '" + projectQuery.getProjectIds() + "'");
 //            }else {
@@ -405,9 +417,11 @@ public class ProjectDao{
      * @return
      */
     public Pagination<ProjectEntity> findProjectPage(ProjectQuery projectQuery){
-        String sql = "select p.* from pmc_project p " +
-                " left join pmc_project_focus ppf on ppf.project_id = p.id " +
-                " where 1=1 ";
+        String sql = "select p.* from pmc_project p ";
+        if (projectQuery.getFocusUser() != null){
+            sql = sql.concat(" left join pmc_project_focus ppf on ppf.project_id = p.id ");
+        }
+        sql = sql.concat(" where 1=1 ");
         List<Object> objects = new ArrayList<>();
         if (projectQuery.getProjectIds() != null){
             String[] projectIds = projectQuery.getProjectIds();
@@ -857,12 +871,16 @@ public class ProjectDao{
         String userId = projectQuery.getCreator();
         String[] projectIds = projectQuery.getProjectIds();
         String s = new String();
-        s =  "(";
-        for(String projectId:projectIds){
-            s = s.concat("'" + projectId + "',");
+        if (projectIds != null && projectIds.length != 0){
+            s =  "(";
+            for(String projectId:projectIds){
+                s = s.concat("'" + projectId + "',");
+            }
+            s= s.substring(0, s.length() - 1);
+            s = s.concat(")");
+        }else {
+            s="('')";
         }
-        s= s.substring(0, s.length() - 1);
-        s = s.concat(")");
 
         HashMap<String, Integer> projectCount = new HashMap<>();
         String sql1 = "SELECT count(1) as total from pmc_project where ( project_limits = '0' or id in " + s + ") ";

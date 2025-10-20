@@ -25,6 +25,15 @@ public interface WorkTypeDmService {
     */
     WorkTypeDm createWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm);
 
+    /**
+     * 创建项目时创建事项类型
+     * @param workTypeDm
+     * @return
+     */
+    WorkTypeDm createWorkTypeDmCreateProject(@NotNull @Valid WorkTypeDm workTypeDm);
+
+    void batchCreateWorkTypeDmCreateProject(List<WorkTypeDm> workTypeDmList, String projectId);
+
     WorkTypeDm copyWorkTypeDm(@NotNull @Valid WorkTypeDm workTypeDm);
 
     /**

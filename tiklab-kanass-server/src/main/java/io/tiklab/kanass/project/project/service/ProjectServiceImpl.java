@@ -12,6 +12,7 @@ import io.tiklab.message.message.model.MessageNoticePatch;
 import io.tiklab.message.message.model.SendMessageNotice;
 import io.tiklab.message.message.service.MessageDmNoticeService;
 import io.tiklab.message.message.service.SendMessageNoticeService;
+import io.tiklab.privilege.permission.service.PermissionService;
 import io.tiklab.privilege.role.model.PatchUser;
 import io.tiklab.kanass.workitem.model.*;
 import io.tiklab.kanass.workitem.service.WorkTypeDmService;
@@ -133,6 +134,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private SendMessageUtil sendMessageUtil;
 
+    @Autowired
+    private PermissionService permissionService;
+
 
 
     @Value("${base.url:null}")
@@ -180,7 +184,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         content.put("link", "/#/project/${projectId}");
         content.put("action", "创建项目");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_CREATE");
+        content.put("noticeId", "KANASS_PROJECT_CREATE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -198,7 +202,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         content.put("link", "/#/project/${projectId}");
         content.put("action", "编辑项目");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_UPDATE");
+        content.put("noticeId", "KANASS_PROJECT_UPDATE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -216,7 +220,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         content.put("link", "/#/project");
         content.put("action", "删除项目");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_DELETE");
+        content.put("noticeId", "KANASS_PROJECT_DELETE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -236,7 +240,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         content.put("link", "/#/project");
         content.put("action", "修改项目状态");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PROJECT_UPDATESTATUS");
+        content.put("noticeId", "KANASS_PROJECT_UPDATESTATUS");
 
         sendMessageUtil.sendDomainMessage(content, newProject.getId());
     }
@@ -255,6 +259,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public String createProject(@NotNull @Valid Project project) {
+        long time1 = System.currentTimeMillis();
+        logger.info("------------开始创建项目------------");
         if (project.getId() == null) {
             String id = UuidGenerator.getRandomIdByUUID(12);
             project.setId(id);
@@ -284,16 +290,23 @@ public class ProjectServiceImpl implements ProjectService {
         if(!nameIsOnly){
             throw new ApplicationException("已存在同名项目");
         }
+        long time2 = System.currentTimeMillis();
+        logger.info("------------判断重名  {}------------", time2-time1);
         String id = projectDao.createProject(projectEntity);
+        long time3 = System.currentTimeMillis();
+        logger.info("------------创建项目本身  {}------------", time3-time2);
         // 初始化项目成员角色
         String masterId = project.getMaster().getId();
         initProjectDmRole(masterId, id);
+        long time4 = System.currentTimeMillis();
+        logger.info("------------初始化项目角色成员  {}------------", time4-time3);
         //创建动态
         Map<String, String> content = new HashMap<>();
         content.put("projectId", id);
         content.put("projectName", project.getProjectName());
         content.put("projectIcon", project.getIconUrl());
         ProjectType projectType = projectTypeService.findProjectType(project.getProjectType().getId());
+
 
         //设置项目类型
         if(projectType.getType().equals("scrum")){
@@ -303,7 +316,10 @@ public class ProjectServiceImpl implements ProjectService {
             content.put("projectType", "projectNomalDetail");
         }
         //初始事项类型
-        initWorkType(id);
+        initWorkTypeCreateProject(id);
+
+        long time5 = System.currentTimeMillis();
+        logger.info("------------初始事项类型  {}------------", time5-time4);
         executorService.submit(() -> {
             creatDynamic(content);
             MessageNoticePatch messageNoticePatch = new MessageNoticePatch();
@@ -422,6 +438,30 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         return workTypeDmList;
+    }
+
+    /**
+     * 初始化项目类型，只初始化系统的
+     * @param projectId
+     */
+    public void initWorkTypeCreateProject(String projectId) {
+
+        WorkTypeQuery workTypeQuery = new WorkTypeQuery();
+        workTypeQuery.setGrouper("system");
+        List<WorkType> workTypeList = workTypeService.findWorkTypeList(workTypeQuery);
+
+        List<WorkTypeDm> workTypeDmList = new ArrayList<>();
+        for (WorkType workType : workTypeList) {
+            WorkTypeDm workTypeDm = new WorkTypeDm();
+            workTypeDm.setId(UuidGenerator.getRandomIdByUUID(8));
+            workTypeDm.setWorkType(workType);
+            workTypeDm.setFlow(workType.getFlow());
+            workTypeDm.setProjectId(projectId);
+            workTypeDm.setForm(workType.getForm());
+            workTypeDmList.add(workTypeDm);
+        }
+
+        workTypeDmService.batchCreateWorkTypeDmCreateProject(workTypeDmList, projectId);
     }
 
     /**
@@ -652,14 +692,9 @@ public class ProjectServiceImpl implements ProjectService {
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
         List<String> privateProjectIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
 
-        //查找所有公开项目
+        //查找所有公开项目和已加入的私密项目
         projectQuery.setProjectLimits("0");
-        List<Project> projectListCommons = findProjectList(projectQuery);
-        List<String> commonProjectListIds = projectListCommons.stream().map(project -> project.getId()).collect(Collectors.toList());
-
-        privateProjectIds.addAll(commonProjectListIds);
         String[] allProjectIds = privateProjectIds.toArray(new String[privateProjectIds.size()]);
-        projectQuery.setProjectLimits(null);
         projectQuery.setProjectIds(allProjectIds);
 
         List<ProjectEntity> joinProjectListEntity = projectDao.findJoinProjectList(projectQuery);
@@ -691,6 +726,33 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
+     * 查找我参与的项目列表
+     * @param projectQuery
+     * @return
+     */
+    @Override
+    public List<Project> findJoinProjectListNoPercent(ProjectQuery projectQuery){
+        // 查找我所参与的私有项目
+        DmUserQuery dmUserQuery = new DmUserQuery();
+        String createUserId = LoginContext.getLoginId();
+        dmUserQuery.setUserId(createUserId);
+        List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
+        List<String> privateProjectIds = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+
+        //查找所有公开项目和已加入的私密项目
+        projectQuery.setProjectLimits("0");
+        String[] allProjectIds = privateProjectIds.toArray(new String[privateProjectIds.size()]);
+        projectQuery.setProjectIds(allProjectIds);
+
+        List<ProjectEntity> joinProjectListEntity = projectDao.findJoinProjectList(projectQuery);
+        List<Project> projectList = BeanMapper.mapList(joinProjectListEntity,Project.class);
+        joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
+
+        return projectList;
+
+    }
+
+    /**
      * 查找我能查看的公开项目和有权限的私有项目
      * @param projectQuery
      * @return
@@ -702,7 +764,7 @@ public class ProjectServiceImpl implements ProjectService {
         dmUserQuery.setUserId(userId);
         List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
         // 被邀请加入的项目
-        List<String> collect = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toList());
+        Set<String> collect = dmUserList.stream().map(DmUser::getDomainId).collect(Collectors.toSet());
 
         // 查询出所有公开的项目
         List<ProjectEntity> allProject = projectDao.findAllProject();
@@ -739,6 +801,24 @@ public class ProjectServiceImpl implements ProjectService {
                     BigDecimal bd = new BigDecimal(percent);
                     bd = bd.setScale(2, RoundingMode.HALF_UP);
                     project.setPercent(bd.floatValue());
+                }
+            }
+
+            // 判断当前用户是否拥有删除修改权限
+            Map<String, Set<String>> domainListPermissions = permissionService.findDomainListPermissions(userId, projectList.stream().map(Project::getId).collect(Collectors.toList()));
+            for (Project project : projectList) {
+                if (!CollectionUtils.isEmpty(domainListPermissions.get(project.getId()))){
+                    if (domainListPermissions.get(project.getId()).contains("project_basic_info_delete")){
+                        project.setDeletePermission( true);
+                    }else {
+                        project.setDeletePermission( false);
+                    }
+
+                    if (domainListPermissions.get(project.getId()).contains("project_basic_info_update")){
+                        project.setUpdatePermission( true);
+                    }else {
+                        project.setUpdatePermission( false);
+                    }
                 }
             }
         }
@@ -841,19 +921,19 @@ public class ProjectServiceImpl implements ProjectService {
         joinTemplate.joinQuery(projectList, new String[]{"projectType", "master"});
 
         int size = projectList.size();
-        if(size < 5){
+        if(size < 4){
             List<String> collect = projectList.stream().map(item -> item.getId()).collect(Collectors.toList());
             String projectId = projectQuery.getProjectId();
             if(projectId != null){
                 collect.add(projectId);
             }
 
-            //如果不够5条，查找我可见的项目
+            //如果不够4条，查找我可见的项目
             projectQuery.setProjectId(null);
-            List<Project> joinProjectList = findJoinProjectList(projectQuery);
+            List<Project> joinProjectList = findJoinProjectListNoPercent(projectQuery);
             // 去除已经被点击过的
             joinProjectList = joinProjectList.stream().filter(item -> !collect.contains(item.getId())).collect(Collectors.toList());
-            int lackSize = 5 - size;
+            int lackSize = 4 - size;
             if(joinProjectList.size() > lackSize){
                 List<Project> projects = joinProjectList.subList(0, lackSize);
                 projectList.addAll(projects);
@@ -865,8 +945,8 @@ public class ProjectServiceImpl implements ProjectService {
         if(projectList.size() <= 0)  return list;
 
         // 拼接projects
-        if(projectList.size() > 5){
-            projectList = projectList.subList(0, 5);
+        if(projectList.size() > 4){
+            projectList = projectList.subList(0, 4);
         }
         String projectIds = "(" + projectList.stream().map(item -> "'" + item.getId() + "'").collect(Collectors.joining(", ")) + ")";
 

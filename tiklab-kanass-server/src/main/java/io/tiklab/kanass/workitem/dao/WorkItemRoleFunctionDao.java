@@ -95,6 +95,7 @@ public class WorkItemRoleFunctionDao {
     public List<WorkItemRoleFunctionEntity> findWorkItemRoleFunctionList(WorkItemRoleFunctionQuery workItemFunctionQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkItemRoleFunctionEntity.class)
                 .eq("workTypeId", workItemFunctionQuery.getWorkTypeId())
+                .in("workTypeId", workItemFunctionQuery.getWorkTypeIds())
                 .eq("roleId", workItemFunctionQuery.getRoleId())
                 .eq("functionType", workItemFunctionQuery.getFunctionType())
                 .orders(workItemFunctionQuery.getOrderParams())

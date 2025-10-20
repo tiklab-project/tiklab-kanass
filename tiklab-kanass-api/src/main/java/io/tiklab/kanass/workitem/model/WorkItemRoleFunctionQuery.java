@@ -20,6 +20,9 @@ public class WorkItemRoleFunctionQuery {
         @ApiProperty(name="workTypeId",desc="事项类型id")
         private String workTypeId;
 
+        @ApiProperty(name="workTypeIds",desc="事项类型ids")
+        private String[] workTypeIds;
+
         @ApiProperty(name="functionType",desc="功能类型")
         private String functionType;
 
@@ -80,5 +83,13 @@ public class WorkItemRoleFunctionQuery {
 
         public void setFunctionListId(String[] functionListId) {
                 this.functionListId = functionListId;
+        }
+
+        public String[] getWorkTypeIds() {
+                return workTypeIds;
+        }
+
+        public void setWorkTypeIds(String[] workTypeIds) {
+                this.workTypeIds = workTypeIds;
         }
 }

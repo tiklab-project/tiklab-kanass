@@ -11,6 +11,6 @@ public class MessageTemplateConstant {
     public static final String KANASS_MESSAGETEMPLATE_WORKITEMSTATUS = "7fcf0ff78d62dfc0754b3f2fe19a48db";
 
     //任务待办通知
-    public static final String KANASS_MESSAGETYPE_TASKTODO = "f5f8a45722db";
+    public static final String KANASS_TASKTODO = "f5f8a45722db";
 
 }

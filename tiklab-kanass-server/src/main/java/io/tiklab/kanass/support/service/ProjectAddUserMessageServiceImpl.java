@@ -92,7 +92,7 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
 
         Message message = new Message();
         MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_JOINPROJECT");
+        messageType.setId("KANASS_JOINPROJECT");
         message.setMessageType(messageType);
         message.setMessageReceiverList(objects);
         message.setBaseUrl(baseUrl);
@@ -133,7 +133,7 @@ public class ProjectAddUserMessageServiceImpl extends DmUserCallbackServiceImpl 
 
         Message message = new Message();
         MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_JOINPROSET");
+        messageType.setId("KANASS_JOINPROSET");
         message.setMessageType(messageType);
         message.setMessageReceiverList(objects);
         message.setBaseUrl(baseUrl);

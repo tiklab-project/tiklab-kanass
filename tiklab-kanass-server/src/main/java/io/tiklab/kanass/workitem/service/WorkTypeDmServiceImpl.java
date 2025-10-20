@@ -1,5 +1,6 @@
 package io.tiklab.kanass.workitem.service;
 
+import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.conditionbuilder.DeleteBuilders;
 import io.tiklab.flow.flow.model.*;
@@ -21,12 +22,15 @@ import io.tiklab.toolkit.join.JoinTemplate;
 import io.tiklab.kanass.workitem.dao.WorkTypeDmDao;
 import io.tiklab.kanass.workitem.entity.WorkTypeDmEntity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +40,7 @@ import java.util.stream.Collectors;
 @Exporter
 public class WorkTypeDmServiceImpl implements WorkTypeDmService {
 
+    private static final Logger log = LoggerFactory.getLogger(WorkTypeDmServiceImpl.class);
     @Autowired
     WorkTypeDmDao workTypeDmDao;
 
@@ -137,10 +142,158 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         workItemRoleFunctionDm.setNewWorkTypeId(workTypeDm1);
         workItemRoleFunctionDmService.copyWorkItemRoleFunctionDm(workItemRoleFunctionDm);
 
+
         workTypeDm.setId(workTypeDm1);
         return workTypeDm;
     }
 
+    @Override
+    public WorkTypeDm createWorkTypeDmCreateProject(@NotNull @Valid WorkTypeDm workTypeDm) {
+
+        long time1 = System.currentTimeMillis();
+        log.info("------------{}  开始------------",workTypeDm.getWorkType().getName());
+        Flow flow = workTypeDm.getFlow();
+        DmFlowQuery dmFlowQuery = new DmFlowQuery();
+        dmFlowQuery.setDomainId(workTypeDm.getProjectId());
+        dmFlowQuery.setGlobalFlowId(flow.getId());
+
+        // 创建流程与事项类型关联记录
+        FlowModelRelation flowModelRelation = new FlowModelRelation();
+
+        // 没复制过，则复制，并关联
+        Flow flow1 = dmFlowService.batchCloneFlowById(flow.getId(), workTypeDm.getProjectId());
+        workTypeDm.setFlow(flow1);
+        // 设置流程与事项类型的关联,关联复制出来时间的流程
+        flowModelRelation.setFlowId(flow1.getId());
+
+        long time2 = System.currentTimeMillis();
+        log.info("创建flow flowId:{} 花费时间:{}----------------",workTypeDm.getFlow().getId(), time2-time1);
+
+        Form form = workTypeDm.getForm();
+        DmFormQuery dmFormQuery = new DmFormQuery();
+        dmFormQuery.setDomainId(workTypeDm.getProjectId());
+        dmFormQuery.setGlobalFormId(form.getId());
+
+        FormModelRelation formModelRelation = new FormModelRelation();
+        String formId = dmFormService.batchCloneFormById(form.getId(),workTypeDm.getProjectId());
+        Form form1 = new Form();
+        form1.setId(formId);
+        workTypeDm.setForm(form1);
+        formModelRelation.setFormId(formId);
+
+        long time3 = System.currentTimeMillis();
+        log.info("创建form formId:{} 花费时间:{}----------------",workTypeDm.getForm().getId(), time3-time2);
+
+        WorkTypeDmEntity workTypeDmEntity = BeanMapper.map(workTypeDm, WorkTypeDmEntity.class);
+        String workTypeDm1 = workTypeDmDao.createWorkTypeDm(workTypeDmEntity);
+
+        long time4 = System.currentTimeMillis();
+        log.info("创建workTypeDm 花费时间:{}----------------",time4-time3);
+
+
+        // 事项类型与流程关联
+        flowModelRelation.setModelId(workTypeDm1);
+        flowModelRelation.setModelName(workTypeDm.getWorkType().getName());
+        flowModelRelation.setBgroup("kanass");
+        flowModelRelation.setModelType("workTypeDm");
+        flowModelRelationService.createFlowModelRelation(flowModelRelation);
+
+        long time5 = System.currentTimeMillis();
+        log.info("创建flowModelRelation 花费时间:{}----------------",time5-time4);
+
+        // 事项类型与表单关联
+        formModelRelation.setModelId(workTypeDm1);
+        formModelRelation.setModelName(workTypeDm.getWorkType().getName());
+        formModelRelation.setBgroup("kanass");
+        formModelRelation.setModelType("workTypeDm");
+        formModelRelationService.createFormModelRelation(formModelRelation);
+
+        long time6 = System.currentTimeMillis();
+        log.info("formModelRelation 花费时间:{}----------------",time6-time5);
+
+        // 复制事项权限
+        WorkItemRoleFunctionDm workItemRoleFunctionDm = new WorkItemRoleFunctionDm();
+        workItemRoleFunctionDm.setWorkTypeId(workTypeDm.getWorkType().getId());
+        workItemRoleFunctionDm.setDomainId(workTypeDm.getProjectId());
+        workItemRoleFunctionDm.setNewWorkTypeId(workTypeDm1);
+        workItemRoleFunctionDmService.copyWorkItemRoleFunctionDm(workItemRoleFunctionDm);
+
+        long time7 = System.currentTimeMillis();
+        log.info("复制事项权限 花费时间:{}----------------",time7-time6);
+
+        log.info("------------{}  结束------------",workTypeDm.getWorkType().getName());
+        workTypeDm.setId(workTypeDm1);
+        return workTypeDm;
+    }
+
+    @Override
+    public void batchCreateWorkTypeDmCreateProject(List<WorkTypeDm> workTypeDmList, String projectId) {
+        long time1 = System.currentTimeMillis();
+        log.info("------------批量创建事项类型 开始------------");
+        Map<String, WorkTypeDm> workTypeDmMap = workTypeDmList.stream().collect(Collectors.toMap(WorkTypeDm::getId, Function.identity()));
+        List<String> flowIdList = workTypeDmList.stream().map(item -> item.getFlow().getId()).collect(Collectors.toList());
+        List<String> formIdList = workTypeDmList.stream().map(item -> item.getForm().getId()).collect(Collectors.toList());
+
+        // 复制的flow，key为全局flowid
+        Map<String, Flow> flowMap = dmFlowService.batchCloneFlowById(flowIdList, projectId);
+        // 复制的form，key为全局formid
+        Map<String, Form> formMap = dmFormService.batchCloneFormById(formIdList,projectId);
+
+        List<FlowModelRelation> flowModelRelationList = new ArrayList<>();
+        List<FormModelRelation> formModelRelationList = new ArrayList<>();
+        for (Map.Entry<String, WorkTypeDm> workTypeDmEntry : workTypeDmMap.entrySet()) {
+            WorkTypeDm workTypeDm = workTypeDmEntry.getValue();
+            Flow oldFlow = workTypeDm.getFlow();
+            Form oldForm = workTypeDm.getForm();
+            String workTypeId = workTypeDm.getWorkType().getId();
+
+            workTypeDm.setFlow(flowMap.get(oldFlow.getId()));
+            workTypeDm.setForm(formMap.get(oldForm.getId()));
+
+            // 创建流程与事项类型关联记录
+            FlowModelRelation flowModelRelation = new FlowModelRelation();
+            flowModelRelation.setId(UuidGenerator.getRandomIdByUUID(12));
+            flowModelRelation.setFlowId(workTypeDm.getFlow().getId());
+            flowModelRelation.setModelId(workTypeDm.getId());
+            flowModelRelation.setModelName(workTypeDm.getWorkType().getName());
+            flowModelRelation.setBgroup("kanass");
+            flowModelRelation.setModelType("workTypeDm");
+            flowModelRelationList.add(flowModelRelation);
+
+            // 创建表单与事项类型关联记录
+            FormModelRelation formModelRelation = new FormModelRelation();
+            formModelRelation.setId(UuidGenerator.getRandomIdByUUID(12));
+            formModelRelation.setFormId(workTypeDm.getForm().getId());
+            formModelRelation.setModelId(workTypeDm.getId());
+            formModelRelation.setModelName(workTypeDm.getWorkType().getName());
+            formModelRelation.setBgroup("kanass");
+            formModelRelation.setModelType("workTypeDm");
+            formModelRelationList.add(formModelRelation);
+        }
+
+        // 批量新增事项类型
+        List<WorkTypeDmEntity> workTypeDmEntityList = BeanMapper.mapList(new ArrayList<>(workTypeDmMap.values()), WorkTypeDmEntity.class);
+        workTypeDmDao.batchCreateWorkTypeDm(workTypeDmEntityList);
+
+        // 批量新增关系
+        flowModelRelationService.batchCreateFlowModelRelation(flowModelRelationList);
+        formModelRelationService.batchCreateFormModelRelation(formModelRelationList);
+
+        // 复制事项权限
+        List<WorkItemRoleFunctionDm> workItemRoleFunctionDmList = new ArrayList<>();
+        for (Map.Entry<String, WorkTypeDm> workTypeDmEntry : workTypeDmMap.entrySet()) {
+            WorkTypeDm workTypeDm = workTypeDmEntry.getValue();
+            WorkItemRoleFunctionDm workItemRoleFunctionDm = new WorkItemRoleFunctionDm();
+            workItemRoleFunctionDm.setWorkTypeId(workTypeDm.getWorkType().getId());
+            workItemRoleFunctionDm.setDomainId(workTypeDm.getProjectId());
+            workItemRoleFunctionDm.setNewWorkTypeId(workTypeDm.getId());
+            workItemRoleFunctionDmList.add(workItemRoleFunctionDm);
+        }
+        workItemRoleFunctionDmService.batchCopyWorkItemRoleFunctionDm(workItemRoleFunctionDmList, projectId);
+
+        long time2 = System.currentTimeMillis();
+        log.info("------------批量创建事项类型 结束  {}------------", time2-time1);
+    }
 
     /**
      * 复制事项类型，刷数据用
@@ -351,10 +504,12 @@ public class WorkTypeDmServiceImpl implements WorkTypeDmService {
         joinTemplate.joinQuery(workTypeDmList, new String[]{"workType", "flow", "form"});
 
         List<WorkTypeDm> sortedList = workTypeDmList.stream()
-                .sorted(Comparator.comparing(
-                        o -> "system".equals(o.getWorkType().getGrouper()) ? 0 : 1
-                ))
-                .collect(Collectors.toList());
+            .sorted(
+                Comparator.comparing((WorkTypeDm o) ->
+                        "system".equals(o.getWorkType().getGrouper()) ? 0 : 1
+                ).thenComparingInt(o -> o.getWorkType().getSort())
+            )
+        .collect(Collectors.toList());
         return sortedList;
     }
 

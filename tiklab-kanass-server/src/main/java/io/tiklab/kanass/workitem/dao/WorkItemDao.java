@@ -1712,7 +1712,7 @@ public class WorkItemDao{
         // 文档
         sql = "Select count(1) as total from pmc_work_item_document where work_item_id = '" + workItemId + "'";
         Integer workDoucment = jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{}, Integer.class);
-        relationModel.put("workDoucment", workDoucment);
+        relationModel.put("workDocument", workDoucment);
 
         // 测试用例
         sql = "Select count(1) as total from pmc_work_test_case where work_item_id = '" + workItemId + "'";

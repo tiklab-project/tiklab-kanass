@@ -106,6 +106,12 @@ public interface ProjectService {
      * @return
      */
     List<Project> findJoinProjectList(ProjectQuery projectQuery);
+    /**
+     * 查找我参与的项目列表  不计算进度
+     * @param projectQuery
+     * @return
+     */
+    List<Project> findJoinProjectListNoPercent(ProjectQuery projectQuery);
 
     /**
      * 查找最近查看的项目

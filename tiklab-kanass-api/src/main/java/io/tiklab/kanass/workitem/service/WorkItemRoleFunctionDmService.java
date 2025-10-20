@@ -27,6 +27,8 @@ public interface WorkItemRoleFunctionDmService {
 
     String copyWorkItemRoleFunctionDm(@NotNull @Valid WorkItemRoleFunctionDm workItemRoleFunctionDm);
 
+    void batchCopyWorkItemRoleFunctionDm(@NotNull @Valid List<WorkItemRoleFunctionDm> workItemRoleFunctionDmList, String domainId);
+
     void updateWorkItemRoleFunctionDm1();
 
     /**

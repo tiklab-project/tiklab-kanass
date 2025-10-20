@@ -39,6 +39,12 @@ public class KanassDsmAutoConfiguration {
     @Autowired
     KanassProjectPrivilege100Task kanassProjectPrivilege100Task;
 
+    @Autowired
+    KanassProjectPrivilege101Task kanassProjectPrivilege101Task;
+
+    @Autowired
+    KanassTest100Task kanassTest100Task;
+
     @Bean
     DsmConfig dsmConfig(){
         DsmConfig dsmConfig = new DsmConfig();
@@ -385,6 +391,34 @@ public class KanassDsmAutoConfiguration {
                 }).get();
         versionList.add(kanass_flow_102);
 
+        DsmVersion kanass_message_102 = DsmVersionBuilder.instance()
+                .version("kanass_message_1.0.2")
+                .db(new String[]{
+                        "kanass_message_1.0.2",
+                }).get();
+        versionList.add(kanass_message_102);
+
+        DsmVersion licence200 = DsmVersionBuilder.instance()
+                .version("licence_2.0.0")
+                .db(new String[]{
+                        "licence_2.0.0",
+                }).get();
+        versionList.add(licence200);
+
+        DsmVersion kanass_privilege_100 = DsmVersionBuilder.instance()
+                .version("kanass_privilege_1.0.0")
+                .db(new String[]{
+                        "kanass_privilege_1.0.0",
+                }).get();
+        versionList.add(kanass_privilege_100);
+
+        DsmVersion kanass_test_101 = DsmVersionBuilder.instance()
+                .version("kanass_test_1.0.1")
+                .db(new String[]{
+                        "kanass_test_1.0.1",
+                }).get();
+        versionList.add(kanass_test_101);
+
         DsmVersion task159 = DsmVersionBuilder.instance()
                 .version("task_1.5.9")
                 .task(pmc159Task)
@@ -445,6 +479,18 @@ public class KanassDsmAutoConfiguration {
                 .task(kanassProjectPrivilege100Task)
                 .get();
         versionList.add(TaskKanassProjectPrivilege100);
+
+        DsmVersion TaskKanassProjectPrivilege101 = DsmVersionBuilder.instance()
+                .version("project_privilege_1.0.1_task")
+                .task(kanassProjectPrivilege101Task)
+                .get();
+        versionList.add(TaskKanassProjectPrivilege101);
+
+        DsmVersion TaskKanassTest100 = DsmVersionBuilder.instance()
+                .version("kanass_test_1.0.0_task")
+                .task(kanassTest100Task)
+                .get();
+        versionList.add(TaskKanassTest100);
 
         return versionList;
     }

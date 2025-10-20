@@ -124,11 +124,21 @@ public class TestCaseDao {
 
     public int bigSort(String workspaceId){
         try {
-            String sql = "select coalesce(max(sort), 0) from autotest_testcase where workspace_id = ?";
+            String sql = "select coalesce(max(sort), 0) from test_testcase where project_id = ?";
             return jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{workspaceId}, Integer.class);
         } catch (Exception e) {
             logger.error("bigSort error:", e);
             return 0;
+        }
+    }
+
+    public String findMaxCaseKey(String projectId){
+        try {
+            String sql = "select case_key from test_testcase wi where wi.project_id = ? order by case_key desc limit 1";
+            return jpaTemplate.getJdbcTemplate().queryForObject(sql, new Object[]{projectId}, String.class);
+        } catch (Exception e) {
+            logger.error("查询caseKey 错误:", e);
+            return null;
         }
     }
 

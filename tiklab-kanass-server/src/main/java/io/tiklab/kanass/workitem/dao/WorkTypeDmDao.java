@@ -2,6 +2,7 @@ package io.tiklab.kanass.workitem.dao;
 
 import io.tiklab.core.order.Order;
 import io.tiklab.dal.jdbc.JdbcTemplate;
+import io.tiklab.flow.flow.entity.DmFlowEntity;
 import io.tiklab.kanass.project.project.entity.ProjectEntity;
 import io.tiklab.kanass.workitem.entity.WorkTypeDmEntity;
 import io.tiklab.kanass.workitem.entity.WorkTypeEntity;
@@ -15,9 +16,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 /**
@@ -38,6 +43,35 @@ public class WorkTypeDmDao{
      */
     public String createWorkTypeDm(WorkTypeDmEntity workTypeDmEntity) {
         return jpaTemplate.save(workTypeDmEntity,String.class);
+    }
+
+    public void batchCreateWorkTypeDm(List<WorkTypeDmEntity> workTypeDmEntityList){
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        jdbcTemplate.batchUpdate("insert into pmc_work_type_dm (id,project_id,work_type_id,flow_id,form_id) " +
+                " values (?,?,?,?,?) ", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1, workTypeDmEntityList.get(i).getId());
+                setStringOrNull(ps, 2, workTypeDmEntityList.get(i).getProjectId());
+                setStringOrNull(ps, 3, workTypeDmEntityList.get(i).getWorkTypeId());
+                setStringOrNull(ps, 4, workTypeDmEntityList.get(i).getFlowId());
+                setStringOrNull(ps, 5, workTypeDmEntityList.get(i).getFormId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return workTypeDmEntityList.size();
+            }
+        });
+    }
+
+    // 辅助方法：处理可能为null的String字段
+    private void setStringOrNull(PreparedStatement ps, int parameterIndex, String value) throws SQLException {
+        if (value != null) {
+            ps.setString(parameterIndex, value);
+        } else {
+            ps.setNull(parameterIndex, Types.VARCHAR);
+        }
     }
 
     /**

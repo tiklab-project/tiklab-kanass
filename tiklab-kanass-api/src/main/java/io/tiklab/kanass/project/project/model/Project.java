@@ -157,6 +157,10 @@ public class Project extends BaseModel{
     @ApiProperty(name="color",desc="项目颜色")
     private int color;
 
+    private boolean deletePermission;
+
+    private boolean updatePermission;
+
     public String getId() {
         return id;
     }
@@ -355,5 +359,21 @@ public class Project extends BaseModel{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public boolean isDeletePermission() {
+        return deletePermission;
+    }
+
+    public void setDeletePermission(boolean deletePermission) {
+        this.deletePermission = deletePermission;
+    }
+
+    public boolean isUpdatePermission() {
+        return updatePermission;
+    }
+
+    public void setUpdatePermission(boolean updatePermission) {
+        this.updatePermission = updatePermission;
     }
 }

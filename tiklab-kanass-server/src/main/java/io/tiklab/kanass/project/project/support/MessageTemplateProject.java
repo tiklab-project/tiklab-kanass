@@ -6,6 +6,6 @@ package io.tiklab.kanass.project.project.support;
 public class MessageTemplateProject {
 
     //项目添加消息
-    public static final String TEAMWIRE_MESSAGETYPE_PROJECTADD = "d616bdf8fbc1";
+    public static final String TEAMWIRE_PROJECTADD = "d616bdf8fbc1";
 
 }

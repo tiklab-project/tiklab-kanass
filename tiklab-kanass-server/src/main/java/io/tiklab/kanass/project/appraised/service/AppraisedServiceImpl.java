@@ -59,7 +59,7 @@ public class AppraisedServiceImpl implements AppraisedService{
 
         content.put("link", "/#/project/${projectId}/appraised/${appraisedId}");
         content.put("action", "创建评审");
-        content.put("noticeId", "KANASS_MESSAGETYPE_APPRAISED_CREATE");
+        content.put("noticeId", "KANASS_APPRAISED_CREATE");
 
         sendMessageUtil.sendDomainMessage(content, appraised.getProject().getId());
     }
@@ -78,7 +78,7 @@ public class AppraisedServiceImpl implements AppraisedService{
 
         content.put("link", "/#/project/${projectId}/appraised/${appraisedId}");
         content.put("action", "创建评审");
-        content.put("noticeId", "KANASS_MESSAGETYPE_APPRAISED_UPDATE");
+        content.put("noticeId", "KANASS_APPRAISED_UPDATE");
 
         sendMessageUtil.sendDomainMessage(content, appraised.getProject().getId());
     }

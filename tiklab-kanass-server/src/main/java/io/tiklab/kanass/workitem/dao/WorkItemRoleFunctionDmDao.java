@@ -1,6 +1,7 @@
 package io.tiklab.kanass.workitem.dao;
 
 import io.tiklab.core.page.Pagination;
+import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.dal.jpa.JpaTemplate;
 import io.tiklab.dal.jpa.criterial.condition.DeleteCondition;
 import io.tiklab.dal.jpa.criterial.condition.QueryCondition;
@@ -12,8 +13,12 @@ import io.tiklab.kanass.workitem.model.WorkItemRoleFunctionDmQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 /**
@@ -34,6 +39,45 @@ public class WorkItemRoleFunctionDmDao {
      */
     public String createWorkItemRoleFunctionDm(WorkItemRoleFunctionDmEntity workItemFunctionEntity) {
         return jpaTemplate.save(workItemFunctionEntity,String.class);
+    }
+
+    public void batchCreateWorkItemRoleFunctionDm(List<WorkItemRoleFunctionDmEntity> workItemRoleFunctionDmEntityList) {
+        JdbcTemplate jdbcTemplate = jpaTemplate.getJdbcTemplate();
+        jdbcTemplate.batchUpdate("INSERT INTO pmc_work_role_function_dm (id, domain_id, work_type_id, function_id, function_type, role_id) VALUES " +
+                " (?, ?, ?, ?, ?, ?) ", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1, workItemRoleFunctionDmEntityList.get(i).getId());
+                setStringOrNull(ps, 2, workItemRoleFunctionDmEntityList.get(i).getDomainId());
+                setStringOrNull(ps, 3, workItemRoleFunctionDmEntityList.get(i).getWorkTypeId());
+                setStringOrNull(ps, 4, workItemRoleFunctionDmEntityList.get(i).getFunctionId());
+                setStringOrNull(ps, 5, workItemRoleFunctionDmEntityList.get(i).getFunctionType());
+                setStringOrNull(ps, 6, workItemRoleFunctionDmEntityList.get(i).getRoleId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return workItemRoleFunctionDmEntityList.size();
+            }
+        });
+    }
+
+    // 辅助方法：处理可能为null的String字段
+    private void setStringOrNull(PreparedStatement ps, int parameterIndex, String value) throws SQLException {
+        if (value != null) {
+            ps.setString(parameterIndex, value);
+        } else {
+            ps.setNull(parameterIndex, Types.VARCHAR);
+        }
+    }
+
+    // 辅助方法：处理可能为null的String字段
+    private void setIntOrNull(PreparedStatement ps, int parameterIndex, Integer value) throws SQLException {
+        if (value != null) {
+            ps.setInt(parameterIndex, value);
+        } else {
+            ps.setNull(parameterIndex, Types.INTEGER);
+        }
     }
 
     /**

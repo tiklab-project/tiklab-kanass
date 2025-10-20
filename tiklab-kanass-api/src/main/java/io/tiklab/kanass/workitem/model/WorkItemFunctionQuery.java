@@ -17,6 +17,9 @@ public class WorkItemFunctionQuery {
 
         private String name;
 
+        @ApiProperty(name ="functionIds",desc = "functionIds")
+        private String[] functionIds;
+
         @ApiProperty(name ="orderParams",desc = "排序参数")
         private List<Order> orderParams = OrderBuilders.instance().asc("name").get();
 
@@ -54,5 +57,13 @@ public class WorkItemFunctionQuery {
 
         public void setPageParam(Page pageParam) {
                 this.pageParam = pageParam;
+        }
+
+        public String[] getFunctionIds() {
+                return functionIds;
+        }
+
+        public void setFunctionIds(String[] functionIds) {
+                this.functionIds = functionIds;
         }
 }

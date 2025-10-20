@@ -236,6 +236,7 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
 
         // 字段信息
         CompletableFuture<List<List<FieldEx>>> fieldExFuture = CompletableFuture.supplyAsync(() -> {
+            long time99 = System.currentTimeMillis();
             List<List<FieldEx>> fieldLists = new ArrayList<>();
             for (String fieldCode : fieldCodeList) {
                 FieldQuery fieldQuery = new FieldQuery();
@@ -243,6 +244,8 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
                 List<FieldEx> fieldList = fieldService.findFieldList(fieldQuery);
                 fieldLists.add(fieldList);
             }
+
+            log.info("findFieldList 花费时间:{}----------------",System.currentTimeMillis()-time99);
             return fieldLists;
         });
 
@@ -297,10 +300,7 @@ public class WorkItemCreateMetaDataServiceImpl implements WorkItemCreateMetaData
         long time6 = System.currentTimeMillis();
         log.info("findFlow 花费时间:{}----------------",time6-time5);
 
-
-
         long time7 = System.currentTimeMillis();
-        log.info("findFieldList 花费时间:{}----------------",time7-time6);
 
         // 模块信息
         ModuleQuery moduleQuery = new ModuleQuery();

@@ -1,5 +1,6 @@
 package io.tiklab.kanass.test.test.service;
 
+import io.tiklab.kanass.common.IDGeneratorUtil;
 import io.tiklab.kanass.common.MagicValue;
 import io.tiklab.kanass.instance.service.InstanceService;
 import io.tiklab.kanass.project.project.service.ProjectService;
@@ -56,9 +57,14 @@ public class TestCaseServiceImpl implements TestCaseService {
         int i = testCaseDao.bigSort(projectId);
         int num = i+1;
         testCasesEntity.setSort(num);
+        String oldKey = testCaseDao.findMaxCaseKey(projectId);
 
-        String projectKey = projectService.findProject(projectId).getProjectKey();
-        testCasesEntity.setCaseKey(projectKey+"-"+num);
+        // 创建key
+        if (num == 1){
+            testCasesEntity.setCaseKey(IDGeneratorUtil.generateID());
+        }else {
+            testCasesEntity.setCaseKey(IDGeneratorUtil.incrementID(oldKey));
+        }
 
         //初始化项目成员
         String userId = LoginContext.getLoginId();

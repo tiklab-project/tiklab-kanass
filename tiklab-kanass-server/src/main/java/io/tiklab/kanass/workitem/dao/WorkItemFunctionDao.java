@@ -83,6 +83,7 @@ public class WorkItemFunctionDao {
     public List<WorkItemFunctionEntity> findWorkItemFunctionList(WorkItemFunctionQuery workItemFunctionQuery) {
         QueryCondition queryCondition = QueryBuilders.createQuery(WorkItemFunctionEntity.class)
                 .eq("name", workItemFunctionQuery.getName())
+                .in("id", workItemFunctionQuery.getFunctionIds())
                 .orders(workItemFunctionQuery.getOrderParams())
                 .get();
         return jpaTemplate.findList(queryCondition, WorkItemFunctionEntity.class);

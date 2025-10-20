@@ -278,7 +278,7 @@ public class WorkCommentServiceImpl implements WorkCommentService {
 
         content.put("link", "/project/${projectId}/work/${workItemId}");
         content.put("action", "创建事项评论");
-        content.put("noticeId", "KANASS_MESSAGETYPE_WORKITEM_COMMENT");
+        content.put("noticeId", "KANASS_WORKITEM_COMMENT");
 
         sendMessageUtil.sendDomainMessage(content, workComment.getWorkItem().getProject().getId());
     }

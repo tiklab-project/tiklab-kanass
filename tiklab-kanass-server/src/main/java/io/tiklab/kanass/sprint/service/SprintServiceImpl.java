@@ -96,7 +96,7 @@ public class SprintServiceImpl implements SprintService {
 
         Message message = new Message();
         MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_SPRINTCREATE");
+        messageType.setId("KANASS_SPRINTCREATE");
         message.setMessageType(messageType);
         message.setData(content);
 
@@ -148,7 +148,7 @@ public class SprintServiceImpl implements SprintService {
 
         Message message = new Message();
         MessageType messageType = new MessageType();
-        messageType.setId("KANASS_MESSAGETYPE_SPRINTUPDATE");
+        messageType.setId("KANASS_SPRINTUPDATE");
         message.setMessageType(messageType);
         message.setData(content);
 

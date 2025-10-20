@@ -5,6 +5,7 @@ import io.tiklab.core.page.PaginationBuilder;
 import io.tiklab.core.utils.UuidGenerator;
 import io.tiklab.dal.jdbc.JdbcTemplate;
 import io.tiklab.form.field.model.FieldEx;
+import io.tiklab.form.field.model.FieldQuery;
 import io.tiklab.form.field.service.FieldService;
 import io.tiklab.kanass.project.project.model.Project;
 import io.tiklab.kanass.project.project.service.ProjectService;
@@ -23,6 +24,7 @@ import io.tiklab.privilege.role.service.RoleService;
 import io.tiklab.rpc.annotation.Exporter;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.user.user.model.User;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +32,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
 * 事项权限服务
@@ -105,6 +109,32 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void batchCopyWorkItemRoleFunctionDm(@NotNull @Valid List<WorkItemRoleFunctionDm> workItemRoleFunctionDmList, String domainId) {
+//        String newWorkTypeId = workItemRoleFunctionDm.getNewWorkTypeId();
+//        String workTypeId = workItemRoleFunctionDm.getWorkTypeId();
+//        String domainId = workItemRoleFunctionDm.getDomainId();
+        Map<String, String> collect = workItemRoleFunctionDmList.stream().collect(Collectors.toMap(WorkItemRoleFunctionDm::getWorkTypeId, WorkItemRoleFunctionDm::getNewWorkTypeId));
+        List<String> workTypeIdList = workItemRoleFunctionDmList.stream().map(WorkItemRoleFunctionDm::getWorkTypeId).collect(Collectors.toList());
+        WorkItemRoleFunctionQuery workItemRoleFunctionQuery = new WorkItemRoleFunctionQuery();
+        workItemRoleFunctionQuery.setWorkTypeIds(workTypeIdList.toArray(new String[0]));
+        List<WorkItemRoleFunction> workItemRoleFunctionList = workItemRoleFunctionService.findWorkItemRoleFunctionList(workItemRoleFunctionQuery);
+        List<WorkItemRoleFunctionDm> newWorkItemRoleFunctionDmList = new ArrayList<>();
+
+        for (WorkItemRoleFunction workItemRoleFunction : workItemRoleFunctionList) {
+            WorkItemRoleFunctionDm dm = new WorkItemRoleFunctionDm();
+            dm.setId(UuidGenerator.getRandomIdByUUID(12));
+            dm.setWorkTypeId(collect.get(workItemRoleFunction.getWorkTypeId()));
+            dm.setDomainId(domainId);
+            dm.setFunctionId(workItemRoleFunction.getFunctionId());
+            dm.setFunctionType(workItemRoleFunction.getFunctionType());
+            dm.setRoleId(workItemRoleFunction.getRoleId());
+            newWorkItemRoleFunctionDmList.add(dm);
+        }
+        List<WorkItemRoleFunctionDmEntity> workItemRoleFunctionDmEntities = BeanMapper.mapList(newWorkItemRoleFunctionDmList, WorkItemRoleFunctionDmEntity.class);
+        workItemRoleFunctionDmDao.batchCreateWorkItemRoleFunctionDm(workItemRoleFunctionDmEntities);
     }
 
     @Override
@@ -221,22 +251,47 @@ public class WorkItemRoleFunctionDmServiceImpl implements WorkItemRoleFunctionDm
         workItemRoleFunctionQuery.setRoleIds(userVroles);
         workItemRoleFunctionQuery.setWorkTypeId(workItem.getWorkType().getId());
         List<WorkItemRoleFunctionDm> workItemRoleFunctionDmList = findWorkItemRoleFunctionDmList(workItemRoleFunctionQuery);
-        for (WorkItemRoleFunctionDm dm : workItemRoleFunctionDmList) {
-            String functionType = dm.getFunctionType();
-            String functionId = dm.getFunctionId();
-
+        Map<String, List<WorkItemRoleFunctionDm>> workItemRoleFunctionDmMap = workItemRoleFunctionDmList.stream().collect(Collectors.groupingBy(WorkItemRoleFunctionDm::getFunctionType));
+        for (String functionType : workItemRoleFunctionDmMap.keySet()) {
             if ("field".equals(functionType)) {
-                FieldEx field = fieldService.findField(functionId);
-                if (field != null) {
-                    codes.add(field.getCode());
+                if (CollectionUtils.isNotEmpty(workItemRoleFunctionDmMap.get(functionType))){
+                    List<String> functionIdList = workItemRoleFunctionDmMap.get(functionType).stream().map(WorkItemRoleFunctionDm::getFunctionId).collect(Collectors.toList());
+                    FieldQuery fieldQuery = new FieldQuery();
+                    fieldQuery.setFunctionIds(functionIdList.toArray(new String[0]));
+                    List<FieldEx> fieldList = fieldService.findFieldList(fieldQuery);
+                    fieldList.forEach(field -> {
+                        codes.add(field.getCode());
+                    });
                 }
-            } else if ("function".equals(functionType)) {
-                WorkItemFunction function = workItemFunctionService.findWorkItemFunction(functionId);
-                if (function != null) {
-                    codes.add(function.getCode());
+            }
+            if ("function".equals(functionType)){
+                if (CollectionUtils.isNotEmpty(workItemRoleFunctionDmMap.get(functionType))){
+                    List<String> functionIdList = workItemRoleFunctionDmMap.get(functionType).stream().map(WorkItemRoleFunctionDm::getFunctionId).collect(Collectors.toList());
+                    WorkItemFunctionQuery workItemFunctionQuery = new WorkItemFunctionQuery();
+                    workItemFunctionQuery.setFunctionIds(functionIdList.toArray(new String[0]));
+                    List<WorkItemFunction> workItemFunctionList = workItemFunctionService.findWorkItemFunctionList(workItemFunctionQuery);
+                    workItemFunctionList.forEach(workItemFunction -> {
+                        codes.add(workItemFunction.getCode());
+                    });
                 }
             }
         }
+//        for (WorkItemRoleFunctionDm dm : workItemRoleFunctionDmList) {
+//            String functionType = dm.getFunctionType();
+//            String functionId = dm.getFunctionId();
+//
+//            if ("field".equals(functionType)) {
+//                FieldEx field = fieldService.findField(functionId);
+//                if (field != null) {
+//                    codes.add(field.getCode());
+//                }
+//            } else if ("function".equals(functionType)) {
+//                WorkItemFunction function = workItemFunctionService.findWorkItemFunction(functionId);
+//                if (function != null) {
+//                    codes.add(function.getCode());
+//                }
+//            }
+//        }
 
         return codes;
     }

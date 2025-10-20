@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService{
 
         content.put("link", "/#/product/${productId}");
         content.put("action", "创建项目集");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PRODUCT_CREATE");
+        content.put("noticeId", "KANASS_PRODUCT_CREATE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -94,7 +94,7 @@ public class ProductServiceImpl implements ProductService{
 
         content.put("link", "/#/product/${productId}");
         content.put("action", "编辑项目集");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PRODUCT_UPDATE");
+        content.put("noticeId", "KANASS_PRODUCT_UPDATE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService{
 
         content.put("link", "/#/product");
         content.put("action", "删除项目集");
-        content.put("noticeId", "KANASS_MESSAGETYPE_PRODUCT_DELETE");
+        content.put("noticeId", "KANASS_PRODUCT_DELETE");
 
         sendMessageUtil.sendMessage(content);
     }
@@ -523,15 +523,10 @@ public class ProductServiceImpl implements ProductService{
                 List<Map<String, Object>> doneList = projectWorkItemCount.stream().filter(workItem -> (workItem.get("project_id").equals(id) && workItem.get("work_status_code").equals("DONE"))).collect(Collectors.toList());
                 project.setEndWorkItemNumber(doneList.size());
 
-                DmUserQuery dmUserQuery = new DmUserQuery();
-                dmUserQuery.setDomainId(id);
-                List<DmUser> dmUserList = dmUserService.findDmUserList(dmUserQuery);
-                project.setMember(dmUserList.size());
-
                 // 统计项目预计工时和剩余工时
                 WorkItemQuery workItemQuery = new WorkItemQuery();
                 workItemQuery.setProjectId(id);
-                List<WorkItem> workItemList = workItemService.findWorkItemList(workItemQuery);
+                List<WorkItem> workItemList = workItemService.findWorkItemListNoJoinQuery(workItemQuery);
                 int estimateTime = 0;
                 int surplusTime = 0;
                 for (WorkItem workItem : workItemList) {
