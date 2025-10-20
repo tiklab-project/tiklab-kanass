@@ -1,8 +1,8 @@
 package io.tiklab.kanass.workitem.service;
 
-import io.tiklab.kanass.test.test.model.TestCase;
-import io.tiklab.kanass.test.test.model.TestCaseQuery;
-import io.tiklab.kanass.test.test.service.TestCaseService;
+import io.tiklab.kanass.test.testcase.test.model.TestCase;
+import io.tiklab.kanass.test.testcase.test.model.TestCaseQuery;
+import io.tiklab.kanass.test.testcase.test.service.TestCaseService;
 import io.tiklab.toolkit.beans.BeanMapper;
 import io.tiklab.core.page.Pagination;
 import io.tiklab.core.page.PaginationBuilder;
@@ -24,11 +24,7 @@ import io.tiklab.kanass.workitem.model.WorkTestCaseQuery;
 import io.tiklab.user.user.model.User;
 import io.tiklab.user.user.service.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;

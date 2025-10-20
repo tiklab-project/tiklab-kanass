@@ -2,9 +2,9 @@ package io.tiklab.kanass.project.module.service;
 
 import io.tiklab.kanass.project.module.model.Module;
 import io.tiklab.kanass.project.module.model.ModuleQuery;
-import io.tiklab.kanass.test.test.model.TestCase;
-import io.tiklab.kanass.test.test.model.TestCaseQuery;
-import io.tiklab.kanass.test.test.service.TestCaseService;
+import io.tiklab.kanass.test.testcase.test.model.TestCase;
+import io.tiklab.kanass.test.testcase.test.model.TestCaseQuery;
+import io.tiklab.kanass.test.testcase.test.service.TestCaseService;
 import io.tiklab.kanass.workitem.dao.WorkItemDao;
 import io.tiklab.kanass.workitem.entity.WorkItemEntity;
 import io.tiklab.kanass.workitem.model.WorkItemQuery;
@@ -17,7 +17,6 @@ import io.tiklab.kanass.project.module.entity.ModuleEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

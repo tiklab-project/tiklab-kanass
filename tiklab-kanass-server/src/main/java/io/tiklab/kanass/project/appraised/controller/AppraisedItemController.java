@@ -6,7 +6,7 @@ import io.tiklab.kanass.project.appraised.model.AppraisedItem;
 import io.tiklab.kanass.project.appraised.model.AppraisedItemQuery;
 import io.tiklab.kanass.project.appraised.service.AppraisedItemService;
 import io.tiklab.kanass.project.wiki.model.ProjectDocument;
-import io.tiklab.kanass.test.test.model.TestCase;
+import io.tiklab.kanass.test.testcase.test.model.TestCase;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

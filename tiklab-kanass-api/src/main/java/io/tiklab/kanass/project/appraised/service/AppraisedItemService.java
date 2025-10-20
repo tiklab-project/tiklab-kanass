@@ -4,7 +4,7 @@ import io.tiklab.core.page.Pagination;
 import io.tiklab.kanass.project.appraised.model.AppraisedItem;
 import io.tiklab.kanass.project.appraised.model.AppraisedItemQuery;
 import io.tiklab.kanass.project.wiki.model.ProjectDocument;
-import io.tiklab.kanass.test.test.model.TestCase;
+import io.tiklab.kanass.test.testcase.test.model.TestCase;
 import io.tiklab.kanass.workitem.model.WorkItem;
 import io.tiklab.toolkit.join.annotation.FindAll;
 import io.tiklab.toolkit.join.annotation.FindList;

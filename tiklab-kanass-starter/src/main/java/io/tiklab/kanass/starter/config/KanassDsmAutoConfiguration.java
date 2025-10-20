@@ -4,7 +4,7 @@ package io.tiklab.kanass.starter.config;
 import io.tiklab.dsm.model.DsmConfig;
 import io.tiklab.dsm.model.DsmVersion;
 import io.tiklab.dsm.support.DsmVersionBuilder;
-import io.tiklab.kanass.sql.service.*;
+import io.tiklab.kanass.support.sql.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package io.tiklab.kanass.project.module.model;
 
-import io.tiklab.kanass.test.test.model.TestCase;
+import io.tiklab.kanass.test.testcase.test.model.TestCase;
 import io.tiklab.postin.annotation.ApiModel;
 import io.tiklab.postin.annotation.ApiProperty;
 import io.tiklab.toolkit.beans.annotation.Mapper;
